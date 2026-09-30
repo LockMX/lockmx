@@ -59,6 +59,24 @@ Consequence: email codes are reasonable for customers, whose accounts hold moder
 2. **Marketing emails (newsletter, promotions).** Separate, explicit, unticked consent, never bundled with account creation or with a purchase. Double opt-in is recommended to prove the consent. To verify the exact requirements in the CNPD directive on direct marketing.
 3. **Landing page contact form.** The visitor asks something and expects an answer. From the sources found, marketing consent is not needed to reply to a request, and a code before delivering the message is not shown to be required. The trade-off is fewer fake or mistyped addresses versus lost enquiries. Options: (a) no double opt-in, with anti-spam (honeypot, rate limit, Cloudflare Turnstile) and an automatic acknowledgement email; (b) a verification code before the message is sent. To decide with the owner and the client.
 
+## Decisions by the owner (2026-09-30)
+
+- **No guest checkout.** A first-time buyer must create an account before buying. The account is created with the same email code flow, inside the checkout.
+- **Contact form:** protected with Cloudflare Turnstile and a server-side rate limit. No double opt-in on the contact form.
+- **No marketing emails at launch.** No newsletter and no promotional email, so no marketing consent flow is needed now.
+- **Welcome email:** sent once, after the customer confirms the registration code.
+- **Phone verification:** not at launch.
+- The spec 001 (technical foundation) is implemented in a later session. These details are settled first.
+
+### Consequences of these decisions
+
+- Every purchase depends on email delivery: the customer cannot check out without receiving a code. Delivery failures directly cost sales. Monitoring of bounces and failures (Resend webhooks) and a clear "resend code" experience are required, not optional. The account-first flow makes this the main availability risk of the shop.
+- The order always has a customer: the order references the account, never an anonymous buyer. The cart of a visitor lives in a server-side session and is attached to the account when the visitor registers or logs in during checkout.
+- The welcome email must stay strictly transactional (account confirmed, how to sign in, where to see orders). Adding promotions to it would turn it into marketing and require the separate, explicit consent described above. Keep this rule when writing the template.
+- Requiring an account to buy should be mentioned in the privacy policy and reviewed with the legal texts. Not verified as a legal requirement either way.
+- Turnstile is a third party (Cloudflare). It goes into the processors inventory and the privacy policy. Its own documentation says the widget does not access or store form entries, and points to a Turnstile Privacy Addendum. Pricing and the addendum are to be verified at the official source before the client commits.
+- Turnstile facts (official documentation, 2026-09-30): the server must validate every token by calling the Siteverify endpoint with the secret key; tokens are valid for 300 seconds and can be validated only once; the secret key stays server-side. The same protection is recommended for the endpoint that sends login and registration codes, because it sends email on request and could be abused to flood a mailbox.
+
 ## Criteria
 
 - A customer can register and log in with only name and email.
@@ -66,7 +84,9 @@ Consequence: email codes are reasonable for customers, whose accounts hold moder
 - Codes are single use, short lived, hashed at rest, and limited in attempts and in resend frequency.
 - Sign-in responses do not reveal whether an email has an account.
 - Admins cannot log in with an email code alone.
-- Marketing consent is separate, explicit and logged with date, text shown and source.
+- Buying requires an account; checkout guides a visitor through registration by code without losing the cart.
+- No marketing email is sent at launch. If marketing is introduced later, consent is separate, explicit and logged with date, text shown and source.
+- The contact form and the code-sending endpoint are protected by Turnstile validated on the server, and by rate limits.
 - Every email exists in PT-PT and EN and follows the templates catalog.
 
 ## Options
@@ -77,11 +97,11 @@ Consequence: email codes are reasonable for customers, whose accounts hold moder
 
 ## Open questions
 
-- Guest checkout: allowed, with an optional account created from the order by email code? Recommended, and it shapes the order model.
-- Marketing emails at launch, or not at all? This decides whether the consent flow is needed now.
-- Contact form: option (a) or (b) above?
+- Does the contact form send an automatic acknowledgement email to the sender? It is transactional. To decide with the client.
 - Emails from `@lockmx.com` or from a subdomain, and the exact DNS records Resend requires. Verify at the Resend documentation when the domain is ready.
-- Resend plan and pricing: verify at the official page before the client commits.
+- Resend plan and pricing, and the Turnstile plan and privacy addendum: verify at the official pages before the client commits.
+- Is a fallback to sign in when the email is delayed needed (for example a magic link as an alternative to the code)? Evaluate in the authentication spec, with the delivery data available by then.
+- Legal review of the account-required-to-buy rule and of the privacy text.
 
 ## Outcome
 

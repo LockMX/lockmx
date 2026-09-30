@@ -16,7 +16,9 @@ The owner is the only developer. The project is a real commercial delivery for a
 - Product catalog with product search.
 - Shopping cart.
 - Customer area (account, orders, invoices). Passwordless: registration and login with name and email plus a one-time code sent by email (see `customer-accounts-and-consent.md`).
-- Landing page contact form.
+- Buying requires an account (no guest checkout). This way the customer can always access the information about their orders (items, prices, quantities, shipping costs), change the delivery address and change the invoicing data. A first-time buyer registers inside the checkout with the emailed code.
+- Landing page contact form, protected with Cloudflare Turnstile and rate limits (no double opt-in).
+- No marketing emails at launch. A welcome email is sent once, after the registration code is confirmed, and it stays strictly transactional.
 - Admin panel for the client to manage the catalog: add, remove and edit products, prices and stock, and manage orders. Protected by a role check on the server, not by shared credentials.
 - Languages: PT-PT and EN from the start.
 - Payment methods requested: MB WAY, Multibanco (entity and reference), bank card, bank transfer (IBAN) and possibly Stripe.
@@ -47,11 +49,10 @@ The owner is the only developer. The project is a real commercial delivery for a
 
 ## Open questions
 
-- Is an account required to buy, or is guest checkout allowed? Affects the order model and the checkout. Answer: Users need to create an account in order to buy products, so this way the user can access information about the order (items, prices, number of items, shipping costs, change address, change invoicing data, and all other information).
 - Payment provider: does a single provider cover MB WAY, Multibanco and cards? Verify and compare fees at the official sources.
 - Invoicing provider: compare the certified options and their APIs at the official sources.
 - Authentication: proposed in ADR 0003 (Better Auth, passwordless customers, strong second method for admins).
-- Guest checkout, marketing consent and double opt-in scope, and the contact form approach: see `customer-accounts-and-consent.md`.
+- Contact form acknowledgement email, delivery fallback for the code, and legal review of the account-required rule: see `customer-accounts-and-consent.md`.
 - Database provider and hosting.
 - Cookie consent management: a paid platform or a self-built solution.
 - Who writes and reviews the legal texts (privacy, cookies, terms).
