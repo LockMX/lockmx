@@ -17,7 +17,7 @@ The owner is the only developer. The project is a real commercial delivery for a
 - Shopping cart.
 - Customer area (account, orders, invoices). Passwordless: registration and login with name and email plus a one-time code sent by email (see `customer-accounts-and-consent.md`).
 - Buying requires an account (no guest checkout). This way the customer can always access the information about their orders (items, prices, quantities, shipping costs), change the delivery address and change the invoicing data. A first-time buyer registers inside the checkout with the emailed code.
-- Landing page contact form, protected with Cloudflare Turnstile and rate limits (no double opt-in).
+- Landing page contact form, protected with Cloudflare Turnstile and rate limits (no double opt-in). The sender gets a confirmation email and the client gets a notification email.
 - No marketing emails at launch. A welcome email is sent once, after the registration code is confirmed, and it stays strictly transactional.
 - Admin panel for the client to manage the catalog: add, remove and edit products, prices and stock, and manage orders. Protected by a role check on the server, not by shared credentials.
 - Languages: PT-PT and EN from the start.
@@ -42,8 +42,11 @@ The owner is the only developer. The project is a real commercial delivery for a
 
 ## Constraints and status
 
+- Legal texts (privacy, cookies, terms) and their legal review are handled by the client.
+
 - Brand identity exists; the files are pending from the client. The design system is built around it, with Claude Design.
-- Emails: the `@lockmx.com` mailboxes are being created.
+- Emails: the `@lockmx.com` mailboxes are being created on AWS. Sending domain for the shop: `@lockmx.com`, validated in Resend by the owner afterwards.
+- Costs of third-party services (email, bot protection, database, hosting) are paid by the client.
 - Shipping: not yet discussed with the client.
 - Stack decided so far: Next.js, pnpm monorepo, a single web app with the backend inside Next.js, Drizzle (PostgreSQL). See `AGENTS.md`.
 
@@ -52,10 +55,9 @@ The owner is the only developer. The project is a real commercial delivery for a
 - Payment provider: does a single provider cover MB WAY, Multibanco and cards? Verify and compare fees at the official sources.
 - Invoicing provider: compare the certified options and their APIs at the official sources.
 - Authentication: proposed in ADR 0003 (Better Auth, passwordless customers, strong second method for admins).
-- Contact form acknowledgement email, delivery fallback for the code, and legal review of the account-required rule: see `customer-accounts-and-consent.md`.
+- Delivery fallback for the code, and DNS records for a domain shared by mailboxes and Resend: see `customer-accounts-and-consent.md`.
 - Database provider and hosting.
 - Cookie consent management: a paid platform or a self-built solution.
-- Who writes and reviews the legal texts (privacy, cookies, terms).
 - Image storage for product photos.
 - Shipping zones, costs and carriers.
 

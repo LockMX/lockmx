@@ -19,11 +19,12 @@ Other transactional providers were not compared yet. The decision stays "propose
 
 ## Consequences
 
-- A verified sending domain is required. It must be ready before any email can be sent, so the `@lockmx.com` domain setup is a dependency. Whether to send from the main domain or from a subdomain, and the DNS records to publish, are confirmed in the Resend documentation when the domain is ready.
+- A verified sending domain is required. It must be ready before any email can be sent, so the `@lockmx.com` domain setup is a dependency. The sending domain is `@lockmx.com`, validated in Resend by the owner when the mailboxes are configured on AWS. Because human mailboxes and Resend share the domain, how the SPF, DKIM and DMARC records combine for both senders is verified in the Resend and AWS documentation before publishing DNS records.
+- Cost is paid by the client. The plan and price are confirmed by the owner at the official Resend page before the client commits.
 - Default API rate limit is 10 requests per second per team, with daily and monthly quotas on the free plan. Login code sending must handle a `429` response without losing the request.
 - An EU data region is available, relevant to GDPR. The data processing agreement and the processor entry in the privacy policy inventory must be recorded.
 - Because purchase requires an account created with an emailed code (ADR 0003), a sending failure blocks sales. Delivery events and failures must be monitored and alerted, and the code endpoint must handle rate limit responses without losing the request.
-- Templates at launch (PT-PT and EN each): registration and login code; welcome, sent after the code is confirmed and strictly transactional (no promotions, otherwise marketing consent would apply); order confirmation. To decide: contact form acknowledgement. The catalog is maintained in `docs/integrations/` once created.
+- Templates at launch (PT-PT and EN each): registration and login code; welcome, sent after the code is confirmed and strictly transactional (no promotions, otherwise marketing consent would apply); order confirmation. Contact form: an acknowledgement to the sender and a notification to the client. The catalog is maintained in `docs/integrations/` once created.
 - Webhooks report delivery events, and can feed monitoring of bounces and failures.
 
 ## Sources

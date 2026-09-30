@@ -95,13 +95,17 @@ Consequence: email codes are reasonable for customers, whose accounts hold moder
 - Admin: passkey, authenticator-app codes, or both.
 - Phone verification: deferred until there is a concrete need.
 
-## Open questions
+## Answers to the open questions (2026-09-30)
 
-- Does the contact form send an automatic acknowledgement email to the sender? It is transactional. To decide with the client.
-- Emails from `@lockmx.com` or from a subdomain, and the exact DNS records Resend requires. Verify at the Resend documentation when the domain is ready.
-- Resend plan and pricing, and the Turnstile plan and privacy addendum: verify at the official pages before the client commits.
+- **Contact form emails:** the sender receives a confirmation email, and the client receives an email informing that someone made contact. Two transactional templates.
+- **Sending domain:** `@lockmx.com`. The owner validates the domain in Resend when the mailboxes are configured on AWS.
+- **Costs:** paid by the client. Turnstile is expected to be free (to confirm at the official plans page). The Resend plan is to be confirmed by the owner.
+- **Legal texts and their review:** handled by the client. The project supplies the data inventory (what is collected, why, which processors) when asked.
+
+## Still open
+
 - Is a fallback to sign in when the email is delayed needed (for example a magic link as an alternative to the code)? Evaluate in the authentication spec, with the delivery data available by then.
-- Legal review of the account-required-to-buy rule and of the privacy text.
+- Sending from the main domain while human mailboxes also use it: how SPF, DKIM and DMARC records combine for both senders. Verify in the Resend and AWS documentation before publishing DNS records.
 
 ## Outcome
 
