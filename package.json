@@ -1,14 +1,14 @@
 {
   "name": "lockmx",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "start": "pnpm --filter web start",
+    "lint": "pnpm --filter web lint"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
@@ -16,6 +16,5 @@
       "onFail": "download"
     }
   },
-  "packageManager": "pnpm@12.6.0",
-  "type": "module"
+  "packageManager": "pnpm@12.6.0"
 }
