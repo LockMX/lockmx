@@ -14,7 +14,9 @@ Use Better Auth, with the Drizzle adapter on the project's own PostgreSQL.
 - **Customers:** passwordless, using Better Auth's Email OTP plugin. Registration and login are the same flow: the visitor enters name and email, receives a code, enters it, and is signed in. No password is stored. Emails are sent through the provider in ADR 0005.
 - **Admins:** the admin plugin provides the role. Every admin must also use a second method that is not an email code: a passkey and/or an authenticator-app second factor (the passkey and two-factor plugins). An email code alone never opens the admin panel.
 - **Code hardening, required:** single use; short lifetime; codes stored hashed; a low limit of failed attempts per code; a rate limit per email and per IP; a resend cooldown; sign-in responses that do not reveal whether an account exists; the email send is not awaited in the request, as the Better Auth documentation recommends.
-- **Marketing consent** is separate from account creation (see the idea document).
+- **Account required to buy.** There is no guest checkout. A first-time buyer registers inside the checkout with the same code flow, and every order references an account.
+- **Bot protection** on the endpoint that sends codes: Cloudflare Turnstile validated on the server, plus rate limits (see the idea document).
+- **No marketing consent** flow at launch, since there is no marketing email. The welcome email is transactional and sent after the code is confirmed.
 
 The decision moves to `accepted` after the verification listed under Consequences.
 
@@ -30,7 +32,7 @@ The decision moves to `accepted` after the verification listed under Consequence
 ## Consequences
 
 - With email codes, the security of a customer account equals the security of the customer's mailbox, and a code can be phished in real time. This is accepted for customer accounts (moderate-value data) and is the reason admins need a stronger method. NIST SP 800-63B-4 says email must not be used for out-of-band authentication and allows codes sent to validate an address; it targets high-assurance systems and is used here as a risk reference, not a requirement.
-- Login availability depends on email delivery. Guest checkout limits the impact on sales.
+- Login and purchase depend on email delivery, and with no guest checkout there is no way around it: a delayed or lost code blocks the sale. Delivery monitoring and alerts are required, and the need for an alternative sign-in method (for example a magic link) is evaluated in the authentication spec.
 - The email templates, in PT-PT and EN, are part of the authentication work (ADR 0005).
 - Server-side authorization is enforced on every action, not only in layouts. Proxy checks are optimistic only, per the Next.js guide.
 - To verify before accepting, in the current official Better Auth documentation:
@@ -39,7 +41,7 @@ The decision moves to `accepted` after the verification listed under Consequence
   - the passkey and two-factor plugins and how to make a second method mandatory for admins;
   - whether password sign-in is off unless enabled;
   - the release status of the version to install.
-- Open product question that shapes the data model: guest checkout, with an optional account created from the order by email code (recommended).
+- The order model requires a customer on every order. The visitor's cart lives in a server-side session and is attached to the account at registration or login.
 
 ## Sources
 
