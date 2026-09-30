@@ -1,30 +1,32 @@
-# Documentação LockMX
+# LockMX documentation
 
-Toda a documentação do projeto vive em `docs/`. Este ficheiro é o índice e explica o ciclo de trabalho.
+All project documentation lives in `docs/`. This file is the index and explains the working cycle.
 
-## Ciclo de trabalho
+## Working cycle
 
-1. **Ideia** em `ideas/`: brainstorming, critérios e objetivo afinados antes de qualquer spec.
-2. **Decisão** em `decisions/`: quando a ideia obriga a escolher tecnologia ou arquitetura, regista-se uma ADR.
-3. **Spec** em `specs/`: tasks detalhadas e explícitas, cada uma com critérios de aceitação e testes.
-4. **Implementação**: uma task, um commit, seguindo `workflow.md`.
-5. **Checklist** em `checklists/`: ao concluir um módulo, regista-se o procedimento para reutilizar noutro projeto.
+1. **Idea** in `ideas/`: brainstorming, criteria and objective refined before any spec.
+2. **Decision** in `decisions/`: when an idea forces a technology or architecture choice, an ADR is recorded.
+3. **Spec** in `specs/`: detailed, explicit tasks, each with acceptance criteria and tests.
+4. **Implementation**: one task, one commit, following `workflow.md`.
+5. **Checklist** in `checklists/`: when a module is finished, the procedure is recorded so it can be reused in another project.
 
-## Pastas
+## Structure
 
-| Pasta | Conteúdo |
+| Path | Content |
 |---|---|
-| `ideas/` | Brainstormings e critérios antes de uma spec. Ver `ideas/README.md`. |
-| `decisions/` | ADRs: uma decisão por ficheiro, com contexto, alternativas e fontes. Ver `decisions/README.md`. |
-| `specs/` | Specs com tasks. Ver `specs/README.md`. |
-| `checklists/` | Procedimentos por módulo, para reutilizar noutros projetos. Ver `checklists/README.md`. |
-| `workflow.md` | Regras de execução de cada task: commits, testes, branches. |
+| `ideas/` | Brainstorming and criteria before a spec. See `ideas/README.md`. |
+| `decisions/` | ADRs: one decision per file, with context, alternatives and sources. See `decisions/README.md`. |
+| `specs/` | Specs with tasks. See `specs/README.md`. |
+| `checklists/` | Per-module procedures, reusable in other projects. See `checklists/README.md`. |
+| `workflow.md` | Rules for executing each task: commits, tests, branches. |
 
-Pastas a criar apenas quando houver conteúdo real: `architecture/`, `design/` (design system), `integrations/` (pagamentos, faturação), `compliance/` (RGPD, cookies, textos legais), `runbooks/` (deploy, backups, incidentes).
+Created when the technical foundation spec defines it: `architecture.md` (the current structure, layers and boundaries, linking to the ADRs that explain each choice).
 
-## Regras da documentação
+Created only when there is real content: `design/` (design system), `integrations/` (payments, invoicing), `compliance/` (GDPR, cookies, legal texts) and `runbooks/` (deploy, backups, incidents).
 
-- Escrita em português (PT-PT). Código, comentários e mensagens de commit em inglês.
-- Uma fonte de verdade por assunto. Não duplicar: apontar para o ficheiro que já o explica.
-- Toda a afirmação técnica indica a fonte consultada e a data. Nunca assumir.
-- Um valor externo (preços, comissões, prazos legais) só entra depois de verificado na fonte oficial.
+## Documentation rules
+
+- Everything is written in English, always: documentation, code comments, identifiers and commit messages. Only user-facing text is translated, through i18n.
+- One source of truth per subject. Do not duplicate: point to the file that already explains it.
+- Every technical claim states the source consulted and the date. Never assume.
+- An external value (prices, fees, legal deadlines) only enters after being verified at the official source.

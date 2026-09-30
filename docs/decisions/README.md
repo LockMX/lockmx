@@ -1,31 +1,31 @@
 # Decisions (ADRs)
 
-Uma decisão de arquitetura ou tecnologia por ficheiro. Registam o porquê, para não ser preciso redescobrir mais tarde.
+One architecture or technology decision per file. They record the why, so it does not have to be rediscovered later.
 
-Nome do ficheiro: `NNNN-<assunto>.md`, com numeração sequencial (`0001-orm-drizzle.md`).
+File name: `NNNN-<subject>.md`, sequentially numbered (`0001-orm-drizzle.md`).
 
-Uma ADR nunca é apagada. Se a decisão mudar, cria-se uma nova ADR e a antiga passa a `substituída por NNNN`.
+An ADR is never deleted. If the decision changes, a new ADR is created and the old one becomes `superseded by NNNN`.
 
-## Modelo
+## Template
 
 ```md
-# NNNN. <Título>
+# NNNN. <Title>
 
-- Estado: proposta | aceite | substituída por NNNN
-- Data: AAAA-MM-DD
+- Status: proposed | accepted | superseded by NNNN
+- Date: YYYY-MM-DD
 
-## Contexto
-O problema e as restrições.
+## Context
+The problem and the constraints.
 
-## Decisão
-O que ficou decidido.
+## Decision
+What was decided.
 
-## Alternativas consideradas
-Cada uma com o motivo de não ter sido escolhida.
+## Alternatives considered
+Each one with the reason it was not chosen.
 
-## Consequências
-O que passa a ser mais fácil e mais difícil.
+## Consequences
+What becomes easier and what becomes harder.
 
-## Fontes
-Documentação oficial consultada, com URL e data de consulta.
+## Sources
+Official documentation consulted, with URL and consultation date.
 ```

@@ -1,26 +1,26 @@
 # Ideas
 
-Brainstormings antes de criar uma spec. Servem para afinar o objetivo e fechar critérios, sem escrever tasks.
+Brainstorming before creating a spec. It refines the objective and settles criteria, without writing tasks.
 
-Nome do ficheiro: `<assunto>.md`, em kebab-case (por exemplo `checkout-guest.md`).
+File name: `<subject>.md`, in kebab-case (for example `guest-checkout.md`).
 
-## Modelo
+## Template
 
 ```md
-# <Assunto>
+# <Subject>
 
-## Objetivo
-O que queremos alcançar e para quem.
+## Objective
+What we want to achieve and for whom.
 
-## Critérios
-O que tem de ser verdade para a ideia estar resolvida.
+## Criteria
+What must be true for the idea to be resolved.
 
-## Opções
-Alternativas consideradas, com vantagens e desvantagens. Indicar a fonte consultada e a data.
+## Options
+Alternatives considered, with pros and cons. State the source consulted and the date.
 
-## Questões em aberto
-O que falta decidir e com quem (por exemplo, o cliente).
+## Open questions
+What is still to be decided and with whom (for example, the client).
 
-## Resultado
-Ligação para a ADR e/ou spec que nasceu desta ideia.
+## Outcome
+Link to the ADR and/or spec that came out of this idea.
 ```

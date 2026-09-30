@@ -1,34 +1,34 @@
 # Specs
 
-Uma spec descreve uma funcionalidade ou módulo em tasks detalhadas e explícitas. Só se escreve depois de a ideia estar afinada em `ideas/` e de as decisões necessárias estarem em `decisions/`.
+A spec describes a feature or module in detailed, explicit tasks. It is only written after the idea is refined in `ideas/` and the necessary decisions are in `decisions/`.
 
-Nome do ficheiro: `NNN-<assunto>.md`, com numeração sequencial (`001-fundacao-tecnica.md`). O branch de trabalho usa o mesmo identificador: `feat/001-fundacao-tecnica`.
+File name: `NNN-<subject>.md`, sequentially numbered (`001-technical-foundation.md`). The working branch uses the same identifier: `feat/001-technical-foundation`.
 
-## Modelo
+## Template
 
 ```md
-# NNN. <Título>
+# NNN. <Title>
 
-- Estado: rascunho | aprovada | em curso | concluída
-- Ideia: ligação para `ideas/...`
-- Decisões: ligações para `decisions/...`
+- Status: draft | approved | in progress | done
+- Idea: link to `ideas/...`
+- Decisions: links to `decisions/...`
 
-## Objetivo
+## Objective
 
-## Fora de âmbito
-O que esta spec não cobre.
+## Out of scope
+What this spec does not cover.
 
-## Fontes
-Documentação oficial consultada, com URL e data de consulta.
+## Sources
+Official documentation consulted, with URL and consultation date.
 
 ## Tasks
 
-### T1. <Título>
-- Descrição: o que fazer, de forma explícita.
-- Ficheiros previstos:
-- Critérios de aceitação:
-- Testes: os testes que acompanham a task (ou "sem testes" e o motivo).
-- Commit: `<tipo>: <mensagem>`
+### T1. <Title>
+- Description: what to do, explicitly.
+- Planned files:
+- Acceptance criteria:
+- Tests: the tests that go with the task (or "no tests" and the reason).
+- Commit: `<type>: <message>`
 ```
 
-Cada task é independente e deixa o projeto a compilar e com os testes a passar.
+Each task is independent and leaves the project compiling with the tests passing.

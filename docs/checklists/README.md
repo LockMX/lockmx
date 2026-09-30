@@ -1,26 +1,26 @@
 # Checklists
 
-Procedimentos por módulo, escritos a partir do que foi feito de facto neste projeto, para servirem de base a projetos futuros. Cada checklist deve permitir repetir o módulo sem consultar mais nada.
+Per-module procedures, written from what was actually done in this project, to serve as a base for future projects. Each checklist must allow repeating the module without consulting anything else.
 
-Um checklist é criado ou atualizado quando o módulo fica concluído, não antes.
+A checklist is created or updated when the module is finished, not before. All new checklists are written in English.
 
-## Módulos previstos
+## Planned modules
 
-Fundação técnica (do pnpm à estrutura de pastas), zona de cliente, carrinho, pagamentos, backend, base de dados, faturação certificada pela AT, painel de administração, emails, i18n, cookies e analytics.
+Technical foundation (from pnpm to folder structure), customer area, cart, payments, backend, database, invoicing certified by the Portuguese tax authority (AT), admin panel, emails, i18n, cookies and analytics.
 
-## Ficheiros
+## Files
 
-- `nextjs-project-checklist.md`: checklist legado de um projeto Next.js mais simples. Serve de base e será substituído por um checklist de fundação adaptado a este projeto (monorepo pnpm, Drizzle, Better Auth). Não seguir sem confirmar cada passo na documentação atual.
+- `nextjs-project-checklist.md`: legacy checklist, in Portuguese, from a simpler Next.js project. It is the base for the new English foundation checklist, adapted to this project (pnpm monorepo, Drizzle, Better Auth), and will be replaced by it. Do not follow it without confirming each step against the current documentation.
 
-## Modelo
+## Template
 
 ```md
-# Checklist: <módulo>
+# Checklist: <module>
 
-## Pré-requisitos
-## Passos
-Cada passo com o comando ou ficheiro exato e o resultado esperado.
-## Erros comuns
-## Verificação
-Como confirmar que o módulo está correto.
+## Prerequisites
+## Steps
+Each step with the exact command or file and the expected result.
+## Common errors
+## Verification
+How to confirm the module is correct.
 ```
