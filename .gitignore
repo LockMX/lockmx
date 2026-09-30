@@ -1,5 +1,15 @@
 node_modules
-.env
 .next
 dist
 build
+coverage
+*.tsbuildinfo
+.DS_Store
+.vercel
+
+# environment files (only the example is versioned)
+.env*
+!.env.example
+
+# temporary notes and transcripts
+debugging/
