@@ -24,6 +24,14 @@ Hosting of the Next.js app is a separate decision. One fact already verified for
 | Branching for tests | Exists (not verified here) | Documented: branches carry the parent's data and are used to test schema changes and destructive queries | Not a built-in feature |
 | Operations effort for one developer | Low | Low | Highest: networking, security groups, patching windows, monitoring |
 
+## Cost model (official pages, consulted 2026-09-30)
+
+- **Supabase** bills per organization. The plan fee (Pro from 25 USD per month) is charged once per organization and applies to all projects in it, so none is paused. Each project also has its own dedicated Postgres server, billed for compute whether or not it is used. The Pro plan includes 10 USD of compute credits, which cover one project on the Micro size. An additional Micro project costs about 10 USD per month. Example: three Micro projects in one Pro organization cost about 25 + 3 x 10 - 10 = 45 USD per month.
+- **Neon** has no monthly minimum on paid plans. Compute is billed per compute-unit hour (0.106 USD on Launch) only while the compute is running. Scale to zero suspends the compute after 5 minutes without queries, and suspended compute incurs no charge. It is mandatory on Free and optional on paid plans. Reactivation takes "a few hundred milliseconds". Storage is billed by size (0.35 USD per GB-month), and the restore window is billed separately (0.20 USD per GB-month). Launch allows up to 100 projects.
+- Illustration of the compute formula, with the smallest compute size assumed to be 0.25 CU (not verified): always on for a month (730 hours) is about 19 USD; active 8 hours per day is about 6 USD; 1 CU always on is about 77 USD. Small storage adds cents. Real cost depends on traffic pattern and on the chosen compute size, and must be measured.
+- So neither is cheaper in general. Neon is cheaper for a small, intermittent workload and can be many times more expensive if a larger compute stays always on. Supabase is a predictable floor of about 25 USD per organization plus about 10 USD per extra project.
+- Ownership: the client pays and must own or take over the account. Projects belonging to the client should live in an organization owned by the client, separate from the owner's personal projects, so billing and ownership stay clean. This means the "several projects under one fee" advantage of Supabase applies only to the owner's own projects, in the owner's own organization.
+
 ## Assessment
 
 - The Free plans of Supabase and Neon are not for production. Supabase Free has no backups and pauses; Neon Free keeps only 6 hours of history.
@@ -38,7 +46,7 @@ Shortlist Supabase Pro and Neon Launch, keeping the code provider-neutral. Leani
 
 ## To verify before accepting
 
-- Neon: whether compute on the Launch plan scales to zero and the resulting cold-start delay on the first request (it would affect login and checkout); connection pooling and the Drizzle driver to use; how long the history window is on Launch at our expected data size and its cost.
+- Neon: the smallest compute size and the real monthly cost for our traffic; whether a reactivation of a few hundred milliseconds is acceptable for login and checkout, or scale to zero should be disabled (allowed on paid plans); connection pooling and the Drizzle driver to use.
 - Supabase: exact backup and recovery options on Pro, how to keep tables out of the Data API (row level security or schema exposure) since it is not used, and pooler settings with Drizzle.
 - Both: the data processing agreement, the processor entry for the privacy inventory, and how the account is owned by the client or transferred to them.
 - Drizzle: the driver and connection settings for the chosen provider (ADR 0002 lists the driver as open).
@@ -54,5 +62,6 @@ Shortlist Supabase Pro and Neon Launch, keeping the code provider-neutral. Leani
 
 - Supabase pricing: https://supabase.com/pricing; regions: https://supabase.com/docs/guides/platform/regions; connections: https://supabase.com/docs/guides/database/connecting-to-postgres (2026-09-30).
 - Neon pricing: https://neon.com/pricing; regions: https://neon.com/docs/introduction/regions; history retention and branching: https://neon.com/docs/introduction/branching (2026-09-30).
+- Supabase billing: https://supabase.com/docs/guides/platform/billing-on-supabase and https://supabase.com/docs/guides/platform/manage-your-usage/compute. Neon plans: https://neon.com/docs/introduction/plans and https://neon.com/docs/introduction/scale-to-zero (2026-09-30).
 - Amazon RDS for PostgreSQL pricing: https://aws.amazon.com/rds/postgresql/pricing/ (2026-09-30).
 - Vercel supported Node.js versions: https://vercel.com/docs/functions/runtimes/node-js/node-js-versions (2026-09-30).
