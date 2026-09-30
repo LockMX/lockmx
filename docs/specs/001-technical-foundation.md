@@ -2,7 +2,7 @@
 
 - Status: draft
 - Idea: `../ideas/project-brief.md`
-- Decisions: `../decisions/0001-monorepo-single-web-app.md`, `../decisions/0002-orm-drizzle-postgresql.md`
+- Decisions: `../decisions/0001-monorepo-single-web-app.md`, `../decisions/0002-orm-drizzle-postgresql.md`, `../decisions/0004-unit-test-runner.md`
 
 ## Objective
 
@@ -23,13 +23,14 @@ Everything that needs an external service or an undecided ADR. Each of these get
 
 - Next.js 16.3.6, React 19.2.8, TypeScript 5, ESLint 9 with `eslint-config-next`, Tailwind 4, React Compiler enabled. `pnpm lint` and `pnpm build` pass from the root.
 - No typecheck script, no test runner, no CI, no commit hooks, no root `README.md`. `apps/web/README.md` is still the `create-next-app` default.
-- Local Node is 24.15.0. Next.js requires Node >= 20.9.0.
+- Local Node is 24.15.0. Next.js requires Node >= 20.9.0; Vitest 5 requires Node >= 22.12.0 (ADR 0004), which becomes the project minimum.
 
 ## Sources
 
 - Next.js bundled docs (16.3.6), `apps/web/node_modules/next/dist/docs/01-app/`, 2026-09-30:
   - `02-guides/testing/vitest.md`: manual setup packages (`vitest`, `@vitejs/plugin-react`, `jsdom`, `@testing-library/react`, `@testing-library/dom`, `vite-tsconfig-paths`) and `vitest.config.mts`. Vitest does not support async Server Components, so unit tests cover plain modules and synchronous components; pages are covered later by end-to-end tests.
   - `01-getting-started/01-installation.md`: minimum Node.js version 20.9.
+- Vitest: https://vitest.dev/guide/ and https://vitest.dev/guide/migration.html, 2026-09-30. Version 5 is the current stable major (requires Vite >= 6.4.0 and Node >= 22.12.0) and changed mock defaults; the Next.js guide may predate it.
 - pnpm/action-setup: https://github.com/pnpm/action-setup, 2026-09-30. Version is read from `packageManager`. The page recommends `pnpm/setup@v1` for pnpm 11 and later; confirm which to use in T5.
 - Husky: https://typicode.github.io/husky/get-started.html, 2026-09-30.
 - commitlint: https://commitlint.js.org/guides/local-setup.html, 2026-09-30. Requires the `commit-msg` hook; the `type-enum` rule sets the allowed types.
@@ -50,7 +51,7 @@ Anything not listed here (exact versions, options) is confirmed against the offi
 - Commit: `arch: add typecheck script`
 
 ### T2. Unit test runner
-- Description: set up Vitest for `apps/web` following the Next.js guide (config file, jsdom environment, tsconfig paths so `@/` works), with one smoke test that imports through the `@/` alias to prove the setup. Add `test` scripts to `apps/web` and the root.
+- Description: set up Vitest for `apps/web` (ADR 0004), starting from the Next.js guide (config file, jsdom environment, tsconfig paths so `@/` works) and checking each step against the current Vitest 5 documentation, with one smoke test that imports through the `@/` alias to prove the setup. Add `test` scripts to `apps/web` and the root.
 - Planned files: `apps/web/package.json`, `apps/web/vitest.config.mts`, one smoke test under `apps/web/src`, `package.json`, `pnpm-lock.yaml`.
 - Acceptance criteria: `pnpm test` passes from the root; the smoke test fails if the alias is broken; lint and build still pass.
 - Tests: the smoke test itself.
@@ -72,7 +73,7 @@ Anything not listed here (exact versions, options) is confirmed against the offi
 - Commit: `arch: enforce commit convention with husky and commitlint`
 
 ### T5. Continuous integration
-- Description: add a GitHub Actions workflow that runs on pull requests and on pushes to `main`: checkout, pnpm and Node setup with dependency cache, `pnpm install --frozen-lockfile`, lint, typecheck, test, build. Read-only permissions, and cancel superseded runs on the same ref. Pin the Node version in one place (for example `.nvmrc` or the `engines` field) after checking the Node.js release schedule; it must satisfy Next.js (>= 20.9.0).
+- Description: add a GitHub Actions workflow that runs on pull requests and on pushes to `main`: checkout, pnpm and Node setup with dependency cache, `pnpm install --frozen-lockfile`, lint, typecheck, test, build. Read-only permissions, and cancel superseded runs on the same ref. Pin the Node version in one place (for example `.nvmrc` or the `engines` field). It must be at least 22.12.0 (Vitest 5, ADR 0004); pick the exact line after checking the Node.js release schedule.
 - Planned files: `.github/workflows/ci.yml`, the Node version file or field.
 - Acceptance criteria: the workflow file is valid; every step matches a command that passes locally; it runs green on the spec's pull request.
 - Tests: the first green run on the pull request is the verification. Until then, the same steps are run locally in the same order.
