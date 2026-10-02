@@ -58,14 +58,14 @@ Not included and not quantified: paid apps (for example vehicle fitment or trans
 
 | Item | Cost | Notes |
 |---|---|---|
-| Application hosting (Vercel) | 20 USD per month per seat on Pro | The free Hobby plan is "for personal, non-commercial use", so a shop needs Pro. Pro includes a 20 USD usage credit and 1 TB of data transfer. |
+| Application hosting (Vercel) | 20 USD per month per seat on Pro | The free Hobby plan is restricted to non-commercial personal use. Commercial use is any deployment used for the financial gain of anyone involved in producing it, including a paid developer, or that requests or processes payments (Vercel fair use guidelines). A shop is commercial, so it needs Pro. Pro includes a 20 USD usage credit and 1 TB of data transfer. AWS alternatives are compared in `../decisions/0007-application-hosting.md`: Lightsail costs 5 to 12 USD per month but puts server operations on the owner and client; Amplify is pay as you go but its documented Next.js support stops at version 15, and this project uses 16. |
 | Database | Neon: about 6 to 19 USD per month (illustration) or Supabase Pro from 25 USD per month | The Neon range uses the smallest compute, 0.25 CU (verified: 1 GB of RAM, shared compute), at 0.106 USD per compute-unit hour, for 8 to 24 hours of activity per day. Real activity must still be measured. Supabase: 25 USD per organization, or about 10 USD per extra project in an existing organization. See ADR 0006. |
 | Transactional email (Resend) | Free: 0 USD, 3,000 emails per month, 100 per day. Pro: 20 USD for 50,000 per month | Login codes, welcome, order and contact emails all count. The 100-per-day limit could block logins on a busy day, which matters because buying requires a code. Pro removes the daily limit. |
 | Error monitoring (Sentry) | Developer: 0 USD (1 user, 5,000 errors per month). Team: 26 USD per month billed annually | Free tier is enough to start. |
 | Bot protection (Turnstile) | Free: up to 20 widgets, unlimited challenges | Verified on the Cloudflare plans page. |
 | Uptime monitoring, backups beyond the database plan | Not researched | |
 
-Fixed-cost range for the custom build, before invoicing and development: about **26 USD** at the low end (Vercel 20 + Neon about 6, free email and monitoring) to about **65 USD** at the high end (Vercel 20 + Supabase 25 + Resend Pro 20). Mixed currencies, not converted.
+Hosting on AWS Lightsail (2 GB at 12 USD) instead of Vercel Pro (20 USD) would save about 8 USD per month, at the price of more operations work (see ADR 0007). Fixed-cost range for the custom build, before invoicing and development: about **26 USD** at the low end (Vercel 20 + Neon about 6, free email and monitoring) to about **65 USD** at the high end (Vercel 20 + Supabase 25 + Resend Pro 20). Mixed currencies, not converted.
 
 ### Invoicing software, needed in both options
 
