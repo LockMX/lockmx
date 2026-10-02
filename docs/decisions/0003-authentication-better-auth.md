@@ -26,7 +26,14 @@ The decision moves to `accepted` after the verification listed under Consequence
 - Magic link instead of a code: same mailbox dependency. Better Auth supports it. A code avoids following a link on another device. Can be reconsidered.
 - Phone (SMS) codes: extra cost and a provider dependency, plus SIM-swap risk. NIST treats SMS as a restricted channel. Deferred until there is a concrete need.
 - Auth.js (NextAuth): a secondary source reports that the Better Auth team took over its maintenance in September 2025 and that its documented pattern predates the Next.js 16 rename of `middleware` to `proxy`. Not verified in the Auth.js documentation.
-- Supabase Auth: fewer lines of code, but users live in a schema managed by the provider, which couples the data model and the database provider. Not verified against the Supabase documentation in this session.
+- Supabase Auth: fewer lines of code and the auth service is operated by the provider. Checked against the Supabase documentation (2026-10-02):
+  - Email OTP exists: six digits, expires after 1 hour and one request per 60 seconds by default, both adjustable. It shares the magic link email template.
+  - MFA factors are authenticator app (TOTP) and SMS. The MFA page does not mention passkeys (WebAuthn). SMS is already deferred above.
+  - MFA enforcement is done with Row Level Security policies that check the `aal` claim in the user's JWT, a model built for the browser talking to the database. This project does the checks on the server.
+  - Cost: Pro includes 100,000 monthly active users, then 0.00325 USD per extra user.
+  - Users live in a schema managed by the provider, which couples authentication to the database provider and works against the provider-neutral rule of ADR 0006.
+  - Not verified: limits of the built-in SMTP and PT-PT/EN template customization. These matter because login and purchase depend on code delivery.
+  - Rejected for now. It is reconsidered only if the project adopts Supabase as a full platform, which conflicts with ADR 0002.
 - Hand-rolled sessions as in the Next.js authentication guide: rejected for the security burden on a store with payments.
 
 ## Consequences
@@ -40,7 +47,8 @@ The decision moves to `accepted` after the verification listed under Consequence
   - the Email OTP defaults (code length, lifetime, attempts, rate limit) and the exact settings we choose;
   - the passkey and two-factor plugins and how to make a second method mandatory for admins;
   - whether password sign-in is off unless enabled;
-  - the release status of the version to install.
+  - the release status of the version to install;
+  - the Better Auth license, in the repository.
 - The order model requires a customer on every order. The visitor's cart lives in a server-side session and is attached to the account at registration or login.
 
 ## Sources
@@ -48,5 +56,7 @@ The decision moves to `accepted` after the verification listed under Consequence
 - Better Auth documentation via Context7 (`/better-auth/better-auth`), consulted 2026-09-30: Drizzle adapter; admin plugin; Email OTP plugin options (`otpLength`, `expiresIn`, `allowedAttempts`, `storeOTP`, `resendStrategy`, `rateLimit`, `disableSignUp`, and the note about not awaiting the send); magic link, passkey and two-factor plugins.
 - NIST SP 800-63B-4, Authenticators: https://pages.nist.gov/800-63-4/sp800-63b/authenticators/ (2026-09-30).
 - OWASP Authentication Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html (2026-09-30).
+- Better Auth pricing: https://www.better-auth.com/pricing (2026-10-02). The framework is free and open source; the paid plans only cover an optional managed dashboard and monitoring. The page does not state the license, so confirm it in the repository before accepting.
+- Supabase Auth: email OTP https://supabase.com/docs/guides/auth/auth-email-passwordless; MFA https://supabase.com/docs/guides/auth/auth-mfa; MAU billing https://supabase.com/docs/guides/platform/manage-your-usage/monthly-active-users (2026-10-02).
 - Next.js bundled docs, `apps/web/node_modules/next/dist/docs/01-app/02-guides/authentication.md` (optimistic checks in Proxy), 2026-09-30.
 - Secondary source, not official: LogRocket, "I tested every major auth library for Next.js in 2026", https://blog.logrocket.com/best-auth-library-nextjs-2026/ (2026-09-30). To be replaced by official sources during verification.
