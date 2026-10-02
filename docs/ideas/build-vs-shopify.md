@@ -76,6 +76,19 @@ Both options need AT-certified invoicing software. Prices excluding VAT, annual 
 
 Conclusion: invoicing costs about the same in both options, roughly 7 to 11 EUR per month plus VAT for a small volume. It is not a difference between A and B.
 
+### Total fixed monthly cost per option
+
+Sum of the fixed costs above, including the certified invoicing that both options need. Excludes VAT, payment fees, development, and items common to both options. Dollar amounts converted at the European Central Bank reference rate of 2026-10-02 (1 EUR = 1.1225 USD).
+
+| Part | Option B: Shopify (Basic plan) | Option A: custom build |
+|---|---|---|
+| Platform or infrastructure | 19 EUR per month (annual plan billing) or 27 EUR per month (monthly billing) | 26 to 65 USD per month, about 23 to 58 EUR |
+| Certified invoicing | 7 to 11 EUR per month | 7 to 11 EUR per month |
+| **Total** | **26 to 30 EUR per month with annual billing; 34 to 38 EUR per month with monthly billing** | **About 30 to 69 EUR per month** |
+| Not included | Paid apps if needed (for example a van finder, about 5 to 20 USD per month in the listings seen). Grow plan: 37 EUR more per month (annual) or 47 EUR more (monthly) than Basic. | The low end assumes the free Resend and Sentry plans. Real database cost depends on traffic and must be measured. |
+
+Summary: Shopify Basic costs about 26 to 38 EUR per month and the custom build about 30 to 69 EUR per month. The ranges overlap at the low end of the custom build. At the high end the custom build costs 31 to 43 EUR per month more.
+
 ## Payment fees
 
 Fees are charged on every sale, so they scale with volume. Example figures below are for one 100 EUR order.
@@ -175,4 +188,5 @@ Take this document to the client. Once the open points that matter to them are a
 - Moloni plans: https://www.moloni.pt/planos/
 - InvoiceXpress plans: https://invoicexpress.com/planos-precos/ and Shopify plugin: https://plugins.invoicexpress.com/shopify/
 - Supabase and Neon: see `../decisions/0006-database-provider.md`.
+- European Central Bank euro reference rate (USD), 2026-10-02: https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-usd.en.html
 - Secondary, not official: MB WAY and Multibanco rates reported by a web search summary (unconfirmed, not used), and the 1.9% + 0.25 EUR card rate quoted by a comparison article (contradicted by the official page).
