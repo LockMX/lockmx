@@ -1,6 +1,6 @@
 # Build from scratch versus Shopify
 
-Prepared to support a decision with the client. All figures come from the official pages consulted on 2026-09-30 unless marked otherwise. Nothing here is a recommendation to choose one side: it lists what each option costs and covers, and what is still unknown.
+Prepared to support a decision with the client. All figures come from the official pages consulted on 2026-09-30 and 2026-10-02 unless marked otherwise. Nothing here is a recommendation to choose one side: it lists what each option costs and covers, and what is still unknown.
 
 How to read it:
 
@@ -24,16 +24,16 @@ From `project-brief.md`: small catalog (a few tyres and the flagship racks for v
 
 | Requirement | Shopify | Custom build |
 |---|---|---|
-| Customer accounts, passwordless by email code | Verified: new customer accounts sign in with an email address and a one-time 6-digit code, with no password. Whether an account can be required to buy: not verified. | Planned (ADR 0003, Better Auth email codes). Account required to buy: decided. |
+| Customer accounts, passwordless by email code | Verified: new customer accounts sign in with an email address and a one-time 6-digit code, with no password. Verified: an account can be required to buy, with the setting "Require customers to sign in to their account before checkout" (Settings, Checkout). Side effects: accelerated checkouts such as Apple Pay are hidden in the cart, and customers can only use an email address to check out. The page does not say whether the setting depends on the plan. | Planned (ADR 0003, Better Auth email codes). Account required to buy: decided. |
 | PT-PT and EN | Verified: up to 20 languages on Basic, Grow and Advanced. Price of the translation tool (Translate & Adapt) not verified; CSV import is free. | Planned, built by us (messages, routes, emails). |
 | Card payments | Verified: Shopify Payments is available in Portugal (Visa, Mastercard, Amex, Maestro, UnionPay; Apple Pay, Google Pay, Shop Pay). | Through a payment provider, for example Stripe. |
 | MB WAY | Verified with a caveat: available through Shopify Payments in Portugal, but the help page says it is in early access and not available to all merchants. Requires an eligible business type. | Stripe supports it (official pricing page). |
 | Multibanco | Verified: requires Shopify Payments; customers have up to 7 days to pay; the customer must check out with an email address. | Stripe supports it (official pricing page). |
-| Bank transfer (IBAN) | Not verified. | Not designed yet. |
-| AT-certified invoices | Verified: InvoiceXpress offers a free Shopify plugin (the service itself is a paid subscription). Moloni lists the e-commerce integration in its Flex and Pro plans. Both issue the invoice automatically when the order is paid (per their own pages). | Through the provider's API, built by us. |
+| Bank transfer (IBAN) | Verified: manual payment methods, including bank transfer, are supported. The order stays unpaid until the merchant marks it as paid by hand, the payment instructions are shown on the confirmation page, and no third-party transaction fee applies. Reconciliation is manual. | Not designed yet. |
+| AT-certified invoices | Verified: InvoiceXpress offers a free Shopify plugin (the service itself is a paid subscription). Moloni lists the e-commerce integration in its Flex and Pro plans. InvoiceXpress describes automatic invoice creation when the order is paid; the Moloni page read describes issuing certified invoices and syncing stock, without stating the payment trigger. | Through the provider's API, built by us. |
 | Admin panel, stock and orders | Included with the platform (not researched in detail in this session). | Built by us: catalog, prices, stock, orders, with two-factor for admins. |
 | Stock never sold twice | Platform concern (not verified in this session). | Built by us: reservation and atomic updates. |
-| Vehicle-specific product choice (racks per van model) | Not verified. May be solvable with variants, or may need an app. | Fully custom. |
+| Vehicle-specific product choice (racks per van model) | Verified limits: a product can have up to 3 options and up to 2,048 variants, so a product with options such as van model, length and height fits without an app if it needs no more than 3 options. A "choose your van" finder is a different feature and would normally need an app: listings found on the Shopify App Store start at about 5 to 20 USD per month, with one at 250 USD per month and up (listing prices seen through a web search, not read on the listings themselves). Whether the racks need a finder is a product decision. | Fully custom. |
 | Checkout customization | Basic plan has basic checkout customization (per the plan page); full checkout customization is listed only for Plus (2,100 EUR per month and up). | Full control. |
 | Contact form with bot protection | Not researched. | Planned with Cloudflare Turnstile. |
 | GA4 with consent | Not researched. | Planned, built by us. |
@@ -59,7 +59,7 @@ Not included and not quantified: paid apps (for example vehicle fitment or trans
 | Item | Cost | Notes |
 |---|---|---|
 | Application hosting (Vercel) | 20 USD per month per seat on Pro | The free Hobby plan is "for personal, non-commercial use", so a shop needs Pro. Pro includes a 20 USD usage credit and 1 TB of data transfer. |
-| Database | Neon: about 6 to 19 USD per month (illustration) or Supabase Pro from 25 USD per month | The Neon range uses an assumed smallest compute of 0.25 CU (not verified) and 8 to 24 hours of activity per day. Real cost must be measured. Supabase: 25 USD per organization, or about 10 USD per extra project in an existing organization. See ADR 0006. |
+| Database | Neon: about 6 to 19 USD per month (illustration) or Supabase Pro from 25 USD per month | The Neon range uses the smallest compute, 0.25 CU (verified: 1 GB of RAM, shared compute), at 0.106 USD per compute-unit hour, for 8 to 24 hours of activity per day. Real activity must still be measured. Supabase: 25 USD per organization, or about 10 USD per extra project in an existing organization. See ADR 0006. |
 | Transactional email (Resend) | Free: 0 USD, 3,000 emails per month, 100 per day. Pro: 20 USD for 50,000 per month | Login codes, welcome, order and contact emails all count. The 100-per-day limit could block logins on a busy day, which matters because buying requires a code. Pro removes the daily limit. |
 | Error monitoring (Sentry) | Developer: 0 USD (1 user, 5,000 errors per month). Team: 26 USD per month billed annually | Free tier is enough to start. |
 | Bot protection (Turnstile) | Free: up to 20 widgets, unlimited challenges | Verified on the Cloudflare plans page. |
@@ -71,7 +71,7 @@ Fixed-cost range for the custom build, before invoicing and development: about *
 
 Both options need AT-certified invoicing software. Prices excluding VAT, annual billing where stated.
 
-- **Moloni**: mOn 3.50 EUR, Base 6.49 EUR, Flex 10.90 EUR, Pro 15.90 EUR per month. **API access is only in Flex and Pro**, and the e-commerce integration is listed in Flex and Pro. So the cheap Base plan is not enough for either option.
+- **Moloni**: mOn 3.50 EUR, Base 6.49 EUR, Flex 10.90 EUR, Pro 15.90 EUR per month. **API access is only in Flex and Pro**, and the e-commerce integration is listed in Flex and Pro. So the cheap Base plan is not enough for either option. The Shopify integration is a paid app made by Webinfor, with support from Moloni. The page read does not state its price or the plan it needs, so it must be confirmed with the provider.
 - **InvoiceXpress**: the plans page lists X3 at 3 EUR for 3 documents, X10 at 7 EUR for 10 documents, X100 at 20 EUR for 100 documents per month, with API access on all plans. The Shopify plugin page lists different plans and prices (XS 6 EUR for 5 documents, S 12 EUR for 20 documents, M 24 EUR for 500 documents) and says the plugin is free. The two official pages disagree, so the exact plan and price must be confirmed with the provider.
 
 Conclusion: invoicing costs about the same in both options, roughly 7 to 11 EUR per month plus VAT for a small volume. It is not a difference between A and B.
@@ -88,14 +88,14 @@ Fees are charged on every sale, so they scale with volume. Example figures below
 | Stripe, Multibanco | 2.95% + 0.25 EUR (Verified) | 3.20 EUR |
 | Stripe, dispute | 20 EUR per dispute (Verified) | |
 | Shopify Payments, card, Basic plan | 1.8% + 0.30 EUR (Verified, official Portuguese pricing page; Grow 1.6% + 0.30, Advanced 1.5% + 0.30) | 2.10 EUR |
-| Shopify Payments, MB WAY and Multibanco | Not found on the official pages read | Not verified |
-| Shopify with a third-party gateway such as Stripe | Shopify adds a transaction fee on top of the gateway fee: 2% Basic, 1% Grow, 0.6% Advanced (Secondary, not confirmed on an official page) | About 3.75 EUR for a standard card |
+| Shopify Payments, MB WAY and Multibanco | Not on the official pages read. One web search summary reported 0.7% + 0.07 EUR for MB WAY and 1.5% + 0.22 EUR for Multibanco, with no confirmed source. Do not use until confirmed in the Shopify account. | Indicative only: about 0.77 EUR (MB WAY) and 1.72 EUR (Multibanco) |
+| Shopify with a third-party gateway such as Stripe | Verified on the Shopify pricing page (European version): Shopify adds a transaction fee on top of the gateway fee, 2% on Basic, 1% on Grow and 0.6% on Advanced. Shopify Payments, Shop Pay and PayPal Express are not charged this fee. | 3.75 EUR for a standard EEA card on Basic (Stripe 1.75 plus 2.00) |
 
 Notes:
 
-- A secondary source quotes different Shopify Payments rates for Europe (1.9% + 0.25 EUR on Basic). The official Portuguese pricing page figure is used above. Confirm in the Shopify account.
+- A secondary source quoted 1.9% + 0.25 EUR for Basic. The official Shopify pricing page shows 1.8% + 0.30 EUR, which is used above. American Express cards cost more on every plan (2.55% to 3% + 0.30 EUR).
 - For a card payment, Shopify Payments on Basic costs 0.3% of the amount plus 0.05 EUR more than Stripe on the custom build. On a 100 EUR order that is 0.35 EUR, and on a 300 EUR order 0.95 EUR. So payment fees are a small difference, not the main one. The figure changes if the custom build uses a different provider, which was not compared.
-- Shopify's third-party fee only matters if the client insists on using Stripe inside Shopify. Using Shopify Payments avoids it, but MB WAY availability is uncertain (early access).
+- Shopify's third-party fee only matters if the client insists on using Stripe inside Shopify. Using Shopify Payments avoids it, but MB WAY is in early access and the Shopify rates for MB WAY and Multibanco are not confirmed.
 
 ## What Shopify saves in fixed infrastructure, and what it does not
 
@@ -120,27 +120,49 @@ In the custom build the client pays separately for application hosting, the data
 
 The last row is a real factor for the owner and should be stated openly to the client.
 
-## What is still unknown (to close before deciding)
+## Research results since the first version (2026-10-02)
 
-1. Can Shopify require an account before buying, and is the code login available on the chosen plan?
-2. MB WAY: is it available to this merchant, or only in early access? What are the Shopify Payments rates for MB WAY and Multibanco?
-3. Does the vehicle-specific choice of racks work with variants, or does it need a paid app, and at what monthly price?
-4. Shopify transaction fee when using Stripe, confirmed on an official page.
-5. Is bank transfer (IBAN) supported on Shopify, and how is it reconciled?
-6. Shopify prices: are they with or without VAT?
-7. InvoiceXpress plan and price (the two official pages disagree), and the Moloni plan needed.
-8. Expected order volume and average order value. Fees scale with them, and so does the choice between plans.
-9. The owner's development fee and the maintenance estimate for the custom build.
-10. The estimated Neon monthly cost for this workload, measured.
+1. **Account required to buy:** possible on Shopify, with the side effects listed in the coverage table. The plan dependency is not stated.
+2. **MB WAY and Multibanco:** MB WAY is in early access and needs an eligible business type (official help page). The Shopify rates for both are not on the official pages read. Multibanco gives customers up to 7 days to pay.
+3. **Vehicle-specific choice:** product limits and app price ranges are in the coverage table. Whether a finder is needed is a product decision.
+4. **Third-party gateway fee:** now verified (2%, 1% and 0.6% by plan).
+5. **Bank transfer:** supported as a manual payment method, with manual reconciliation.
+6. **VAT on Shopify prices:** the pricing page does not say. Confirm during the trial.
+7. **Invoicing plans:** the exact InvoiceXpress plan and price, and the Moloni plan and Webinfor app price, are still to be confirmed with the providers.
+8. **Neon smallest compute:** verified as 0.25 CU, which confirms the illustration. Real traffic is still to be measured.
+
+## Still open (to close before deciding)
+
+For the client and owner:
+
+- Expected order volume and average order value. Fees scale with them, and so does the choice between plans.
+- The owner's development fee and the maintenance estimate for the custom build.
+- Does the racks product need a "choose your van" finder, or are variants enough?
+
+To confirm in a Shopify trial account or with the providers:
+
+- The Shopify Payments rates for MB WAY and Multibanco, and whether MB WAY is available to this merchant.
+- Whether the sign-in requirement depends on the plan.
+- VAT on the Shopify subscription.
+- The invoicing plan and price (InvoiceXpress, or Moloni with the Webinfor app).
+- Measured Neon cost for this workload, if the custom build goes ahead.
 
 ## Next step
 
-Take this document to the client. Once the unknowns that matter to them are answered (mainly 1, 2, 3, 8 and 9), record the outcome as an ADR. If the decision is Shopify, the current ADRs 0001 to 0006 and spec 001 are superseded. If it stays custom, the work continues as documented.
+Take this document to the client. Once the open points that matter to them are answered (mainly volume, the development fee, the finder and the MB WAY availability), record the outcome as an ADR. If the decision is Shopify, the current ADRs 0001 to 0006 and spec 001 are superseded. If it stays custom, the work continues as documented.
 
 ## Sources
 
 - Shopify pricing (Portugal): https://www.shopify.com/pt/precos
 - Shopify Payments methods in Portugal: https://help.shopify.com/en/manual/payments/shopify-payments/supported-countries/portugal/payment-methods
+- Shopify pricing (European version, third-party fee and card rates): https://www.shopify.com/pricing
+- Shopify checkout sign-in requirement: https://help.shopify.com/en/manual/checkout-settings/checkout-form-options
+- Shopify manual payments: https://help.shopify.com/en/manual/payments/manual-payments
+- Shopify variants: https://help.shopify.com/en/manual/products/variants/add-variants
+- Neon compute sizes: https://neon.com/docs/manage/computes
+- Moloni Shopify integration: https://www.moloni.pt/plugins/shopify/
+- InvoiceXpress Shopify plugin article: https://invoicexpress.com/blog/vender-faturar-online-plugin-integracao-shopify/
+- Shopify fitment apps (App Store listings seen through a web search): https://apps.shopify.com/make-model-year and https://apps.shopify.com/year-make-model-fitment-search
 - Shopify MB WAY: https://help.shopify.com/en/manual/payments/shopify-payments/local-payment-methods/mb-way
 - Shopify Multibanco: https://help.shopify.com/en/manual/payments/shopify-payments/local-payment-methods/multibanco
 - Shopify new customer accounts: https://help.shopify.com/en/manual/customers/customer-accounts/new-customer-accounts
@@ -153,4 +175,4 @@ Take this document to the client. Once the unknowns that matter to them are answ
 - Moloni plans: https://www.moloni.pt/planos/
 - InvoiceXpress plans: https://invoicexpress.com/planos-precos/ and Shopify plugin: https://plugins.invoicexpress.com/shopify/
 - Supabase and Neon: see `../decisions/0006-database-provider.md`.
-- Secondary, not official: Shopify third-party gateway fees and Europe card rates, from comparison articles returned by a web search (for example https://trueprofit.io/blog/shopify-payment-fees).
+- Secondary, not official: MB WAY and Multibanco rates reported by a web search summary (unconfirmed, not used), and the 1.9% + 0.25 EUR card rate quoted by a comparison article (contradicted by the official page).
