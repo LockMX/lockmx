@@ -26,7 +26,7 @@ Commands, from the root:
 | `pnpm dev` | Start the development server. |
 | `pnpm build` | Production build. |
 | `pnpm lint` | ESLint. |
-| `pnpm typecheck` | TypeScript compiler without emitting. |
+| `pnpm typecheck` | Next.js type generation, then the TypeScript compiler without emitting. |
 | `pnpm test` | Unit tests (Vitest, single run). |
 
 Definition of done for a task: `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm build` pass (the ones the task affects, at minimum), the tests for the task exist, and the commit contains code and tests together.

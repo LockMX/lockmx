@@ -23,7 +23,7 @@ The site runs at http://localhost:3000.
 | `pnpm dev` | Start the development server. |
 | `pnpm build` | Production build. |
 | `pnpm lint` | ESLint. |
-| `pnpm typecheck` | TypeScript compiler without emitting. |
+| `pnpm typecheck` | Next.js type generation, then the TypeScript compiler without emitting. |
 | `pnpm test` | Unit tests (Vitest). |
 
 ## Documentation
