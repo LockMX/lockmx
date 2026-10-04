@@ -1,10 +1,16 @@
-// Source: https://nextjs.org/docs/app/guides/testing/vitest#manual-setup
+// Sources:
+// https://nextjs.org/docs/app/guides/testing/vitest#manual-setup
+// https://vite.dev/config/shared-options.html#resolve-tsconfigpaths
+// Vite resolves tsconfig `paths` natively, so vite-tsconfig-paths (listed in
+// the Next.js guide) is not needed.
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [tsconfigPaths(), react()],
+  plugins: [react()],
+  resolve: {
+    tsconfigPaths: true,
+  },
   test: {
     environment: "jsdom",
   },
