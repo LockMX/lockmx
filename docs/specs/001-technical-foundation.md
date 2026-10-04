@@ -1,6 +1,6 @@
 # 001. Technical foundation
 
-- Status: draft
+- Status: done
 - Idea: `../ideas/project-brief.md`
 - Decisions: `../decisions/0001-monorepo-single-web-app.md`, `../decisions/0002-orm-drizzle-postgresql.md`, `../decisions/0004-unit-test-runner.md`
 
