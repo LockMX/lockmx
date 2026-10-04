@@ -19,8 +19,7 @@ All project documentation lives in `docs/`. This file is the index and explains 
 | `specs/` | Specs with tasks. See `specs/README.md`. |
 | `checklists/` | Per-module procedures, reusable in other projects. See `checklists/README.md`. |
 | `workflow.md` | Rules for executing each task: commits, tests, branches. |
-
-Created when the technical foundation spec defines it: `architecture.md` (the current structure, layers and boundaries, linking to the ADRs that explain each choice).
+| `architecture.md` | Current structure, layers and boundaries, linking to the ADRs behind each choice. |
 
 Created only when there is real content: `design/` (design system), `integrations/` (payments, invoicing), `compliance/` (GDPR, cookies, legal texts) and `runbooks/` (deploy, backups, incidents).
 
