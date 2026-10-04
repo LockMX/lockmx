@@ -10,7 +10,8 @@ Technical foundation (from pnpm to folder structure), customer area, cart, payme
 
 ## Files
 
-- `nextjs-project-checklist.md`: legacy checklist, in Portuguese, from a simpler Next.js project. It is the base for the new English foundation checklist, adapted to this project (pnpm monorepo, Drizzle, Better Auth), and will be replaced by it. Do not follow it without confirming each step against the current documentation.
+- `00-foundation.md`: technical foundation (pnpm monorepo, typecheck, unit tests, commit convention, CI). Replaces the foundation part of the legacy checklist.
+- `nextjs-project-checklist.md`: legacy checklist, in Portuguese, from a simpler Next.js project. Still the reference for the modules not yet redone (i18n, database, server actions), and removed when the last of them is replaced. Do not follow it without confirming each step against the current documentation.
 
 ## Template
 
