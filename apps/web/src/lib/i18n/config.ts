@@ -10,6 +10,12 @@ export const htmlLang: Record<Locale, string> = {
   en: "en",
 };
 
+// Each language is named in its own language, so it is not translated.
+export const localeNames: Record<Locale, string> = {
+  pt: "Português",
+  en: "English",
+};
+
 export function isLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);
 }
