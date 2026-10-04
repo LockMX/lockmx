@@ -1,4 +1,4 @@
-# Source: https://docs.github.com/en/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot
+# Source: https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 # Keeps the SHA-pinned actions in .github/workflows current.
 version: 2
 updates:
@@ -6,3 +6,6 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    # Follows the commit convention in docs/workflow.md ("arch: bump ...").
+    commit-message:
+      prefix: arch
