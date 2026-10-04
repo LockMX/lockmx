@@ -21,10 +21,15 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 | Path | Status | Content |
 |---|---|---|
 | `app/` | exists | Routes, layouts and composition only. No business logic in pages. |
-| `app/(marketing)`, `(shop)`, `(account)`, `(admin)` | planned | Route groups, one per site section. |
-| `test/` | exists | Test setup check (`smoke.test.ts`). Unit tests live next to the code they cover once there is code. |
-| `server/` | planned | Server-only layer, see below. |
-| `lib/` | planned | Code shared by server and client that has no server dependencies (for example validation schemas). |
+| `app/[lang]/` | exists | Root segment for the locale (`pt` or `en`). Holds the root layout and every page. |
+| `app/[lang]/(marketing)`, `(shop)`, `(account)`, `(admin)` | planned | Route groups, one per site section, inside `[lang]`. |
+| `proxy.ts` | exists | Sends a request without a supported locale prefix to `/<locale>/...`. Kept small: later specs add their own checks here. |
+| `components/` | exists | Reusable components. Receive text and data through props, never read dictionaries themselves. |
+| `lib/i18n/` | exists | Locale configuration, locale negotiation from `Accept-Language`, path switching. No server dependencies. |
+| `server/i18n/` | exists | Typed dictionaries (`messages/pt.ts` defines the shape, `messages/en.ts` follows it), `getMessages(locale)` and `getCurrentLocale()`. |
+| `server/` (other modules) | planned | Server-only layer, see below. |
+| `lib/` (other modules) | planned | Code shared by server and client that has no server dependencies (for example validation schemas). |
+| `test/` | exists | Test setup (`setup.ts`) and the alias smoke test. Unit tests live next to the code they cover. |
 
 ## Server layer
 
@@ -40,9 +45,20 @@ Everything that is not presentation lives in `server/`, separated from the UI:
 
 Source for these rules: Next.js bundled docs, `apps/web/node_modules/next/dist/docs/01-app/02-guides/data-security.md` (see ADR 0001).
 
+## Internationalization
+
+Decided in `decisions/0008-i18n-native-next.md`, specified in `specs/002-i18n.md`.
+
+- Two locales, `pt` and `en`, always in the URL path (`/pt/...`, `/en/...`). `<html lang>` is `pt-PT` for `pt`.
+- First visit: `proxy.ts` picks the locale from `Accept-Language`, falling back to `pt`. An unsupported language prefix (`/fr`) is replaced by the resolved locale. The redirect is temporary and varies on `Accept-Language`. No cookie is used.
+- Every visible string comes from a dictionary. Pages read it with `getMessages(await getCurrentLocale())` and pass strings to components as props. ESLint (`react/jsx-no-literals`) rejects literal text in JSX; attribute strings (`alt`, `aria-label`) are a review point.
+- The proxy matcher skips `api`, `_next` and any path with a dot. Next.js turns an escaped dot in a matcher into any character, so the pattern uses `[.]`; a test guards it.
+- No top-level route may be named like a language code (two or three letters).
+
 ## How code is tested
 
 - Unit and integration tests run with Vitest in a jsdom environment (`apps/web/vitest.config.mts`), through `pnpm test`.
+- Component tests clean the DOM after each test through `src/test/setup.ts`.
 - Vitest does not support async Server Components. Plain modules and synchronous components are unit tested; pages are covered later by end-to-end tests (planned, not yet set up).
 - CI runs lint, typecheck, test and build on every pull request and on pushes to `main`.
 
@@ -54,6 +70,7 @@ Source for these rules: Next.js bundled docs, `apps/web/node_modules/next/dist/d
 | Drizzle ORM with PostgreSQL | `decisions/0002-orm-drizzle-postgresql.md` | accepted |
 | Authentication with Better Auth | `decisions/0003-authentication-better-auth.md` | proposed |
 | Vitest as unit test runner | `decisions/0004-unit-test-runner.md` | accepted |
+| Internationalization with the native Next.js pattern | `decisions/0008-i18n-native-next.md` | accepted |
 | Transactional email with Resend | `decisions/0005-transactional-email-resend.md` | proposed |
 | Database provider | `decisions/0006-database-provider.md` | proposed |
 | Application hosting | `decisions/0007-application-hosting.md` | proposed |
