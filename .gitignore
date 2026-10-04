@@ -13,3 +13,5 @@ coverage
 
 # temporary notes and transcripts
 debugging/
+# Claude Code local settings
+.claude
