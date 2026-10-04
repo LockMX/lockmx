@@ -60,8 +60,8 @@ Online store for LockMX (motocross products: tyres and racks for carrying equipm
 
 ## Commands (from the root)
 
-- `pnpm dev`, `pnpm build`, `pnpm lint`.
-- Test and typecheck commands arrive with the technical foundation spec and are recorded in `docs/workflow.md`.
+- `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
+- Definition of done for a task: `docs/workflow.md`.
 - Never claim a command passed if you did not run it.
 
 ## Current state
