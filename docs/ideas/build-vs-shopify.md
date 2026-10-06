@@ -101,14 +101,37 @@ Fees are charged on every sale, so they scale with volume. Example figures below
 | Stripe, Multibanco | 2.95% + 0.25 EUR (Verified) | 3.20 EUR |
 | Stripe, dispute | 20 EUR per dispute (Verified) | |
 | Shopify Payments, card, Basic plan | 1.8% + 0.30 EUR (Verified, official Portuguese pricing page; Grow 1.6% + 0.30, Advanced 1.5% + 0.30) | 2.10 EUR |
-| Shopify Payments, MB WAY and Multibanco | Not on the official pages read. One web search summary reported 0.7% + 0.07 EUR for MB WAY and 1.5% + 0.22 EUR for Multibanco, with no confirmed source. Do not use until confirmed in the Shopify account. | Indicative only: about 0.77 EUR (MB WAY) and 1.72 EUR (Multibanco) |
-| Shopify with a third-party gateway such as Stripe | Verified on the Shopify pricing page (European version): Shopify adds a transaction fee on top of the gateway fee, 2% on Basic, 1% on Grow and 0.6% on Advanced. Shopify Payments, Shop Pay and PayPal Express are not charged this fee. | 3.75 EUR for a standard EEA card on Basic (Stripe 1.75 plus 2.00) |
+| Shopify Payments, MB WAY | 1.3% + 0.30 EUR on Basic, down to 1% + 0.30 EUR on Plus (Verified, official Portuguese pricing page, read 2026-10-06) | 1.60 EUR on Basic |
+| Shopify Payments, Multibanco | Not listed on the official Portuguese pricing page read. Not verified. | |
+| Shopify Payments, international card | 2.55% to 3% + 0 EUR depending on the plan (Verified) | |
+| Shopify Payments, American Express | 3% + 0.30 EUR on Basic, 2.9% Grow, 2.7% Advanced, 2.55% Plus (Verified) | 3.30 EUR on Basic |
+| Shopify with a third-party gateway such as Stripe | Verified on the Shopify pricing page (European version): Shopify adds a transaction fee on top of the gateway fee, 2% on Basic, 1% on Grow and 0.6% on Advanced (the Portuguese page shows 2% on Basic down to 0.2% on Plus, which differs for the upper plans: confirm in a trial). Shopify Payments, Shop Pay and PayPal Express are not charged this fee. | 3.75 EUR for a standard EEA card on Basic (Stripe 1.75 plus 2.00) |
+| Stripe, international card | 3.15% + 0.25 EUR, plus 2% if currency conversion is needed (Verified) | |
 
 Notes:
 
-- A secondary source quoted 1.9% + 0.25 EUR for Basic. The official Shopify pricing page shows 1.8% + 0.30 EUR, which is used above. American Express cards cost more on every plan (2.55% to 3% + 0.30 EUR).
-- For a card payment, Shopify Payments on Basic costs 0.3% of the amount plus 0.05 EUR more than Stripe on the custom build. On a 100 EUR order that is 0.35 EUR, and on a 300 EUR order 0.95 EUR. So payment fees are a small difference, not the main one. The figure changes if the custom build uses a different provider, which was not compared.
-- Shopify's third-party fee only matters if the client insists on using Stripe inside Shopify. Using Shopify Payments avoids it, but MB WAY is in early access and the Shopify rates for MB WAY and Multibanco are not confirmed.
+- A secondary source quoted 1.9% + 0.25 EUR for Basic. The official Shopify pricing page shows 1.8% + 0.30 EUR, which is used above.
+- For a standard EEA card, Shopify Payments on Basic costs 0.3% of the amount plus 0.05 EUR more than Stripe. On a 100 EUR order that is 0.35 EUR, and on a 300 EUR order 0.95 EUR. For a premium EEA card the order reverses: Shopify's flat 1.8% is cheaper than Stripe's 2.8%. The real difference therefore depends on the mix of cards customers use. For MB WAY, Shopify Basic (1.60 EUR per 100 EUR) is slightly cheaper than Stripe (1.75 EUR).
+- Shopify's third-party fee only matters if the client insists on using Stripe inside Shopify. Using Shopify Payments avoids it, but MB WAY is in early access and the Multibanco rate is not confirmed.
+- The earlier "0.7% + 0.07 EUR for MB WAY" figure attributed to Shopify was wrong: it is the published ifthenpay rate (see below). It has been removed from the Shopify rows.
+
+### Other providers for the custom build (read 2026-10-06)
+
+Only the custom build can choose its payment provider freely. Shopify Payments is required for MB WAY and Multibanco on Shopify. Per 100 EUR order, standard EEA consumer card:
+
+| Provider | Card | MB WAY | Multibanco | Status |
+|---|---|---|---|---|
+| Stripe | 1.5% + 0.25 = 1.75 EUR | 1.5% + 0.25 = 1.75 EUR | 2.95% + 0.25 = 3.20 EUR | Verified |
+| Mollie | 1.8% + 0.25 = 2.05 EUR (commercial and American Express 2.9% + 0.25) | 1.5% + 0.25 = 1.75 EUR | 2.1% + 0.35 = 2.45 EUR | Verified, official pricing page |
+| ifthenpay | 1.5% + 0.20 = 1.70 EUR (consumer, EEA) | 0.7% + 0.07 = 0.77 EUR | 1.5% + 0.20 = 1.70 EUR | Verified, official site. No monthly fee, minimum or lock-in |
+
+Findings and cautions:
+
+- Multibanco and MB WAY are where the providers differ most. ifthenpay is the cheapest of the three on those two methods, roughly half of Stripe's MB WAY cost and about half of its Multibanco cost. On standard cards the three are within 0.35 EUR of each other.
+- ifthenpay publishes an API for cards (hosted secure payment page), MB WAY and Multibanco, so card data would not pass through our server. Its documentation describes the success callback as an HTTP GET to our server. The pages read do not say whether that callback is signed. `AGENTS.md` requires a verified signature and idempotent processing, so this must be confirmed in the ifthenpay documentation before choosing it. No Node.js SDK was found (PHP and a browser-focused JavaScript SDK only), so integration would be written against the REST API.
+- ifthenpay's card rate is stated for consumer EEA cards. Rates for commercial, American Express and international cards were not seen.
+- Eupago and Easypay were also found through a web search summary reporting similar rates (Eupago: 0.7% + 0.07 EUR MB WAY, 1.5% + 0.20 EUR cards; Easypay: 1.5% + 0.25 EUR cards). Their official pricing pages could not be read, so these are Secondary and not used. SIBS Pay and Viva Wallet were not researched at the source.
+- Using a different provider per method (for example Stripe for cards, ifthenpay for MB WAY and Multibanco) is possible but adds two integrations, two sets of webhooks and two reconciliation reports. That cost is not priced here.
 
 ## What Shopify saves in fixed infrastructure, and what it does not
 
@@ -154,7 +177,8 @@ For the client and owner:
 
 To confirm in a Shopify trial account or with the providers:
 
-- The Shopify Payments rates for MB WAY and Multibanco, and whether MB WAY is available to this merchant.
+- The Shopify Payments rate for Multibanco, and whether MB WAY is available to this merchant.
+- For ifthenpay (or another provider): callback signature verification, rates for commercial, American Express and international cards, and contract terms. Eupago, Easypay and SIBS Pay from their official pages.
 - Whether the sign-in requirement depends on the plan.
 - VAT on the Shopify subscription.
 - The invoicing plan and price (InvoiceXpress, or Moloni with the Webinfor app).
@@ -180,7 +204,9 @@ Take this document to the client. Once the open points that matter to them are a
 - Shopify Multibanco: https://help.shopify.com/en/manual/payments/shopify-payments/local-payment-methods/multibanco
 - Shopify new customer accounts: https://help.shopify.com/en/manual/customers/customer-accounts/new-customer-accounts
 - Shopify languages: https://help.shopify.com/en/manual/international/languages
-- Stripe Portugal pricing: https://stripe.com/pt/pricing and https://stripe.com/pt-pt/pricing/local-payment-methods
+- Stripe Portugal pricing: https://stripe.com/pt/pricing, https://stripe.com/en-pt/pricing and https://stripe.com/pt-pt/pricing/local-payment-methods
+- Mollie pricing: https://www.mollie.com/pricing
+- ifthenpay pricing and API documentation: https://ifthenpay.com/ and https://ifthenpay.com/docs/en/
 - Vercel pricing: https://vercel.com/pricing
 - Resend pricing: https://resend.com/pricing
 - Sentry pricing: https://sentry.io/pricing/
@@ -189,4 +215,4 @@ Take this document to the client. Once the open points that matter to them are a
 - InvoiceXpress plans: https://invoicexpress.com/planos-precos/ and Shopify plugin: https://plugins.invoicexpress.com/shopify/
 - Supabase and Neon: see `../decisions/0006-database-provider.md`.
 - European Central Bank euro reference rate (USD), 2026-10-02: https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-usd.en.html
-- Secondary, not official: MB WAY and Multibanco rates reported by a web search summary (unconfirmed, not used), and the 1.9% + 0.25 EUR card rate quoted by a comparison article (contradicted by the official page).
+- Secondary, not official: Eupago and Easypay rates from a web search summary (not used), and the 1.9% + 0.25 EUR card rate quoted by a comparison article (contradicted by the official page).
