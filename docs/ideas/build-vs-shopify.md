@@ -128,8 +128,9 @@ Only the custom build can choose its payment provider freely. Shopify Payments i
 Findings and cautions:
 
 - Multibanco and MB WAY are where the providers differ most. ifthenpay is the cheapest of the three on those two methods, roughly half of Stripe's MB WAY cost and about half of its Multibanco cost. On standard cards the three are within 0.35 EUR of each other.
-- ifthenpay publishes an API for cards (hosted secure payment page), MB WAY and Multibanco, so card data would not pass through our server. Its documentation describes the success callback as an HTTP GET to our server. The pages read do not say whether that callback is signed. `AGENTS.md` requires a verified signature and idempotent processing, so this must be confirmed in the ifthenpay documentation before choosing it. No Node.js SDK was found (PHP and a browser-focused JavaScript SDK only), so integration would be written against the REST API.
+- ifthenpay publishes an API for cards (hosted secure payment page), MB WAY and Multibanco, so card data would not pass through our server. Its callback guide (https://www.ifthenpay.com/docs/en/guides/callback/, read 2026-10-06) describes the success callback as an HTTP GET to our server, authenticated only by an "anti-phishing key" (up to 50 characters, chosen by the merchant) sent as a plain query parameter. No signature, HMAC or IP allowlist is mentioned, and the guide does not recommend checking the amount. Callbacks are retried up to 13 times (8 at 5-minute intervals, then hourly) and may arrive more than once, so processing must be idempotent. This does not meet the signed-webhook rule in `AGENTS.md` as it stands: a shared secret in a URL can leak through logs and proxies, and a leaked key lets anyone forge a "paid" notification. Stripe, by contrast, signs its webhooks. Possible mitigation, not verified: after each callback, confirm the payment with ifthenpay through a server-to-server API call before marking the order paid. Whether such an endpoint exists was not found. This needs a written answer from ifthenpay or a decision recorded in an ADR as an accepted deviation. No Node.js SDK was found (PHP and a browser-focused JavaScript SDK only), so integration would be written against the REST API.
 - ifthenpay's card rate is stated for consumer EEA cards. Rates for commercial, American Express and international cards were not seen.
+- Reliability evidence is limited. Portal da Queixa (consumer complaints site, read 2026-10-06) shows a 91/100 satisfaction index and a 100% resolution rate, with complaints mostly about unrecognised debits that ifthenpay says come from its merchants' customers' payments. Trustpilot shows 3.5 out of 5 from only 9 reviews (search summary, not read directly). A third-party page claims over 20 years of activity and about 2 billion EUR processed per year (Secondary, unverified). These measure consumer-side complaints, not uptime or merchant-side incident history, which were not found.
 - Eupago and Easypay were also found through a web search summary reporting similar rates (Eupago: 0.7% + 0.07 EUR MB WAY, 1.5% + 0.20 EUR cards; Easypay: 1.5% + 0.25 EUR cards). Their official pricing pages could not be read, so these are Secondary and not used. SIBS Pay and Viva Wallet were not researched at the source.
 - Using a different provider per method (for example Stripe for cards, ifthenpay for MB WAY and Multibanco) is possible but adds two integrations, two sets of webhooks and two reconciliation reports. That cost is not priced here.
 
@@ -178,7 +179,7 @@ For the client and owner:
 To confirm in a Shopify trial account or with the providers:
 
 - The Shopify Payments rate for Multibanco, and whether MB WAY is available to this merchant.
-- For ifthenpay (or another provider): callback signature verification, rates for commercial, American Express and international cards, and contract terms. Eupago, Easypay and SIBS Pay from their official pages.
+- For ifthenpay (or another provider): whether a server-to-server payment status check exists to compensate for the unsigned callback, Banco de Portugal authorisation (a third-party page states licence 8707, not confirmed at the register, which returned an error), rates for commercial, American Express and international cards, and contract terms. Eupago, Easypay and SIBS Pay from their official pages.
 - Whether the sign-in requirement depends on the plan.
 - VAT on the Shopify subscription.
 - The invoicing plan and price (InvoiceXpress, or Moloni with the Webinfor app).
@@ -206,7 +207,8 @@ Take this document to the client. Once the open points that matter to them are a
 - Shopify languages: https://help.shopify.com/en/manual/international/languages
 - Stripe Portugal pricing: https://stripe.com/pt/pricing, https://stripe.com/en-pt/pricing and https://stripe.com/pt-pt/pricing/local-payment-methods
 - Mollie pricing: https://www.mollie.com/pricing
-- ifthenpay pricing and API documentation: https://ifthenpay.com/ and https://ifthenpay.com/docs/en/
+- ifthenpay pricing and API documentation: https://ifthenpay.com/, https://ifthenpay.com/docs/en/ and https://www.ifthenpay.com/docs/en/guides/callback/
+- ifthenpay complaints: https://portaldaqueixa.com/brands/ifthenpay
 - Vercel pricing: https://vercel.com/pricing
 - Resend pricing: https://resend.com/pricing
 - Sentry pricing: https://sentry.io/pricing/
