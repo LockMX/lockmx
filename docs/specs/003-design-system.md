@@ -204,13 +204,14 @@ Sources consulted and deviations from the plan, recorded when each task was done
 - Added file, not in the plan: `apps/web/src/styles/theme.test.ts`. It compiles `globals.css` with the installed Tailwind and checks the acceptance criteria that can be checked without a browser (no default utilities, colour tokens do not shadow font sizes, no self-referencing variable, focus and reduced-motion rules present).
 - Changed file, not in the plan: `apps/web/src/app/[lang]/page.tsx` used `text-3xl`, which no longer exists; it now uses `text-heading-lg`.
 - The next/font variable for the display face is `--font-barlow-condensed`; `--font-display` is the token that reads it. Using `--font-display` for both would make the token refer to itself.
-- New tokens from Findings 1 and 2: `--lmx-yellow-800`, `--lmx-red-600`, `--lmx-red-700`, `--border-control`, `--focus-ring-inverse`, `--status-danger-hover`, `--status-danger-press`, `--surface-backdrop`, `--shadow-focus-danger`. The control heights and the checkbox and switch sizes of Finding 2 are Tailwind spacing-scale values (multiples of `--space-1`), so they need no token.
+- New tokens from Findings 1 and 2: `--lmx-yellow-800`, `--lmx-red-600`, `--lmx-red-700`, `--border-control`, `--focus-ring-inverse`, `--status-danger-hover`, `--status-danger-press`, `--status-warning-text`, `--surface-backdrop`, `--shadow-focus-danger`. The control heights and the checkbox and switch sizes of Finding 2 are Tailwind spacing-scale values (multiples of `--space-1`), so they need no token.
 - Inverse surfaces set `data-surface="inverse"` to get the yellow focus ring.
 - `box-sizing` is not repeated in the base layer: Tailwind's preflight already sets it.
 - The contrast test failed on 18 pairs with the imported values (the pairs of Finding 1) and passes with the approved ones. Every token name of the imported manifest exists in `tokens.css`.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`. The built CSS and the served HTML of `/pt` contain no reference to `fonts.googleapis.com` or `fonts.gstatic.com`; the font files are preloaded from `/_next/static/media/`.
 - Not verified: the browser network panel and the visual check at 320, 768, 1024 and 1440 px. No component exists to inspect yet.
 - Open points raised for the owner: `docs/design/README.md`, "Open points".
+- Corrected after review, in a separate `fix` commit: (1) `--status-warning` had been moved to the darker text value, which would have darkened the imported solid warning fill (yellow with a black label, `Badge.jsx`) beyond what Finding 1 approved; it keeps its imported value and warning text has its own token. (2) The reset did not cover container widths, drop, inset and text shadows or blur, and a transition without a duration ran on Tailwind's 150ms default; these are now reset or mapped to the motion tokens, with tests.
 
 ### T2 (2026-10-08)
 

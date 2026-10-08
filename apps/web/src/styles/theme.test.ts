@@ -29,6 +29,14 @@ const candidates = [
   "rounded-lg",
   "shadow-xl",
   "font-extralight",
+  "max-w-md",
+  "drop-shadow-md",
+  "inset-shadow-sm",
+  "text-shadow-sm",
+  "blur-md",
+  "transition-colors",
+  "animate-spin",
+  "sm:px-gutter",
   "bg-surface-page",
   "bg-action-primary",
   "bg-yellow-50",
@@ -79,6 +87,11 @@ describe("default Tailwind theme", () => {
     "rounded-lg",
     "shadow-xl",
     "font-extralight",
+    "max-w-md",
+    "drop-shadow-md",
+    "inset-shadow-sm",
+    "text-shadow-sm",
+    "blur-md",
   ])("does not generate %s", (utility) => {
     expect(ruleFor(utility)).toBeUndefined();
   });
@@ -109,6 +122,22 @@ describe("token utilities", () => {
     ["max-w-page", "max-width: var(--container-max)"],
   ])("%s resolves to its token", (utility, declaration) => {
     expect(ruleFor(utility)).toContain(declaration);
+  });
+
+  it("runs a transition without an explicit duration on the motion tokens", () => {
+    const rule = ruleFor("transition-colors");
+
+    expect(rule).toContain("var(--duration-fast)");
+    expect(rule).toContain("var(--ease-out)");
+  });
+
+  it("keeps the spin animation and the responsive variants", () => {
+    expect(ruleFor("animate-spin")).toContain("animation:");
+    expect(compiledCssMatches(/@media \(width >= 40rem\)/)).toBe(true);
+  });
+
+  it("sets no line height with a font size, so each size needs a leading", () => {
+    expect(ruleFor("text-sm")).not.toContain("line-height");
   });
 
   it("keeps colour text tokens out of the font-size utilities", () => {

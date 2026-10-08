@@ -24,7 +24,7 @@ Three brand colours come from the logo: Lock Yellow (`--lmx-yellow`), black (`--
 | Focus | `--focus-ring`, `--focus-ring-inverse` | See `accessibility.md`. |
 | Actions | `--action-primary` with `-hover` and `-press` | Primary button: yellow fill, black label. |
 | | `--action-secondary` with `-hover` | Secondary button: black fill, white label. |
-| Status | `--status-success`, `--status-danger`, `--status-info`, `--status-warning`, each with `-bg` | State only: stock, order status, validation, toasts. `--status-danger` also has `-hover` and `-press` for the danger button. |
+| Status | `--status-success`, `--status-danger`, `--status-info`, `--status-warning`, each with `-bg` | State only: stock, order status, validation, toasts. Each is both the text colour and the solid fill (white label), except warning: `--status-warning` is a yellow fill with a black label, and warning text uses `--status-warning-text`. `--status-danger` also has `-hover` and `-press` for the danger button. |
 
 Rules:
 

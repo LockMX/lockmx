@@ -116,6 +116,8 @@ describe("action labels meet 4.5:1 in every state", () => {
   });
 });
 
+// Warning is the exception: its fill is a yellow that carries black text, so
+// its text colour is a separate token.
 describe("status colours meet 4.5:1 as text, on their tint and as a solid fill", () => {
   it.each([
     ["--status-success", "--surface-page"],
@@ -123,9 +125,9 @@ describe("status colours meet 4.5:1 as text, on their tint and as a solid fill",
     ["--lmx-white", "--status-success"],
     ["--status-danger", "--surface-page"],
     ["--status-danger", "--status-danger-bg"],
-    ["--status-warning", "--surface-page"],
-    ["--status-warning", "--status-warning-bg"],
-    ["--lmx-white", "--status-warning"],
+    ["--status-warning-text", "--surface-page"],
+    ["--status-warning-text", "--status-warning-bg"],
+    ["--text-on-accent", "--status-warning"],
     ["--status-info", "--surface-page"],
     ["--status-info", "--status-info-bg"],
     ["--lmx-white", "--status-info"],

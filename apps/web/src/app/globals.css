@@ -3,8 +3,9 @@
 
 /*
  * Maps the design tokens (styles/tokens.css) into Tailwind's theme namespaces
- * (ADR 0009). Each namespace is reset first, so only design system values
- * generate utilities.
+ * (ADR 0009). Each namespace that carries a visual value is reset first, so
+ * only design system values generate utilities. Left as Tailwind ships them:
+ * breakpoints, animations, aspect ratios and perspective.
  *
  * `inline` makes a utility use the token itself (`var(--radius-sm)`).
  * `reference` stops Tailwind from also emitting the theme variable: several
@@ -90,6 +91,7 @@
   --color-status-info: var(--status-info);
   --color-status-info-bg: var(--status-info-bg);
   --color-status-warning: var(--status-warning);
+  --color-status-warning-text: var(--status-warning-text);
   --color-status-warning-bg: var(--status-warning-bg);
 
   --font-*: initial;
@@ -141,16 +143,24 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-focus: var(--shadow-focus);
   --shadow-focus-danger: var(--shadow-focus-danger);
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --text-shadow-*: initial;
+  --blur-*: initial;
 
   --ease-*: initial;
   --ease-out: var(--ease-out);
   --ease-in-out: var(--ease-in-out);
+  /* A `transition-*` utility with no explicit duration or easing uses these. */
+  --default-transition-duration: var(--duration-fast);
+  --default-transition-timing-function: var(--ease-out);
 
   /* The spacing scale keeps Tailwind's multiplier on the 4px base token:
      `p-4` is `--space-1` times 4, the same value as `--space-4`. */
   --spacing: var(--space-1);
   --spacing-gutter: var(--container-pad);
   --spacing-header: var(--header-height);
+  --container-*: initial;
   --container-page: var(--container-max);
 }
 

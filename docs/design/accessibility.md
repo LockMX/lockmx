@@ -42,7 +42,8 @@ Text, minimum 4.5:
 | White on `--status-danger` `#D0281C` / hover `#B3221A` / press `#961C15` | 5.25 / 6.64 / 8.49 |
 | `--status-success` `#157A3F` on white / on `--status-success-bg` `#E8F5EE` / white on it | 5.40 / 4.82 / 5.40 |
 | `--status-danger` on white / on `--status-danger-bg` `#FCEAE8` | 5.25 / 4.52 |
-| `--status-warning` `#8A5A00` on white / on `--status-warning-bg` `#FFF1CC` / white on it | 5.93 / 5.28 / 5.93 |
+| `--status-warning-text` `#8A5A00` on white / on `--status-warning-bg` `#FFF1CC` | 5.93 / 5.28 |
+| `--text-on-accent` on `--status-warning` `#CC9200` (solid warning fill) | 7.24 |
 | `--status-info` `#1F5FD1` on white / on `--status-info-bg` `#E8EFFC` / white on it | 5.81 / 5.03 / 5.81 |
 
 Non-text, minimum 3:
@@ -61,7 +62,7 @@ Pairs that are not allowed, with the measured reason:
 | Pair | Ratio | Rule |
 |---|---|---|
 | `--lmx-yellow` as text or as a focus ring on white / `--surface-subtle` | 1.76 / 1.64 | Yellow is a fill. Text on it is black. |
-| `--lmx-yellow-700` `#CC9200` as text on white | 2.73 | Use `--text-accent`. |
+| `--lmx-yellow-700` `#CC9200` (also `--status-warning`) as text on white | 2.73 | Use `--text-accent` or `--status-warning-text`. White text on it is not allowed either: the label on a warning fill is black. |
 | `--border-default` `#C9C9C9` as a control boundary on white | 1.66 | Use `--border-control`. |
 | `--status-*` text on `--surface-sunken` | not guarded | Status text sits on the page, a card or its own tint. |
 

@@ -77,7 +77,9 @@
   --action-secondary: var(--lmx-ink-950);
   --action-secondary-hover: var(--lmx-ink-800);
 
-  /* Status roles */
+  /* Status roles. A status colour is both the text colour and the solid
+     fill, except warning: its fill is a yellow that carries black text, so
+     its text has its own token. */
   --status-success: var(--lmx-green);
   --status-success-bg: var(--lmx-green-50);
   --status-danger: var(--lmx-red);
@@ -86,7 +88,8 @@
   --status-danger-bg: var(--lmx-red-50);
   --status-info: var(--lmx-blue);
   --status-info-bg: var(--lmx-blue-50);
-  --status-warning: var(--lmx-yellow-800);
+  --status-warning: var(--lmx-yellow-700);
+  --status-warning-text: var(--lmx-yellow-800);
   --status-warning-bg: var(--lmx-yellow-100);
 
   /* Font families. The loader variables are set on <html> by next/font in
