@@ -118,6 +118,7 @@
   --font-weight-medium: var(--weight-medium);
   --font-weight-semibold: var(--weight-semibold);
   --font-weight-bold: var(--weight-bold);
+  --font-weight-extrabold: var(--weight-extrabold);
   --font-weight-black: var(--weight-black);
 
   --leading-*: initial;
@@ -128,6 +129,7 @@
 
   --tracking-*: initial;
   --tracking-display: var(--tracking-display);
+  --tracking-caps: var(--tracking-caps);
   --tracking-label: var(--tracking-label);
   --tracking-eyebrow: var(--tracking-eyebrow);
 
@@ -162,6 +164,27 @@
   --spacing-header: var(--header-height);
   --container-*: initial;
   --container-page: var(--container-max);
+}
+
+/* The slant as a parallelogram: buttons and cards use the full cut, small
+   tags the short one. A clipped element also clips its own outline, so a
+   focusable element clips a pseudo-element instead (`before:clip-slant`). */
+@utility clip-slant {
+  clip-path: polygon(
+    var(--slant-cut) 0,
+    100% 0,
+    calc(100% - var(--slant-cut)) 100%,
+    0 100%
+  );
+}
+
+@utility clip-slant-sm {
+  clip-path: polygon(
+    var(--slant-cut-sm) 0,
+    100% 0,
+    calc(100% - var(--slant-cut-sm)) 100%,
+    0 100%
+  );
 }
 
 @layer base {

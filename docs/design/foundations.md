@@ -36,7 +36,7 @@ Rules:
 
 | Family token | Face | Use |
 |---|---|---|
-| `--font-display` | Barlow Condensed, a stand-in (see `brand.md`) | Headlines, buttons, prices. Italic, uppercase, weights 700 to 900. |
+| `--font-display` | Barlow Condensed, a stand-in (see `brand.md`) | Headlines, buttons, prices. Italic, uppercase: `--weight-bold` for buttons, `--weight-extrabold` for headings, prices and slanted tags, `--weight-black` for display. Uppercase UI text in this face is spaced with `--tracking-caps`. |
 | `--font-sans` | Geist | Running text, labels, UI. |
 | `--font-mono` | Geist Mono | SKUs, order numbers, codes. |
 
@@ -66,7 +66,7 @@ Hard edges: `--radius-xs`, `--radius-sm`, `--radius-md`. `--radius-pill` is only
 
 ## The slant
 
-The logo's forward-leaning underline bar is the signature motif. It appears as a bar skewed by `--slant` (hero accents, the active tab underline, order progress) and as a parallelogram clipped by `--slant-cut` (hero buttons, merchandising tags). One or two per view.
+The logo's forward-leaning underline bar is the signature motif. It appears as a bar skewed by `--slant` (hero accents, the active tab underline, order progress) and as a parallelogram clipped by `--slant-cut` (hero buttons) or `--slant-cut-sm` (merchandising tags). One or two per view.
 
 ## Elevation
 

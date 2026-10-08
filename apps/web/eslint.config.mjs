@@ -13,6 +13,14 @@ const eslintConfig = defineConfig([
       "react/jsx-no-literals": ["error", { noStrings: true, ignoreProps: true }],
     },
   },
+  {
+    // Tests render components with sample text of their own; it is fixture
+    // data, not text a visitor reads.
+    files: ["**/*.test.tsx"],
+    rules: {
+      "react/jsx-no-literals": "off",
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

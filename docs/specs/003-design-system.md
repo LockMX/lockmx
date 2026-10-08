@@ -238,6 +238,21 @@ Sources consulted and deviations from the plan, recorded when each task was done
 - New information from the owner: the logo typeface is "Rushdriver italic". Recorded in `docs/design/brand.md` with the licence status. The display font is unchanged (decision 1 still applies: the font is identified, not supplied or licensed).
 - `docs/decisions/README.md` holds no index of ADRs, so it was not changed. The ADR table in `docs/architecture.md` gained 0009 to 0011.
 
+### T4 (2026-10-08)
+
+- Sources: https://lucide.dev/guide/react/getting-started and the Lucide accessibility guide, read through Context7 (tree-shakable named imports; `aria-hidden` by default, removed when the icon gets `aria-label` or a title); the npm registry entry of `lucide-react` (peer dependency `react ^16.5.1 || ^17 || ^18 || ^19`, licence ISC) and `sideEffects: false` in its `package.json`; `apps/web/node_modules/next/dist/docs/01-app/03-api-reference/02-components/link.md` 16.3.6; the imported `Icon.jsx`, `Button.jsx`, `IconButton.jsx`, `Badge.jsx`.
+- `lucide-react` is pinned to 1.48.0 (published 2026-09-24). The newest release, 1.53.0, was published on the day of the task; a two-week-old version was chosen for a production dependency. Dependabot proposes updates.
+- `@testing-library/user-event` 14.6.7 added as a development dependency, as the spec allows: it turns Enter and Space on a focused button into a click the way a browser does, which `fireEvent` does not.
+- Added files, not in the plan: `components/ui/class-names.ts` (joins conditional classes), `components/ui/core/button-styles.ts` (the classes `Button` and `ButtonLink` share), their tests and `components/ui/index.test.ts`.
+- Changed file, not in the plan: `apps/web/eslint.config.mjs` turns `react/jsx-no-literals` off for `*.test.tsx`, where the literal text is fixture data.
+- New tokens (Finding 2): `--weight-extrabold`, `--tracking-caps`, `--slant-cut-sm`. New utilities: `clip-slant`, `clip-slant-sm`.
+- Decision 7 substitutions: button text 15, 17, 20 px became `--text-md`, `--text-lg`, `--text-heading-md` (16, 18, 22 px); the slanted badge letter spacing 0.06em became `--tracking-caps` and the 0.01em of the pill was dropped; button icons 16, 18, 20 px became 16, 20, 20; the large icon button icon 22 px became 24; the button border 1.5 px became 2 px; the pill badge side padding 9 px became 8 px.
+- Differences from the imported API: `Icon` has a closed `size` (`sm`, `md`, `lg`) and no `color`, `strokeWidth`, `title` or `style`; `IconButton` with `variant="outline"` uses `--border-control` (the imported `--border-default` is under 3:1); the count is part of the accessible name; `Badge` requires children.
+- While loading, `Button` sets the native `disabled` attribute, as the import did. An `aria-disabled` button that stays focusable would need a click handler and so a Client Component.
+- `Logo` is exported from `components/ui/index.ts` with the T4 components.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`; every class the components use is present in the built CSS.
+- Not verified, for the owner to check in a browser (no browser was available to the agent): the focus ring on light and on inverse surfaces, that the slanted button does not clip its ring, hover and active colours, and the layout at 320, 768, 1024 and 1440 px.
+
 ## Boundaries
 
 - Always: tests before code in each task; read the relevant APG pattern and the bundled Next.js docs before the task; tokens only, no raw hex or `px`; every string and accessible name through props; run lint, typecheck, test and build before each commit.
