@@ -87,5 +87,6 @@ Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucid
 | Transactional email with Resend | `decisions/0005-transactional-email-resend.md` | proposed |
 | Database provider | `decisions/0006-database-provider.md` | proposed |
 | Application hosting | `decisions/0007-application-hosting.md` | proposed |
+| Provisional hosting of the placeholder page on Vercel | `decisions/0012-provisional-hosting-vercel.md` | proposed |
 
 Payment provider and cookie consent management are still open (no ADR yet).
