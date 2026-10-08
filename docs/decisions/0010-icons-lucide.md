@@ -1,7 +1,7 @@
 # 0010. Icons: lucide-react
 
-- Status: proposed
-- Date: 2026-10-07
+- Status: accepted
+- Date: 2026-10-08
 
 ## Context
 

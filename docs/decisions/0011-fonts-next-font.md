@@ -1,7 +1,7 @@
 # 0011. Fonts: self-hosted through next/font
 
-- Status: proposed
-- Date: 2026-10-07
+- Status: accepted
+- Date: 2026-10-08
 
 ## Context
 

@@ -1,7 +1,7 @@
 # 0009. Styling: design tokens as CSS variables, consumed through Tailwind
 
-- Status: proposed
-- Date: 2026-10-07
+- Status: accepted
+- Date: 2026-10-08
 
 ## Context
 
