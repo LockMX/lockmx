@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.9.0",
+    "lucide-react": "1.48.0",
     "negotiator": "^1.1.0",
     "next": "16.3.6",
     "react": "19.2.8",
@@ -21,6 +22,7 @@
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "14.6.7",
     "@types/negotiator": "^0.6.5",
     "@types/node": "^22.20.5",
     "@types/react": "^19",

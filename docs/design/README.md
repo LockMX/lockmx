@@ -43,6 +43,7 @@ Decisions behind this setup: `../decisions/0009-styling-design-tokens-tailwind.m
 | Spacing | Tailwind's numeric scale on the base token `--space-1` | `p-4` equals `--space-4` |
 | Layout | `px-gutter`, `h-header`, `max-w-page` | page container and header |
 | Duration, z-index, slant (no Tailwind namespace) | variable shorthand | `duration-(--duration-fast)`, `z-(--z-dialog)`, `skew-x-(--slant)` |
+| Slant cut | `clip-slant`, `clip-slant-sm` (custom utilities in `globals.css`) | `before:clip-slant` on a focusable element, so its outline is not clipped |
 
 A font-size utility sets only the size. Tailwind's paired line heights went with the reset, so every text style also names a `leading-*`.
 
@@ -85,6 +86,7 @@ Only after it is in an approved spec. Follow "Conventions for every component ta
 | `--font-*`: literal family names, Google Fonts `@import` | reference the `next/font` variables | ADR 0011. |
 | Type, spacing and layout tokens in `px` | the same sizes in `rem` | They follow the reader's browser font size. Owner decision, 2026-10-08. Radii, shadows and the slant cut stay in `px`. |
 | Links underlined in yellow | underlined in the text colour; yellow underline only on inverse surfaces | The yellow underline measures 1.76:1 on white and was the only sign of a link. Owner decision, 2026-10-08. |
+| Raw weight 800, letter spacing and the small slant cut inside components | `--weight-extrabold`, `--tracking-caps`, `--slant-cut-sm` (new) | Spec 003 Finding 2. Weight 800 is the heading and price weight of ADR 0011. |
 | Component font sizes outside the type scale (15, 17, 20, 13, 26, 32 px) | the nearest size token | No new size tokens. Owner decision, 2026-10-08. Each component task records what it changed. |
 
 Every other token keeps its imported name and its imported value (converted to `rem` where the row above applies).
@@ -95,4 +97,3 @@ Each needs an owner decision. Nothing here was changed on assumption.
 
 1. **Display typeface.** The owner reported the logo typeface on 2026-10-08. It cannot be used until a licence that covers a commercial website exists. The client or the designer also has to confirm the licence under which the logo artwork was made. See `brand.md`.
 2. **`--shadow-focus`.** Kept as imported (a translucent yellow glow). It measures under 3:1 on light surfaces, so it may decorate a focused control but is never the only focus indicator.
-3. **Weight 800.** The imported components use weight 800 for headings and prices, and the font is loaded at 800, but the imported tokens have no step between `--weight-bold` and `--weight-black`. The first component that needs it (spec 003, T4 or T10) adds the token.

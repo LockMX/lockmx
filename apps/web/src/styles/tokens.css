@@ -120,6 +120,7 @@
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
+  --weight-extrabold: 800;
   --weight-black: 900;
 
   --leading-display: 0.92;
@@ -128,6 +129,7 @@
   --leading-body: 1.55;
 
   --tracking-display: -0.005em;
+  --tracking-caps: 0.04em;
   --tracking-label: 0.14em;
   --tracking-eyebrow: 0.22em;
 
@@ -161,6 +163,7 @@
   /* The logo's forward slant: every skewed bar or clipped corner uses this */
   --slant: -18deg;
   --slant-cut: 12px;
+  --slant-cut-sm: 7px;
 
   /* Elevation: used sparingly, borders do most of the work */
   --shadow-sm: 0 1px 2px rgba(10, 10, 10, 0.08);
