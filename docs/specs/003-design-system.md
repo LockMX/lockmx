@@ -1,6 +1,6 @@
 # 003. Design system
 
-- Status: approved
+- Status: in progress
 - Idea: `../ideas/project-brief.md`
 - Decisions: `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0010-icons-lucide.md`, `../decisions/0011-fonts-next-font.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0004-unit-test-runner.md`
 
@@ -192,6 +192,41 @@ Needs owner approval (workflow: new production dependencies).
 - Acceptance criteria: each step names the exact command or file and matches the repository; every component in `components.md` exists and is exported from `components/ui/index.ts`.
 - Tests: no tests (documentation).
 - Commit: `docs: add design system checklist`
+
+## Task notes
+
+Sources consulted and deviations from the plan, recorded when each task was done.
+
+### T1 (2026-10-08)
+
+- Sources: https://tailwindcss.com/docs/theme (namespaces, `@theme inline`, resetting a namespace with `initial`); `apps/web/node_modules/tailwindcss/theme.css` 4.3.3 (uses `@theme default inline reference`); `apps/web/node_modules/tailwindcss/dist/lib.d.mts` (`compile`, used by the theme test); `apps/web/node_modules/next/dist/docs/01-app/03-api-reference/02-components/font.md` 16.3.6; `font-data.json` of the same package (Barlow Condensed: weights 100 to 900, normal and italic, not variable). The token files were read again from the design system project.
+- The theme block is `@theme inline reference`, not `@theme inline`. Many tokens share their name with the Tailwind theme variable (`--radius-sm`, `--text-sm`, `--font-sans`); with `inline` alone Tailwind emits `--radius-sm: var(--radius-sm)`. Confirmed by compiling both forms.
+- Added file, not in the plan: `apps/web/src/styles/theme.test.ts`. It compiles `globals.css` with the installed Tailwind and checks the acceptance criteria that can be checked without a browser (no default utilities, colour tokens do not shadow font sizes, no self-referencing variable, focus and reduced-motion rules present).
+- Changed file, not in the plan: `apps/web/src/app/[lang]/page.tsx` used `text-3xl`, which no longer exists; it now uses `text-heading-lg`.
+- The next/font variable for the display face is `--font-barlow-condensed`; `--font-display` is the token that reads it. Using `--font-display` for both would make the token refer to itself.
+- New tokens from Findings 1 and 2: `--lmx-yellow-800`, `--lmx-red-600`, `--lmx-red-700`, `--border-control`, `--focus-ring-inverse`, `--status-danger-hover`, `--status-danger-press`, `--surface-backdrop`, `--shadow-focus-danger`. The control heights and the checkbox and switch sizes of Finding 2 are Tailwind spacing-scale values (multiples of `--space-1`), so they need no token.
+- Inverse surfaces set `data-surface="inverse"` to get the yellow focus ring.
+- `box-sizing` is not repeated in the base layer: Tailwind's preflight already sets it.
+- The contrast test failed on 18 pairs with the imported values (the pairs of Finding 1) and passes with the approved ones. Every token name of the imported manifest exists in `tokens.css`.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`. The built CSS and the served HTML of `/pt` contain no reference to `fonts.googleapis.com` or `fonts.gstatic.com`; the font files are preloaded from `/_next/static/media/`.
+- Not verified: the browser network panel and the visual check at 320, 768, 1024 and 1440 px. No component exists to inspect yet.
+- Open points raised for the owner: `docs/design/README.md`, "Open points".
+
+### T2 (2026-10-08)
+
+- Sources: `apps/web/node_modules/next/dist/docs/01-app/03-api-reference/02-components/image.md` 16.3.6 (`src`, `alt`, `width` and `height`, `sizes`, `style`); the imported `Logo.jsx`, `Logo.d.ts` and `Logo.prompt.md`.
+- The imported `height` and `basePath` props are dropped: size comes from `className`, and the files have one location.
+- `sizes` is a required prop, not in the plan. The files are 1400px wide and always displayed smaller; without `sizes` the browser assumes the image is as wide as the viewport.
+- The "no inline style" test was replaced by a type check that `style` is not accepted: `next/image` sets its own `style` attribute on the element.
+- The note in the task description about the source pack in `public/logo/` is obsolete: it was already removed (see Current state).
+- `git check-ignore` confirms `apps/web/public/brand/logo/*.png` is not ignored.
+- Not verified: rendering in a browser.
+
+### T3 (2026-10-08)
+
+- Sources: https://www.w3.org/TR/WCAG21/ (criteria 1.4.1, 1.4.3, 1.4.11, 2.1.1, 2.4.7, 4.1.2 and conformance requirement 5.2.1, quoted in `docs/design/accessibility.md`); the imported `readme.md` and the `guidelines/` cards for logo, type, slant, elevation and imagery.
+- New information from the owner: the logo typeface is "Rushdriver italic". Recorded in `docs/design/brand.md` with the licence status. The display font is unchanged (decision 1 still applies: the font is identified, not supplied or licensed).
+- `docs/decisions/README.md` holds no index of ADRs, so it was not changed. The ADR table in `docs/architecture.md` gained 0009 to 0011.
 
 ## Boundaries
 
