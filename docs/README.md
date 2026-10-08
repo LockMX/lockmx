@@ -18,10 +18,11 @@ All project documentation lives in `docs/`. This file is the index and explains 
 | `decisions/` | ADRs: one decision per file, with context, alternatives and sources. See `decisions/README.md`. |
 | `specs/` | Specs with tasks. See `specs/README.md`. |
 | `checklists/` | Per-module procedures, reusable in other projects. See `checklists/README.md`. |
+| `compliance/` | Legal and regulatory requirements with sources and open points. See `compliance/README.md`. |
 | `workflow.md` | Rules for executing each task: commits, tests, branches. |
 | `architecture.md` | Current structure, layers and boundaries, linking to the ADRs behind each choice. |
 
-Created only when there is real content: `design/` (design system), `integrations/` (payments, invoicing), `compliance/` (GDPR, cookies, legal texts) and `runbooks/` (deploy, backups, incidents).
+Created only when there is real content: `design/` (design system), `integrations/` (payments, invoicing) and `runbooks/` (deploy, backups, incidents).
 
 ## Documentation rules
 
