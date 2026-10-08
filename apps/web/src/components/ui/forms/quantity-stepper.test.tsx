@@ -243,10 +243,73 @@ describe("QuantityStepper", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  test("submits with a form through its name", () => {
-    render(<QuantityStepper {...TEXT} name="quantity" defaultValue={3} />);
+  function renderInForm(props: Partial<QuantityStepperProps>) {
+    const submitted = vi.fn();
+    render(
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          submitted(new FormData(event.currentTarget).get("quantity"));
+        }}
+      >
+        <QuantityStepper {...TEXT} name="quantity" {...props} />
+        <button type="submit">Atualizar</button>
+      </form>,
+    );
+    return submitted;
+  }
 
-    expect(field().getAttribute("name")).toBe("quantity");
+  test("submits the value with its form, under its name", async () => {
+    const submitted = renderInForm({ defaultValue: 3 });
+
+    field().focus();
+    await userEvent.keyboard("{Enter}");
+
+    expect(submitted).toHaveBeenLastCalledWith("3");
+  });
+
+  test("submits the clamped value when Enter is pressed on a typed value out of range", async () => {
+    const submitted = renderInForm({ defaultValue: 5, max: 20 });
+
+    await userEvent.clear(field());
+    await userEvent.type(field(), "150{Enter}");
+
+    expect(submitted).toHaveBeenLastCalledWith("20");
+    expect(field().value).toBe("20");
+  });
+
+  test("submits the last value when Enter is pressed on an empty field", async () => {
+    const submitted = renderInForm({ defaultValue: 7 });
+
+    await userEvent.clear(field());
+    await userEvent.keyboard("{Enter}");
+
+    expect(submitted).toHaveBeenLastCalledWith("7");
+  });
+
+  test("submits nothing when disabled", async () => {
+    const { container } = render(
+      <form>
+        <QuantityStepper {...TEXT} name="quantity" disabled />
+      </form>,
+    );
+    const form = container.querySelector("form");
+    if (!form) throw new Error("No form");
+
+    expect(new FormData(form).has("quantity")).toBe(false);
+  });
+
+  test("marks the field invalid while the typed value is out of range", async () => {
+    render(<QuantityStepper {...TEXT} defaultValue={5} max={20} />);
+
+    expect(field().hasAttribute("aria-invalid")).toBe(false);
+
+    await userEvent.clear(field());
+    await userEvent.type(field(), "150");
+    expect(field().getAttribute("aria-invalid")).toBe("true");
+
+    await userEvent.tab();
+    expect(field().hasAttribute("aria-invalid")).toBe(false);
   });
 
   test.each([
