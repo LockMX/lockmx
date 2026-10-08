@@ -29,7 +29,7 @@ Decisions behind this setup: `../decisions/0009-styling-design-tokens-tailwind.m
 ## How a token reaches a component
 
 1. `tokens.css` declares the token as a custom property on `:root`, under the design system's own name (`--surface-page`, `--radius-sm`).
-2. `globals.css` maps it into a Tailwind theme namespace inside `@theme inline reference`. Every namespace is reset first, so Tailwind's default palette and scales generate nothing: `bg-red-500` and `text-xl` do not exist.
+2. `globals.css` maps it into a Tailwind theme namespace inside `@theme inline reference`. Every namespace that carries a visual value is reset first (colours, families, sizes, weights, leading, tracking, radii, all shadow kinds, blur, easing, container widths), so Tailwind's defaults generate nothing: `bg-red-500`, `text-xl` and `max-w-md` do not exist. Breakpoints, animations (`animate-spin`), aspect ratios and perspective are left as Tailwind ships them.
 3. A component uses the utility: `bg-surface-page`, `rounded-sm`.
 
 | Token group | Utility form | Example |
@@ -43,6 +43,10 @@ Decisions behind this setup: `../decisions/0009-styling-design-tokens-tailwind.m
 | Spacing | Tailwind's numeric scale on the 4px base token | `p-4` equals `--space-4` |
 | Layout | `px-gutter`, `h-header`, `max-w-page` | page container and header |
 | Duration, z-index, slant (no Tailwind namespace) | variable shorthand | `duration-(--duration-fast)`, `z-(--z-dialog)`, `skew-x-(--slant)` |
+
+A font-size utility sets only the size. Tailwind's paired line heights went with the reset, so every text style also names a `leading-*`.
+
+A `transition-*` utility without an explicit duration or easing runs on `--duration-fast` and `--ease-out`.
 
 Colour text tokens are mapped under `--color-text-*` because `--text-*` is Tailwind's font-size namespace: `text-text-strong` is a colour and `text-sm` is a size.
 
@@ -70,7 +74,8 @@ Only after it is in an approved spec. Follow "Conventions for every component ta
 
 | Imported | Now | Reason |
 |---|---|---|
-| `--text-accent`, `--status-warning`: `--lmx-yellow-700` | `--lmx-yellow-800` (new palette step) | Text contrast, spec 003 Finding 1. |
+| `--text-accent`: `--lmx-yellow-700` | `--lmx-yellow-800` (new palette step) | Text contrast, spec 003 Finding 1. |
+| Warning text: a raw value in the Badge | `--status-warning-text` (new). `--status-warning` keeps its imported value and is a fill with black text. | Text contrast, spec 003 Findings 1 and 2. |
 | `--lmx-green` | darker value | Text contrast, on white and on its tint. |
 | `--lmx-ink-500` | darker value | `--text-subtle` on the grey surfaces; control boundary. |
 | Inputs bordered with `--border-default` | `--border-control` (new) | 3:1 boundary. `--border-default` is for dividers only. |
