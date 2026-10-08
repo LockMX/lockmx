@@ -16,7 +16,7 @@ Rendered with the `Logo` component (`apps/web/src/components/ui/core/logo.tsx`),
 - Minimum size: the lockup is used at 120px wide or more, because the tagline is not legible below that; smaller placements use the wordmark. Source: the imported `Logo.prompt.md` (2026-10-08). No minimum for the wordmark and no clear-space rule were supplied by the client or the design system; both are open.
 - `alt` is required and comes from the dictionaries. When the logo is the only content of a link, `alt` names the destination.
 - `sizes` is required and states the rendered width (for example `"160px"`). The files are 1400px wide and are always displayed much smaller, so without it the browser would download a far larger image than it shows. Source: `apps/web/node_modules/next/dist/docs/01-app/03-api-reference/02-components/image.md` (16.3.6, `sizes`), 2026-10-08.
-- Size and placement are set with `className` (for example `h-8 w-auto`).
+- Size and placement are set with `className` (for example `h-8 w-auto`). As a direct child of a column flex container the image is stretched to the full width; add `self-start` (or another alignment) there.
 
 ## Assets
 

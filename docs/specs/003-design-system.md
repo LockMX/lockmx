@@ -218,7 +218,7 @@ Sources consulted and deviations from the plan, recorded when each task was done
 - `box-sizing` is not repeated in the base layer: Tailwind's preflight already sets it.
 - The contrast test failed on 18 pairs with the imported values (the pairs of Finding 1) and passes with the approved ones. Every token name of the imported manifest exists in `tokens.css`.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`. The built CSS and the served HTML of `/pt` contain no reference to `fonts.googleapis.com` or `fonts.gstatic.com`; the font files are preloaded from `/_next/static/media/`.
-- Not verified: the browser network panel and the visual check at 320, 768, 1024 and 1440 px. No component exists to inspect yet.
+- The browser checks were done later: see "Visual check of T1, T2 and T4".
 - Open points raised for the owner: `docs/design/README.md`, "Open points".
 - Corrected after review, in a separate `fix` commit: (1) `--status-warning` had been moved to the darker text value, which would have darkened the imported solid warning fill (yellow with a black label, `Badge.jsx`) beyond what Finding 1 approved; it keeps its imported value and warning text has its own token. (2) The reset did not cover container widths, drop, inset and text shadows or blur, and a transition without a duration ran on Tailwind's 150ms default; these are now reset or mapped to the motion tokens, with tests.
 
@@ -230,7 +230,7 @@ Sources consulted and deviations from the plan, recorded when each task was done
 - The "no inline style" test was replaced by a type check that `style` is not accepted: `next/image` sets its own `style` attribute on the element.
 - The note in the task description about the source pack in `public/logo/` is obsolete: it was already removed (see Current state).
 - `git check-ignore` confirms `apps/web/public/brand/logo/*.png` is not ignored.
-- Not verified: rendering in a browser.
+- Rendering in a browser was checked later: see "Visual check of T1, T2 and T4".
 
 ### T3 (2026-10-08)
 
@@ -251,7 +251,21 @@ Sources consulted and deviations from the plan, recorded when each task was done
 - While loading, `Button` sets the native `disabled` attribute, as the import did. An `aria-disabled` button that stays focusable would need a click handler and so a Client Component.
 - `Logo` is exported from `components/ui/index.ts` with the T4 components.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`; every class the components use is present in the built CSS.
-- Not verified, for the owner to check in a browser (no browser was available to the agent): the focus ring on light and on inverse surfaces, that the slanted button does not clip its ring, hover and active colours, and the layout at 320, 768, 1024 and 1440 px.
+- The browser checks were done later: see "Visual check of T1, T2 and T4".
+
+### Visual check of T1, T2 and T4 (2026-10-08)
+
+Done in Chrome through the Claude in Chrome extension, on a temporary route under `app/[lang]/` served by `next dev`, deleted afterwards and never committed.
+
+- Fonts: the page loaded Geist, Geist Mono and Barlow Condensed italic 700, 800 and 900. Every request of the page went to `localhost`; none to Google.
+- Focus: the ring is dark on the light surface and yellow inside `data-surface="inverse"`, on text links, buttons and icon buttons. The slanted button shows a whole rectangular ring on both surfaces; the cut does not clip it.
+- Hover: the outline button fills black with white text; the secondary button goes to `--action-secondary-hover`.
+- Sizes: the three button sizes measure 36, 44 and 54 px high.
+- Widths: checked at 1440, 1024 and 768 px by resizing the window, and at 320 px in a 320 px wide frame, because the Chrome window on the machine used does not go below 662 px. At 320 px the gutter is 16 px, the header token is 3.5rem and nothing overflows horizontally.
+- The nine logo files were not all rendered: four placements were (wordmark dark and light, lockup dark, wide mono).
+- Found and fixed: the count of an `IconButton` had a white ring on the inverse surface. The ring now takes the colour of the surface its variant is made for.
+- Found, a layout rule and not a defect: a `Logo` sized with `h-* w-auto` is stretched when it is a direct child of a column flex container. Recorded in `docs/design/brand.md`.
+- Not checked: the active (pressed) colours, and a screen reader.
 
 ## Boundaries
 

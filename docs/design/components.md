@@ -30,5 +30,5 @@ Usage notes for `Logo` are in `brand.md`.
 - **Icon.** Adding an icon is one import and one line in the map in `core/icon.tsx`. An icon never has a name of its own: the control around it does (ADR 0010).
 - **Button.** Navigation uses `ButtonLink`, so it is an anchor; `Button` is only for actions. While `loading` the native `disabled` attribute is set, which is what keeps the button a Server Component; the page changes the label if it wants the wait announced in words. `variant="outline-inverse"` and the `ghost-inverse` icon button belong on an inverse surface.
 - **Slanted button.** The background is a clipped pseudo-element, not the button itself, so the focus outline is not cut. It has no visible border, so the outline variants are not meant to be slanted.
-- **IconButton.** With a `count` above zero the accessible name is the label followed by the number ("Carrinho 3"), and the number is not read a second time.
+- **IconButton.** With a `count` above zero the accessible name is the label followed by the number ("Carrinho 3"), and the number is not read a second time. The ring around the count takes the colour of the surface the variant is made for (`ghost-inverse`: the inverse surface).
 - **Badge.** Always has text. `dot` and colour are additions to it.
