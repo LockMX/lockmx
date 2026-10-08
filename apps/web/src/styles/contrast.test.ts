@@ -92,6 +92,8 @@ describe("text tokens meet 4.5:1 on the surfaces they are used on", () => {
     ["--text-inverse-muted", "--surface-inverse"],
     ["--text-inverse-muted", "--surface-inverse-raised"],
     ["--text-on-accent", "--surface-accent"],
+    // Tabs: the count of a tab that is not selected.
+    ["--text-body", "--lmx-ink-200"],
   ])("%s on %s", (foreground, background) => {
     expect(tokenContrast(foreground, background)).toBeGreaterThanOrEqual(
       TEXT_MINIMUM,
@@ -150,6 +152,11 @@ describe("focus rings and control boundaries meet 3:1", () => {
     ["--border-control", "--surface-subtle"],
     ["--border-control", "--surface-sunken"],
     ["--border-strong", "--surface-page"],
+    // Toast: the tone icons, on the black of the toast.
+    ["--lmx-yellow", "--surface-inverse"],
+    ["--status-success", "--surface-inverse"],
+    ["--status-info", "--surface-inverse"],
+    ["--status-danger", "--surface-inverse"],
   ])("%s on %s", (indicator, background) => {
     expect(tokenContrast(indicator, background)).toBeGreaterThanOrEqual(
       NON_TEXT_MINIMUM,

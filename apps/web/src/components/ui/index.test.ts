@@ -7,6 +7,7 @@ describe("components/ui entry point", () => {
       "Badge",
       "Button",
       "ButtonLink",
+      "Card",
       "Checkbox",
       "Field",
       "Icon",
@@ -18,7 +19,11 @@ describe("components/ui entry point", () => {
       "SearchBar",
       "Select",
       "Switch",
+      "Tabs",
       "Textarea",
+      "Toast",
+      "Toaster",
+      "Tooltip",
     ]);
   });
 });
