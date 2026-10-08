@@ -19,10 +19,11 @@ All project documentation lives in `docs/`. This file is the index and explains 
 | `specs/` | Specs with tasks. See `specs/README.md`. |
 | `checklists/` | Per-module procedures, reusable in other projects. See `checklists/README.md`. |
 | `compliance/` | Legal and regulatory requirements with sources and open points. See `compliance/README.md`. |
+| `integrations/` | Operational setup of external services. Now: `aws-ses-mailboxes.md` (mailbox receiving and forwarding). |
 | `workflow.md` | Rules for executing each task: commits, tests, branches. |
 | `architecture.md` | Current structure, layers and boundaries, linking to the ADRs behind each choice. |
 
-Created only when there is real content: `design/` (design system), `integrations/` (payments, invoicing) and `runbooks/` (deploy, backups, incidents).
+Created only when there is real content: `design/` (design system), further `integrations/` files (payments, invoicing) and `runbooks/` (deploy, backups, incidents).
 
 ## Documentation rules
 
