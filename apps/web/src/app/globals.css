@@ -1,26 +1,198 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Maps the design tokens (styles/tokens.css) into Tailwind's theme namespaces
+ * (ADR 0009). Each namespace is reset first, so only design system values
+ * generate utilities.
+ *
+ * `inline` makes a utility use the token itself (`var(--radius-sm)`).
+ * `reference` stops Tailwind from also emitting the theme variable: several
+ * tokens share their name with it (`--radius-sm`, `--text-sm`, `--font-sans`),
+ * and the emitted copy would be `--radius-sm: var(--radius-sm)`.
+ * Sources: https://tailwindcss.com/docs/theme (namespaces, `inline`, resetting
+ * with `initial`); node_modules/tailwindcss/theme.css, which itself uses
+ * `@theme default inline reference`. Guarded by styles/theme.test.ts.
+ *
+ * Tokens without a theme namespace (duration, z-index, slant) are used with
+ * the variable shorthand: `duration-(--duration-fast)`, `z-(--z-header)`.
+ */
+@theme inline reference {
+  --color-*: initial;
+  --color-white: var(--lmx-white);
+  --color-black: var(--lmx-black);
+  --color-yellow: var(--lmx-yellow);
+  --color-yellow-50: var(--lmx-yellow-50);
+  --color-yellow-100: var(--lmx-yellow-100);
+  --color-yellow-600: var(--lmx-yellow-600);
+  --color-yellow-700: var(--lmx-yellow-700);
+  --color-yellow-800: var(--lmx-yellow-800);
+  --color-ink-50: var(--lmx-ink-50);
+  --color-ink-100: var(--lmx-ink-100);
+  --color-ink-200: var(--lmx-ink-200);
+  --color-ink-300: var(--lmx-ink-300);
+  --color-ink-400: var(--lmx-ink-400);
+  --color-ink-500: var(--lmx-ink-500);
+  --color-ink-600: var(--lmx-ink-600);
+  --color-ink-700: var(--lmx-ink-700);
+  --color-ink-800: var(--lmx-ink-800);
+  --color-ink-850: var(--lmx-ink-850);
+  --color-ink-900: var(--lmx-ink-900);
+  --color-ink-950: var(--lmx-ink-950);
+  --color-green: var(--lmx-green);
+  --color-green-50: var(--lmx-green-50);
+  --color-red: var(--lmx-red);
+  --color-red-50: var(--lmx-red-50);
+  --color-red-600: var(--lmx-red-600);
+  --color-red-700: var(--lmx-red-700);
+  --color-blue: var(--lmx-blue);
+  --color-blue-50: var(--lmx-blue-50);
+
+  --color-surface-page: var(--surface-page);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-card: var(--surface-card);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-inverse: var(--surface-inverse);
+  --color-surface-inverse-raised: var(--surface-inverse-raised);
+  --color-surface-accent: var(--surface-accent);
+  --color-surface-backdrop: var(--surface-backdrop);
+
+  /* Colour text tokens sit under `--color-text-*`, away from the `--text-*`
+     font-size namespace: `text-text-strong` is a colour, `text-sm` a size. */
+  --color-text-strong: var(--text-strong);
+  --color-text-body: var(--text-body);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
+  --color-text-inverse: var(--text-inverse);
+  --color-text-inverse-muted: var(--text-inverse-muted);
+  --color-text-on-accent: var(--text-on-accent);
+  --color-text-accent: var(--text-accent);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+  --color-border-control: var(--border-control);
+  --color-border-strong: var(--border-strong);
+  --color-border-inverse: var(--border-inverse);
+  --color-focus-ring: var(--focus-ring);
+
+  --color-action-primary: var(--action-primary);
+  --color-action-primary-hover: var(--action-primary-hover);
+  --color-action-primary-press: var(--action-primary-press);
+  --color-action-secondary: var(--action-secondary);
+  --color-action-secondary-hover: var(--action-secondary-hover);
+
+  --color-status-success: var(--status-success);
+  --color-status-success-bg: var(--status-success-bg);
+  --color-status-danger: var(--status-danger);
+  --color-status-danger-hover: var(--status-danger-hover);
+  --color-status-danger-press: var(--status-danger-press);
+  --color-status-danger-bg: var(--status-danger-bg);
+  --color-status-info: var(--status-info);
+  --color-status-info-bg: var(--status-info-bg);
+  --color-status-warning: var(--status-warning);
+  --color-status-warning-bg: var(--status-warning-bg);
+
+  --font-*: initial;
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --text-*: initial;
+  --text-2xs: var(--text-2xs);
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-md: var(--text-md);
+  --text-lg: var(--text-lg);
+  --text-heading-sm: var(--text-heading-sm);
+  --text-heading-md: var(--text-heading-md);
+  --text-heading-lg: var(--text-heading-lg);
+  --text-display-sm: var(--text-display-sm);
+  --text-display-md: var(--text-display-md);
+  --text-display-lg: var(--text-display-lg);
+  --text-display-xl: var(--text-display-xl);
+
+  --font-weight-*: initial;
+  --font-weight-regular: var(--weight-regular);
+  --font-weight-medium: var(--weight-medium);
+  --font-weight-semibold: var(--weight-semibold);
+  --font-weight-bold: var(--weight-bold);
+  --font-weight-black: var(--weight-black);
+
+  --leading-*: initial;
+  --leading-display: var(--leading-display);
+  --leading-tight: var(--leading-tight);
+  --leading-snug: var(--leading-snug);
+  --leading-body: var(--leading-body);
+
+  --tracking-*: initial;
+  --tracking-display: var(--tracking-display);
+  --tracking-label: var(--tracking-label);
+  --tracking-eyebrow: var(--tracking-eyebrow);
+
+  --radius-*: initial;
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-*: initial;
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-focus: var(--shadow-focus);
+  --shadow-focus-danger: var(--shadow-focus-danger);
+
+  --ease-*: initial;
+  --ease-out: var(--ease-out);
+  --ease-in-out: var(--ease-in-out);
+
+  /* The spacing scale keeps Tailwind's multiplier on the 4px base token:
+     `p-4` is `--space-1` times 4, the same value as `--space-4`. */
+  --spacing: var(--space-1);
+  --spacing-gutter: var(--container-pad);
+  --spacing-header: var(--header-height);
+  --container-page: var(--container-max);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  /* Preflight already sets `box-sizing: border-box` and removes margins. */
+  body {
+    background-color: var(--surface-page);
+    color: var(--text-body);
+    font-size: var(--text-md);
+    line-height: var(--leading-body);
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  a {
+    color: var(--text-strong);
+    text-decoration: underline;
+    text-decoration-color: var(--lmx-yellow);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  a:hover {
+    color: var(--text-accent);
+  }
+
+  ::selection {
+    background-color: var(--lmx-yellow);
+    color: var(--lmx-black);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }

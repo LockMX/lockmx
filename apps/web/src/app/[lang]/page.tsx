@@ -8,7 +8,7 @@ export default async function Home() {
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
-      <h1 className="text-3xl font-semibold">{home.heading}</h1>
+      <h1 className="text-heading-lg font-semibold">{home.heading}</h1>
       <p>{home.intro}</p>
       <LanguageSwitcher label={languageSwitcher.label} current={locale} />
     </main>
