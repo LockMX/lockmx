@@ -40,7 +40,7 @@ Decisions behind this setup: `../decisions/0009-styling-design-tokens-tailwind.m
 | Font sizes `--text-sm` ... | `text-<name>` | `text-sm`, `text-display-lg` |
 | Families, weights, leading, tracking | `font-<name>`, `leading-<name>`, `tracking-<name>` | `font-display`, `font-semibold`, `leading-body`, `tracking-label` |
 | Radii, shadows, easing | `rounded-<name>`, `shadow-<name>`, `ease-<name>` | `rounded-pill`, `shadow-lg`, `ease-out` |
-| Spacing | Tailwind's numeric scale on the 4px base token | `p-4` equals `--space-4` |
+| Spacing | Tailwind's numeric scale on the base token `--space-1` | `p-4` equals `--space-4` |
 | Layout | `px-gutter`, `h-header`, `max-w-page` | page container and header |
 | Duration, z-index, slant (no Tailwind namespace) | variable shorthand | `duration-(--duration-fast)`, `z-(--z-dialog)`, `skew-x-(--slant)` |
 
@@ -83,15 +83,16 @@ Only after it is in an approved spec. Follow "Conventions for every component ta
 | Raw values inside components | `--lmx-red-600`, `--lmx-red-700`, `--status-danger-hover`, `--status-danger-press`, `--surface-backdrop`, `--shadow-focus-danger` (new) | Spec 003 Finding 2. |
 | `--container-pad`, `--header-height`: one value | mobile value, desktop value from the `sm` breakpoint | Responsive rule of spec 003. |
 | `--font-*`: literal family names, Google Fonts `@import` | reference the `next/font` variables | ADR 0011. |
+| Type, spacing and layout tokens in `px` | the same sizes in `rem` | They follow the reader's browser font size. Owner decision, 2026-10-08. Radii, shadows and the slant cut stay in `px`. |
+| Links underlined in yellow | underlined in the text colour; yellow underline only on inverse surfaces | The yellow underline measures 1.76:1 on white and was the only sign of a link. Owner decision, 2026-10-08. |
+| Component font sizes outside the type scale (15, 17, 20, 13, 26, 32 px) | the nearest size token | No new size tokens. Owner decision, 2026-10-08. Each component task records what it changed. |
 
-Every other token keeps its imported name and value.
+Every other token keeps its imported name and its imported value (converted to `rem` where the row above applies).
 
 ## Open points
 
 Each needs an owner decision. Nothing here was changed on assumption.
 
 1. **Display typeface.** The owner reported the logo typeface on 2026-10-08. It cannot be used until a licence that covers a commercial website exists. The client or the designer also has to confirm the licence under which the logo artwork was made. See `brand.md`.
-2. **Units.** The imported type and spacing tokens are in `px`. A font size in `px` does not follow the reader's browser font-size setting; `rem` does. Converting is a change to token values, so it was not done.
-3. **Link underline.** The imported link style keeps a yellow underline. On white it measures 1.76:1, and the link text is nearly the colour of body text, so the underline is the only cue. See `accessibility.md`.
-4. **`--shadow-focus`.** Kept as imported (a translucent yellow glow). It measures under 3:1 on light surfaces, so it may decorate a focused control but is never the only focus indicator.
-5. **Weight 800.** The imported components use weight 800 for headings and prices, and the font is loaded at 800, but the imported tokens have no step between `--weight-bold` and `--weight-black`. The first component that needs it (spec 003, T4 or T10) adds the token.
+2. **`--shadow-focus`.** Kept as imported (a translucent yellow glow). It measures under 3:1 on light surfaces, so it may decorate a focused control but is never the only focus indicator.
+3. **Weight 800.** The imported components use weight 800 for headings and prices, and the font is loaded at 800, but the imported tokens have no step between `--weight-bold` and `--weight-black`. The first component that needs it (spec 003, T4 or T10) adds the token.

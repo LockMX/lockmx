@@ -175,6 +175,33 @@ describe("compiled stylesheet", () => {
     ).toBe(true);
   });
 
+  it("sizes type, spacing and layout in rem, so they follow the reader's font size", () => {
+    expect(
+      compiledCssMatches(
+        /--(text|space|container|header)-[\w-]+:\s*[\d.]+px/,
+      ),
+    ).toBe(false);
+    expect(compiledCssMatches(/--text-md:\s*1rem/)).toBe(true);
+    expect(compiledCssMatches(/--space-1:\s*0\.25rem/)).toBe(true);
+  });
+
+  it("underlines links in their own text colour, not in yellow", () => {
+    expect(
+      compiledCssMatches(/\n\s*a\s*\{[^}]*text-decoration-color/),
+    ).toBe(false);
+    expect(
+      compiledCssMatches(/\n\s*a\s*\{[^}]*text-decoration(-line)?:\s*underline/),
+    ).toBe(true);
+  });
+
+  it("gives links on inverse surfaces a light colour and the yellow underline", () => {
+    expect(
+      compiledCssMatches(
+        /\[data-surface="?inverse"?\] a\s*\{[^}]*color:\s*var\(--text-inverse\)[^}]*text-decoration-color:\s*var\(--lmx-yellow\)/,
+      ),
+    ).toBe(true);
+  });
+
   it("removes motion when the user asks for reduced motion", () => {
     expect(compiledCssMatches(/prefers-reduced-motion:\s*reduce/)).toBe(true);
   });
