@@ -56,6 +56,7 @@ function clamp(value: number, min: number, max: number): number {
  * A quantity between `min` and `max`: a field that takes digits only, with a
  * button on each side. What is typed is a draft until it is a number in range
  * or the field is left, when it is clamped; an empty draft restores the value.
+ * With a `name`, a hidden input carries the settled value to the form.
  */
 export function QuantityStepper({
   label,
@@ -67,6 +68,8 @@ export function QuantityStepper({
   max = 99,
   size = "md",
   disabled = false,
+  name,
+  form,
   onChange,
   onBlur,
   onKeyDown,
@@ -77,6 +80,8 @@ export function QuantityStepper({
   const [draft, setDraft] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const current = clamp(value ?? innerValue, min, max);
+  const draftOutOfRange =
+    draft !== null && draft !== "" && clamp(Number(draft), min, max) !== Number(draft);
 
   function change(next: number): number {
     const clamped = clamp(next, min, max);
@@ -101,14 +106,21 @@ export function QuantityStepper({
     if (text !== "" && typed >= min && typed <= max) change(typed);
   }
 
-  function handleBlur(event: React.FocusEvent<HTMLInputElement>) {
+  function commitDraft() {
     if (draft) change(Number(draft));
     setDraft(null);
+  }
+
+  function handleBlur(event: React.FocusEvent<HTMLInputElement>) {
+    commitDraft();
     onBlur?.(event);
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     onKeyDown?.(event);
+    // Enter may submit the form: the draft is settled first, so the form
+    // gets the same value the field ends up showing.
+    if (event.key === "Enter") commitDraft();
     if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
     event.preventDefault();
     step(event.key === "ArrowUp" ? 1 : -1, false);
@@ -150,6 +162,7 @@ export function QuantityStepper({
         aria-valuenow={current}
         aria-valuemin={min}
         aria-valuemax={max}
+        aria-invalid={draftOutOfRange || undefined}
         disabled={disabled}
         value={draft ?? String(current)}
         onChange={handleInput}
@@ -158,6 +171,10 @@ export function QuantityStepper({
         className="h-full w-10 bg-transparent text-center font-mono text-md font-semibold text-text-strong focus-visible:-outline-offset-2 disabled:cursor-not-allowed"
       />
       {stepButton("plus", increaseLabel, 1, current >= max)}
+      {/* The form gets the settled value, never the draft in the field. */}
+      {name && (
+        <input type="hidden" name={name} form={form} value={current} disabled={disabled} />
+      )}
       {/* Always rendered: a live region must exist before its content changes. */}
       <span aria-live="polite" className="sr-only">
         {announcement}
