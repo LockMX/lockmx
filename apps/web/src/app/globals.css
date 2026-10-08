@@ -229,6 +229,12 @@
     outline-offset: 2px;
   }
 
+  /* The page behind a modal dialog does not scroll. In CSS, so no script
+     writes a style on the root element. */
+  html:has(dialog:modal) {
+    overflow: hidden;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     ::before,

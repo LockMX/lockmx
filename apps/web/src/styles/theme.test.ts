@@ -194,6 +194,12 @@ describe("compiled stylesheet", () => {
     expect(compiledCssMatches(/--space-1:\s*0\.25rem/)).toBe(true);
   });
 
+  it("stops the page from scrolling behind a modal dialog", () => {
+    expect(
+      compiledCssMatches(/html:has\(dialog:modal\)\s*\{[^}]*overflow:\s*hidden/),
+    ).toBe(true);
+  });
+
   it("underlines links in their own text colour, not in yellow", () => {
     expect(
       compiledCssMatches(/\n\s*a\s*\{[^}]*text-decoration-color/),
