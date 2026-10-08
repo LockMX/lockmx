@@ -36,7 +36,17 @@ const ICON_SIZES: Record<IconButtonSize, IconSize> = {
 };
 
 const COUNT_CLASSES =
-  "absolute -top-1 -right-1 grid h-4.5 min-w-4.5 place-items-center rounded-pill bg-yellow px-1 text-2xs font-bold leading-none text-black ring-2 ring-surface-page";
+  "absolute -top-1 -right-1 grid h-4.5 min-w-4.5 place-items-center rounded-pill bg-yellow px-1 text-2xs font-bold leading-none text-black ring-2";
+
+// The ring separates the count from the icon, so it takes the colour of the
+// surface the variant is made for.
+const COUNT_RING_CLASSES: Record<IconButtonVariant, string> = {
+  ghost: "ring-surface-page",
+  "ghost-inverse": "ring-surface-inverse",
+  outline: "ring-surface-page",
+  primary: "ring-surface-page",
+  secondary: "ring-surface-page",
+};
 
 export type IconButtonProps = Omit<
   React.ComponentProps<"button">,
@@ -79,7 +89,10 @@ export function IconButton({
     >
       <Icon name={icon} size={ICON_SIZES[size]} />
       {hasCount && (
-        <span aria-hidden="true" className={COUNT_CLASSES}>
+        <span
+          aria-hidden="true"
+          className={classNames(COUNT_CLASSES, COUNT_RING_CLASSES[variant])}
+        >
           {count}
         </span>
       )}

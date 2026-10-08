@@ -28,6 +28,19 @@ describe("IconButton", () => {
     expect(screen.getByText("3")).toBeTruthy();
   });
 
+  test("rings the count in the colour of the surface the button sits on", () => {
+    render(
+      <>
+        <IconButton icon="shopping-cart" label="Claro" count={3} />
+        <IconButton icon="shopping-cart" label="Escuro" count={12} variant="ghost-inverse" />
+      </>,
+    );
+
+    expect(screen.getByText("3").className.split(" ")).toContain("ring-surface-page");
+    expect(screen.getByText("12").className.split(" ")).toContain("ring-surface-inverse");
+    expect(screen.getByText("12").className.split(" ")).not.toContain("ring-surface-page");
+  });
+
   test("shows no count when it is zero or absent", () => {
     render(
       <>
