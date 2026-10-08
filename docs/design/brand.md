@@ -38,4 +38,6 @@ The owner reported on 2026-10-08 that the typeface used for the logo is "Rushdri
 - The author's own site could not be opened on 2026-10-08, so the licence types, whether one of them covers embedding in a website, and the price are not confirmed.
 - No font file was supplied, and none is in the repository or in the identity pack.
 
-Until the client holds a licence that covers use as a web font on a commercial site, and supplies the file obtained under that licence, the stand-in stays. A file downloaded from a font aggregator is not used. When the conditions are met, the font replaces Barlow Condensed through `next/font/local` in `layout.tsx`: the `--font-display` token keeps its name, so no component changes. The logo itself is an image and is not affected.
+Until the client holds a licence that covers use as a web font on a commercial site, and supplies the file obtained under that licence, the stand-in stays. A file downloaded from a font aggregator is not used. When the conditions are met, the font replaces Barlow Condensed through `next/font/local` in `layout.tsx`: the `--font-display` token keeps its name, so no component changes. Replacing the web font does not touch the logo files, which are images.
+
+Open, for the client or the designer of the logo to confirm: that the logo artwork was produced under a commercial licence of the typeface. The listing above says the free file is for personal use only and that a licence bought after use is not accepted. This file records what the listing says; it is not a legal assessment.

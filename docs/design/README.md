@@ -90,7 +90,7 @@ Every other token keeps its imported name and value.
 
 Each needs an owner decision. Nothing here was changed on assumption.
 
-1. **Display typeface.** The owner reported the logo typeface on 2026-10-08. It cannot be used until a licence that covers a commercial website exists. See `brand.md`.
+1. **Display typeface.** The owner reported the logo typeface on 2026-10-08. It cannot be used until a licence that covers a commercial website exists. The client or the designer also has to confirm the licence under which the logo artwork was made. See `brand.md`.
 2. **Units.** The imported type and spacing tokens are in `px`. A font size in `px` does not follow the reader's browser font-size setting; `rem` does. Converting is a change to token values, so it was not done.
 3. **Link underline.** The imported link style keeps a yellow underline. On white it measures 1.76:1, and the link text is nearly the colour of body text, so the underline is the only cue. See `accessibility.md`.
 4. **`--shadow-focus`.** Kept as imported (a translucent yellow glow). It measures under 3:1 on light surfaces, so it may decorate a focused control but is never the only focus indicator.
