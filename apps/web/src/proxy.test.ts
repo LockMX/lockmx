@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { NextRequest } from "next/server";
-import { describe, expect, test } from "vitest";
+import { getRewrittenUrl, isRewrite } from "next/experimental/testing/server";
+import { afterEach, describe, expect, test, vi } from "vitest";
 import { config, proxy } from "@/proxy";
 
 function request(path: string, acceptLanguage?: string) {
@@ -51,6 +52,45 @@ describe("proxy", () => {
     expect(response.status).toBe(307);
     expect(response.headers.get("vary")).toContain("Accept-Language");
   });
+});
+
+describe("proxy with the coming soon switch", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  function rewriteTarget(path: string) {
+    const response = proxy(request(path));
+    return isRewrite(response) ? new URL(getRewrittenUrl(response) ?? "").pathname : null;
+  }
+
+  test.each([
+    ["/pt", "/pt/coming-soon"],
+    ["/en", "/en/coming-soon"],
+    ["/pt/loja", "/pt/coming-soon"],
+    ["/en/a/b", "/en/coming-soon"],
+    ["/pt/coming-soon", "/pt/coming-soon"],
+  ])("on: %s shows the placeholder of its locale (%s)", (path, expected) => {
+    vi.stubEnv("COMING_SOON", "true");
+
+    expect(rewriteTarget(path)).toBe(expected);
+  });
+
+  test("on: a path without a locale is still redirected to its locale first", () => {
+    vi.stubEnv("COMING_SOON", "true");
+
+    expect(redirectTarget("/loja", "en")).toBe("/en/loja");
+  });
+
+  test.each([undefined, "", "false", "1", "TRUE"])(
+    "off when the variable is %s: pages are served as they are",
+    (value) => {
+      if (value !== undefined) vi.stubEnv("COMING_SOON", value);
+
+      expect(rewriteTarget("/pt")).toBeNull();
+      expect(rewriteTarget("/pt/loja")).toBeNull();
+    },
+  );
 });
 
 describe("proxy matcher", () => {
