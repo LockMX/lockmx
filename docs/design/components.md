@@ -22,6 +22,10 @@ The inventory of `apps/web/src/components/ui/`. Each component task of spec 003 
 | `ButtonLink` | core | `core/button-link.tsx` | no | the appearance props of `Button`, `iconLeft`, `iconRight`, `next/link` props (`href` required) | hover, active, focus | `children` |
 | `IconButton` | core | `core/icon-button.tsx` | no | `icon`, `variant` (`ghost`, `ghost-inverse`, `outline`, `primary`, `secondary`; default `ghost`), `size` (`sm`, `md`, `lg`; default `md`), `count`, native `button` props | hover, focus, disabled | `label` (required: accessible name and tooltip) |
 | `Badge` | core | `core/badge.tsx` | no | `tone` (`neutral`, `accent`, `success`, `danger`, `info`, `warning`, `inverse`; default `neutral`), `variant` (`soft`, `solid`; default `soft`), `shape` (`pill`, `slant`; default `pill`), `dot`, native `span` props | none | `children` (required) |
+| `Field` | forms | `forms/field.tsx` | no | `id` (required), `className`, `children` (a function that receives the props for the control: `id`, `required`, `aria-describedby`, `aria-invalid`) | invalid (when `error` is set), required | `label` (required), `hint`, `error`, `requiredLabel` |
+| `Input` | forms | `forms/input.tsx` | no | `size` (`sm`, `md`, `lg`; default `md`), `iconLeft`, `suffix`, native `input` props (`type` defaults to `text`) | focus, invalid, disabled, required | the `Field` text props, `placeholder`, `suffix` |
+| `Textarea` | forms | `forms/textarea.tsx` | no | native `textarea` props (`rows` defaults to 5) | focus, invalid, disabled, required | the `Field` text props, `placeholder` |
+| `Select` | forms | `forms/select.tsx` | no | `options` (`{ value, label }[]`, required), `size`, native `select` props except `multiple` | focus, invalid, disabled, required | the `Field` text props, `placeholder`, each option `label` |
 
 Usage notes for `Logo` are in `brand.md`.
 
@@ -32,3 +36,5 @@ Usage notes for `Logo` are in `brand.md`.
 - **Slanted button.** The background is a clipped pseudo-element, not the button itself, so the focus outline is not cut. It has no visible border, so the outline variants are not meant to be slanted.
 - **IconButton.** With a `count` above zero the accessible name is the label followed by the number ("Carrinho 3"), and the number is not read a second time. The ring around the count takes the colour of the surface the variant is made for (`ghost-inverse`: the inverse surface).
 - **Badge.** Always has text. `dot` and colour are additions to it.
+- **Field.** `Input`, `Textarea` and `Select` use it themselves; use it directly only around another control. A label is required. An error is shown with an icon and text inside a polite live region that is always present, so an error that appears later is announced; the hint stays visible next to it. The required mark is hidden from assistive technology, which gets the native `required` attribute instead, and `requiredLabel` is its tooltip.
+- **Input, Textarea, Select.** The native control has no border of its own: the box around it draws focus, invalid and disabled from the state of the control (`forms/control-styles.ts`). Invalid adds a second line to the border, so it does not depend on colour. `Select` is the native element, so the list, the keyboard and the mobile picker are the browser's.

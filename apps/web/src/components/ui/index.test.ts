@@ -7,9 +7,13 @@ describe("components/ui entry point", () => {
       "Badge",
       "Button",
       "ButtonLink",
+      "Field",
       "Icon",
       "IconButton",
+      "Input",
       "Logo",
+      "Select",
+      "Textarea",
     ]);
   });
 });
