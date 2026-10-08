@@ -179,6 +179,7 @@
   --duration-base: 180ms;
   --duration-slow: 320ms;
 
+  --z-dropdown: 20;
   --z-header: 50;
   --z-overlay: 90;
   --z-dialog: 100;
