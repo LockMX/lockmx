@@ -5,7 +5,7 @@
 
 ## Context
 
-The site needs a public address before the shop exists. The request for AWS SES production access asks for the website of the sender, and the owner wants to submit it now with `https://www.lockmx.com`. The home route is a placeholder (the logo and "coming soon", commit `feat: add coming soon placeholder home page`), to be replaced by the real home page when its spec is built.
+The site needs a public address before the shop exists. The request for AWS SES production access asks for the website of the sender, and the owner wants to submit it now with `https://www.lockmx.com`. The placeholder (the logo and "coming soon") is the route `/<locale>/coming-soon`. With `COMING_SOON=true` in the deployment's environment, the proxy shows it at every page address, so `main` can receive the real pages as they are built without publishing them (`docs/architecture.md`, Internationalization).
 
 Application hosting for the shop is not decided: ADR 0007 is still proposed, leaning to Vercel Pro, with AWS Amplify as the alternative to test. This ADR does not settle that. It only covers where the placeholder runs until ADR 0007 is accepted.
 
@@ -32,7 +32,7 @@ The owner hosts other projects on Vercel at no cost, on the Hobby plan, and prop
 - The SES request can be submitted as soon as the domain answers.
 - Hosting may cost 20 USD per month from now instead of from launch, if option 1 is taken. The Hobby page mentions a free Pro trial; its length and limits were not checked.
 - A provisional choice tends to stay. Accepting ADR 0007 is still a separate step, and Amplify stays to be tested if the client prefers AWS.
-- The site becomes public: only the placeholder is deployed from `main`, and nothing that handles personal data or payments is exposed before its own spec and decisions.
+- The site becomes public. The deployment must have `COMING_SOON=true`, which hides pages but not API routes: nothing that handles personal data or payments is merged into `main` before its own spec and decisions, switch or no switch.
 
 ## To verify at deployment
 

@@ -8,10 +8,23 @@ import { resolveLocale } from "@/lib/i18n/negotiate";
 // A first segment shaped like a language code (fr, en-US) that is not supported.
 const localeShaped = /^[a-z]{2,3}(-[a-z0-9]{2,8})*$/i;
 
+// The public site shows only the placeholder while this is "true" in the
+// deployment's environment. It is unset in development, where every page is
+// served as it is. Read per request, so it follows the environment it runs in.
+const COMING_SOON_SEGMENT = "coming-soon";
+
+function comingSoonEnabled(): boolean {
+  return process.env.COMING_SOON === "true";
+}
+
 export function proxy(request: NextRequest) {
   const [first = "", ...rest] = request.nextUrl.pathname.split("/").filter(Boolean);
 
-  if (isLocale(first)) return NextResponse.next();
+  if (isLocale(first)) {
+    return comingSoonEnabled()
+      ? NextResponse.rewrite(new URL(`/${first}/${COMING_SOON_SEGMENT}`, request.url))
+      : NextResponse.next();
+  }
 
   const locale = resolveLocale(request.headers.get("accept-language"));
   const remaining = localeShaped.test(first) ? rest : [first, ...rest].filter(Boolean);

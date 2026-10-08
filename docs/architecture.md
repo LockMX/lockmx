@@ -23,7 +23,7 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 | `app/` | exists | Routes, layouts and composition only. No business logic in pages. |
 | `app/[lang]/` | exists | Root segment for the locale (`pt` or `en`). Holds the root layout and every page. |
 | `app/[lang]/(marketing)`, `(shop)`, `(account)`, `(admin)` | planned | Route groups, one per site section, inside `[lang]`. |
-| `proxy.ts` | exists | Sends a request without a supported locale prefix to `/<locale>/...`. Kept small: later specs add their own checks here. |
+| `proxy.ts` | exists | Sends a request without a supported locale prefix to `/<locale>/...`. While `COMING_SOON` is `true`, shows the placeholder at every page address. Kept small: later specs add their own checks here. |
 | `components/` | exists | Reusable components. Receive text and data through props, never read dictionaries themselves. |
 | `components/ui/` | exists | Design system primitives, one folder per group (`core` now; `forms`, `surfaces`, `commerce`, `data` planned). See `design/components.md`. |
 | `styles/` | exists | `tokens.css`, the design tokens and single source of truth for visual values, with the contrast and theme guard tests. Wired into Tailwind by `app/globals.css`. |
@@ -54,6 +54,7 @@ Decided in `decisions/0008-i18n-native-next.md`, specified in `specs/002-i18n.md
 - Two locales, `pt` and `en`, always in the URL path (`/pt/...`, `/en/...`). `<html lang>` is `pt-PT` for `pt`.
 - First visit: `proxy.ts` picks the locale from `Accept-Language`, falling back to `pt`. An unsupported language prefix (`/fr`) is replaced by the resolved locale. The redirect is temporary and varies on `Accept-Language`. No cookie is used.
 - Every visible string comes from a dictionary. Pages read it with `getMessages(await getCurrentLocale())` and pass strings to components as props. ESLint (`react/jsx-no-literals`) rejects literal text in JSX; attribute strings (`alt`, `aria-label`) are a review point.
+- Coming soon switch: with `COMING_SOON=true` in the environment, `proxy.ts` rewrites every page request that has a locale to `/<locale>/coming-soon` (the address in the browser does not change). It is set only in the public deployment until launch (ADR 0012) and left unset in development, where every page is served as it is. The value is read per request; checked on 2026-10-08 with `next start`, on a build made without the variable. It was not checked on Vercel: redeploy after changing it there. The switch hides pages only. Requests the matcher skips (`api`, files) are not covered, so an API route is never protected by it. At launch the variable, the `coming-soon` route, the `ComingSoon` component and its dictionary keys are removed.
 - The proxy matcher skips `api`, `_next` and any path with a dot. Next.js turns an escaped dot in a matcher into any character, so the pattern uses `[.]`; a test guards it.
 - No top-level route may be named like a language code (two or three letters).
 

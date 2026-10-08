@@ -6,9 +6,9 @@ export const en: Messages = {
     description:
       "Motocross tyres and racks for carrying equipment inside vans.",
   },
-  home: {
+  comingSoon: {
     logoAlt: "LockMX Modular System",
-    comingSoon: "Coming soon",
+    message: "Coming soon",
   },
   languageSwitcher: {
     label: "Language",
