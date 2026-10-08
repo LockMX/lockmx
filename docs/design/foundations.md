@@ -78,7 +78,7 @@ Quick and mechanical. `--duration-fast` for colour changes, `--duration-base` fo
 
 ## Stacking
 
-`--z-header`, `--z-overlay`, `--z-dialog`, `--z-toast`, in that order. No other z-index values.
+`--z-dropdown`, `--z-header`, `--z-overlay`, `--z-dialog`, `--z-toast`, in that order. No other z-index values.
 
 ## Iconography
 

@@ -19,6 +19,11 @@ export {
   type QuantityStepperProps,
 } from "./forms/quantity-stepper";
 export { Radio, type RadioOption, type RadioProps } from "./forms/radio";
+export {
+  SearchBar,
+  type SearchBarProps,
+  type SearchSuggestion,
+} from "./forms/search-bar";
 export { Select, type SelectOption, type SelectProps } from "./forms/select";
 export { Switch, type SwitchProps } from "./forms/switch";
 export { Textarea, type TextareaProps } from "./forms/textarea";

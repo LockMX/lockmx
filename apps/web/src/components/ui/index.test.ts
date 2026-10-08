@@ -15,6 +15,7 @@ describe("components/ui entry point", () => {
       "Logo",
       "QuantityStepper",
       "Radio",
+      "SearchBar",
       "Select",
       "Switch",
       "Textarea",
