@@ -4,6 +4,10 @@ import { Icon } from "@/components/ui/core/icon";
 // A symbol, not a word: the word that explains it comes from `requiredLabel`.
 const REQUIRED_MARK = "*";
 
+/** The small uppercase label of a control, and the legend of a group of them. */
+export const FIELD_LABEL_CLASSES =
+  "text-2xs leading-tight font-semibold tracking-label text-text-strong uppercase";
+
 /** The text every form control shows around itself. */
 export type FieldText = {
   label: string;
@@ -45,10 +49,7 @@ export function Field({
 
   return (
     <div className={classNames("flex min-w-0 flex-col gap-1.5", className)}>
-      <label
-        htmlFor={id}
-        className="text-2xs leading-tight font-semibold tracking-label text-text-strong uppercase"
-      >
+      <label htmlFor={id} className={FIELD_LABEL_CLASSES}>
         {label}
         {required && (
           <span aria-hidden="true" title={requiredLabel} className="ml-1 text-text-accent">
