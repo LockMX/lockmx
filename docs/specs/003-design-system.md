@@ -1,6 +1,6 @@
 # 003. Design system
 
-- Status: draft
+- Status: approved
 - Idea: `../ideas/project-brief.md`
 - Decisions: `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0010-icons-lucide.md`, `../decisions/0011-fonts-next-font.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0004-unit-test-runner.md`
 
@@ -14,7 +14,7 @@ Turn the design system created in Claude Design (project "LockMX Design System")
 - The Claude Design tooling files: `_ds_bundle.js`, `_ds_manifest.json`, `_adherence.oxlintrc.json`, `*.card.html`, `thumbnail.html`, `guidelines/*.html` (specimen cards). They are read as reference; the content that matters is rewritten as Markdown in `docs/design/`.
 - A dark theme. The design system defines light surfaces plus a black inverse surface; the dark mode block in the current `globals.css` is removed, not extended.
 - A component documentation site (Storybook or similar).
-- Money representation and tax rules (shop spec). `Price` here only formats a value it is given.
+- Money storage, calculation and tax rules (shop spec). `Price` here only formats an amount in integer cents that it is given.
 - Real product photography, the client's real display lettering, and final copy.
 
 ## Current state (verified 2026-10-07)
@@ -22,7 +22,7 @@ Turn the design system created in Claude Design (project "LockMX Design System")
 - `apps/web/src/app/globals.css` is the `create-next-app` scaffold (`--background`, `--foreground`, a `prefers-color-scheme: dark` block, `font-family: Arial`). Tailwind 4.3.3 through `@tailwindcss/postcss`. No design tokens, no components besides `language-switcher.tsx`.
 - `app/[lang]/layout.tsx` loads Geist and Geist Mono with `next/font/google` and exposes `--font-geist-sans` and `--font-geist-mono`.
 - `apps/web/AGENTS.md` says tokens are defined "in `docs/design/`". This spec fixes that divergence (T3): the CSS lives in the app, the documentation in `docs/design/`.
-- `apps/web/public/logo/` holds the original identity pack (PNG, mockups, `.ai`, `.eps`) and is tracked in git. Everything in `public/` is served publicly, including the `.ai` and `.eps` sources. The working tree has an uncommitted `.gitignore` change adding `logo/`, which matches any folder named `logo` at any depth (including a future `public/logo/`); new brand assets therefore go to `public/brand/`.
+- `apps/web/public/logo/` holds the original identity pack (PNG, mockups, `.ai`, `.eps`) and is tracked in git. Everything in `public/` is served publicly, including the `.ai` and `.eps` sources. The owner's intent for the `logo/` folder at the repository root is: keep the client's logo pack locally for consultation, never push it to GitHub and never serve it. The unanchored pattern `logo/` also matches any other folder named `logo` at any depth, so it is anchored to `/logo/` (commit `arch: ignore root logo folder`, outside the tasks below). `apps/web/public/logo/` was already tracked before this spec and is still served; moving it out of `public/` is a separate decision, not part of this spec. New brand assets go to `public/brand/`.
 - `jsdom` 30 ships an empty `HTMLDialogElement` (no `showModal()`/`close()`), so the dialog component needs a test strategy (T9).
 - `server/i18n` is server-only. Components receive text through props (`architecture.md`).
 
@@ -79,16 +79,17 @@ Anything not listed (exact versions, API details) is confirmed against the offic
 
 Needs owner approval (workflow: new production dependencies).
 
-- Production: `lucide-react` (ADR 0010), approved with this spec. Fallback if refused: inline SVG subset, which changes T4 only.
+- Production: `lucide-react` (ADR 0010), approved by the owner on 2026-10-08.
 - Development: none planned. Component tests use the existing Vitest, Testing Library and jsdom. If keyboard-interaction tests need `@testing-library/user-event`, it is added in the task that needs it, with justification.
 
-## Decisions to take at approval
+## Decisions taken at approval (2026-10-08)
 
-- **D1. Display font.** Barlow Condensed is a stand-in. Confirm it is accepted for now, and whether the client can supply the real lettering later.
-- **D2. Contrast fixes.** Approve the proposed token values in Finding 1, which differ from the Claude Design values. Any other value must be re-checked before it is used.
-- **D3. Icons.** Approve `lucide-react`, or choose the inline SVG subset.
-- **D4. Price input.** The shop spec has not defined how money is stored. Proposal: `Price` takes a number of euros as a display value and the shop spec decides the storage (integer cents recommended there), so `Price` is not coupled to it. Confirm, or choose integer cents as the `Price` input now.
-- **D5. Branch.** Work on `feat/003-design-system` with the commits listed below.
+1. **Display font.** Barlow Condensed is accepted for now. The owner will ask the client which typeface the logo uses; if the real one is identified or supplied, it replaces Barlow Condensed through `next/font/local` (ADR 0011) without changing components.
+2. **Contrast fixes.** The token values in Finding 1 are approved. Any other value must be re-checked before it is used.
+3. **Icons.** `lucide-react` approved (ADR 0010).
+4. **Price input.** `Price` takes integer cents (`amountCents`, and `compareAtCents`). A non-integer or negative value is rejected at the type and runtime level. Storage, calculation and tax stay in the shop spec; the cents contract is the shared one.
+5. **Branch.** `feat/003-design-system`, with the commits listed below.
+6. **Brand assets.** Only what is used is served: the 9 logo PNGs go to `public/brand/logo/`. The mockups stay in the git-ignored staging folder until a page needs one (no speculative assets).
 
 ## Working branch
 
@@ -116,8 +117,8 @@ Needs owner approval (workflow: new production dependencies).
 - Commit: `feat: add design tokens and fonts`
 
 ### T2. Brand assets and Logo
-- Description: copy the 9 cropped logo PNGs to `apps/web/public/brand/logo/` (`lockup-*`, `lockup-wide-*`, `wordmark-*` in `black-yellow`, `white-yellow`, `black-white`) and the three complete mockups (`m1`, `m3`, `m4`) to `public/brand/mockups/`, from `debugging/design-export/assets/`. Build the `Logo` component with `next/image`: `variant` (`lockup`, `wide`, `wordmark`), `tone` (`dark`, `light`, `mono`) mapped to the file, intrinsic width and height from the file so there is no layout shift, `alt` required. Record in `docs/design/` (T3) that the logo is never redrawn or recoloured, and that the source pack in `public/logo/` should leave `public/` (separate decision, not changed here).
-- Planned files: `apps/web/public/brand/logo/*.png`, `apps/web/public/brand/mockups/*.jpg`, `apps/web/src/components/ui/core/logo.tsx`, `logo.test.tsx`.
+- Description: copy the 9 cropped logo PNGs to `apps/web/public/brand/logo/` (`lockup-*`, `lockup-wide-*`, `wordmark-*` in `black-yellow`, `white-yellow`, `black-white`) from `debugging/design-export/assets/logo/` (the mockups are not copied, see decision 6). Build the `Logo` component with `next/image`: `variant` (`lockup`, `wide`, `wordmark`), `tone` (`dark`, `light`, `mono`) mapped to the file, intrinsic width and height from the file so there is no layout shift, `alt` required. Record in `docs/design/` (T3) that the logo is never redrawn or recoloured, and that the source pack in `public/logo/` should leave `public/` (separate decision, not changed here).
+- Planned files: `apps/web/public/brand/logo/*.png`, `apps/web/src/components/ui/core/logo.tsx`, `logo.test.tsx`.
 - Acceptance criteria: `git status` shows the new files as tracked candidates (not ignored, checked with `git check-ignore`); the 9 variants render with the right `src`, `width`, `height` and the given `alt`; no file in `public/brand/` is larger than needed (logos at most 1400 px wide as imported).
 - Tests: each variant/tone resolves to the expected file; `alt` is required (type test); the rendered image has width and height attributes.
 - Commit: `feat: add brand assets and logo component`
@@ -172,10 +173,10 @@ Needs owner approval (workflow: new production dependencies).
 - Commit: `feat: add dialog`
 
 ### T10. Commerce: Price, ProductCard, CartLine
-- Description: `Price` formats with `Intl.NumberFormat` using the locale prop (`pt-PT` renders `349,00 €`; the project shows "IVA incluído" through the `note` prop), with the strikethrough compare-at price exposed to assistive technology as "was/now" text from props (`compareAtLabel`), so the discount is not colour-only. `ProductCard`: an `<article>` with one link on the title that covers the card (the image is decorative or has meaningful `alt` from props), stock state as a `Badge` with text from props (`stockLabel`, `stock` in/low/out), a add-to-cart button whose name includes the product (`addLabel` plus title) and is disabled when out of stock, a placeholder when there is no image, image via `next/image` with sizes. `CartLine`: image, title, meta, `QuantityStepper`, remove button, line total, compact variant; labels from props. No cart logic: callbacks only.
+- Description: `Price` takes integer cents (`amountCents`, optional `compareAtCents`) and formats with `Intl.NumberFormat` using the locale prop (`pt-PT` renders `349,00 €`; the project shows "IVA incluído" through the `note` prop), with the strikethrough compare-at price exposed to assistive technology as "was/now" text from props (`compareAtLabel`), so the discount is not colour-only. `ProductCard`: an `<article>` with one link on the title that covers the card (the image is decorative or has meaningful `alt` from props), stock state as a `Badge` with text from props (`stockLabel`, `stock` in/low/out), a add-to-cart button whose name includes the product (`addLabel` plus title) and is disabled when out of stock, a placeholder when there is no image, image via `next/image` with sizes. `CartLine`: image, title, meta, `QuantityStepper`, remove button, line total, compact variant; labels from props. No cart logic: callbacks only.
 - Planned files: `apps/web/src/components/ui/commerce/{price,product-card,cart-line}.tsx` and tests.
-- Acceptance criteria: `pt-PT` and `en` output verified with `Intl` for 349, 1234.5 and 0; out-of-stock cards cannot be added; a keyboard user reaches title link, then the add button, in that order; no price is computed from a quantity inside `Price` (CartLine receives the line total from the caller, since totals are computed on the server per the project rules).
-- Tests: formatting in both locales, compare-at text, stock states, disabled add, accessible names, placeholder when no image, compact CartLine.
+- Acceptance criteria: `pt-PT` and `en` output verified with `Intl` for 34900, 123450 and 0 cents; out-of-stock cards cannot be added; a keyboard user reaches title link, then the add button, in that order; no price is computed from a quantity inside `Price` (CartLine receives the line total from the caller, since totals are computed on the server per the project rules).
+- Tests: formatting in both locales from cents (34900, 123450, 0, 1), rejection of non-integer and negative cents, compare-at text, stock states, disabled add, accessible names, placeholder when no image, compact CartLine.
 - Commit: `feat: add commerce components`
 
 ### T11. Data: DataTable
@@ -186,7 +187,7 @@ Needs owner approval (workflow: new production dependencies).
 - Commit: `feat: add data table`
 
 ### T12. Design system checklist and status
-- Description: write `docs/checklists/02-design-system.md` in English from what T1 to T11 did (token wiring, fonts, brand assets, component conventions, test strategy including the dialog double, the contrast guard), update `docs/checklists/README.md`, mark the ADRs 0009, 0010 and 0011 as accepted, and set this spec to `done`. `docs/design/components.md` is verified against the code.
+- Description: write `docs/checklists/02-design-system.md` in English from what T1 to T11 did (token wiring, fonts, brand assets, component conventions, test strategy including the dialog double, the contrast guard), update `docs/checklists/README.md`, and set this spec to `done`. `docs/design/components.md` is verified against the code.
 - Planned files: `docs/checklists/02-design-system.md`, `docs/checklists/README.md`, ADR files, this spec.
 - Acceptance criteria: each step names the exact command or file and matches the repository; every component in `components.md` exists and is exported from `components/ui/index.ts`.
 - Tests: no tests (documentation).
@@ -200,4 +201,4 @@ Needs owner approval (workflow: new production dependencies).
 
 ## Definition of done
 
-All tasks committed on `feat/003-design-system`, `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm build` pass locally and in CI, the contrast guard passes, the documentation in `docs/design/` matches the code, ADRs 0009 to 0011 are accepted, and the spec status is `done`.
+All tasks committed on `feat/003-design-system`, `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm build` pass locally and in CI, the contrast guard passes, the documentation in `docs/design/` matches the code, and the spec status is `done`.
