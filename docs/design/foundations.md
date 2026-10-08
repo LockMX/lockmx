@@ -56,7 +56,7 @@ The display face is loaded only as italic at 700, 800 and 900 (ADR 0011). Anothe
 
 ## Spacing and layout
 
-- Spacing is a 4px scale (`--space-1` and its multiples). Tailwind's numeric spacing utilities multiply `--space-1`, so `gap-3` is `--space-3`.
+- Spacing is a scale built on `--space-1` (4px at the default font size) and its multiples, in `rem`. Tailwind's numeric spacing utilities multiply `--space-1`, so `gap-3` is `--space-3`.
 - The page container is `--container-max` wide with a `--container-pad` gutter; the sticky header is `--header-height` tall. Both the gutter and the header have a mobile value and a desktop value that starts at Tailwind's `sm` breakpoint.
 - Components are fluid. Layouts are checked at 320, 768, 1024 and 1440 px.
 

@@ -77,7 +77,11 @@ Pairs that are not allowed, with the measured reason:
 
 State that colour shows is also shown by shape or text: an error has an icon and a message, a checked box has a mark, a badge has a label, a discount has "was" and "now" text for assistive technology.
 
-Open point: the imported link style (near-black text, yellow underline) relies on an underline that measures 1.76:1 on white. It was kept as imported and is listed in `README.md` for a decision.
+A link is underlined in its own text colour. The imported yellow underline measured 1.76:1 on white and was the only sign of a link, so yellow is used for the underline only inside `data-surface="inverse"`, where it measures 11.26:1.
+
+## Text size
+
+Type, spacing and layout tokens are in `rem`, so they follow the font size the reader set in the browser. A component does not set a font size or a text container height in `px`.
 
 ## Motion
 

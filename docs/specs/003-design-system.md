@@ -91,6 +91,15 @@ Needs owner approval (workflow: new production dependencies).
 5. **Branch.** `feat/003-design-system`, with the commits listed below.
 6. **Brand assets.** Only what is used is served: the 9 logo PNGs go to `public/brand/logo/`. The mockups stay in the git-ignored staging folder until a page needs one (no speculative assets).
 
+## Decisions taken during implementation (2026-10-08)
+
+Asked of the owner after T3, before the first component task.
+
+7. **Font sizes outside the scale.** The imported components use sizes that are not tokens (buttons 15, 17 and 20 px, input 15 px, toast 13 px, dialog title 26 px, price 32 px). Each is set to the nearest size token; no size tokens are added. The task notes record each substitution.
+8. **Units.** Type, spacing and layout tokens are in `rem`. Radii, shadows and the slant cut stay in `px`.
+9. **Links.** The underline uses the text colour. The yellow underline is used only on inverse surfaces.
+10. **Logo typeface.** The owner reported "Rushdriver italic". It is not used: no licensed file exists (see `docs/design/brand.md`). Decision 1 stands.
+
 ## Working branch
 
 `feat/003-design-system`. Tasks are committed in order. Merge with "rebase and merge" after an explicit request to open the pull request.
@@ -104,7 +113,7 @@ Needs owner approval (workflow: new production dependencies).
 - Every visible string and every accessible name (`aria-label`, `title`, `alt`) is a prop. No default Portuguese or English text inside a component. Components never read dictionaries.
 - Accessibility acceptance for each interactive component: operable with the keyboard alone, visible focus that meets 3:1 on the surface it sits on, correct role and name, disabled and invalid states exposed to assistive technology, no information conveyed by colour alone, `prefers-reduced-motion` respected for transitions of more than opacity or colour.
 - Tests (written first) cover: rendering of each variant and size, accessible roles and names, keyboard behavior, controlled and uncontrolled use where both exist, disabled/loading/invalid states, and that no text comes from inside the component.
-- Responsive: components are fluid; the 32 px container gutter and 72 px header from the tokens are desktop values. Mobile values (16 px gutter below the `sm` breakpoint, 56 px header) are defined in T1 and verified at 320, 768, 1024 and 1440 px in the visual check of each task.
+- Responsive: components are fluid; the 32 px container gutter and 72 px header from the tokens are desktop values (stored in `rem` since decision 8). Mobile values (16 px gutter below the `sm` breakpoint, 56 px header) are defined in T1 and verified at 320, 768, 1024 and 1440 px in the visual check of each task.
 - Visual check (not committed): a temporary route under `app/[lang]/` renders the component variants; it is run with `pnpm dev`, inspected, and deleted before the commit. No specimen route is kept in the repository.
 
 ## Tasks

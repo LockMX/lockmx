@@ -155,7 +155,7 @@
   --default-transition-duration: var(--duration-fast);
   --default-transition-timing-function: var(--ease-out);
 
-  /* The spacing scale keeps Tailwind's multiplier on the 4px base token:
+  /* The spacing scale keeps Tailwind's multiplier on the base token:
      `p-4` is `--space-1` times 4, the same value as `--space-4`. */
   --spacing: var(--space-1);
   --spacing-gutter: var(--container-pad);
@@ -173,16 +173,27 @@
     line-height: var(--leading-body);
   }
 
+  /* The underline takes the text colour: a yellow one is under 3:1 on a light
+     surface and would be the only sign of a link. On an inverse surface yellow
+     has the contrast, so it comes back there. */
   a {
     color: var(--text-strong);
     text-decoration: underline;
-    text-decoration-color: var(--lmx-yellow);
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
   }
 
   a:hover {
     color: var(--text-accent);
+  }
+
+  [data-surface="inverse"] a {
+    color: var(--text-inverse);
+    text-decoration-color: var(--lmx-yellow);
+  }
+
+  [data-surface="inverse"] a:hover {
+    color: var(--lmx-yellow);
   }
 
   ::selection {
