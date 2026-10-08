@@ -25,6 +25,8 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 | `app/[lang]/(marketing)`, `(shop)`, `(account)`, `(admin)` | planned | Route groups, one per site section, inside `[lang]`. |
 | `proxy.ts` | exists | Sends a request without a supported locale prefix to `/<locale>/...`. Kept small: later specs add their own checks here. |
 | `components/` | exists | Reusable components. Receive text and data through props, never read dictionaries themselves. |
+| `components/ui/` | exists | Design system primitives, one folder per group (`core` now; `forms`, `surfaces`, `commerce`, `data` planned). See `design/components.md`. |
+| `styles/` | exists | `tokens.css`, the design tokens and single source of truth for visual values, with the contrast and theme guard tests. Wired into Tailwind by `app/globals.css`. |
 | `lib/i18n/` | exists | Locale configuration, locale negotiation from `Accept-Language`, path switching. No server dependencies. |
 | `server/i18n/` | exists | Typed dictionaries (`messages/pt.ts` defines the shape, `messages/en.ts` follows it), `getMessages(locale)` and `getCurrentLocale()`. |
 | `server/` (other modules) | planned | Server-only layer, see below. |
@@ -55,6 +57,14 @@ Decided in `decisions/0008-i18n-native-next.md`, specified in `specs/002-i18n.md
 - The proxy matcher skips `api`, `_next` and any path with a dot. Next.js turns an escaped dot in a matcher into any character, so the pattern uses `[.]`; a test guards it.
 - No top-level route may be named like a language code (two or three letters).
 
+## Design system
+
+Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucide.md` and `0011-fonts-next-font.md`, specified in `specs/003-design-system.md`, documented in `design/`.
+
+- Visual values exist only in `styles/tokens.css`. Components use Tailwind utilities that resolve to those tokens; Tailwind's default palette and scales are switched off.
+- Fonts are loaded in `app/[lang]/layout.tsx` with `next/font` and served from the site's own origin.
+- Brand assets that a page uses are in `public/brand/`. The client's identity pack is in `logo/` at the repository root, git-ignored and never served.
+
 ## How code is tested
 
 - Unit and integration tests run with Vitest in a jsdom environment (`apps/web/vitest.config.mts`), through `pnpm test`.
@@ -71,6 +81,9 @@ Decided in `decisions/0008-i18n-native-next.md`, specified in `specs/002-i18n.md
 | Authentication with Better Auth | `decisions/0003-authentication-better-auth.md` | proposed |
 | Vitest as unit test runner | `decisions/0004-unit-test-runner.md` | accepted |
 | Internationalization with the native Next.js pattern | `decisions/0008-i18n-native-next.md` | accepted |
+| Styling with design tokens consumed through Tailwind | `decisions/0009-styling-design-tokens-tailwind.md` | accepted |
+| Icons with lucide-react | `decisions/0010-icons-lucide.md` | accepted |
+| Fonts self-hosted through next/font | `decisions/0011-fonts-next-font.md` | accepted |
 | Transactional email with Resend | `decisions/0005-transactional-email-resend.md` | proposed |
 | Database provider | `decisions/0006-database-provider.md` | proposed |
 | Application hosting | `decisions/0007-application-hosting.md` | proposed |

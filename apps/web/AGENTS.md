@@ -31,7 +31,7 @@ These complement the root `AGENTS.md`. The block above is managed by Next.js: do
 
 ## Interface
 
-- No ad hoc colors, sizes or typography: use the design system tokens (to be defined in `docs/design/`, based on the client's existing visual identity).
+- No ad hoc colors, sizes or typography: use the design system tokens. Values live in `src/styles/tokens.css` and are used through Tailwind utilities; rules and usage are documented in `docs/design/`.
 - Loading, empty, error and success states in every data view.
 - Accessibility: semantic HTML, keyboard navigation and adequate contrast.
 - No hardcoded visible text in components: everything goes through i18n (PT-PT and EN).
