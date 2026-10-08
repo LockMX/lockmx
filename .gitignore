@@ -16,3 +16,6 @@ coverage
 debugging/
 # Claude Code local settings
 .claude
+
+# SMTP credentials
+docs/credentials/
