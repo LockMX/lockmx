@@ -8,7 +8,7 @@ The company mailboxes (`support@`, `fabio.ramalhinho@`, `privacy@`, `terms@`, `d
 
 ## Flow
 
-1. DNS: the MX record of the receiving domain points to SES inbound in the SES region.
+1. DNS: the root domain has an MX record pointing to SES inbound in the region of the receipt rules: `lockmx.com MX 10 inbound-smtp.us-east-1.amazonaws.com` (checked with `nslookup` on 2026-10-08). The MX on `mail.lockmx.com` (`feedback-smtp.us-east-1.amazonses.com`) belongs to the custom MAIL FROM and only handles bounces of sent mail; it does not make the domain receive mail. Without the root MX nothing reaches S3 and the function is never invoked.
 2. A receipt rule per mailbox matches the recipient and runs two actions: store the message in S3 under `<mailbox>/<messageId>`, then invoke the Lambda.
 3. The Lambda reads the object from S3, decides whether to forward, rebuilds a MIME message (HTML body preferred, text fallback, attachments kept) and sends it with SES v2 from the mailbox address to the client's inbox, with `Reply-To` set to the original sender.
 
@@ -24,7 +24,17 @@ Code: `aws-ses-forwarder.py` (this folder). Locally tested with a stubbed `boto3
 | `ForwardPrefixes` | comma separated mailbox names allowed to be forwarded, for example `support,fabio.ramalhinho,privacy,terms,dev,abuse,postmaster` |
 | `ConfigurationSet` | optional SES configuration set, to get bounce and complaint metrics for forwarded mail |
 
-Function settings to raise from the defaults: memory (the message is read, parsed and serialized again, so several copies of it live in memory; 512 MB or more) and timeout (60 s for large attachments). The IAM role needs `s3:GetObject` on the bucket and `ses:SendEmail` for the sending identity.
+Function settings to raise from the defaults (128 MB and 3 s, with which the function timed out in a console test on 2026-10-08): memory (the message is read, parsed and serialized again, so several copies of it live in memory; 512 MB or more) and timeout (60 s for large attachments). The IAM role needs `s3:GetObject` on the bucket and `ses:SendEmail` for the sending identity.
+
+### The `dev@` mailbox
+
+`dev@` belongs to the maintainer, not to the client. The rule `forward-to-dev` invokes a second function with the same code, `MailRecipient` set to the maintainer's mailbox and `ForwardPrefixes=dev`; `dev` is left out of `ForwardPrefixes` in the main function.
+
+If the destination mailbox is itself forwarded by another SES setup, that second forwarder must also keep an existing `Reply-To`. A forwarder that uses `Return-Path` first replaces the sender with the SES bounce address of the first hop (seen on 2026-10-08, fixed by using this same function there).
+
+### Testing in the console
+
+The default console test event has no `Records` key and fails with `KeyError: 'Records'`. Use an event shaped like the SES one (`Records[0].ses.mail.messageId`, `receipt.recipients` and the three verdicts), with `messageId` equal to the name of an object that exists under `<mailbox>/` in the bucket. `AMAZON_SES_SETUP_NOTIFICATION` is the file SES writes when the S3 action is configured, not a received message.
 
 ## Forwarding rules in the function
 
@@ -54,6 +64,8 @@ SES sending limits and reputation review are account-wide: a high bounce or comp
 
 ## Open points
 
+- The SES account is still in the sandbox (2026-10-08): it only sends to verified addresses, so every forwarding destination must be verified until production access is granted.
+- `_dmarc.lockmx.com` is `v=DMARC1; p=none;` with no report address (2026-10-08).
 - Receiving domain and sending subdomain names (planned: Resend on `shop.lockmx.com`, SES custom MAIL FROM on `mail.lockmx.com`); the MAIL FROM subdomain must not be used for anything else.
 - The Resend DNS records must be checked in the Resend dashboard before touching DNS, to confirm they do not collide with the SES records.
 - Outlook safe-sender rule so that forwarded copies do not land in junk.
