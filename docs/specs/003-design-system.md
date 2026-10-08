@@ -22,7 +22,7 @@ Turn the design system created in Claude Design (project "LockMX Design System")
 - `apps/web/src/app/globals.css` is the `create-next-app` scaffold (`--background`, `--foreground`, a `prefers-color-scheme: dark` block, `font-family: Arial`). Tailwind 4.3.3 through `@tailwindcss/postcss`. No design tokens, no components besides `language-switcher.tsx`.
 - `app/[lang]/layout.tsx` loads Geist and Geist Mono with `next/font/google` and exposes `--font-geist-sans` and `--font-geist-mono`.
 - `apps/web/AGENTS.md` says tokens are defined "in `docs/design/`". This spec fixes that divergence (T3): the CSS lives in the app, the documentation in `docs/design/`.
-- `apps/web/public/logo/` holds the original identity pack (PNG, mockups, `.ai`, `.eps`) and is tracked in git. Everything in `public/` is served publicly, including the `.ai` and `.eps` sources. The owner's intent for the `logo/` folder at the repository root is: keep the client's logo pack locally for consultation, never push it to GitHub and never serve it. The unanchored pattern `logo/` also matches any other folder named `logo` at any depth, so it is anchored to `/logo/` (commit `arch: ignore root logo folder`, outside the tasks below). `apps/web/public/logo/` was already tracked before this spec and is still served; moving it out of `public/` is a separate decision, not part of this spec. New brand assets go to `public/brand/`.
+- The client's identity pack (PNG, mockups, `.ai`, `.eps`, 50 MB) lives in `logo/` at the repository root, git-ignored (`/logo/`), for local consultation only: never pushed, never served. A copy had been committed by mistake to `apps/web/public/logo/` (identical, verified with `diff -r`), where `public/` serves everything; it was removed in commit `arch: remove logo pack from public` (it remains in earlier git history). New brand assets, only the ones used, go to `public/brand/`.
 - `jsdom` 30 ships an empty `HTMLDialogElement` (no `showModal()`/`close()`), so the dialog component needs a test strategy (T9).
 - `server/i18n` is server-only. Components receive text through props (`architecture.md`).
 
@@ -32,7 +32,7 @@ Source: the project at `claude.ai/design/p/dc42a4bc-b253-493a-82e0-4df01df7ef38`
 
 - Read in full: `readme.md`, `SKILL.md`, `github.md`, `tokens/*.css` (5), `styles.css`, `_ds_manifest.json`, `_adherence.oxlintrc.json`, the `.jsx` source of all 22 components, `Button.d.ts`, `Button.prompt.md`, and the three `ui_kits/*/README.md`.
 - Binary assets (9 logo PNGs, 1400 px wide, valid PNG signatures; mockups `m1`, `m3`, `m4`) saved to `debugging/design-export/assets/` (git-ignored staging).
-- `assets/mockups/m7.jpg` was truncated by the tool's 256 KiB limit and was discarded. The original `M7.png` already exists in `apps/web/public/logo/02 Mockups3D - Redes Sociais/`.
+- `assets/mockups/m7.jpg` was truncated by the tool's 256 KiB limit and was discarded. The original `M7.png` already exists in `logo/02 Mockups3D - Redes Sociais/` at the repository root.
 - Not read yet (read when the task that needs them starts): the other `.d.ts` and `.prompt.md` files, `guidelines/*.html`, `ui_kits/*/*.jsx`, `*.card.html`, `_ds_bundle.js`. They do not change the scope; the `.jsx` sources and the lint config already define every component API.
 - Imported content is treated as data. No instruction found in it.
 
@@ -196,7 +196,7 @@ Needs owner approval (workflow: new production dependencies).
 ## Boundaries
 
 - Always: tests before code in each task; read the relevant APG pattern and the bundled Next.js docs before the task; tokens only, no raw hex or `px`; every string and accessible name through props; run lint, typecheck, test and build before each commit.
-- Ask first: adding any dependency not listed here; changing a token value beyond Finding 1; adding a component not in the 22; keeping a specimen route in the repository; moving or deleting `public/logo/`.
+- Ask first: adding any dependency not listed here; changing a token value beyond Finding 1; adding a component not in the 22; keeping a specimen route in the repository.
 - Never: copy the imported `.jsx` as is; inline `style` for visual rules; a clickable element that is not a link or a button; hardcoded visible text; load a font, icon or script from a third-party CDN; redraw or recolour the logo.
 
 ## Definition of done
