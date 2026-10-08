@@ -267,6 +267,19 @@ Done in Chrome through the Claude in Chrome extension, on a temporary route unde
 - Found, a layout rule and not a defect: a `Logo` sized with `h-* w-auto` is stretched when it is a direct child of a column flex container. Recorded in `docs/design/brand.md`.
 - Not checked: the active (pressed) colours, and a screen reader.
 
+### T5 (2026-10-08)
+
+- Sources: the imported `Input.jsx`, `Select.jsx` and `Textarea.jsx`; https://www.w3.org/TR/WCAG21/ criteria 1.4.1 and 1.4.11 (already quoted in `docs/design/accessibility.md`).
+- Added file, not in the plan: `components/ui/forms/control-styles.ts`, the box classes the three controls share.
+- `Field` gives the control its props through a function child, so one component wires `id`, `aria-describedby`, `aria-invalid` and `required` for any control.
+- Differences from the imported API: `label` is required; the error no longer replaces the hint, both are shown; `Select` options are `{ value, label }` objects only; `multiple` is not supported; `inputStyle` and `style` are dropped.
+- The required mark is `aria-hidden` with `requiredLabel` as its `title`. The word is not added to the accessible name, because the native `required` attribute is already announced and the two would be read twice.
+- Decision 7 substitutions: control text 15 px became `--text-md` (16 px); the large control height 52 px is `h-13` on the spacing scale; hint and error 12 px are `--text-xs`; the label 11 px is `--text-2xs`.
+- The focused control shows a 2 px outline in `--focus-ring`, a `--border-strong` border and the `--shadow-focus` glow. The glow alone would not meet 3:1.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`.
+- Visual check in Chrome, on a temporary route deleted afterwards: default, required, invalid, disabled, icon and suffix, the three sizes (36, 44 and 52 px), select and textarea at 1440 px; focus on an input, on an invalid input and on a select; Tab skips the disabled input; at 320 px (in a 320 px frame) nothing overflows.
+- Not checked: 768 and 1024 px (the layout is one fluid column per field), the controls on an inverse surface, and a screen reader.
+
 ## Boundaries
 
 - Always: tests before code in each task; read the relevant APG pattern and the bundled Next.js docs before the task; tokens only, no raw hex or `px`; every string and accessible name through props; run lint, typecheck, test and build before each commit.
