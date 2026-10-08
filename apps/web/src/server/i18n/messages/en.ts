@@ -7,8 +7,8 @@ export const en: Messages = {
       "Motocross tyres and racks for carrying equipment inside vans.",
   },
   home: {
-    heading: "Coming soon",
-    intro: "The new LockMX website is under construction.",
+    logoAlt: "LockMX Modular System",
+    comingSoon: "Coming soon",
   },
   languageSwitcher: {
     label: "Language",

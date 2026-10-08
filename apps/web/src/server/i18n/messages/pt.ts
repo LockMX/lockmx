@@ -6,8 +6,8 @@ export const pt = {
       "Pneus de motocross e racks para transportar equipamento no interior de carrinhas.",
   },
   home: {
-    heading: "Em breve",
-    intro: "O novo site da LockMX está em construção.",
+    logoAlt: "LockMX Modular System",
+    comingSoon: "Em breve",
   },
   languageSwitcher: {
     label: "Idioma",

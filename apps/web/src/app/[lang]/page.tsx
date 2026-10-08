@@ -1,16 +1,10 @@
-import { LanguageSwitcher } from "@/components/language-switcher";
+import { ComingSoon } from "@/components/coming-soon";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
 
+// Placeholder: replaced by the real home page when its spec is built.
 export default async function Home() {
-  const locale = await getCurrentLocale();
-  const { home, languageSwitcher } = await getMessages(locale);
+  const { home } = await getMessages(await getCurrentLocale());
 
-  return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
-      <h1 className="text-heading-lg font-semibold">{home.heading}</h1>
-      <p>{home.intro}</p>
-      <LanguageSwitcher label={languageSwitcher.label} current={locale} />
-    </main>
-  );
+  return <ComingSoon logoAlt={home.logoAlt} message={home.comingSoon} />;
 }
