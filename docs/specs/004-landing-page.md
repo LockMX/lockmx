@@ -2,20 +2,20 @@
 
 - Status: draft
 - Idea: `../ideas/landing-page.md`
-- Decisions: `../decisions/0013-e2e-test-runner.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0001-monorepo-single-web-app.md`
+- Decisions: `../decisions/0013-e2e-test-runner.md`, `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0001-monorepo-single-web-app.md`
 
 ## Objective
 
-Give the site its public face and the frame every later page sits in. After this spec: end-to-end tests run in three browser engines locally and in CI; every public page has a header, a footer with the legal links, a skip link, a canonical address and alternate-language links; unknown addresses and failures show a translated page; the site has a sitemap and a robots file; and `/pt` and `/en` show the landing page (hero, racks, tyres, contact) built only from the components of spec 003.
+Give the site its public face and the frame every later page sits in. After this spec: end-to-end tests run in three browser engines locally and in CI; every public page has a header, a footer with the legal links, a skip link, a canonical address and alternate-language links; unknown addresses and failures show a translated page; the site has a sitemap and a robots file; and `/pt` and `/en` show the landing page built only from the components of spec 003. The landing page is the entry point of the site and exists to present the main product, the LockMX modular system of racks for vans; every other product is a complement.
 
-The spec is valid for every shop option still open in `../ideas/build-vs-shopify.md`: none of them changes the landing page or the shell.
+The shop itself is Shopify behind this frontend (ADR 0014) and has its own idea and spec. This spec builds nothing that talks to Shopify.
 
 ## Out of scope
 
 - The contact form, its emails, Turnstile and rate limits (own spec, after ADR 0005 and the decisions listed in the idea). The contact section shows contact details only.
-- Privacy policy, cookie policy and terms of sale (texts come from the client). No personal data is collected and no cookie is set by this spec, so no consent banner and no analytics.
-- Products, prices, cart, search, accounts. The header has no cart, search or account entry until the spec that makes them work.
-- Sections that state facts only the client can confirm: "Why LockMX" (materials, origin, warranty) and the list of van models. They are added when the client supplies and confirms the content.
+- No personal data is collected and no cookie is set by this spec, so no consent banner and no analytics.
+- Products, prices, cart, search, accounts. The owner wants the shop one step away from the landing page (a navigation entry or an icon in the header). That entry, and the switch of the page's main action to the shop, belong to the shop spec: the header gets no entry that leads nowhere.
+- Statements the client's copy does not make: materials, origin, warranty, specific van models, prices.
 - Product photography. No stock or placeholder photograph is published. Sections are designed to work without a photograph and gain one when the client supplies it.
 - Security headers (Content-Security-Policy and the others). They need their own decision, because a policy affects fonts, images, analytics and the payment provider.
 - Removing the coming soon switch. It stays until launch; turning it off is the owner's action (`../architecture.md`).
@@ -30,7 +30,8 @@ The spec is valid for every shop option still open in `../ideas/build-vs-shopify
 - Components outside the design system: `components/language-switcher.tsx` and `components/coming-soon.tsx`.
 - No end-to-end runner. `apps/web/vitest.config.mts` sets no `include`, so Vitest's default pattern would also match `*.spec.ts` files of an end-to-end folder.
 - CI (`.github/workflows/ci.yml`) runs install, lint, typecheck, test and build on `ubuntu-latest`.
-- The address the site will be published at is not recorded anywhere in the repository (see Open points).
+- The site is published at `https://lockmx.com`; `www.lockmx.com` redirects to it (owner, 2026-10-09). The redirect is DNS or hosting configuration, outside this spec.
+- The client's copy is in `debugging/logs.txt` (git-ignored working notes): a long description of the system in PT-PT and EN, and a short description for search results. See "Copy" below.
 
 ## Sources
 
@@ -52,17 +53,33 @@ Anything not listed is confirmed against the official documentation at the momen
 - Development: `@playwright/test`, pinned exactly, at a version published at least two weeks before the day of T1 (1.63.0 on 2026-10-09). Approved by the owner with ADR 0013 on 2026-10-09.
 - Production: none. Any other dependency is asked first.
 
+## Decisions taken with the owner (2026-10-09)
+
+1. **Site address.** `https://lockmx.com` is the canonical origin (T2).
+2. **Address structure.** The landing page is the home (`/pt`, `/en`). The shop gets its own path in the shop spec and must be easy to reach from the header.
+3. **Purpose of the landing page.** Present the racks: say what the system is, explain it in detail, then lead to buying. Complementary products get one short block.
+4. **Error page text.** The proposal of T4 is accepted: the marketing layout passes the error strings to a client provider, and `global-error` carries its own two texts.
+5. **Legal part last.** The company data and the policy texts are with the client. T7 is the last task and waits for them; the rest of the spec does not.
+6. **Shop.** Shopify headless (ADR 0014). Turnstile is the bot protection for the contact form, which stays in its own spec.
+
+## Copy
+
+Source: the client's texts, given by the owner on 2026-10-09.
+
+- **Long description** (PT-PT and EN): used for the system section of the landing page. It names what the system is for (campervan, motovan or van), its parts (mounts for helmets and boots, hangers, modular shelves) and its benefits (space, gear kept in place, resistance to road, dust and mud). The tagline is "LockMX — Lock it, send it!".
+- **Short description** (for search results): used for the meta description. It exists in Portuguese only, with an English headline ("LockMX – Everything for Motocross!").
+- Points to confirm with the client before `COMING_SOON` is turned off, none of which blocks the tasks:
+  1. The PT text reads "sem sem compromissos": a repeated word, corrected to "sem compromissos" in the dictionary.
+  2. The EN text opens with "Pure organization for those who live on the edge."; the PT text has no such line. Proposed: use it as the section heading in EN and ask the client for the PT line; until then PT uses the tagline.
+  3. The short description has no EN version. A working translation is written in T6 and marked for the client's review.
+  4. The short description contains an emoji and says "pneus, peças, acessórios". The emoji is dropped from the meta description (it is the client's choice to keep it); the product list must match what the shop sells at launch.
+- Any other sentence the page needs (button labels, headings, the one-line hero text) is working copy derived from these texts, stating nothing they do not state.
+
 ## Open points
 
-Each needs an answer before the task named. Nothing is filled in on assumption.
-
-1. **Storefront UI kit** (before T3). The visual input for the header, footer and sections is `ui_kits/storefront` in the Claude Design project. It was not read for this spec: the tool that reads the project is used from `/design-sync`, which the owner starts. Until it is read, the sections follow the idea file. Where the kit differs, the difference goes to the owner.
-2. **Site address** (before T2). The canonical origin, for example whether the site is served at `lockmx.com` or another domain, with or without `www`. It is configuration, not code, but the tests and the production value need it.
-3. **Copy** (before T6 is merged). T6 is built with working copy in PT-PT and EN written from `../ideas/project-brief.md`, stating no fact the brief does not state. The client approves or replaces it before `COMING_SOON` is turned off.
-4. **Company data** (before T7): company name, registered address, commercial registry number, tax number, telephone, the physical address for complaints, the arbitration centre if any. T7 cannot start without them.
-5. **Primary action of the hero** (before T6): proposed, a link to the contact section.
-6. **Address structure** (before T3): proposed, the landing page is the home (`/pt`, `/en`) and the shop gets its own path later. It decides the navigation labels.
-7. **Error page text** (before T4): see the choice in T4.
+1. **Storefront UI kit** (before T3). The visual input for the header, footer and sections is `ui_kits/storefront` in the Claude Design project. It was not read for this spec: the tool that reads the project is used from `/design-sync`, which the owner starts. Until it is read, the sections follow this spec. Where the kit differs, the difference goes to the owner.
+2. **Company data and policy texts** (T7): with the client.
+3. **Photographs.** The system section and the parts cards work without photographs. Real photographs of the racks in a van would make the page; they are asked from the client and added when they exist.
 
 ## Working branch
 
@@ -88,22 +105,22 @@ Each needs an answer before the task named. Nothing is filled in on assumption.
 - Commit: `arch: add playwright end-to-end tests`
 
 ### T2. Site address and page metadata
-- Description: read the public origin from an environment variable in the server layer (`SITE_URL`, validated as an absolute `https` address outside development, documented in `.env.example` without a value). Set `metadataBase` in the root layout. Add a function that builds the metadata of a page from its locale, its path, its title and its description: canonical address for the locale, `alternates.languages` for `pt-PT`, `en` and `x-default` (the default locale), and the title template. Use it on the home page.
+- Description: read the public origin from an environment variable in the server layer (`SITE_URL`, `https://lockmx.com` in production, validated as an absolute `https` address outside development, documented in `.env.example` without a value). Set `metadataBase` in the root layout. Add a function that builds the metadata of a page from its locale, its path, its title and its description: canonical address for the locale, `alternates.languages` for `pt-PT`, `en` and `x-default` (the default locale), and the title template. Use it on the home page.
 - Planned files: `apps/web/src/server/site/site-url.ts`, `apps/web/src/server/site/page-metadata.ts`, their tests, `apps/web/src/app/[lang]/layout.tsx`, `apps/web/src/app/[lang]/page.tsx`, `apps/web/.env.example`, `apps/web/playwright.config.ts` (the variable for the test server), `apps/web/e2e/metadata.spec.ts`.
 - Acceptance criteria: `/pt` and `/en` each have one `<link rel="canonical">` pointing at themselves and `hreflang` links for both locales and `x-default`, all absolute; a missing or malformed `SITE_URL` fails the production build with a message that names the variable; the variable is read in one module only.
 - Tests: unit tests for the address validation and for the metadata builder (paths with and without a trailing segment, both locales), written first; an end-to-end test for the `<head>` links of both home pages.
 - Commit: `feat: add site address and page metadata`
 
 ### T3. Public shell: header, footer and skip link
-- Description: add the route group `app/[lang]/(marketing)/` with a layout that renders a skip link, the header, `<main id>` and the footer, and move the home page into it. The placeholder (`coming-soon`) stays outside the group, without the shell. `SiteHeader`: the logo linking to the home of the locale, the navigation (links to the page sections and to contact), the language switcher; usable at 320 px without a new component (if the navigation does not fit, raise it instead of building a drawer). `SiteFooter`: the navigation, a link to the company information page, the link to the Complaints Book platform (`https://www.livroreclamacoes.pt`, visible on every page, opening the official site), the language switcher, the copyright line with the year. No link to the EU dispute platform. The dictionaries gain the `navigation`, `header` and `footer` messages.
+- Description: add the route group `app/[lang]/(marketing)/` with a layout that renders a skip link, the header, `<main id>` and the footer, and move the home page into it. The placeholder (`coming-soon`) stays outside the group, without the shell. `SiteHeader`: the logo linking to the home of the locale, the navigation (links to the page sections and to contact), the language switcher; usable at 320 px without a new component (if the navigation does not fit, raise it instead of building a drawer). `SiteFooter`: the navigation, the link to the Complaints Book platform (`https://www.livroreclamacoes.pt`, visible on every page, opening the official site), the language switcher, the copyright line with the year. No link to the EU dispute platform. The dictionaries gain the `navigation`, `header` and `footer` messages.
 - Planned files: `apps/web/src/app/[lang]/(marketing)/layout.tsx`, `apps/web/src/app/[lang]/(marketing)/page.tsx` (moved), `apps/web/src/components/site/{site-header,site-footer,skip-link}.tsx` and tests, `apps/web/src/server/i18n/messages/{pt,en}.ts`, `apps/web/e2e/shell.spec.ts`.
 - Acceptance criteria: each page has exactly one `banner`, one `main`, one `contentinfo` and named `navigation` landmarks; the skip link is the first tab stop, becomes visible on focus and moves focus to the main content; the logo has the alternative text from the dictionary; the Complaints Book link is present in both locales; the footer uses the inverse surface with the yellow focus ring (`data-surface="inverse"`); no horizontal scroll at 320 px; the placeholder page has no header or footer.
 - Tests: unit tests for the three components (roles, names, links, `aria-current` on the current navigation item, text only from props), written first; end-to-end tests for the landmarks, the skip link with the keyboard, the footer links and the language switch keeping the path, in both locales and on the mobile project.
 - Commit: `feat: add public site shell`
 
 ### T4. Not-found and error pages
-- Description: a translated not-found page inside the shell, for `notFound()` and for an address under a locale that matches no route; an error page for a failure while rendering a page, with a retry action and a link home; and `global-error` for a failure of the root layout, with its own `<html>` and `<body>`. Confirm in the bundled docs how an unmatched address under `[lang]` reaches the not-found page when the root layout is inside `[lang]`; if it needs a catch-all route that calls `notFound()`, add it. **Choice for the owner (open point 7):** an error boundary is a Client Component and cannot read the server dictionaries. Proposed: the marketing layout passes the few error strings of the current locale to a small client provider, and `error.tsx` reads them from it; `global-error`, which has no layout above it, carries its two short texts for both locales in a module of `lib/i18n/` and picks one from the address. The alternative is to move those strings out of the server dictionaries for both.
-- Planned files: `apps/web/src/app/[lang]/(marketing)/not-found.tsx`, `apps/web/src/app/[lang]/(marketing)/error.tsx`, `apps/web/src/app/global-error.tsx`, a catch-all route if needed, `apps/web/src/components/site/error-messages.tsx` (or the chosen alternative) and test, dictionaries, `apps/web/e2e/not-found.spec.ts`.
+- Description: a translated not-found page inside the shell, for `notFound()` and for an address under a locale that matches no route; an error page for a failure while rendering a page, with a retry action and a link home; and `global-error` for a failure of the root layout, with its own `<html>` and `<body>`. Confirm in the bundled docs how an unmatched address under `[lang]` reaches the not-found page when the root layout is inside `[lang]`; if it needs a catch-all route that calls `notFound()`, add it. An error boundary is a Client Component and cannot read the server dictionaries. Accepted by the owner: the marketing layout passes the few error strings of the current locale to a small client provider, and `error.tsx` reads them from it; `global-error`, which has no layout above it, carries its two short texts for both locales in a module of `lib/i18n/` and picks one from the address.
+- Planned files: `apps/web/src/app/[lang]/(marketing)/not-found.tsx`, `apps/web/src/app/[lang]/(marketing)/error.tsx`, `apps/web/src/app/global-error.tsx`, a catch-all route if needed, `apps/web/src/components/site/error-messages.tsx` and test, `apps/web/src/lib/i18n/global-error-messages.ts`, dictionaries, `apps/web/e2e/not-found.spec.ts`.
 - Acceptance criteria: `/pt/does-not-exist` and `/en/does-not-exist` answer 404 with the translated page inside the shell and a link home; the page is not indexable; the error page shows no technical detail (only the message and, if present, the digest as a reference); the retry action uses the function the installed version documents; `global-error` renders without the global stylesheet and stays readable.
 - Tests: end-to-end for the 404 status, heading and home link in both locales; a unit test for the error view (message, retry callback, home link). The root layout failure cannot be provoked in a test without test-only code, so `global-error` is checked by hand once and recorded in the task notes.
 - Commit: `feat: add not-found and error pages`
@@ -116,19 +133,27 @@ Each needs an answer before the task named. Nothing is filled in on assumption.
 - Commit: `feat: add sitemap and robots`
 
 ### T6. Landing page
-- Description: replace the stub with the landing page, composed of section components that receive their text through props: hero (the display heading, one sentence, the primary action), racks (what they are and what they are for, from the brief), tyres (a short block), contact (the email address as a link; telephone and address appear when T7 supplies them). One `h1`, section headings in order, each section a named region reachable from the header navigation. Images only from `public/brand/`; a mockup from the identity pack is copied there only if the owner approves its use on the page. Working copy in both dictionaries (open point 3).
-- Planned files: `apps/web/src/app/[lang]/(marketing)/page.tsx`, `apps/web/src/components/site/sections/{hero,racks,tyres,contact}.tsx` and tests, dictionaries, `apps/web/e2e/landing.spec.ts`.
-- Acceptance criteria: the page renders in both locales with no untranslated string; exactly one `h1`; the header links move to their sections and the focus follows; the primary action is reachable with the keyboard; every image has dimensions and an alternative text or is marked decorative; no horizontal scroll from 320 px; the page states no price, no stock and no fact that is not in the brief.
-- Tests: unit tests per section (headings, links, text only from props), written first; end-to-end for the heading structure, the in-page navigation and the contact link, in both locales and on the mobile project.
+- Description: replace the stub with the landing page, composed of section components that receive their text through props. In page order:
+  1. **Hero.** The display heading with the tagline, one sentence saying what LockMX is (a modular system that organizes riding gear inside a van), and two actions: the primary one leads to buying, the secondary one to the system section. Until the shop spec gives the primary action a destination, it leads to the contact section.
+  2. **The system.** The client's long description: who it is for, what it turns the van into, what it solves.
+  3. **The parts.** One card per part the copy names: helmet mounts, boot mounts, hangers, modular shelves. Each with a short text and an icon from the closed icon set; a photograph replaces the icon when the client supplies one.
+  4. **Why.** The benefits the copy states and no others: space, gear kept in place, built for road, dust and mud, less time organizing.
+  5. **Buy.** A closing block that repeats the primary action. The shop spec turns it into featured products read from Shopify.
+  6. **Complements.** One short block saying the shop also carries complementary motocross products. It names only the product types the shop sells at launch.
+  7. **Contact.** The email address as a link; telephone and address appear when T7 supplies them.
+  One `h1`, section headings in order, each section a named region reachable from the header navigation. Images only from `public/brand/`; a mockup from the identity pack is copied there only if the owner approves its use on the page. The meta description is the client's short description.
+- Planned files: `apps/web/src/app/[lang]/(marketing)/page.tsx`, `apps/web/src/components/site/sections/{hero,system,parts,benefits,buy,complements,contact}.tsx` and tests, dictionaries, `apps/web/e2e/landing.spec.ts`.
+- Acceptance criteria: the page renders in both locales with no untranslated string; exactly one `h1`; the header links move to their sections and the focus follows; both hero actions are reachable with the keyboard; every image has dimensions and an alternative text or is marked decorative; no horizontal scroll from 320 px; the page states no price, no stock and nothing the client's copy does not state; an icon the closed set lacks is asked first, not added silently.
+- Tests: unit tests per section (headings, links, text only from props), written first; end-to-end for the heading structure, the in-page navigation, the two hero actions and the contact link, in both locales and on the mobile project.
 - Commit: `feat: add landing page`
 
-### T7. Company information page
-- Blocked until open point 4 is answered.
-- Description: a page linked from the footer of every page with the identification the law requires (`../compliance/site-information-and-complaints.md`, sections 1, 3 and 7): company name, registered address, email, commercial registry data, tax number, telephone, the physical address for complaints, the dispute resolution entity if the client is bound to one, and the Complaints Book link again. The values live in one typed module, not in the dictionaries (they are data, the same in both languages); the labels are translated. The contact section of the landing page reads telephone and address from the same module. The page joins the sitemap.
-- Planned files: `apps/web/src/lib/site/company.ts` and test, `apps/web/src/app/[lang]/(marketing)/company/page.tsx`, dictionaries, `apps/web/src/components/site/sections/contact.tsx`, `apps/web/e2e/company.spec.ts`.
+### T7. Company information and policy pages
+- Last task. Blocked until the client delivers the company data and the policy texts (decision 5). If only part arrives, the task is split and the missing part is named in the status.
+- Description: this task adds the footer links to its pages (T3 builds the footer without them, so no link leads nowhere). The routes for the texts the client delivers (privacy policy, cookie policy, terms), each a translated static page linked from the footer and listed in the sitemap, with the text exactly as delivered and reviewed on the client's side. And a page linked from the footer of every page with the identification the law requires (`../compliance/site-information-and-complaints.md`, sections 1, 3 and 7): company name, registered address, email, commercial registry data, tax number, telephone, the physical address for complaints, the dispute resolution entity if the client is bound to one, and the Complaints Book link again. The values live in one typed module, not in the dictionaries (they are data, the same in both languages); the labels are translated. The contact section of the landing page reads telephone and address from the same module. The page joins the sitemap.
+- Planned files: `apps/web/src/lib/site/company.ts` and test, `apps/web/src/app/[lang]/(marketing)/company/page.tsx`, one route per policy text, dictionaries, `apps/web/src/components/site/sections/contact.tsx`, `apps/web/e2e/company.spec.ts`.
 - Acceptance criteria: the page is one click from every page; every value shown comes from the client's answer, recorded with its date in the task notes; a missing mandatory value fails a test instead of rendering an empty line.
 - Tests: a unit test that every mandatory field is present and non-empty; end-to-end for the footer link and the presence of each labelled value in both locales.
-- Commit: `feat: add company information page`
+- Commit: `feat: add company information and policy pages`
 
 ### T8. Architecture, checklist and status
 - Description: update `docs/architecture.md` (the `(marketing)` group, `components/site/`, `server/site/`, `lib/site/`, `e2e/`, the error pages, the `noindex` header of the switch) and `apps/web/AGENTS.md` where it lists what exists; write `docs/checklists/03-public-site.md` from what T1 to T7 did and add it to `docs/checklists/README.md`; set this spec to `done`. If T7 is still blocked, the spec stays `in progress` and the checklist says so.
@@ -145,4 +170,4 @@ Each needs an answer before the task named. Nothing is filled in on assumption.
 
 ## Definition of done
 
-All tasks committed on `feat/004-landing-page`; `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` and `pnpm test:e2e` pass locally and in CI; the client's copy and company data are in place or the open task is named in the status; the documentation matches the code; and the spec status is `done`.
+All tasks committed on `feat/004-landing-page`; `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` and `pnpm test:e2e` pass locally and in CI; the client's company data and policy texts are in place or the open task is named in the status; the documentation matches the code; and the spec status is `done`.

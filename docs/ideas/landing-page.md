@@ -4,7 +4,9 @@
 
 Replace the "coming soon" placeholder with the real public face of LockMX: a landing page in PT-PT and EN that presents the brand and the flagship product (racks for carrying equipment inside vans) and the tyres, and the shell every later page sits in (header, navigation, footer, metadata, error pages). For visitors who do not know the brand, and for the client, who needs something to show before the shop exists.
 
-This idea is independent of how the shop is built. In every option still open in `build-vs-shopify.md` (custom, or Shopify behind our own Next.js frontend) the landing page and the shell are Next.js pages built with the design system of spec 003.
+This idea is independent of how the shop is built. The shop was decided on 2026-10-09 as Shopify behind our own Next.js frontend (ADR 0014); the landing page and the shell are Next.js pages built with the design system of spec 003 either way.
+
+Update of 2026-10-09: the owner answered most of the open questions below (address, structure, purpose of the page, copy from the client, legal part last). The answers and the final section list are in `../specs/004-landing-page.md`, which is the current source; the options below are kept as the record of what was considered.
 
 ## Criteria
 
