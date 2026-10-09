@@ -1,6 +1,6 @@
 # 004. Public site shell and landing page
 
-- Status: draft
+- Status: in progress (approved by the owner on 2026-10-09)
 - Idea: `../ideas/landing-page.md`
 - Decisions: `../decisions/0013-e2e-test-runner.md`, `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0001-monorepo-single-web-app.md`
 
@@ -61,7 +61,8 @@ Anything not listed is confirmed against the official documentation at the momen
 3. **Purpose of the landing page.** Present the racks: say what the system is, explain it in detail, then lead to buying. Complementary products get one short block. The section order of T6 is accepted as the starting point; adjustments come after it is seen.
 4. **Error page text.** The proposal of T4 is accepted: the marketing layout passes the error strings to a client provider, and `global-error` carries its own two texts.
 5. **Legal part last.** The company data and the policy texts are with the client. T7 is the last task and waits for them; the rest of the spec does not.
-6. **Shop.** Shopify headless (ADR 0014). Turnstile is the bot protection for the contact form, which stays in its own spec.
+6. **Contact address.** The contact section shows `crew@lockmx.com` (T6). `support@lockmx.com`, the public address named in `../compliance/site-information-and-complaints.md` and ADR 0005, is kept for questions about orders and payments; where it is used is settled in the shop spec.
+7. **Shop.** Shopify headless (ADR 0014). Turnstile is the bot protection for the contact form, which stays in its own spec.
 
 ## Copy
 
@@ -114,8 +115,7 @@ Open with the owner:
 
 1. **Three choices the storefront UI kit raises** (before T3 and T6): a sticky header, the brand mockups as page images, and the yellow contact section. See "Storefront UI kit" below.
 2. **Company data and policy texts** (T7): with the client.
-3. **Contact address shown on the page** (before T6). The contact form messages go to `crew@lockmx.com` (owner, 2026-10-09). `../compliance/site-information-and-complaints.md` and ADR 0005 name `support@lockmx.com` as the public address. Which of the two the contact section shows is the owner's choice.
-4. **Photographs.** The system section and the parts cards work without photographs. Real photographs of the racks in a van would make the page; they are asked from the client and added when they exist.
+3. **Photographs.** The system section and the parts cards work without photographs. Real photographs of the racks in a van would make the page; they are asked from the client and added when they exist.
 
 ## Working branch
 
