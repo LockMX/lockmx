@@ -71,7 +71,7 @@ Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucid
 - Unit and integration tests run with Vitest in a jsdom environment (`apps/web/vitest.config.mts`), through `pnpm test`.
 - Component tests clean the DOM after each test through `src/test/setup.ts`.
 - Vitest does not support async Server Components. Plain modules and synchronous components are unit tested; pages are covered by end-to-end tests.
-- End-to-end tests run with Playwright (`apps/web/playwright.config.ts`, tests in `apps/web/e2e/`), through `pnpm test:e2e`: Chromium, Firefox, WebKit and one mobile viewport, against the production build on port 3100, with `COMING_SOON` off. Locally the command builds and starts the app, or reuses a server already on that port; the browsers are installed once with `pnpm --filter web exec playwright install`.
+- End-to-end tests run with Playwright (`apps/web/playwright.config.ts`, tests in `apps/web/e2e/`), through `pnpm test:e2e`: Chromium, Firefox, WebKit and one mobile viewport, against the production build on port 3100, with `COMING_SOON` off. A second server on port 3101 runs the same build with the switch on. Locally the command builds and starts the app, or reuses a server already on that port; the browsers are installed once with `pnpm --filter web exec playwright install`.
 - CI runs lint, typecheck, test, build and the end-to-end tests on every pull request and on pushes to `main`, and uploads the Playwright report when a run fails.
 
 ## Decisions

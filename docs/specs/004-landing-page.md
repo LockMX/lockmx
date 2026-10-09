@@ -262,6 +262,16 @@ Decided by the owner on 2026-10-09:
 - Checked by hand, with a temporary page that threw and a temporary throw in the root layout, both removed before the commit: the error page answers 500 inside the shell, in both locales, shows the translated text and the digest, and does not show the message of the error; `global-error` renders its own document with the English texts on `/en`. Screenshots looked at: not-found at 1440 px, error at 320 px.
 - Not checked: the retry button after a failure that then recovers; 768 and 1024 px; CI.
 
+### T5 (2026-10-09)
+
+- Sources read: the bundled `03-file-conventions/01-metadata/sitemap.md` and `robots.md` (both are cached by default unless they use a request-time API); https://playwright.dev/docs/test-webserver (an array of servers is supported).
+- `lib/site/public-paths.ts` holds the list of public paths (the home page for now), the address of a path in a locale and the language alternates. The metadata builder of T2 now uses it, so the `<head>` links and the sitemap cannot differ.
+- Sitemap entries carry `x-default` like the pages do, and no `lastModified`: there is no reliable date to give.
+- The coming soon switch is tested end to end: Playwright starts a second server on port 3101 on the same build with `COMING_SOON=true`. The servers start one after the other, so the second finds the build of the first.
+- The `noindex` header is set on the rewrite to the placeholder only. A request without a locale is redirected first and gets the header on the request that follows.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (48 files, 682 tests), `pnpm test:e2e` (176 passed, which includes the production build); neither port answered after the run.
+- Not checked: CI, and how a search engine treats the header in practice.
+
 ## Boundaries
 
 - Always: the test first, seen failing; the bundled Next.js docs read before each convention is used; tokens and design system components only; every string in both dictionaries; all four widths in the visual check.

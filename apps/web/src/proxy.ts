@@ -17,13 +17,21 @@ function comingSoonEnabled(): boolean {
   return process.env.COMING_SOON === "true";
 }
 
+// The placeholder is not content to index. robots.txt is fixed at build time and
+// cannot follow the switch, so the response itself says it.
+function comingSoonResponse(request: NextRequest, locale: string) {
+  const response = NextResponse.rewrite(
+    new URL(`/${locale}/${COMING_SOON_SEGMENT}`, request.url),
+  );
+  response.headers.set("X-Robots-Tag", "noindex");
+  return response;
+}
+
 export function proxy(request: NextRequest) {
   const [first = "", ...rest] = request.nextUrl.pathname.split("/").filter(Boolean);
 
   if (isLocale(first)) {
-    return comingSoonEnabled()
-      ? NextResponse.rewrite(new URL(`/${first}/${COMING_SOON_SEGMENT}`, request.url))
-      : NextResponse.next();
+    return comingSoonEnabled() ? comingSoonResponse(request, first) : NextResponse.next();
   }
 
   const locale = resolveLocale(request.headers.get("accept-language"));
