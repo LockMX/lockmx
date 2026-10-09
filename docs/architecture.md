@@ -11,7 +11,7 @@ Status markers: **exists** means it is in the repository today, **planned** mean
 | `apps/web/` | exists | The only application: a Next.js site with the backend inside it. |
 | `packages/` | exists (workspace glob only) | Receives code only when it gains a second real consumer. |
 | `docs/` | exists | Documentation, see `README.md`. |
-| `.github/workflows/ci.yml` | exists | CI: install, lint, typecheck, test, build. |
+| `.github/workflows/ci.yml` | exists | CI: install, lint, typecheck, test, build, end-to-end tests. |
 | `apps/api/` | planned, only on a concrete need | Standalone API (mobile app, public integrations, long-running jobs). |
 
 pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Commands and the definition of done are in `workflow.md`.
@@ -70,8 +70,9 @@ Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucid
 
 - Unit and integration tests run with Vitest in a jsdom environment (`apps/web/vitest.config.mts`), through `pnpm test`.
 - Component tests clean the DOM after each test through `src/test/setup.ts`.
-- Vitest does not support async Server Components. Plain modules and synchronous components are unit tested; pages are covered later by end-to-end tests (planned, not yet set up).
-- CI runs lint, typecheck, test and build on every pull request and on pushes to `main`.
+- Vitest does not support async Server Components. Plain modules and synchronous components are unit tested; pages are covered by end-to-end tests.
+- End-to-end tests run with Playwright (`apps/web/playwright.config.ts`, tests in `apps/web/e2e/`), through `pnpm test:e2e`: Chromium, Firefox, WebKit and one mobile viewport, against the production build on port 3100, with `COMING_SOON` off. Locally the command builds and starts the app, or reuses a server already on that port; the browsers are installed once with `pnpm --filter web exec playwright install`.
+- CI runs lint, typecheck, test, build and the end-to-end tests on every pull request and on pushes to `main`, and uploads the Playwright report when a run fails.
 
 ## Decisions
 

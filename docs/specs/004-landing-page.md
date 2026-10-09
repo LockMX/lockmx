@@ -198,6 +198,21 @@ Open with the owner:
 - Tests: no tests (documentation).
 - Commit: `docs: add public site checklist`
 
+## Task notes
+
+### T1 (2026-10-09)
+
+- Sources read: https://playwright.dev/docs/test-webserver, https://playwright.dev/docs/test-projects, https://playwright.dev/docs/ci and https://playwright.dev/docs/ci-intro; the bundled Next.js guide `02-guides/testing/playwright.md`.
+- `@playwright/test` 1.63.0 (published 2026-09-04). 1.64.0 was published on 2026-10-07 and is excluded by the two-week rule.
+- Projects: Chromium, Firefox, WebKit and `mobile` (the iPhone 12 device of Playwright, which runs on WebKit).
+- The test server runs on port 3100, so a development server on 3000 is never reused. Locally the `webServer` command builds and starts the app; in CI it only starts it, because the build is its own step before. `COMING_SOON` is set to `false` for the test server.
+- The preferred language of a visitor is set with the `locale` option of Playwright, which sends the `Accept-Language` header.
+- Browser binaries are not cached in CI: the Playwright CI page advises against it (restoring takes about as long as downloading, and the system dependencies cannot be cached). CI installs them with `--with-deps`.
+- The report is uploaded only when the job fails. The Playwright example uploads it on every run that is not cancelled.
+- `actions/upload-artifact` is pinned to the commit of tag v7.0.2.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (37 files, 619 tests, none from `e2e/`), `pnpm build`, `pnpm test:e2e` (28 passed: 7 tests in 4 projects), and the server no longer answered on port 3100 after the run.
+- Not verified: the CI steps. Nothing was pushed, so the workflow has not run with them.
+
 ## Boundaries
 
 - Always: the test first, seen failing; the bundled Next.js docs read before each convention is used; tokens and design system components only; every string in both dictionaries; all four widths in the visual check.
