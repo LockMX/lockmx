@@ -89,6 +89,6 @@ Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucid
 | Database provider | `decisions/0006-database-provider.md` | proposed |
 | Application hosting | `decisions/0007-application-hosting.md` | proposed |
 | Provisional hosting of the placeholder page on Vercel | `decisions/0012-provisional-hosting-vercel.md` | proposed |
-| Playwright as end-to-end test runner | `decisions/0013-e2e-test-runner.md` | proposed |
+| Playwright as end-to-end test runner | `decisions/0013-e2e-test-runner.md` | accepted |
 
 Payment provider and cookie consent management are still open (no ADR yet).

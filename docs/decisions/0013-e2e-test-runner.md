@@ -1,6 +1,6 @@
 # 0013. Playwright as end-to-end test runner
 
-- Status: proposed
+- Status: accepted
 - Date: 2026-10-09
 
 ## Context
@@ -15,7 +15,7 @@ Constraints: the repository runs Node 24 (`.nvmrc`) with a floor of 22.12 (ADR 0
 
 Use Playwright Test (`@playwright/test`) for end-to-end tests of `apps/web`.
 
-- Development dependency only. It needs owner approval before it is installed, like any dependency.
+- Development dependency only. Approved by the owner with this ADR on 2026-10-09.
 - Version pinned exactly. 1.64.0 was published on 2026-10-07, two days before this ADR; 1.63.0 (2026-09-04) is the version to install, following the rule used for `lucide-react` in spec 003 (a release at least two weeks old). Dependabot proposes the updates.
 - Tests run against the production build, as the Next.js guide recommends: the `webServer` option starts the built app and waits for it, with `reuseExistingServer: !process.env.CI`.
 - Browsers: Chromium, Firefox and WebKit projects, plus one mobile viewport. The exact project list is set in the spec that installs it.
