@@ -15,6 +15,7 @@ Give the client a factual comparison between:
 
 - **Option A, custom build**: a Next.js application with its own database, payments, emails and admin panel, as currently documented in `docs/decisions/`.
 - **Option B, Shopify**: a hosted Shopify store with themes, apps and the certified invoicing integration.
+- **Option C, headless** (added 2026-10-09): our own Next.js frontend with Shopify as the commerce backend. It has its own section below; the tables before it compare A and B only.
 
 ## The requirements being compared
 
@@ -105,7 +106,7 @@ Fees are charged on every sale, so they scale with volume. Example figures below
 | Shopify Payments, Multibanco | Not listed on the official Portuguese pricing page read. Not verified. | |
 | Shopify Payments, international card | 2.55% to 3% + 0 EUR depending on the plan (Verified) | |
 | Shopify Payments, American Express | 3% + 0.30 EUR on Basic, 2.9% Grow, 2.7% Advanced, 2.55% Plus (Verified) | 3.30 EUR on Basic |
-| Shopify with a third-party gateway such as Stripe | Verified on the Shopify pricing page (European version): Shopify adds a transaction fee on top of the gateway fee, 2% on Basic, 1% on Grow and 0.6% on Advanced (the Portuguese page shows 2% on Basic down to 0.2% on Plus, which differs for the upper plans: confirm in a trial). Shopify Payments, Shop Pay and PayPal Express are not charged this fee. | 3.75 EUR for a standard EEA card on Basic (Stripe 1.75 plus 2.00) |
+| Shopify with a third-party gateway such as Stripe | Verified on the Shopify pricing page (European version): Shopify adds a transaction fee on top of the gateway fee, 2% on Basic, 1% on Grow and 0.6% on Advanced. The Portuguese page, read again on 2026-10-09, shows the same and 0.2% on Plus. Shopify Payments, Shop Pay and PayPal Express are not charged this fee. | 3.75 EUR for a standard EEA card on Basic (Stripe 1.75 plus 2.00) |
 | Stripe, international card | 3.15% + 0.25 EUR, plus 2% if currency conversion is needed (Verified) | |
 
 Notes:
@@ -157,12 +158,82 @@ In the custom build the client pays separately for application hosting, the data
 
 The last row is a real factor for the owner and should be stated openly to the client.
 
+## Option C: our own frontend with Shopify as the commerce backend (headless), researched 2026-10-09
+
+Raised by the owner after a brainstorming session on supplier orders. The whole site (landing page, catalogue, product pages, cart) stays a Next.js application built with the design system of spec 003, and reads products and manages the cart through Shopify's Storefront API (GraphQL). Shopify holds the catalogue, stock, orders, customer accounts, checkout and payments. This replaces the planned database, authentication and payment integration of Option A; it does not replace the frontend or its hosting.
+
+### What Shopify charges for this
+
+| Item | Finding | Status |
+|---|---|---|
+| An "API only" plan | None found. The Storefront API is used from a store on a normal plan. | Verified by absence on the pricing page |
+| Starter plan | "The Starter plan isn't available to new stores." So it is not a cheaper entry point. | Verified, Shopify help |
+| Minimum plan | Basic: 27 EUR per month, or 19 EUR per month billed annually. The plan table lists "create headless storefronts": 1 on Basic, Grow and Advanced, 25 on Plus. | Verified, Portuguese pricing page |
+| Headless channel (the app that issues the Storefront API and Customer Account API tokens) | Free. Made by Shopify. | Verified, App Store listing |
+| Storefront API usage | No usage fee is stated on any page read. Requests from real buyers have no fixed per-minute limit; bots are limited; checkout creation is throttled per minute. The limits section does not mention plans. | Verified for limits. "No fee" is by absence, not a statement |
+| Payment fees | The same as Option B, by plan (Basic: 1.8% + 0.30 EUR for standard online cards, MB WAY 1.3% + 0.30 EUR). | Verified earlier in this document |
+| Third-party gateway fee | 2% on Basic, 1% on Grow, 0.6% on Advanced, 0.2% on Plus. The Portuguese page read today shows the same figures as the European page, which closes the difference noted in the fees table above. | Verified |
+| VAT on the subscription | Still not stated. The "VAT" row of the plan table is a tax feature for the shop's sales, not a statement about Shopify's own price. | Not verified |
+
+So the answer to "what do we pay Shopify to use only the API" is: the same subscription and the same payment fees as a normal Shopify store, from 19 to 27 EUR per month on Basic. The API and the Headless channel add nothing to that.
+
+### What stays ours, and what it costs
+
+- The Next.js frontend and its hosting stay. Vercel Pro (20 USD per month) is still needed (ADR 0007). Shopify's own hosting, Oxygen, is described on the Headless listing together with Hydrogen, Shopify's framework; whether it can host a Next.js application was not researched and it is not counted.
+- No database of our own for the shop: products, stock, orders and customers live in Shopify. ADR 0002 and ADR 0006 would apply only if something else needs a database.
+- Email: login codes and order emails are sent by Shopify. Resend would be needed only for the contact form, inside the free plan, and the 100-per-day risk for login codes disappears.
+- Certified invoicing: needed as in A and B. The InvoiceXpress and Moloni integrations act on Shopify orders; that they work the same when the order comes from a headless storefront was not verified.
+
+Fixed monthly cost, same method as the totals table above (1 EUR = 1.1225 USD, VAT excluded):
+
+| Part | Option C |
+|---|---|
+| Shopify Basic | 19 EUR (annual billing) or 27 EUR (monthly billing) |
+| Frontend hosting (Vercel Pro, 20 USD) | about 18 EUR |
+| Certified invoicing | 7 to 11 EUR |
+| **Total** | **about 44 to 56 EUR per month** |
+
+Option C costs more per month than Option B (26 to 38 EUR), because the frontend hosting is added to the Shopify plan, and sits inside the range of Option A (30 to 69 EUR). What it saves compared with A is development and maintenance of the stock, order, payment, account and admin code, which this document does not price.
+
+### The checkout is not ours
+
+- The cart's `checkoutUrl` sends the buyer to "Shopify's web checkout". The checkout pages are Shopify's, not Next.js pages. (Verified, Storefront API reference.)
+- Below Plus, checkout styling is a logo, a colour palette and fonts chosen "from a list". Advanced branding (the Checkout Branding API) is for Plus, from 2,100 EUR per month. (Verified, Shopify help.) The design system's components and its display typeface therefore stop at the cart. Whether the preset list contains Geist or Barlow Condensed was not checked.
+- Customer accounts: the Customer Account API uses a "hosted customer authentication system" with passwordless login and single sign-on across custom storefronts, accounts and checkout. The sign-in screen is Shopify's. Our pages can read the customer's orders through the API. (Verified, shopify.dev. The login flow details and any plan requirement were not on the page.)
+- The domain the checkout and sign-in pages are served from was not found in the pages read. Not verified.
+
+So "the whole site with our design system" is true for the landing page, catalogue, product pages and cart, and not for sign-in and checkout unless the client pays for Plus.
+
+### Does it solve the supplier problem? Not by itself
+
+The problem: some suppliers say they cannot ship to the end customer, only to LockMX.
+
+- Direct shipping is an agreement with each supplier. No platform, and no API, makes a supplier ship to an address it has refused.
+- The mechanism the owner described (supplier ships, supplier is paid automatically, the margin stays with LockMX) is Shopify Collective. It is free ("No setup fees"), and with automatic payments the product cost and shipping are debited from the retailer's Shopify Payments balance and paid to the supplier when it marks the order fulfilled, with "no extra charges". (Verified, Shopify help and App Store listing.)
+- Collective connects two Shopify stores. Requirements read today, the same for retailer and supplier: an active Shopify plan; Shopify Payments set up with active payouts; a supported country (Portugal is listed) and currency (EUR is listed); the retailer and the supplier in the same country and using the same currency; Shopify Tax, Basic Tax or a tax app, not manual tax; a verified VAT number; Shopify Network Intelligence activated; possibly identity verification. (Verified.)
+- Consequences for LockMX: it helps only with a supplier that has its own Shopify store, has joined Collective, is established in Portugal and sells in EUR. A supplier without Shopify, or in Spain or Germany, cannot be connected this way. Collective also needs Shopify Payments, so a cheaper Portuguese provider such as ifthenpay is out, and MB WAY on Shopify Payments is still "in early access, and isn't available to all eligible merchants" (read again today).
+- Whether products imported through Collective can be published to the Headless channel and sold through the Storefront API was **not confirmed**. The importing page speaks of publishing to "sales channels" in general and to the online store; neither it nor the App Store listing mentions headless. This must be answered by Shopify in writing, or tested in a trial store, before Option C is chosen for this reason.
+
+### Not researched for Option C
+
+- Languages through the Storefront API (how PT and EN product texts are requested).
+- Whether "require sign-in before checkout" behaves the same from a headless cart.
+- The fitment finder: with our own frontend it would be our code reading Shopify data, not an app.
+- Lock-in: the frontend is ours, but catalogue, orders and customers are on Shopify. Leaving means migrating that data and building what Option A plans.
+
+### What decides it
+
+1. For each supplier that matters: country, whether it has a Shopify store, whether it is in Collective, and whether its refusal to ship to customers is commercial policy or a missing process. Without this, Collective cannot be counted as a benefit.
+2. Shopify's written answer on Collective products in a headless storefront.
+3. Whether a Shopify-styled sign-in and checkout is acceptable to the client.
+4. The points already open for Option B: MB WAY availability for this merchant and the Multibanco rate.
+
 ## Research results since the first version (2026-10-02)
 
 1. **Account required to buy:** possible on Shopify, with the side effects listed in the coverage table. The plan dependency is not stated.
 2. **MB WAY and Multibanco:** MB WAY is in early access and needs an eligible business type (official help page). The Shopify rates for both are not on the official pages read. Multibanco gives customers up to 7 days to pay.
 3. **Vehicle-specific choice:** product limits and app price ranges are in the coverage table. Whether a finder is needed is a product decision.
-4. **Third-party gateway fee:** now verified (2%, 1% and 0.6% by plan).
+4. **Third-party gateway fee:** now verified (2%, 1% and 0.6% by plan, 0.2% on Plus; the Portuguese and European pages agree as of 2026-10-09).
 5. **Bank transfer:** supported as a manual payment method, with manual reconciliation.
 6. **VAT on Shopify prices:** the pricing page does not say. Confirm during the trial.
 7. **Invoicing plans:** the exact InvoiceXpress plan and price, and the Moloni plan and Webinfor app price, are still to be confirmed with the providers.
@@ -187,11 +258,13 @@ To confirm in a Shopify trial account or with the providers:
 
 ## Next step
 
-Take this document to the client. Once the open points that matter to them are answered (mainly volume, the development fee, the finder and the MB WAY availability), record the outcome as an ADR. If the decision is Shopify, the current ADRs 0001 to 0006 and spec 001 are superseded. If it stays custom, the work continues as documented.
+Take this document to the client. Once the open points that matter to them are answered (mainly volume, the development fee, the finder and the MB WAY availability), record the outcome as an ADR. If the decision is Shopify (Option B), the current ADRs 0001 to 0006 and spec 001 are superseded. If it is Option C, the frontend work (specs 001 to 003 and the landing page) stands and ADRs 0002, 0003, 0005 and 0006 are revisited. If it stays custom, the work continues as documented.
 
 ## Sources
 
-- Shopify pricing (Portugal): https://www.shopify.com/pt/precos
+- Shopify pricing (Portugal): https://www.shopify.com/pt/precos (read again 2026-10-09 for the headless storefront row and the third-party fees)
+- Option C, read 2026-10-09: https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api, https://shopify.dev/docs/storefronts/headless/bring-your-own-stack, https://shopify.dev/docs/api/storefront#rate-limits, https://shopify.dev/docs/api/usage/limits, https://shopify.dev/docs/api/storefront/latest/objects/Cart, https://shopify.dev/docs/storefronts/headless/building-with-the-customer-account-api, https://apps.shopify.com/headless, https://help.shopify.com/en/manual/intro-to-shopify/pricing-plans/plans-features/shopify-starter-plan, https://help.shopify.com/en/manual/checkout-settings/customize-checkout-configurations/checkout-style
+- Shopify Collective, read 2026-10-09: https://apps.shopify.com/collective, https://help.shopify.com/en/manual/online-sales-channels/shopify-collective/retailers/requirements-and-considerations, https://help.shopify.com/en/manual/online-sales-channels/shopify-collective/suppliers/requirements-and-considerations, https://help.shopify.com/en/manual/online-sales-channels/shopify-collective/retailers/payments, https://help.shopify.com/en/manual/online-sales-channels/shopify-collective/retailers/importing-products
 - Shopify Payments methods in Portugal: https://help.shopify.com/en/manual/payments/shopify-payments/supported-countries/portugal/payment-methods
 - Shopify pricing (European version, third-party fee and card rates): https://www.shopify.com/pricing
 - Shopify checkout sign-in requirement: https://help.shopify.com/en/manual/checkout-settings/checkout-form-options
