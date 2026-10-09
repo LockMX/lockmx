@@ -1,5 +1,16 @@
 // The public entry point of the design system. Code outside `components/ui`
 // imports from here, never from a component's own file.
+export {
+  CartLine,
+  type CartLineImage,
+  type CartLineProps,
+} from "./commerce/cart-line";
+export { Price, type PriceAmount, type PriceProps } from "./commerce/price";
+export {
+  ProductCard,
+  type ProductCardProps,
+  type ProductImage,
+} from "./commerce/product-card";
 export { Badge, type BadgeProps } from "./core/badge";
 export { Button, type ButtonProps } from "./core/button";
 export { ButtonLink, type ButtonLinkProps } from "./core/button-link";
