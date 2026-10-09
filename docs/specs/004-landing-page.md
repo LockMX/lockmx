@@ -213,6 +213,16 @@ Decided by the owner on 2026-10-09:
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (37 files, 619 tests, none from `e2e/`), `pnpm build`, `pnpm test:e2e` (28 passed: 7 tests in 4 projects), and the server no longer answered on port 3100 after the run.
 - Not verified: the CI steps. Nothing was pushed, so the workflow has not run with them.
 
+### T2 (2026-10-09)
+
+- Sources read: the bundled `03-api-reference/04-functions/generate-metadata.md` (`metadataBase`, title template, `alternates`) and `02-guides/environment-variables.md` (`NODE_ENV` is `production` for every command except `next dev`; load order of the `.env` files).
+- `SITE_URL` is read only in `server/site/site-url.ts`. With `NODE_ENV=production` it is required and must be an `https` origin without a path. Otherwise (development and unit tests) it falls back to `http://localhost:3000` when unset and accepts `http`; a malformed value fails everywhere.
+- The addresses are fixed when the pages are prerendered, so the variable is needed by `next build`. A local `pnpm build` now needs `SITE_URL` in `apps/web/.env.local` or in the shell. The Playwright `webServer` and the CI job set `https://lockmx.com`.
+- `x-default` is not in the examples of the bundled page; it is accepted by the `Metadata` type and the end-to-end test confirms the link is rendered.
+- The home page passes no title, so it shows the site title alone; other pages get "title | LockMX" from the template in the root layout.
+- Verified: `pnpm build` without `SITE_URL` fails while prerendering `/pt` with "SITE_URL is not set"; with it, `pnpm lint`, `pnpm typecheck`, `pnpm test` (39 files, 642 tests), `pnpm build` and `pnpm test:e2e` (44 passed) pass.
+- Not verified: CI (nothing pushed). The deployment needs `SITE_URL` set in its environment before the next deploy, or its build fails.
+
 ## Boundaries
 
 - Always: the test first, seen failing; the bundled Next.js docs read before each convention is used; tokens and design system components only; every string in both dictionaries; all four widths in the visual check.

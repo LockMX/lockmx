@@ -9,6 +9,9 @@ import { defineConfig, devices } from "@playwright/test";
 const port = 3100;
 const baseURL = `http://localhost:${port}`;
 
+// The origin the pages are built with. In CI the build step sets the same value.
+const siteUrl = "https://lockmx.com";
+
 // CI builds in its own step before the tests; locally the command builds first.
 const start = `pnpm exec next start --port ${port}`;
 
@@ -34,7 +37,8 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
-    // The tests cover the real pages, not the placeholder.
-    env: { COMING_SOON: "false" },
+    // The tests cover the real pages, not the placeholder. The production
+    // build needs the public origin (server/site/site-url.ts).
+    env: { COMING_SOON: "false", SITE_URL: siteUrl },
   },
 });
