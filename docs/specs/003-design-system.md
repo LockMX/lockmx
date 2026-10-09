@@ -1,6 +1,6 @@
 # 003. Design system
 
-- Status: in progress
+- Status: done
 - Idea: `../ideas/project-brief.md`
 - Decisions: `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0010-icons-lucide.md`, `../decisions/0011-fonts-next-font.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0004-unit-test-runner.md`
 
@@ -107,7 +107,7 @@ Asked of the owner after T3, before the first component task.
 ## Conventions for every component task
 
 - One folder per component group under `apps/web/src/components/ui/<group>/` (`core`, `forms`, `surfaces`, `commerce`, `data`), one `.tsx` per component and its test next to it. Public imports go through `components/ui/index.ts` (added in T4 and extended per task); nothing outside imports a component's internal file.
-- Server Component by default. `"use client"` only for components with state or effects (SearchBar, QuantityStepper when uncontrolled, Switch, Checkbox when uncontrolled, Tabs, Dialog, Toast, Tooltip, DataTable with row click). Native HTML state is preferred to React state where possible.
+- Server Component by default. `"use client"` only for components with state or effects. As built: QuantityStepper, SearchBar, Dialog, Tabs, Toast, Tooltip and the scroll container of DataTable (`data/scroll-region.tsx`). Switch and Checkbox use native state and DataTable has no row click, so they are Server Components; Card, ProductCard and CartLine take handlers without a directive and need a Client Component parent when given one (task notes T8, T10 and T11). Native HTML state is preferred to React state where possible.
 - Styling follows ADR 0009: Tailwind classes resolving to tokens; no inline `style` for visual rules, no hex, no raw `px` outside the token file.
 - Props follow the imported API (names, variants, sizes) unless a finding above says otherwise, and extend the matching native element props (`React.ComponentProps<"button">`) so `aria-*`, `name`, `form` and `ref` work. `style` is not a prop; `className` is accepted for layout only.
 - Every visible string and every accessible name (`aria-label`, `title`, `alt`) is a prop. No default Portuguese or English text inside a component. Components never read dictionaries.
@@ -386,6 +386,17 @@ Done in Chrome through the Claude in Chrome extension, on a temporary route unde
 - Known and left as it is: the caption is part of the table, so it scrolls sideways with it.
 - Checked by hand by the project owner in Chrome, with mouse and keyboard, on 2026-10-09, and accepted: the tab stop and focus ring of the overflowing container and its scrolling with the arrow keys, no tab stop on the tables that fit, the hover tint on rows with a link only, the three states, the hidden caption and a 320 px screen. The owner also accepted `DataTable` as a Server Component with a client scroll container.
 - Not checked: 768 and 1024 px, touch, a screen reader, Safari and Firefox.
+
+### T12 (2026-10-09)
+
+- `docs/checklists/02-design-system.md` written from the task notes and checked against the repository: the files and commands it names exist, and its verification steps were run.
+- `docs/design/components.md` verified against the code with a script: its 25 inventory rows each have their file and test under `components/ui/` and their name in `components/ui/index.ts`, and the index exports no component that the inventory lacks. The rows marked as Client Components match the files with `"use client"`.
+- The convention on Client Components in this spec listed Switch, Checkbox and "DataTable with row click", which were built without client state, and did not list the components that take handlers. It now says what was built.
+- The plan listed "ADR files" among the files of this task. ADRs 0009, 0010 and 0011 were already accepted on 2026-10-08, so none changed.
+- The spec counted 22 primitives. The inventory has 25: `ButtonLink`, `Field` and `Toaster` were added by their tasks.
+- Left open, recorded where they belong: the `SearchBar` list inside a scrolling container (`components.md`); a toast behind an open dialog and Escape closing a tooltip and its dialog together (T9 notes); the stand-in display typeface (`brand.md`). No component was checked with a screen reader, on touch, or in Safari and Firefox. The conventions asked for a visual check at 320, 768, 1024 and 1440 px in each task; from T7 on the checks were at 320 px and one desktop width (1280 or 1536 px), and 768 and 1024 px were not checked.
+- The contrast table in `docs/design/accessibility.md` records the pairs measured on 2026-10-08. The pairs added since (the toast tone icons on `--surface-inverse`, `--text-body` on `--lmx-ink-200`, `--text-body` and `--text-strong` on `--lmx-yellow-50`) are only in `contrast.test.ts`, which is the complete list.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`.
 
 ## Boundaries
 
