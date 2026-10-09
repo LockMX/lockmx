@@ -13,4 +13,21 @@ export const en: Messages = {
   languageSwitcher: {
     label: "Language",
   },
+  navigation: {
+    main: "Main",
+    footer: "Footer",
+    home: "Home",
+  },
+  header: {
+    skipToContent: "Skip to content",
+    logoAlt: "LockMX, home",
+  },
+  footer: {
+    logoAlt: "LockMX Modular System",
+    tagline: "Lock it, send it!",
+    navigationTitle: "Navigation",
+    legalTitle: "Legal",
+    complaintsBook: "Complaints Book",
+    copyright: "© {year} LockMX",
+  },
 };

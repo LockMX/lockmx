@@ -34,7 +34,8 @@ for (const home of homes) {
 
     test("marks the current language and leads to the other one", async ({ page }) => {
       await page.goto(home.path);
-      const switcher = page.getByRole("navigation", { name: home.switcher });
+      // The header and the footer both have the switcher.
+      const switcher = page.getByRole("banner").getByRole("navigation", { name: home.switcher });
 
       await expect(switcher.getByRole("link", { name: home.current })).toHaveAttribute(
         "aria-current",

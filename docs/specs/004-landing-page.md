@@ -109,7 +109,7 @@ Decided by the owner on 2026-10-09:
 
 - **Sticky header.** The header stays at the top while the page scrolls, as in the kit. In-page links must not leave the heading they jump to under it, so the sections get a scroll offset (T3).
 - **Yellow contact section.** As in the kit, with the contact details in the white card.
-- **Hero image.** Not the mockup `m1.jpg`. The owner is considering the cut-out logo on a transparent background (white and yellow, the artwork already served as `wordmark-white-yellow.png`) or the mockup `M2.png` of the identity pack (the logo engraved in grey stone, with "Modular System"), and has not chosen. The hero of T6 takes its image as a prop and works without one; both candidates are shown to the owner on the real page before either is kept.
+- **Hero image.** Not the mockup `m1.jpg`. The owner named `M5.png` or `M4.png` of the identity pack, because they have more colour (corrected on 2026-10-09; the cut-out logo and `M2.png` mentioned first were a mistake). `M5.png` is a black sign with the white and yellow logo on a grey wall; `M4.png` is a yellow sign with the black and white logo. The hero of T6 takes its image as a prop and works without one; both are shown to the owner on the real page before one is copied to `public/brand/` and kept.
 
 ## Open points
 
@@ -222,6 +222,23 @@ Decided by the owner on 2026-10-09:
 - The home page passes no title, so it shows the site title alone; other pages get "title | LockMX" from the template in the root layout.
 - Verified: `pnpm build` without `SITE_URL` fails while prerendering `/pt` with "SITE_URL is not set"; with it, `pnpm lint`, `pnpm typecheck`, `pnpm test` (39 files, 642 tests), `pnpm build` and `pnpm test:e2e` (44 passed) pass.
 - Not verified: CI (nothing pushed). The deployment needs `SITE_URL` set in its environment before the next deploy, or its build fails.
+
+### T3 (2026-10-09)
+
+- Sources read: the bundled `route-groups.md`; https://www.w3.org/WAI/WCAG21/Techniques/general/G1 (the skip link is the first focusable item, may be hidden until focused, and activating it must move the focus into the main content); https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/ (one banner, main and contentinfo; each navigation landmark is labelled, without the word "navigation"; two landmarks with the same links share a label).
+- Navigation items: only "Início" / "Home" for now. The sections the header should link to are built in T6, and the spec forbids a link that leads nowhere, so T6 adds them. `SiteNavigation` is a Client Component because the current item needs the path.
+- **Raised for the owner: the header navigation on narrow screens.** Below the `md` breakpoint the header shows the logo and the language switcher, and the section links are in the footer only. With the four or five links of T6 they cannot fit beside the logo at 320 px. A menu button that opens the links would be a new component, which the spec asks to raise instead of building.
+- The language switcher is in the header and in the footer, with the same label, as the APG page allows for two landmarks with the same links. The current language is now bold and not underlined.
+- The legal column is its own navigation landmark with one link for now; T7 adds the policy and company links. The Complaints Book link opens in the same tab.
+- The footer sentence is the tagline of the client, "Lock it, send it!", in both locales. The sentence of the kit was placeholder copy.
+- `main` has `tabindex="-1"` so the skip link can move the focus to it, and no outline: it is a target, not a control.
+- `html` has `scroll-padding-top` equal to the header height, for the in-page links of T6.
+- The copyright year is computed when the page is rendered. The pages are prerendered, so the year is the year of the last build.
+- The skip link sits a little above the viewport (`-top-1`): WebKit reported a sliver of it in view at `top-0`.
+- `expect` timeout raised to 10 s: a client navigation in Firefox took just over the default 5 s once, with the four projects in parallel (16 repeats afterwards passed).
+- The locale routing test of T1 now looks for the switcher inside the banner, since there are two.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (43 files, 655 tests), `pnpm test:e2e` (120 passed, which includes the production build). Screenshots of `/pt` looked at in Chromium at 320 and 1440 px, and at 320 px with the skip link focused. No sideways scroll at 320 px (test).
+- Not checked: 768 and 1024 px by eye (captured, not looked at); a screen reader; the sticky header while scrolling, since the stub page is shorter than the screen (checked in T6); CI.
 
 ## Boundaries
 
