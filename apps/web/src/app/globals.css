@@ -188,6 +188,11 @@
 }
 
 @layer base {
+  /* A link to a place in the page stops below the sticky header, not under it. */
+  html {
+    scroll-padding-top: var(--header-height);
+  }
+
   /* Preflight already sets `box-sizing: border-box` and removes margins. */
   body {
     background-color: var(--surface-page);

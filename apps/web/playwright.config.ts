@@ -22,6 +22,9 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [["list"], ["html", { open: "never" }]],
+  // Firefox takes close to the default 5 s for a client navigation when the
+  // four projects run in parallel.
+  expect: { timeout: 10_000 },
   use: {
     baseURL,
     trace: "on-first-retry",

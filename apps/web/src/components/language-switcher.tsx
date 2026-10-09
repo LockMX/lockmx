@@ -22,6 +22,7 @@ export function LanguageSwitcher({ label, current }: LanguageSwitcherProps) {
               href={switchLocalePath(pathname, locale)}
               lang={htmlLang[locale]}
               aria-current={locale === current ? "true" : undefined}
+              className="aria-[current=true]:font-bold aria-[current=true]:no-underline"
             >
               {localeNames[locale]}
             </Link>
