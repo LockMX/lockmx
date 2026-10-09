@@ -66,8 +66,8 @@ Online store for LockMX (motocross products: tyres and racks for carrying equipm
 
 ## Current state
 
-- Decided: Next.js, pnpm monorepo, a single web app with the backend inside Next.js, Drizzle as ORM (PostgreSQL). ADRs formalize these choices.
-- Proposed (ADRs, not yet accepted): authentication with Better Auth (passwordless email codes for customers, a stronger second method required for admins), transactional email with Resend.
-- Open (ADR before choosing): payment provider, database provider and hosting, cookie consent management.
+- Decided: Next.js, pnpm monorepo, a single web app. The shop is Shopify behind this frontend (headless, ADR 0014): catalogue, stock, orders, customers, checkout and payments live on Shopify.
+- Written for a custom shop and to be revisited before anything is built on them (ADR 0014): Drizzle with PostgreSQL (ADR 0002), Better Auth (ADR 0003), Resend (ADR 0005), database provider (ADR 0006).
+- Open (ADR before choosing): hosting, cookie consent management, rate limiting for the contact form.
 - Accepted: Vitest as unit test runner (ADR 0004), Playwright as end-to-end test runner (ADR 0013).
 - Web app specific rules: `apps/web/AGENTS.md`.
