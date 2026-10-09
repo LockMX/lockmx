@@ -2,7 +2,8 @@
 // `alternates.canonical` and `alternates.languages` may be relative; they are
 // resolved against the `metadataBase` set in the root layout.
 import type { Metadata } from "next";
-import { defaultLocale, htmlLang, locales, type Locale } from "@/lib/i18n/config";
+import type { Locale } from "@/lib/i18n/config";
+import { languageAlternates, localizedPath } from "@/lib/site/public-paths";
 
 type PageMetadataInput = {
   locale: Locale;
@@ -13,25 +14,18 @@ type PageMetadataInput = {
   description: string;
 };
 
-function localizedPath(locale: Locale, path: string): string {
-  const segments = path.split("/").filter(Boolean);
-  return `/${[locale, ...segments].join("/")}`;
-}
-
 export function buildPageMetadata({
   locale,
   path,
   title,
   description,
 }: PageMetadataInput): Metadata {
-  const languages: Record<string, string> = Object.fromEntries(
-    locales.map((each) => [htmlLang[each], localizedPath(each, path)]),
-  );
-  languages["x-default"] = localizedPath(defaultLocale, path);
-
   return {
     ...(title === undefined ? {} : { title }),
     description,
-    alternates: { canonical: localizedPath(locale, path), languages },
+    alternates: {
+      canonical: localizedPath(locale, path),
+      languages: languageAlternates(path),
+    },
   };
 }

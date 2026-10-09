@@ -76,6 +76,17 @@ describe("proxy with the coming soon switch", () => {
     expect(rewriteTarget(path)).toBe(expected);
   });
 
+  test("on: the placeholder response tells search engines not to index it", () => {
+    vi.stubEnv("COMING_SOON", "true");
+
+    expect(proxy(request("/pt")).headers.get("x-robots-tag")).toBe("noindex");
+    expect(proxy(request("/en/loja")).headers.get("x-robots-tag")).toBe("noindex");
+  });
+
+  test("off: a page carries no indexing header", () => {
+    expect(proxy(request("/pt")).headers.get("x-robots-tag")).toBeNull();
+  });
+
   test("on: a path without a locale is still redirected to its locale first", () => {
     vi.stubEnv("COMING_SOON", "true");
 
