@@ -80,5 +80,5 @@ For the owner:
 
 ## Outcome
 
-- `../decisions/0013-e2e-test-runner.md` (proposed).
-- Spec `004-landing-page` and branch `feat/004-landing-page`, to be written after the owner answers the questions above that change the scope.
+- `../decisions/0013-e2e-test-runner.md` (accepted 2026-10-09).
+- `../specs/004-landing-page.md` (draft), on branch `feat/004-landing-page`.
