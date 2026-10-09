@@ -3,7 +3,7 @@
 // https://vite.dev/config/shared-options.html#resolve-tsconfigpaths
 // Vite resolves tsconfig `paths` natively, so vite-tsconfig-paths (listed in
 // the Next.js guide) is not needed.
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
@@ -14,5 +14,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
+    // End-to-end tests are run by Playwright (pnpm test:e2e).
+    exclude: [...configDefaults.exclude, "e2e/**"],
   },
 });

@@ -4,6 +4,8 @@
 # Sources:
 # https://github.com/actions/setup-node (node-version-file)
 # https://github.com/pnpm/setup (pnpm 11 and later, reads packageManager)
+# https://playwright.dev/docs/ci (install with --with-deps; caching browser binaries is not recommended)
+# https://playwright.dev/docs/ci-intro (report uploaded as an artifact)
 name: CI
 
 on:
@@ -35,3 +37,11 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      - run: pnpm --filter web exec playwright install --with-deps
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ failure() }}
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 7

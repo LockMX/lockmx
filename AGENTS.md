@@ -60,7 +60,7 @@ Online store for LockMX (motocross products: tyres and racks for carrying equipm
 
 ## Commands (from the root)
 
-- `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`.
+- `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`.
 - Definition of done for a task: `docs/workflow.md`.
 - Never claim a command passed if you did not run it.
 

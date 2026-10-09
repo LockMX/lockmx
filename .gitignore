@@ -8,6 +8,11 @@ coverage
 .vercel
 /logo/
 
+# playwright reports and traces
+test-results/
+playwright-report/
+blob-report/
+
 # environment files (only the example is versioned)
 .env*
 !.env.example

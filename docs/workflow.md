@@ -28,8 +28,9 @@ Commands, from the root:
 | `pnpm lint` | ESLint. |
 | `pnpm typecheck` | Next.js type generation, then the TypeScript compiler without emitting. |
 | `pnpm test` | Unit tests (Vitest, single run). |
+| `pnpm test:e2e` | End-to-end tests (Playwright, against the production build). |
 
-Definition of done for a task: `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm build` pass (the ones the task affects, at minimum), the tests for the task exist, and the commit contains code and tests together.
+Definition of done for a task: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` and `pnpm test:e2e` pass (the ones the task affects, at minimum), the tests for the task exist, and the commit contains code and tests together.
 
 ## Commits
 

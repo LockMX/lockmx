@@ -10,6 +10,7 @@
     "lint": "pnpm --filter web lint",
     "typecheck": "pnpm --filter web typecheck",
     "test": "pnpm --filter web test",
+    "test:e2e": "pnpm --filter web test:e2e",
     "prepare": "husky"
   },
   "devEngines": {
