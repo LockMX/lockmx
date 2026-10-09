@@ -17,6 +17,11 @@ export { ButtonLink, type ButtonLinkProps } from "./core/button-link";
 export { Icon, type IconName, type IconProps } from "./core/icon";
 export { IconButton, type IconButtonProps } from "./core/icon-button";
 export { Logo, type LogoProps } from "./core/logo";
+export {
+  DataTable,
+  type DataTableColumn,
+  type DataTableProps,
+} from "./data/data-table";
 export { Checkbox, type CheckboxProps } from "./forms/checkbox";
 export {
   Field,

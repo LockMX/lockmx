@@ -36,6 +36,7 @@ const candidates = [
   "blur-md",
   "transition-colors",
   "animate-spin",
+  "animate-pulse",
   "sm:px-gutter",
   "bg-surface-page",
   "bg-action-primary",
@@ -142,6 +143,7 @@ describe("token utilities", () => {
 
   it("keeps the spin animation and the responsive variants", () => {
     expect(ruleFor("animate-spin")).toContain("animation:");
+    expect(ruleFor("animate-pulse")).toContain("animation:");
     expect(compiledCssMatches(/@media \(width >= 40rem\)/)).toBe(true);
   });
 

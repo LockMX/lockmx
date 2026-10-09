@@ -94,6 +94,9 @@ describe("text tokens meet 4.5:1 on the surfaces they are used on", () => {
     ["--text-on-accent", "--surface-accent"],
     // Tabs: the count of a tab that is not selected.
     ["--text-body", "--lmx-ink-200"],
+    // DataTable: a row with a link, under the pointer.
+    ["--text-body", "--lmx-yellow-50"],
+    ["--text-strong", "--lmx-yellow-50"],
   ])("%s on %s", (foreground, background) => {
     expect(tokenContrast(foreground, background)).toBeGreaterThanOrEqual(
       TEXT_MINIMUM,
