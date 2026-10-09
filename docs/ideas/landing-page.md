@@ -48,7 +48,7 @@ A proposal to check against the storefront UI kit and with the client, in page o
 5. Contact: email, telephone, address.
 6. Footer: navigation, company information, Complaints Book, language switcher.
 
-The storefront UI kit of the design system (`ui_kits/storefront` in the Claude Design project) is the visual input for these sections. Spec 003 read only its README and left the screens as input for this spec. It was not read again for this idea, so the list above comes from `project-brief.md` and not from the kit. Reading the kit is the first step of writing the spec; where the two differ, the difference goes to the owner.
+The storefront UI kit of the design system (`ui_kits/storefront` in the Claude Design project) is the visual input for these sections. Spec 003 read only its README and left the screens as input for this spec. It was not read for this idea, so the list above comes from `project-brief.md` and not from the kit. It was read on 2026-10-09; what it defines and where it differs is in the spec, section "Storefront UI kit".
 
 ### Featured products
 

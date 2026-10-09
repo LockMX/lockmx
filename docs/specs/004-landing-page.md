@@ -43,8 +43,9 @@ The shop itself is Shopify behind this frontend (ADR 0014) and has its own idea 
   - `03-api-reference/04-functions/generate-metadata.md`: `metadataBase`, `alternates.canonical`, `alternates.languages`, `robots`; a relative address without `metadataBase` is a build error.
   - `03-api-reference/03-file-conventions/01-metadata/sitemap.md` and `robots.md`: `app/sitemap.ts` with `alternates.languages` per entry; `app/robots.ts`; `robots` is cached unless it uses a request-time API.
 - Playwright: https://playwright.dev/docs/intro and https://playwright.dev/docs/test-webserver (2026-10-09), as cited in ADR 0013.
+- The storefront UI kit of the design system, read 2026-10-09 through the design-sync tool, read-only: `ui_kits/storefront/README.md`, `Header.jsx`, `Footer.jsx`, `Home.jsx`, `data.jsx` and `index.html`. Not read: `ProductPage.jsx`, `CartDrawer.jsx` and `Checkout.jsx`, which belong to the shop spec. See "Storefront UI kit" below.
 - `../compliance/site-information-and-complaints.md` (2026-10-08): what the footer and the company page must show.
-- Not read yet, read at the start of the task that needs them and cited in the task notes: the Playwright pages on configuration, projects, CI and browser caching (T1); the bundled `layout.md`, `page.md` and the metadata getting-started page (T2, T3); WCAG 2.4.1 (bypass blocks) and the APG landmark guidance (T3); the bundled `image.md` again (T6); the storefront UI kit of the design system (T3 and T6, see Open points).
+- Not read yet, read at the start of the task that needs them and cited in the task notes: the Playwright pages on configuration, projects, CI and browser caching (T1); the bundled `layout.md`, `page.md` and the metadata getting-started page (T2, T3); WCAG 2.4.1 (bypass blocks) and the APG landmark guidance (T3); the bundled `image.md` again (T6).
 
 Anything not listed is confirmed against the official documentation at the moment of the task, and the source is added to the task notes.
 
@@ -75,9 +76,43 @@ Source: the client's texts, given by the owner on 2026-10-09.
   4. The emoji is left out of the meta description, and the product types it lists ("pneus, peças, acessórios") must match what the shop sells at launch; checked again in the shop spec.
 - Any other sentence the page needs (button labels, headings, the one-line hero text) is working copy derived from these texts, stating nothing they do not state.
 
+## Storefront UI kit
+
+The kit is a proposal: its README says the screens were built from the brand identity and `project-brief.md`, and that product names, prices and copy are placeholders. It is written for a 1280 px desktop frame with inline styles and fixed column grids, and defines no narrow layout. So it is the source of the visual language, not of the content, the structure or the code.
+
+Taken from the kit:
+
+- **Header.** Inverse surface (black) with a bottom border, the light wordmark on the left linking home, uppercase navigation links, and the language choice on the right. The current navigation item is marked by a yellow bar skewed by `--slant` under the link.
+- **Footer.** Inverse surface. A first column with the lockup logo and one sentence about LockMX, then columns of links under small yellow uppercase titles, and a bottom line with the copyright and the language choice. The Complaints Book link sits in the "Legal" column.
+- **Hero.** Inverse surface, two columns: an eyebrow, the display heading on two lines with the second line in yellow, one paragraph, a slanted primary button with an arrow and an `outline-inverse` secondary button; on the right a square image with a yellow slant bar across its lower edge.
+- **Section headings.** An eyebrow above a display heading (italic, uppercase), as `../design/foundations.md` already describes.
+- **Contact.** A full-width yellow section: eyebrow, display heading and one sentence on the left, a white card on the right.
+
+Every prop the kit uses for these exists in spec 003 (`Button` with `slanted` and `outline-inverse`, `Logo` with `tone` and `variant`). No new component is needed for them.
+
+Where the kit differs, and what this spec does:
+
+| Kit | This spec | Reason |
+|---|---|---|
+| Header has a product search, an account icon and a cart icon | Not in the header | They lead to the shop, which does not exist yet (Out of scope). Added by the shop spec. |
+| Header navigation is "Racks", "Pneus", "Contacto" (shop categories) | Links to the page sections and to contact | There are no category pages yet. |
+| Footer has the columns "Loja" and "Conta" | One navigation column and the legal column | Same reason. The legal column gets its policy links in T7. |
+| Home is hero, two category tiles (racks, tyres), four featured products with prices, contact form | The seven sections of T6 | Owner decision 3: the page presents the racks; the kit treats racks and tyres as equal and shows prices. |
+| Hero has a product search and the heading "Carrega as motos. Fecha a carrinha." | No search; heading from the client's tagline | Placeholder copy. The client's copy is the source. |
+| Names van models (Sprinter, Crafter), prices and stock | None of them | The client's copy does not state them (Out of scope). |
+| Contact is a form with a privacy checkbox, and says a confirmation was sent to the sender's email | Contact details only | The form has its own spec, and the owner decided that no automatic email goes to the sender. |
+| Inline styles, `#fff`, sizes in `px` | Tokens and utilities only | Conventions of this spec and of spec 003. |
+| No narrow layout | Designed here from 320 px, with the grids of the kit collapsing to one column | The kit defines none. If the header navigation does not fit, it is raised (T3). |
+
+Open with the owner:
+
+- **Sticky header.** The kit keeps the header fixed at the top while the page scrolls. With in-page links it must not cover the heading a link jumps to, which needs a scroll offset. Proposed: follow the kit.
+- **Images.** The kit uses the identity pack mockups (`assets/mockups/m1.jpg` in the hero, `m3.jpg` and `m7.jpg` in the tiles). They are brand images, not product photographs, and are not in `public/` (spec 003, decision 6). Whether the hero shows `m1.jpg` until real photographs exist is the owner's choice; without it the hero is one column of text.
+- **Yellow contact section.** Proposed: follow the kit, with the contact details in the white card.
+
 ## Open points
 
-1. **Storefront UI kit** (before T3). The visual input for the header, footer and sections is `ui_kits/storefront` in the Claude Design project. It was not read for this spec: the tool that reads the project is used from `/design-sync`, which the owner starts. Until it is read, the sections follow this spec. Where the kit differs, the difference goes to the owner.
+1. **Three choices the storefront UI kit raises** (before T3 and T6): a sticky header, the brand mockups as page images, and the yellow contact section. See "Storefront UI kit" below.
 2. **Company data and policy texts** (T7): with the client.
 3. **Contact address shown on the page** (before T6). The contact form messages go to `crew@lockmx.com` (owner, 2026-10-09). `../compliance/site-information-and-complaints.md` and ADR 0005 name `support@lockmx.com` as the public address. Which of the two the contact section shows is the owner's choice.
 4. **Photographs.** The system section and the parts cards work without photographs. Real photographs of the racks in a van would make the page; they are asked from the client and added when they exist.
@@ -113,7 +148,7 @@ Source: the client's texts, given by the owner on 2026-10-09.
 - Commit: `feat: add site address and page metadata`
 
 ### T3. Public shell: header, footer and skip link
-- Description: add the route group `app/[lang]/(marketing)/` with a layout that renders a skip link, the header, `<main id>` and the footer, and move the home page into it. The placeholder (`coming-soon`) stays outside the group, without the shell. `SiteHeader`: the logo linking to the home of the locale, the navigation (links to the page sections and to contact), the language switcher; usable at 320 px without a new component (if the navigation does not fit, raise it instead of building a drawer). `SiteFooter`: the navigation, the link to the Complaints Book platform (`https://www.livroreclamacoes.pt`, visible on every page, opening the official site), the language switcher, the copyright line with the year. No link to the EU dispute platform. The dictionaries gain the `navigation`, `header` and `footer` messages.
+- Description: add the route group `app/[lang]/(marketing)/` with a layout that renders a skip link, the header, `<main id>` and the footer, and move the home page into it. The placeholder (`coming-soon`) stays outside the group, without the shell. The visual treatment of both follows "Storefront UI kit" above. `SiteHeader`: the logo linking to the home of the locale, the navigation (links to the page sections and to contact), the language switcher; usable at 320 px without a new component (if the navigation does not fit, raise it instead of building a drawer). `SiteFooter`: the navigation, the link to the Complaints Book platform (`https://www.livroreclamacoes.pt`, visible on every page, opening the official site), the language switcher, the copyright line with the year. No link to the EU dispute platform. The dictionaries gain the `navigation`, `header` and `footer` messages.
 - Planned files: `apps/web/src/app/[lang]/(marketing)/layout.tsx`, `apps/web/src/app/[lang]/(marketing)/page.tsx` (moved), `apps/web/src/components/site/{site-header,site-footer,skip-link}.tsx` and tests, `apps/web/src/server/i18n/messages/{pt,en}.ts`, `apps/web/e2e/shell.spec.ts`.
 - Acceptance criteria: each page has exactly one `banner`, one `main`, one `contentinfo` and named `navigation` landmarks; the skip link is the first tab stop, becomes visible on focus and moves focus to the main content; the logo has the alternative text from the dictionary; the Complaints Book link is present in both locales; the footer uses the inverse surface with the yellow focus ring (`data-surface="inverse"`); no horizontal scroll at 320 px; the placeholder page has no header or footer.
 - Tests: unit tests for the three components (roles, names, links, `aria-current` on the current navigation item, text only from props), written first; end-to-end tests for the landmarks, the skip link with the keyboard, the footer links and the language switch keeping the path, in both locales and on the mobile project.
@@ -142,7 +177,7 @@ Source: the client's texts, given by the owner on 2026-10-09.
   5. **Buy.** A closing block that repeats the primary action. The shop spec turns it into featured products read from Shopify.
   6. **Complements.** One short block saying the shop also carries complementary motocross products. It names only the product types the shop sells at launch.
   7. **Contact.** The email address as a link; telephone and address appear when T7 supplies them.
-  One `h1`, section headings in order, each section a named region reachable from the header navigation. Images only from `public/brand/`; a mockup from the identity pack is copied there only if the owner approves its use on the page. The meta description is the client's short description.
+  The hero, the section headings and the contact section follow "Storefront UI kit" above. One `h1`, section headings in order, each section a named region reachable from the header navigation. Images only from `public/brand/`; a mockup from the identity pack is copied there only if the owner approves its use on the page. The meta description is the client's short description.
 - Planned files: `apps/web/src/app/[lang]/(marketing)/page.tsx`, `apps/web/src/components/site/sections/{hero,system,parts,benefits,buy,complements,contact}.tsx` and tests, dictionaries, `apps/web/e2e/landing.spec.ts`.
 - Acceptance criteria: the page renders in both locales with no untranslated string; exactly one `h1`; the header links move to their sections and the focus follows; both hero actions are reachable with the keyboard; every image has dimensions and an alternative text or is marked decorative; no horizontal scroll from 320 px; the page states no price, no stock and nothing the client's copy does not state; an icon the closed set lacks is asked first, not added silently.
 - Tests: unit tests per section (headings, links, text only from props), written first; end-to-end for the heading structure, the in-page navigation, the two hero actions and the contact link, in both locales and on the mobile project.
