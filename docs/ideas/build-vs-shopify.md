@@ -274,7 +274,11 @@ To confirm in a Shopify trial account or with the providers:
 - The invoicing plan and price (InvoiceXpress, or Moloni with the Webinfor app).
 - Measured Neon cost for this workload, if the custom build goes ahead.
 
-## Next step
+## Outcome
+
+Decided on 2026-10-09, after a meeting with the client: Option C. Recorded in `../decisions/0014-shopify-headless-commerce.md`, with the points still to verify.
+
+## Next step (as written before the decision)
 
 Take this document to the client. Once the open points that matter to them are answered (mainly volume, the development fee, the finder and the MB WAY availability), record the outcome as an ADR. If the decision is Shopify (Option B), the current ADRs 0001 to 0006 and spec 001 are superseded. If it is Option C, the frontend work (specs 001 to 003 and the landing page) stands and ADRs 0002, 0003, 0005 and 0006 are revisited. If it stays custom, the work continues as documented.
 

@@ -90,5 +90,8 @@ Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucid
 | Application hosting | `decisions/0007-application-hosting.md` | proposed |
 | Provisional hosting of the placeholder page on Vercel | `decisions/0012-provisional-hosting-vercel.md` | proposed |
 | Playwright as end-to-end test runner | `decisions/0013-e2e-test-runner.md` | accepted |
+| Shopify as the commerce backend, headless | `decisions/0014-shopify-headless-commerce.md` | accepted |
 
-Payment provider and cookie consent management are still open (no ADR yet).
+ADR 0014 puts the shop's data, accounts, checkout and payments on Shopify. ADRs 0002, 0003, 0005 and 0006 and the planned `server/auth`, `server/db`, `server/repositories`, `server/payments` and `server/invoicing` modules above were written for a custom shop and are revisited with the shop idea; until then they are not built.
+
+Cookie consent management is still open (no ADR yet).
