@@ -10,6 +10,7 @@ describe("components/ui entry point", () => {
       "Card",
       "CartLine",
       "Checkbox",
+      "DataTable",
       "Dialog",
       "Field",
       "Icon",
