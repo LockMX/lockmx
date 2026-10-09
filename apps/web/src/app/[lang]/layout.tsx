@@ -3,6 +3,7 @@ import { Barlow_Condensed, Geist, Geist_Mono } from "next/font/google";
 import { htmlLang, locales } from "@/lib/i18n/config";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
+import { getSiteUrl } from "@/server/site/site-url";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -29,7 +30,11 @@ export function generateStaticParams() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const { metadata } = await getMessages(await getCurrentLocale());
-  return { title: metadata.title, description: metadata.description };
+  return {
+    metadataBase: getSiteUrl(),
+    title: { default: metadata.title, template: `%s | ${metadata.title}` },
+    description: metadata.description,
+  };
 }
 
 export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
