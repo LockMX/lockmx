@@ -61,6 +61,18 @@ The storefront UI kit of the design system (`ui_kits/storefront` in the Claude D
 
 There is no shop to send the visitor to. Options: scroll to the contact section, or a `mailto:` link. Open with the client (see below).
 
+## Contact form: decisions so far (owner, 2026-10-09)
+
+The form stays in its own spec. Recorded here so that spec starts from them:
+
+- Bot protection: Cloudflare Turnstile, verified on the server.
+- No double opt-in. It confirms consent to a subscription, and a contact message is not one (see `customer-accounts-and-consent.md`).
+- The message is delivered to `crew@lockmx.com`, which replaces `fabio.ramalhinho@lockmx.com` in the table of ADR 0005. The client answers from that mailbox, so the visitor's address goes in the reply-to field.
+- No automatic email to the sender. This changes the earlier plan of an acknowledgement, and it also means the form cannot be used to send mail to an address someone else typed.
+- Nothing is stored: no database (ADR 0014). The message exists only as the email.
+- Still needed, and not decided: a service that sends that one email (Resend, ADR 0005, or the AWS SES account that already receives the mailboxes); a validation library for the input on the server; the privacy information shown next to the form, since name, email and message are personal data; and a rate limit (see below).
+- Rate limit: Turnstile reduces automated submissions, it does not stop a person or a paid solving service from sending many. Each submission costs one email of the sending quota and lands in the client's inbox. A limit per address of origin caps that. Where its counters live without a database, or whether the hosting provides it, is not researched yet.
+
 ## Open questions
 
 For the client:

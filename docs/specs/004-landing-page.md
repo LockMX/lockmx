@@ -57,7 +57,7 @@ Anything not listed is confirmed against the official documentation at the momen
 
 1. **Site address.** `https://lockmx.com` is the canonical origin (T2).
 2. **Address structure.** The landing page is the home (`/pt`, `/en`). The shop gets its own path in the shop spec and must be easy to reach from the header.
-3. **Purpose of the landing page.** Present the racks: say what the system is, explain it in detail, then lead to buying. Complementary products get one short block.
+3. **Purpose of the landing page.** Present the racks: say what the system is, explain it in detail, then lead to buying. Complementary products get one short block. The section order of T6 is accepted as the starting point; adjustments come after it is seen.
 4. **Error page text.** The proposal of T4 is accepted: the marketing layout passes the error strings to a client provider, and `global-error` carries its own two texts.
 5. **Legal part last.** The company data and the policy texts are with the client. T7 is the last task and waits for them; the rest of the spec does not.
 6. **Shop.** Shopify headless (ADR 0014). Turnstile is the bot protection for the contact form, which stays in its own spec.
@@ -68,18 +68,19 @@ Source: the client's texts, given by the owner on 2026-10-09.
 
 - **Long description** (PT-PT and EN): used for the system section of the landing page. It names what the system is for (campervan, motovan or van), its parts (mounts for helmets and boots, hangers, modular shelves) and its benefits (space, gear kept in place, resistance to road, dust and mud). The tagline is "LockMX — Lock it, send it!".
 - **Short description** (for search results): used for the meta description. It exists in Portuguese only, with an English headline ("LockMX – Everything for Motocross!").
-- Points to confirm with the client before `COMING_SOON` is turned off, none of which blocks the tasks:
-  1. The PT text reads "sem sem compromissos": a repeated word, corrected to "sem compromissos" in the dictionary.
-  2. The EN text opens with "Pure organization for those who live on the edge."; the PT text has no such line. Proposed: use it as the section heading in EN and ask the client for the PT line; until then PT uses the tagline.
-  3. The short description has no EN version. A working translation is written in T6 and marked for the client's review.
-  4. The short description contains an emoji and says "pneus, peças, acessórios". The emoji is dropped from the meta description (it is the client's choice to keep it); the product list must match what the shop sells at launch.
+- Decided by the owner on 2026-10-09:
+  1. The PT text reads "sem sem compromissos": the repeated word is removed in the dictionary.
+  2. The EN text opens with "Pure organization for those who live on the edge."; the PT text has no such line. Both are kept as the client wrote them: the line appears in EN only.
+  3. The short description has no EN version: it is translated to EN from the PT text in T6.
+  4. The emoji is left out of the meta description, and the product types it lists ("pneus, peças, acessórios") must match what the shop sells at launch; checked again in the shop spec.
 - Any other sentence the page needs (button labels, headings, the one-line hero text) is working copy derived from these texts, stating nothing they do not state.
 
 ## Open points
 
 1. **Storefront UI kit** (before T3). The visual input for the header, footer and sections is `ui_kits/storefront` in the Claude Design project. It was not read for this spec: the tool that reads the project is used from `/design-sync`, which the owner starts. Until it is read, the sections follow this spec. Where the kit differs, the difference goes to the owner.
 2. **Company data and policy texts** (T7): with the client.
-3. **Photographs.** The system section and the parts cards work without photographs. Real photographs of the racks in a van would make the page; they are asked from the client and added when they exist.
+3. **Contact address shown on the page** (before T6). The contact form messages go to `crew@lockmx.com` (owner, 2026-10-09). `../compliance/site-information-and-complaints.md` and ADR 0005 name `support@lockmx.com` as the public address. Which of the two the contact section shows is the owner's choice.
+4. **Photographs.** The system section and the parts cards work without photographs. Real photographs of the racks in a van would make the page; they are asked from the client and added when they exist.
 
 ## Working branch
 
