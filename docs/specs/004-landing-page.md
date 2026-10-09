@@ -61,7 +61,7 @@ Anything not listed is confirmed against the official documentation at the momen
 3. **Purpose of the landing page.** Present the racks: say what the system is, explain it in detail, then lead to buying. Complementary products get one short block. The section order of T6 is accepted as the starting point; adjustments come after it is seen.
 4. **Error page text.** The proposal of T4 is accepted: the marketing layout passes the error strings to a client provider, and `global-error` carries its own two texts.
 5. **Legal part last.** The company data and the policy texts are with the client. T7 is the last task and waits for them; the rest of the spec does not.
-6. **Contact address.** The contact section shows `crew@lockmx.com` (T6). `support@lockmx.com`, the public address named in `../compliance/site-information-and-complaints.md` and ADR 0005, is kept for questions about orders and payments; where it is used is settled in the shop spec.
+6. **Contact address.** The contact section shows `crew@lockmx.com` (T6). `support@lockmx.com`, the public address named in `../compliance/site-information-and-complaints.md` and ADR 0005, is kept for questions about orders and payments and is the email of the company information page (T7); its use in the shop is settled in the shop spec.
 7. **Shop.** Shopify headless (ADR 0014). Turnstile is the bot protection for the contact form, which stays in its own spec.
 
 ## Copy
@@ -105,15 +105,15 @@ Where the kit differs, and what this spec does:
 | Inline styles, `#fff`, sizes in `px` | Tokens and utilities only | Conventions of this spec and of spec 003. |
 | No narrow layout | Designed here from 320 px, with the grids of the kit collapsing to one column | The kit defines none. If the header navigation does not fit, it is raised (T3). |
 
-Open with the owner:
+Decided by the owner on 2026-10-09:
 
-- **Sticky header.** The kit keeps the header fixed at the top while the page scrolls. With in-page links it must not cover the heading a link jumps to, which needs a scroll offset. Proposed: follow the kit.
-- **Images.** The kit uses the identity pack mockups (`assets/mockups/m1.jpg` in the hero, `m3.jpg` and `m7.jpg` in the tiles). They are brand images, not product photographs, and are not in `public/` (spec 003, decision 6). Whether the hero shows `m1.jpg` until real photographs exist is the owner's choice; without it the hero is one column of text.
-- **Yellow contact section.** Proposed: follow the kit, with the contact details in the white card.
+- **Sticky header.** The header stays at the top while the page scrolls, as in the kit. In-page links must not leave the heading they jump to under it, so the sections get a scroll offset (T3).
+- **Yellow contact section.** As in the kit, with the contact details in the white card.
+- **Hero image.** Not the mockup `m1.jpg`. The owner is considering the cut-out logo on a transparent background (white and yellow, the artwork already served as `wordmark-white-yellow.png`) or the mockup `M2.png` of the identity pack (the logo engraved in grey stone, with "Modular System"), and has not chosen. The hero of T6 takes its image as a prop and works without one; both candidates are shown to the owner on the real page before either is kept.
 
 ## Open points
 
-1. **Three choices the storefront UI kit raises** (before T3 and T6): a sticky header, the brand mockups as page images, and the yellow contact section. See "Storefront UI kit" below.
+1. **Hero image** (T6): the owner chooses between two candidates after seeing them on the page. See "Storefront UI kit" above.
 2. **Company data and policy texts** (T7): with the client.
 3. **Photographs.** The system section and the parts cards work without photographs. Real photographs of the racks in a van would make the page; they are asked from the client and added when they exist.
 

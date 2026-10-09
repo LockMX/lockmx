@@ -4,7 +4,7 @@ Status: in use (being migrated to the v2 function). Written on 2026-10-08. The m
 
 ## Purpose
 
-The company mailboxes (`support@`, `fabio.ramalhinho@`, `privacy@`, `terms@`, `dev@`, `abuse@`, `postmaster@`) do not exist as real mailboxes. SES receives the mail for them and a Lambda forwards a copy to the client's inbox (`lock_mx@outlook.com`). Transactional shop mail (`shop@`, send only) does not use this path: it goes through Resend on its own subdomain, so the two reputations stay separate.
+The company mailboxes (`support@`, `crew@`, `fabio.ramalhinho@`, `privacy@`, `terms@`, `dev@`, `abuse@`, `postmaster@`) do not exist as real mailboxes. SES receives the mail for them and a Lambda forwards a copy to the client's inbox (`lock_mx@outlook.com`). Transactional shop mail (`shop@`, send only) does not use this path: it goes through Resend on its own subdomain, so the two reputations stay separate.
 
 ## Flow
 
@@ -69,5 +69,6 @@ SES sending limits and reputation review are account-wide: a high bounce or comp
 - Receiving domain and sending subdomain names (planned: Resend on `shop.lockmx.com`, SES custom MAIL FROM on `mail.lockmx.com`); the MAIL FROM subdomain must not be used for anything else.
 - The Resend DNS records must be checked in the Resend dashboard before touching DNS, to confirm they do not collide with the SES records.
 - Outlook safe-sender rule so that forwarded copies do not land in junk.
+- `crew@` was added after this document was written and replaces `fabio.ramalhinho@` as the client mailbox for contacts. The owner reported on 2026-10-09 that its forwarding is configured and working; the value of `ForwardPrefixes` in the deployed stack was not read for this note.
 - Whether `fabio.ramalhinho@` and `support@` share the same inbox.
 - The SMTP credentials of the SES account are kept locally in `docs/credentials/` (ignored by git). They are never committed, copied into documentation or put in environment files of the repository.
