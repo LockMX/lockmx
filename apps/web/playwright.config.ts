@@ -22,8 +22,9 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [["list"], ["html", { open: "never" }]],
-  // Firefox takes close to the default 5 s for a client navigation when the
-  // four projects run in parallel.
+  // Firefox is slow when the four projects run in parallel: a test there went
+  // over the default 30 s, and a client navigation over the default 5 s.
+  timeout: 60_000,
   expect: { timeout: 10_000 },
   use: {
     baseURL,

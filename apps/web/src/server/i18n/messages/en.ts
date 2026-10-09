@@ -30,4 +30,16 @@ export const en: Messages = {
     complaintsBook: "Complaints Book",
     copyright: "© {year} LockMX",
   },
+  notFound: {
+    title: "Page not found",
+    message: "The address you opened does not exist or has changed.",
+    home: "Back to home",
+  },
+  error: {
+    title: "Something went wrong",
+    message: "This page could not be shown. Try again in a moment.",
+    retry: "Try again",
+    home: "Back to home",
+    reference: "Reference:",
+  },
 };

@@ -30,6 +30,18 @@ export const pt = {
     // {year} is replaced by the current year.
     copyright: "© {year} LockMX",
   },
+  notFound: {
+    title: "Página não encontrada",
+    message: "O endereço que abriste não existe ou mudou.",
+    home: "Voltar ao início",
+  },
+  error: {
+    title: "Ocorreu um erro",
+    message: "Não foi possível mostrar esta página. Tenta novamente daqui a pouco.",
+    retry: "Tentar novamente",
+    home: "Voltar ao início",
+    reference: "Referência:",
+  },
 };
 
 type DeepString<T> = {

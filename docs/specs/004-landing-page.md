@@ -109,7 +109,7 @@ Decided by the owner on 2026-10-09:
 
 - **Sticky header.** The header stays at the top while the page scrolls, as in the kit. In-page links must not leave the heading they jump to under it, so the sections get a scroll offset (T3).
 - **Yellow contact section.** As in the kit, with the contact details in the white card.
-- **Hero image.** Not the mockup `m1.jpg`. The owner named `M5.png` or `M4.png` of the identity pack, because they have more colour (corrected on 2026-10-09; the cut-out logo and `M2.png` mentioned first were a mistake). `M5.png` is a black sign with the white and yellow logo on a grey wall; `M4.png` is a yellow sign with the black and white logo. The hero of T6 takes its image as a prop and works without one; both are shown to the owner on the real page before one is copied to `public/brand/` and kept.
+- **Hero image.** Not the mockup `m1.jpg`. The owner named `M5.png` or `M4.png` of the identity pack, because they have more colour (corrected on 2026-10-09; the cut-out logo and `M2.png` mentioned first were a mistake). `M5.png` is a black sign with the white and yellow logo on a grey wall; `M4.png` is a yellow sign with the black and white logo. The hero of T6 takes its image as a prop and works without one; `M5.png` is tried first; `M4.png` only if the owner does not like the result (owner, 2026-10-09).
 
 ## Open points
 
@@ -167,6 +167,14 @@ Decided by the owner on 2026-10-09:
 - Acceptance criteria: `/sitemap.xml` and `/robots.txt` are served without a locale redirect and contain absolute addresses from `SITE_URL`; every sitemap entry answers 200; the placeholder response carries the `noindex` header and a normal page does not; `coming-soon` is not in the sitemap.
 - Tests: unit tests for the sitemap entries and for the proxy header (written first); end-to-end for both files. The switch itself is tested end to end against a second server started with `COMING_SOON=true`, if the Playwright documentation supports more than one `webServer`; otherwise it stays covered by the proxy unit tests and the task notes say so.
 - Commit: `feat: add sitemap and robots`
+
+### T5a. Header menu for narrow screens
+- Added on 2026-10-09. T3 raised that the section links do not fit in the header below the `md` breakpoint; the owner chose a menu button that opens the links, built as its own task before T6.
+- Description: below `md` the header shows a button that opens and closes the navigation links; from `md` up the header is unchanged. Before any code, the task reads the APG disclosure pattern (and the bundled docs for whatever it uses from Next.js), decides whether this is a design system primitive or a site component, and records that in the task notes with `docs/design/components.md` updated if it is a primitive. The button name and state come from the dictionaries; the menu closes on Escape, on choosing a link and when the width passes `md`; focus is never left on a hidden element.
+- Planned files: decided in the task, inside `apps/web/src/components/`; dictionaries; `apps/web/e2e/shell.spec.ts`.
+- Acceptance criteria: at 320 px every navigation link of the header is reachable with the keyboard and by touch; the button exposes its state (`aria-expanded`) and the element it controls; nothing is hidden from assistive technology while visible, or visible while hidden; no sideways scroll; the desktop header is unchanged.
+- Tests: unit tests for open, close, Escape and the attributes, written first; end-to-end on the mobile project for opening the menu and following a link.
+- Commit: `feat: add header menu for narrow screens`
 
 ### T6. Landing page
 - Description: replace the stub with the landing page, composed of section components that receive their text through props. In page order:
@@ -239,6 +247,20 @@ Decided by the owner on 2026-10-09:
 - The locale routing test of T1 now looks for the switcher inside the banner, since there are two.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (43 files, 655 tests), `pnpm test:e2e` (120 passed, which includes the production build). Screenshots of `/pt` looked at in Chromium at 320 and 1440 px, and at 320 px with the skip link focused. No sideways scroll at 320 px (test).
 - Not checked: 768 and 1024 px by eye (captured, not looked at); a screen reader; the sticky header while scrolling, since the stub page is shorter than the screen (checked in T6); CI.
+
+### T4 (2026-10-09)
+
+- Sources read: the bundled `03-file-conventions/not-found.md` and `error.md`.
+- The error boundary receives `retry` in the installed version (it re-fetches and re-renders the segment); `reset` is kept by Next.js for the case without re-fetching and is not used.
+- An address under a locale that matches no route needs a catch-all route: the root layout is inside `[lang]`, so there is no root `app/not-found` to catch it. `(marketing)/[...rest]/page.tsx` calls `notFound()`, which renders `(marketing)/not-found.tsx` inside the shell. The experimental `global-not-found` is not used.
+- `not-found` cannot export metadata, so the 404 page keeps the site title. Next.js adds the `noindex` meta tag by itself.
+- If the error page ever renders outside the provider of the layout, it throws the error again, so `global-error` shows it.
+- `global-error` is plain HTML without classes or styles: it gets no stylesheet, and the conventions forbid inline styles. It picks its texts with `usePathname`, falling back to the default locale.
+- New site components beyond the planned files: `page-message.tsx` (the shared layout of both pages), `not-found-view.tsx` and `error-view.tsx`.
+- The test timeout is now 60 s. A Firefox test went over the default 30 s once with the four projects in parallel; the same tests passed 40 times in a row when Firefox ran alone, so it is load on the machine, not the page.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (47 files, 672 tests), `pnpm test:e2e` (144 passed, which includes the production build).
+- Checked by hand, with a temporary page that threw and a temporary throw in the root layout, both removed before the commit: the error page answers 500 inside the shell, in both locales, shows the translated text and the digest, and does not show the message of the error; `global-error` renders its own document with the English texts on `/en`. Screenshots looked at: not-found at 1440 px, error at 320 px.
+- Not checked: the retry button after a failure that then recovers; 768 and 1024 px; CI.
 
 ## Boundaries
 
