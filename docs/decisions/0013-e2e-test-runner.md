@@ -20,7 +20,7 @@ Use Playwright Test (`@playwright/test`) for end-to-end tests of `apps/web`.
 - Tests run against the production build, as the Next.js guide recommends: the `webServer` option starts the built app and waits for it, with `reuseExistingServer: !process.env.CI`.
 - Browsers: Chromium, Firefox and WebKit projects, plus one mobile viewport. The exact project list is set in the spec that installs it.
 - A separate script, `pnpm test:e2e`, from the root. `pnpm test` stays the unit run (Vitest) and stays fast.
-- Test files live outside `src/`, in `apps/web/e2e/`, so Vitest does not pick them up.
+- Test files live in `apps/web/e2e/`. `apps/web/vitest.config.mts` sets no `include`, so the Vitest configuration must exclude that folder in the same task; otherwise `pnpm test` would try to run them.
 
 Nothing is installed by this ADR. The first task of the spec that needs it (004, landing page) does the installation, after the versions and the configuration are confirmed against the Playwright documentation on that day.
 
