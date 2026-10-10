@@ -11,6 +11,7 @@ const props = {
   homeHref: "/pt",
   logoAlt: "LockMX, página inicial",
   navigationLabel: "Principal",
+  menuLabel: "Menu",
   navigationItems: [{ href: "/pt", label: "Início" }],
   languageLabel: "Idioma",
 };
@@ -38,6 +39,7 @@ describe("SiteHeader", () => {
     const navigation = within(banner).getByRole("navigation", { name: "Principal" });
 
     expect(within(navigation).getByRole("link", { name: "Início" })).toBeTruthy();
+    expect(within(navigation).getByRole("button", { name: "Menu" })).toBeTruthy();
     expect(within(banner).getByRole("navigation", { name: "Idioma" })).toBeTruthy();
   });
 });

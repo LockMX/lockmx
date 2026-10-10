@@ -24,6 +24,7 @@ describe("Icon", () => {
       "loader-circle",
       "lock",
       "mail",
+      "menu",
       "minus",
       "package",
       "pencil",

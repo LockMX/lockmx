@@ -26,6 +26,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
         homeHref={homeHref}
         logoAlt={header.logoAlt}
         navigationLabel={navigation.main}
+        menuLabel={header.menu}
         navigationItems={navigationItems}
         languageLabel={languageSwitcher.label}
       />
