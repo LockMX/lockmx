@@ -1,9 +1,11 @@
 // Source: 01-app/03-api-reference/03-file-conventions/route-groups.md (bundled Next.js docs):
 // the group gives its pages this layout without changing their address.
 import { ErrorMessagesProvider } from "@/components/site/error-messages";
+import { SectionFocus } from "@/components/site/section-focus";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SkipLink } from "@/components/site/skip-link";
+import { sectionHref, sectionIds } from "@/lib/site/sections";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
 
@@ -15,11 +17,18 @@ export default async function MarketingLayout({ children }: { children: React.Re
   const { navigation, header, footer, languageSwitcher, error } = await getMessages(locale);
 
   const homeHref = `/${locale}`;
-  const navigationItems = [{ href: homeHref, label: navigation.home }];
+  const navigationItems = [
+    { href: homeHref, label: navigation.home },
+    { href: sectionHref(locale, sectionIds.system), label: navigation.system },
+    { href: sectionHref(locale, sectionIds.parts), label: navigation.parts },
+    { href: sectionHref(locale, sectionIds.why), label: navigation.why },
+    { href: sectionHref(locale, sectionIds.contact), label: navigation.contact },
+  ];
   const copyright = footer.copyright.replace("{year}", String(new Date().getFullYear()));
 
   return (
     <>
+      <SectionFocus />
       <SkipLink targetId={MAIN_ID} label={header.skipToContent} />
       <SiteHeader
         locale={locale}

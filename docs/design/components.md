@@ -17,7 +17,7 @@ The inventory of `apps/web/src/components/ui/`. Each component task of spec 003 
 | Component | Group | File | Client | Props | States | Text props |
 |---|---|---|---|---|---|---|
 | `Logo` | core | `core/logo.tsx` | no | `variant` (`lockup`, `wide`, `wordmark`; default `wordmark`), `tone` (`dark`, `light`, `mono`; default `dark`), `sizes` (required), `className`, other `next/image` props except `src`, `width`, `height`, `fill`, `style` | none (static image) | `alt` (required) |
-| `Icon` | core | `core/icon.tsx` | no | `name` (closed set of 25 Lucide icons), `size` (`sm`, `md`, `lg`; default `md`), `className` | none | none: always decorative |
+| `Icon` | core | `core/icon.tsx` | no | `name` (closed set of 29 Lucide icons), `size` (`sm`, `md`, `lg`; default `md`), `className` | none | none: always decorative |
 | `Button` | core | `core/button.tsx` | no | `variant` (`primary`, `secondary`, `outline`, `outline-inverse`, `ghost`, `danger`; default `primary`), `size` (`sm`, `md`, `lg`; default `md`), `slanted`, `fullWidth`, `iconLeft`, `iconRight`, `loading`, native `button` props (`type` defaults to `button`) | hover, active, focus, disabled, loading (`aria-busy`, spinner, not activatable) | `children` |
 | `ButtonLink` | core | `core/button-link.tsx` | no | the appearance props of `Button`, `iconLeft`, `iconRight`, `next/link` props (`href` required) | hover, active, focus | `children` |
 | `IconButton` | core | `core/icon-button.tsx` | no | `icon`, `variant` (`ghost`, `ghost-inverse`, `outline`, `primary`, `secondary`; default `ghost`), `size` (`sm`, `md`, `lg`; default `md`), `count`, native `button` props | hover, focus, disabled | `label` (required: accessible name and tooltip) |
