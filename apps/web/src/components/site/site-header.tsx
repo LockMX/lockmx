@@ -32,7 +32,7 @@ export function SiteHeader({
       data-surface="inverse"
       className="sticky top-0 z-(--z-header) border-b border-border-inverse bg-surface-inverse text-text-inverse"
     >
-      <div className="mx-auto flex h-header max-w-page items-center gap-2 px-gutter sm:gap-4 md:gap-8">
+      <div className="mx-auto flex h-header max-w-page items-center gap-4 px-gutter md:gap-8">
         <Link href={homeHref} className="shrink-0">
           <Logo
             variant="wordmark"
@@ -40,7 +40,7 @@ export function SiteHeader({
             alt={logoAlt}
             sizes="8rem"
             loading="eager"
-            className="h-5 w-auto sm:h-6"
+            className="h-6 w-auto"
           />
         </Link>
         {/* On a narrow screen the navigation is a menu button, beside the language switcher. */}

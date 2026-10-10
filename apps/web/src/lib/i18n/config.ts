@@ -16,6 +16,12 @@ export const localeNames: Record<Locale, string> = {
   en: "English",
 };
 
+// What the language switcher shows; the full name goes with it for assistive technology.
+export const localeCodes: Record<Locale, string> = {
+  pt: "PT",
+  en: "EN",
+};
+
 export function isLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);
 }

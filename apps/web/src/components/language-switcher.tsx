@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { htmlLang, localeNames, locales, type Locale } from "@/lib/i18n/config";
+import { htmlLang, localeCodes, localeNames, locales, type Locale } from "@/lib/i18n/config";
 import { switchLocalePath } from "@/lib/i18n/switch-locale-path";
 
 type LanguageSwitcherProps = {
@@ -24,7 +24,9 @@ export function LanguageSwitcher({ label, current }: LanguageSwitcherProps) {
               aria-current={locale === current ? "true" : undefined}
               className="aria-[current=true]:font-bold aria-[current=true]:no-underline"
             >
-              {localeNames[locale]}
+              {/* The code is what is seen; the name follows it in the accessible name. */}
+              {localeCodes[locale]}{" "}
+              <span className="sr-only">{localeNames[locale]}</span>
             </Link>
           </li>
         ))}
