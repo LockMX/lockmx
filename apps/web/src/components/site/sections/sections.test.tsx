@@ -4,55 +4,12 @@ import { Benefits } from "@/components/site/sections/benefits";
 import { Buy } from "@/components/site/sections/buy";
 import { Complements } from "@/components/site/sections/complements";
 import { Contact } from "@/components/site/sections/contact";
-import { Parts } from "@/components/site/sections/parts";
-import { System } from "@/components/site/sections/system";
 
 const heading = { eyebrow: "Sobrancelha", title: "Título" };
 
 function region() {
   return screen.getByRole("region", { name: "Título" });
 }
-
-describe("System", () => {
-  test("is a named region with the text from props", () => {
-    render(<System id="system" {...heading} text="O sistema modular." />);
-
-    expect(region().id).toBe("system");
-    expect(within(region()).getByText("Sobrancelha")).toBeTruthy();
-    expect(within(region()).getByText("O sistema modular.")).toBeTruthy();
-  });
-});
-
-describe("Parts", () => {
-  const parts = [
-    { icon: "hard-hat" as const, title: "Capacetes", text: "Suportes para capacetes." },
-    { icon: "footprints" as const, title: "Botas", text: "Suportes para botas." },
-  ];
-
-  test("is a named region with its text and one list item per part", () => {
-    render(<Parts id="parts" {...heading} text="Introdução." parts={parts} />);
-
-    expect(region().id).toBe("parts");
-    expect(within(region()).getByText("Introdução.")).toBeTruthy();
-    expect(within(region()).getAllByRole("listitem")).toHaveLength(2);
-  });
-
-  test("names each part with an h3 and shows its text", () => {
-    render(<Parts id="parts" {...heading} text="Introdução." parts={parts} />);
-
-    const titles = within(region()).getAllByRole("heading", { level: 3 });
-    expect(titles.map((title) => title.textContent)).toEqual(["Capacetes", "Botas"]);
-    expect(within(region()).getByText("Suportes para botas.")).toBeTruthy();
-  });
-
-  test("keeps the icons decorative", () => {
-    const { container } = render(<Parts id="parts" {...heading} text="Introdução." parts={parts} />);
-
-    const icons = [...container.querySelectorAll("svg")];
-    expect(icons).toHaveLength(2);
-    expect(icons.every((icon) => icon.getAttribute("aria-hidden") === "true")).toBe(true);
-  });
-});
 
 describe("Benefits", () => {
   const benefits = [

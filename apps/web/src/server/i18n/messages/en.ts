@@ -17,8 +17,7 @@ export const en: Messages = {
     main: "Main",
     footer: "Footer",
     home: "Home",
-    system: "System",
-    parts: "Parts",
+    modularSystem: "Modular system",
     why: "Why",
     contact: "Contact",
   },
@@ -35,6 +34,31 @@ export const en: Messages = {
     complaintsBook: "Complaints Book",
     copyright: "© {year} LockMX",
   },
+  modularSystem: {
+    eyebrow: "LockMX modular system",
+    title: "A command center on wheels",
+    // The name of the page in the browser tab and in search results.
+    pageTitle: "Modular system",
+    description: "The LockMX modular system organizes your gear inside your van: mounts for helmets and boots, hangers and modular shelves.",
+    systemText: "Pure organization for those who live on the edge. Built for adventurers, riders, and everyone driven by action sports, the LockMX modular system is designed to keep up with your pace — no compromises. Turn your campervan, motovan, or regular van into a true mobile command center, fully functional and ready for any mission.",
+    partsText: "With dedicated mounts for helmets, boots, hangers, and modular shelves, every component fits into an intelligent system that maximizes space, keeps your gear exactly where it belongs, and stands up to the toughest conditions — road, dust, mud, and miles of abuse. All wrapped in a clean, technical design with serious attitude.",
+    helmets: {
+      title: "Helmet mounts",
+      text: "Dedicated mounts for your helmets.",
+    },
+    boots: {
+      title: "Boot mounts",
+      text: "Dedicated mounts for your boots.",
+    },
+    hangers: {
+      title: "Hangers",
+      text: "To hang your gear exactly where it belongs.",
+    },
+    shelves: {
+      title: "Modular shelves",
+      text: "Shelves that fit into the system.",
+    },
+  },
   home: {
     hero: {
       eyebrow: "LockMX modular system",
@@ -44,32 +68,6 @@ export const en: Messages = {
       primaryAction: "Get in touch",
       secondaryAction: "See the system",
       imageAlt: "Black sign with the LockMX Modular System logo on a stone wall.",
-    },
-    system: {
-      eyebrow: "The system",
-      title: "A command center on wheels",
-      text: "Pure organization for those who live on the edge. Built for adventurers, riders, and everyone driven by action sports, the LockMX modular system is designed to keep up with your pace — no compromises. Turn your campervan, motovan, or regular van into a true mobile command center, fully functional and ready for any mission.",
-    },
-    parts: {
-      eyebrow: "The parts",
-      title: "Every part in its place",
-      text: "With dedicated mounts for helmets, boots, hangers, and modular shelves, every component fits into an intelligent system that maximizes space, keeps your gear exactly where it belongs, and stands up to the toughest conditions — road, dust, mud, and miles of abuse. All wrapped in a clean, technical design with serious attitude.",
-      helmets: {
-        title: "Helmet mounts",
-        text: "Dedicated mounts for your helmets.",
-      },
-      boots: {
-        title: "Boot mounts",
-        text: "Dedicated mounts for your boots.",
-      },
-      hangers: {
-        title: "Hangers",
-        text: "To hang your gear exactly where it belongs.",
-      },
-      shelves: {
-        title: "Modular shelves",
-        text: "Shelves that fit into the system.",
-      },
     },
     why: {
       eyebrow: "Why LockMX",

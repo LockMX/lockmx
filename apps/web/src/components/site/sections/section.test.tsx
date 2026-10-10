@@ -14,6 +14,12 @@ describe("Section", () => {
     expect(within(region).getByText("O sistema")).toBeTruthy();
   });
 
+  test("has an h1 when it is the whole of its page", () => {
+    render(<Section id="system" level={1} eyebrow="O sistema" title="Um quartel-general" />);
+
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Um quartel-general");
+  });
+
   test("can take the focus without being a tab stop", () => {
     render(<Section id="system" eyebrow="O sistema" title="Um quartel-general" />);
 

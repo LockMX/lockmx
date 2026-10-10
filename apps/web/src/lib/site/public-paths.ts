@@ -5,7 +5,9 @@ import { defaultLocale, htmlLang, locales, type Locale } from "@/lib/i18n/config
 
 // Every public page, without the locale. A page added to the site is added
 // here, so it reaches the sitemap. The placeholder is not a public page.
-export const publicPaths: readonly string[] = ["/"];
+export const modularSystemPath = "/modular-system";
+
+export const publicPaths: readonly string[] = ["/", modularSystemPath];
 
 // The address of a page in a locale: "/" gives "/pt", "/company" gives "/pt/company".
 export function localizedPath(locale: Locale, path: string): string {
