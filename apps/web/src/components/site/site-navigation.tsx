@@ -9,12 +9,14 @@ export type SiteNavigationItem = {
   label: string;
 };
 
+type SiteNavigationOrientation = "row" | "column";
+
 type SiteNavigationProps = {
   /** Accessible name of the landmark, without the word "navigation". */
   label: string;
   items: SiteNavigationItem[];
-  /** `row` for the header, `column` for the footer. */
-  orientation?: "row" | "column";
+  /** `row` is the look of the header links, `column` the look of the footer ones. */
+  orientation?: SiteNavigationOrientation;
 };
 
 const LINK_STYLES = {
@@ -23,21 +25,35 @@ const LINK_STYLES = {
   column: "text-sm leading-body no-underline hover:underline aria-[current=page]:font-semibold",
 };
 
-export function SiteNavigation({ label, items, orientation = "row" }: SiteNavigationProps) {
+type SiteNavigationLinkProps = {
+  item: SiteNavigationItem;
+  appearance: SiteNavigationOrientation;
+  onClick?: () => void;
+};
+
+/** One navigation link, marked when it leads to the current page. */
+export function SiteNavigationLink({ item, appearance, onClick }: SiteNavigationLinkProps) {
   const pathname = usePathname();
 
+  return (
+    <Link
+      href={item.href}
+      aria-current={item.href === pathname ? "page" : undefined}
+      className={LINK_STYLES[appearance]}
+      onClick={onClick}
+    >
+      {item.label}
+    </Link>
+  );
+}
+
+export function SiteNavigation({ label, items, orientation = "row" }: SiteNavigationProps) {
   return (
     <nav aria-label={label}>
       <ul className={classNames("flex", orientation === "row" ? "gap-6" : "flex-col gap-2")}>
         {items.map((item) => (
           <li key={item.href}>
-            <Link
-              href={item.href}
-              aria-current={item.href === pathname ? "page" : undefined}
-              className={LINK_STYLES[orientation]}
-            >
-              {item.label}
-            </Link>
+            <SiteNavigationLink item={item} appearance={orientation} />
           </li>
         ))}
       </ul>

@@ -21,6 +21,7 @@ export const en: Messages = {
   header: {
     skipToContent: "Skip to content",
     logoAlt: "LockMX, home",
+    menu: "Menu",
   },
   footer: {
     logoAlt: "LockMX Modular System",

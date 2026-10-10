@@ -272,6 +272,21 @@ Decided by the owner on 2026-10-09:
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (48 files, 682 tests), `pnpm test:e2e` (176 passed, which includes the production build); neither port answered after the run.
 - Not checked: CI, and how a search engine treats the header in practice.
 
+### T5a (2026-10-10)
+
+- Sources read: https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/ and its navigation menu example (https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/): the button has `aria-expanded` and `aria-controls`, sits inside the navigation landmark, and Escape closes the menu and puts the focus on the button.
+- **Site component, not a primitive.** `components/site/site-header-navigation.tsx` has one consumer, the header, so nothing is added to `components/ui`. It is built from the existing `IconButton` (`ghost-inverse`).
+- **Owner decision: the `menu` icon joins the closed icon set** (25 icons; `docs/design/components.md` updated). The button shows `menu` when closed and `x` when open; its name stays "Menu" and `aria-expanded` carries the state.
+- One navigation landmark holds the button and the list. Below `md` the list is hidden with `display` until the button opens it under the header; from `md` up the list always shows and the button is hidden. No animation, so shown and exposed to assistive technology are always the same thing.
+- The menu closes on Escape, on choosing a link, when the page changes (the header stays mounted between pages) and when the width passes `md`. On Escape and on a link the focus goes to the button, because the link it was on is now hidden. **For T6:** a link to a section of the page must move the focus to that section instead; the button keeps it only when the link leads to the current page.
+- The breakpoint is written once in script, `(min-width: 48rem)`, the default `md` of Tailwind that the classes use (`--breakpoint-md` in `node_modules/tailwindcss/theme.css`). An end-to-end test opens the menu at 767 px, widens to 768 px and narrows back, so the script and the classes must agree on the boundary.
+- The width is asked on the `resize` event of the window, not on the `change` event of the media query: that event did not fire on the mobile project (WebKit) when the width went from 767 to 768 px, and the menu stayed open.
+- Not done, and not asked by the spec: closing when the focus leaves the navigation, as the APG example does.
+- **The narrow header is tight.** At 320 px the logo, the button and the language switcher only fit with the logo at `h-5` and a gap of `2` below `sm`; about 3 px are left. The smaller logo applies to every screen below `sm` (640 px), so to every phone. Raised for the owner: showing the languages as "PT" and "EN" on narrow screens would give room.
+- `SiteNavigationLink` was taken out of `SiteNavigation` so the header and the footer share the link and its current-page mark.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (49 files, 696 tests), `pnpm test:e2e` (206 passed, 2 skipped: the wide-screen test on the mobile project); the header was measured at 320 px in Chromium, Firefox and WebKit, in both locales.
+- Not checked: CI, a real phone, a screen reader.
+
 ## Boundaries
 
 - Always: the test first, seen failing; the bundled Next.js docs read before each convention is used; tokens and design system components only; every string in both dictionaries; all four widths in the visual check.

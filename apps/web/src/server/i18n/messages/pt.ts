@@ -20,6 +20,7 @@ export const pt = {
   header: {
     skipToContent: "Saltar para o conteúdo",
     logoAlt: "LockMX, página inicial",
+    menu: "Menu",
   },
   footer: {
     logoAlt: "LockMX Modular System",
