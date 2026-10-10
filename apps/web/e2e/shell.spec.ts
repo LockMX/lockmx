@@ -123,6 +123,9 @@ for (const locale of locales) {
 
         await page.setViewportSize({ width: 768, height: 640 });
         await expect(button).toBeHidden();
+        // Checked here, before narrowing again: two quick resizes can reach the page as one.
+        // The button is hidden now, so it is not found by its role.
+        await expect(main.locator("button")).toHaveAttribute("aria-expanded", "false");
         await expect(main.getByRole("link", { name: locale.home })).toBeVisible();
 
         await page.setViewportSize({ width: 767, height: 640 });

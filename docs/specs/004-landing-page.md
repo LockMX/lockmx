@@ -293,6 +293,24 @@ Decided by the owner on 2026-10-09:
 - With the room this gives, the header logo is back at `h-6` and the gap at `4` on narrow screens; the tight fit noted in T5a no longer applies.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, which includes the 320 px checks with the menu open.
 
+### T6 (2026-10-10)
+
+- Sources read: the bundled `03-api-reference/02-components/image.md` (`priority` is deprecated since 16; `loading="eager"` is the advice for an image above the fold) and `link.md` ("Scrolling to an `id`", "Scroll offset with sticky headers"); `node_modules/next/dist/client/components/layout-router.js`, where the handler in use scrolls to the fragment and leaves the focus untouched.
+- **Sections.** `components/site/sections/`: `hero`, `system`, `parts`, `benefits`, `buy`, `complements`, `contact`, and a shared `section` (the named region with the eyebrow and the `h2`). Their ids are in `lib/site/sections.ts`, in English in both locales.
+- **Copy.** The system text and the parts text are the client's two paragraphs. The EN-only opening line is the first sentence of the EN system text, because both dictionaries must have the same keys. The repeated "sem" is removed. Everything else is working copy restating those texts, for the client to review: the hero sentence, the headings, the one line of each part and of each benefit, the buy block and the contact sentence.
+- **Main action.** There is no shop yet, so the hero and the buy block say "Fala connosco" / "Get in touch" and lead to the contact section. The shop spec changes label and destination.
+- **Complements.** The block uses the product types of the client's short description (tyres, parts, accessories). To be checked against what the shop sells at launch (decision 4 of "Copy").
+- **Meta description.** `metadata.description` is now the client's short description without the emoji; the EN text is a translation of it. It is the default of every page.
+- **Owner decision: four icons join the closed set** for the parts cards: `hard-hat`, `footprints`, `shirt`, `shelving-unit` (29 icons). They are approximations and give way to photographs.
+- **Hero image.** `M5.png` of the identity pack, exported to `public/brand/mockups/sign-black.jpg` at 1600 px (386 KB; the original is 6.6 MB), for the owner to judge on the page. `M4.png` is the alternative.
+- **Navigation.** The header and the footer link to Sistema, Peças, Porquê and Contacto, as `/{locale}#id` so they work from any page, with the focus following; an end-to-end test follows one from the not-found page. At 768 px the five links fit beside the logo.
+- **Deviation, raised for the owner:** the task asks for every section to be reachable from the header. The buy block and the complements block have an id and no header link: seven links would not fit at `md`, and the buy block only repeats the main action. The hero is the top of the page, reached by "Início".
+- **Tests.** The end-to-end tests were written first and seen failing. The unit tests of the sections were written together with the components, not before them.
+- **Focus follows a section link.** `components/site/section-focus.tsx`, mounted once by the marketing layout, moves the focus to the section when a link of the open page leads to it, when a page opens with a fragment (also when it was reached from another page, which the layout sees as a change of path) and on `hashchange`. The section has `tabindex="-1"`. The listener is attached in a layout effect: with a passive effect, WebKit missed a click made right after hydration (7 of 40 runs; 0 of 80 after). This also settles the note of T5a: from the open menu, a section link ends with the focus on the section.
+- The "closes when the screen becomes wide" test of T5a now checks the closed state at 768 px, before narrowing again: two quick resizes could reach the page as one.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (55 files, 729 tests), `pnpm test:e2e` (342 passed, 2 skipped by design); screenshots in Chromium: `/pt` whole at 1024 and 1440 px, its top at 320 and 768 px, the parts and contact sections at 320 px, and the top of `/en` at 1024 px. One run of `pnpm test:e2e` ended with the runner crashing before any test (exit code -1073740791); the next run passed without a change.
+- Not checked: CI, a real phone, a screen reader, the rest of `/en` by eye, the other sections at 320 and 768 px by eye.
+
 ## Boundaries
 
 - Always: the test first, seen failing; the bundled Next.js docs read before each convention is used; tokens and design system components only; every string in both dictionaries; all four widths in the visual check.
