@@ -287,6 +287,12 @@ Decided by the owner on 2026-10-09:
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (49 files, 696 tests), `pnpm test:e2e` (206 passed, 2 skipped: the wide-screen test on the mobile project); the header was measured at 320 px in Chromium, Firefox and WebKit, in both locales.
 - Not checked: CI, a real phone, a screen reader.
 
+### Language switcher codes (2026-10-10)
+
+- **Owner decision, after T5a:** the language switcher shows "PT" and "EN" on every screen, in the header and in the footer. The name of the language follows the code for assistive technology only ("PT Português"), so the visible text is still part of the accessible name (WCAG 2.5.3).
+- With the room this gives, the header logo is back at `h-6` and the gap at `4` on narrow screens; the tight fit noted in T5a no longer applies.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, which includes the 320 px checks with the menu open.
+
 ## Boundaries
 
 - Always: the test first, seen failing; the bundled Next.js docs read before each convention is used; tokens and design system components only; every string in both dictionaries; all four widths in the visual check.
