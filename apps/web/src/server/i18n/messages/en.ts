@@ -109,6 +109,14 @@ export const en: Messages = {
       emailLabel: "Email",
     },
   },
+  legal: {
+    company: "Company information",
+    privacy: "Privacy policy",
+    cookies: "Cookie policy",
+    terms: "Terms and conditions",
+    pending: "Under construction",
+    home: "Back to home",
+  },
   notFound: {
     title: "Page not found",
     message: "The address you opened does not exist or has changed.",

@@ -1,5 +1,9 @@
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { SiteNavigation, type SiteNavigationItem } from "@/components/site/site-navigation";
+import {
+  SiteNavigation,
+  SiteNavigationLink,
+  type SiteNavigationItem,
+} from "@/components/site/site-navigation";
 import { Logo } from "@/components/ui";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -18,6 +22,8 @@ type SiteFooterProps = {
   navigationItems: SiteNavigationItem[];
   /** Title of the legal column and name of its landmark. */
   legalTitle: string;
+  /** The company page and the policy texts. */
+  legalItems: SiteNavigationItem[];
   complaintsBookLabel: string;
   languageLabel: string;
   copyright: string;
@@ -32,6 +38,7 @@ export function SiteFooter({
   navigationTitle,
   navigationItems,
   legalTitle,
+  legalItems,
   complaintsBookLabel,
   languageLabel,
   copyright,
@@ -57,6 +64,11 @@ export function SiteFooter({
           <p className={COLUMN_TITLE}>{legalTitle}</p>
           <nav aria-label={legalTitle}>
             <ul className="flex flex-col gap-2">
+              {legalItems.map((item) => (
+                <li key={item.href}>
+                  <SiteNavigationLink item={item} appearance="column" />
+                </li>
+              ))}
               <li>
                 <a
                   href={COMPLAINTS_BOOK_URL}

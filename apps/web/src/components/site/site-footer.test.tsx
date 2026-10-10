@@ -14,6 +14,10 @@ const props = {
   navigationTitle: "Navegação",
   navigationItems: [{ href: "/pt", label: "Início" }],
   legalTitle: "Legal",
+  legalItems: [
+    { href: "/pt/company", label: "Informação da empresa" },
+    { href: "/pt/privacy", label: "Política de privacidade" },
+  ],
   complaintsBookLabel: "Livro de Reclamações",
   languageLabel: "Idioma",
   copyright: "© 2026 LockMX",
@@ -49,6 +53,19 @@ describe("SiteFooter", () => {
     const legal = screen.getByRole("navigation", { name: "Legal" });
     const link = within(legal).getByRole("link", { name: "Livro de Reclamações" });
     expect(link.getAttribute("href")).toBe("https://www.livroreclamacoes.pt");
+  });
+
+  test("lists the legal pages from props before the Complaints Book", () => {
+    render(<SiteFooter {...props} />);
+
+    const legal = screen.getByRole("navigation", { name: "Legal" });
+    const links = within(legal).getAllByRole("link");
+    expect(links.map((link) => link.textContent)).toEqual([
+      "Informação da empresa",
+      "Política de privacidade",
+      "Livro de Reclamações",
+    ]);
+    expect(links[0].getAttribute("href")).toBe("/pt/company");
   });
 
   test("never links to the discontinued EU dispute platform", () => {
