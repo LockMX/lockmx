@@ -4,8 +4,6 @@ import { localizedPath } from "@/lib/site/public-paths";
 // The sections of the landing page. The ids are part of the address, so they
 // are the same in both locales, like the paths (spec 002).
 export const sectionIds = {
-  system: "system",
-  parts: "parts",
   why: "why",
   buy: "buy",
   complements: "complements",

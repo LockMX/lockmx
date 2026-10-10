@@ -4,9 +4,8 @@ import { Buy } from "@/components/site/sections/buy";
 import { Complements } from "@/components/site/sections/complements";
 import { Contact } from "@/components/site/sections/contact";
 import { Hero, type HeroImage } from "@/components/site/sections/hero";
-import { Parts } from "@/components/site/sections/parts";
-import { System } from "@/components/site/sections/system";
 import { contactEmail } from "@/lib/site/contact";
+import { localizedPath, modularSystemPath } from "@/lib/site/public-paths";
 import { sectionHref, sectionIds } from "@/lib/site/sections";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
@@ -25,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata({ locale, path: "/", description: metadata.description });
 }
 
-// The landing page: it presents the modular system and leads to contact.
+// The landing page: it presents the brand and leads to the modular system and to contact.
 export default async function Home() {
   const locale = await getCurrentLocale();
   const { home } = await getMessages(locale);
@@ -41,28 +40,10 @@ export default async function Home() {
         // Until the shop exists, the main action of the page leads to contact.
         primaryAction={{ href: contactHref, label: home.hero.primaryAction }}
         secondaryAction={{
-          href: sectionHref(locale, sectionIds.system),
+          href: localizedPath(locale, modularSystemPath),
           label: home.hero.secondaryAction,
         }}
         image={{ ...HERO_IMAGE, alt: home.hero.imageAlt }}
-      />
-      <System
-        id={sectionIds.system}
-        eyebrow={home.system.eyebrow}
-        title={home.system.title}
-        text={home.system.text}
-      />
-      <Parts
-        id={sectionIds.parts}
-        eyebrow={home.parts.eyebrow}
-        title={home.parts.title}
-        text={home.parts.text}
-        parts={[
-          { icon: "hard-hat", ...home.parts.helmets },
-          { icon: "footprints", ...home.parts.boots },
-          { icon: "shirt", ...home.parts.hangers },
-          { icon: "shelving-unit", ...home.parts.shelves },
-        ]}
       />
       <Benefits
         id={sectionIds.why}

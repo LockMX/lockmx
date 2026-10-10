@@ -6,6 +6,8 @@ type SectionProps = {
   /** The id a link leads to; the heading is named after it. */
   id: string;
   surface?: SectionSurface;
+  /** 1 when the section is the whole of its page. */
+  level?: 1 | 2;
   eyebrow: string;
   title: string;
   children?: React.ReactNode;
@@ -39,8 +41,16 @@ const TITLE_CLASSES: Record<SectionSurface, string> = {
  * eyebrow above it. It can take the focus, so a link to it moves the focus
  * there, but it is not a tab stop.
  */
-export function Section({ id, surface = "page", eyebrow, title, children }: SectionProps) {
+export function Section({
+  id,
+  surface = "page",
+  level = 2,
+  eyebrow,
+  title,
+  children,
+}: SectionProps) {
   const headingId = `${id}-heading`;
+  const Heading = level === 1 ? "h1" : "h2";
 
   return (
     <section
@@ -60,7 +70,7 @@ export function Section({ id, surface = "page", eyebrow, title, children }: Sect
           >
             {eyebrow}
           </p>
-          <h2
+          <Heading
             id={headingId}
             className={classNames(
               "font-display text-display-sm leading-display font-extrabold tracking-display uppercase italic md:text-display-md",
@@ -68,7 +78,7 @@ export function Section({ id, surface = "page", eyebrow, title, children }: Sect
             )}
           >
             {title}
-          </h2>
+          </Heading>
         </div>
         {children}
       </div>

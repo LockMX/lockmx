@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SkipLink } from "@/components/site/skip-link";
 import { legalPageHref, legalPages } from "@/lib/site/legal-pages";
+import { localizedPath, modularSystemPath } from "@/lib/site/public-paths";
 import { sectionHref, sectionIds } from "@/lib/site/sections";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
@@ -20,8 +21,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
   const homeHref = `/${locale}`;
   const navigationItems = [
     { href: homeHref, label: navigation.home },
-    { href: sectionHref(locale, sectionIds.system), label: navigation.system },
-    { href: sectionHref(locale, sectionIds.parts), label: navigation.parts },
+    { href: localizedPath(locale, modularSystemPath), label: navigation.modularSystem },
     { href: sectionHref(locale, sectionIds.why), label: navigation.why },
     { href: sectionHref(locale, sectionIds.contact), label: navigation.contact },
   ];

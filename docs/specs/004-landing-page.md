@@ -199,6 +199,13 @@ Decided by the owner on 2026-10-09:
 - Tests: a unit test that every mandatory field is present and non-empty; end-to-end for the footer link and the presence of each labelled value in both locales.
 - Commit: `feat: add company information and policy pages`
 
+### T6a. Modular system page
+- Added on 2026-10-10 by the owner, after seeing the landing page of T6.
+- Description: the system section and the parts section of T6 become one section on its own page, `/modular-system`, reached from the header and the footer through one link, "Sistema modular", which replaces "Sistema" and "Peças". The secondary action of the hero leads to it. The landing page keeps the hero, the benefits, the buy block, the complements and the contact section.
+- Acceptance criteria: the page is in both locales with one `h1`, its own title and canonical address, and is in the sitemap; the header link is marked as the current page on it; no sideways scroll from 320 px.
+- Tests: unit tests for the section; end-to-end for the links that lead to the page, its content and its head, in both locales and on the mobile project.
+- Commit: `feat: move the modular system to its own page`
+
 ### T7a. Placeholder legal pages
 - Added on 2026-10-10 by the owner, to move ahead of T7 while the client's data and texts are missing.
 - Description: the routes `/company`, `/privacy`, `/cookies` and `/terms` exist in both locales and are linked from the legal column of the footer. Each page shows its name and a line saying it is being prepared. T7 replaces each placeholder with its content.
@@ -328,6 +335,21 @@ Decided by the owner on 2026-10-09:
 - **Before launch:** the placeholders do not meet `../compliance/site-information-and-complaints.md`. The site cannot leave "coming soon" until T7 is done.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (57 files, 734 tests), `pnpm test:e2e` (478 passed, 2 skipped by design).
 - Not checked: CI; the pages by eye.
+
+### Language switcher underline (2026-10-10)
+
+- **Owner decision:** the underline marks the language in use, as the bar marks the current page in the navigation. The other language is not underlined until it is hovered. This replaces the note of T3 ("bold and not underlined"): the current language is bold and underlined.
+
+### T6a (2026-10-10)
+
+- `components/site/sections/modular-system.tsx` replaces `system.tsx` and `parts.tsx`: the two paragraphs of the client, then the four cards. `Section` takes a heading level, so the section is the `h1` of its page and the cards are `h2`.
+- The path is `/modular-system` in both locales. The owner wrote "sistema-modular"; addresses are the same in both locales and in English (spec 002, and `/company`, `/privacy`), so the English form was used. Raised for the owner.
+- The dictionaries have `modularSystem` in place of `home.system` and `home.parts`. The title of the page in the browser and its description are working copy.
+- The section ids `system` and `parts` are gone; the header has Início, Sistema modular, Porquê, Contacto.
+- The tests were written together with the code, not before it.
+- **Not built, raised with the owner:** a search bar under the hero actions, a "Destaques" carousel of products after the hero, and cards for product types. They need the catalogue (Shopify, ADR 0014) and a carousel, which is a new design system component; this spec builds nothing that talks to the shop and shows no product. They belong to the shop idea and spec.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (58 files, 735 tests), `pnpm test:e2e` (534 passed, 2 skipped by design); the page seen at 1440 px and its top at 320 px, in Chromium, `/pt` only.
+- Not checked: CI, a real phone, a screen reader.
 
 ## Boundaries
 

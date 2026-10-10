@@ -7,22 +7,17 @@ const locales = [
     menu: "Menu",
     title: "Lock it, send it!",
     headings: [
-      "Um quartel-general sobre rodas",
-      "Cada peça no seu lugar",
       "Mais tempo a rodar",
       "Pronto para arrumar a carrinha?",
       "Tudo para motocross",
       "Fala connosco",
     ],
     sections: [
-      { link: "Sistema", id: "system", heading: "Um quartel-general sobre rodas" },
-      { link: "Peças", id: "parts", heading: "Cada peça no seu lugar" },
       { link: "Porquê", id: "why", heading: "Mais tempo a rodar" },
       { link: "Contacto", id: "contact", heading: "Fala connosco" },
     ],
     primaryAction: "Fala connosco",
     secondaryAction: "Conhece o sistema",
-    parts: ["Suportes para capacetes", "Suportes para botas", "Cabides", "Prateleiras modulares"],
     description: /^A tua loja online de motocross\./,
   },
   {
@@ -31,22 +26,17 @@ const locales = [
     menu: "Menu",
     title: "Lock it, send it!",
     headings: [
-      "A command center on wheels",
-      "Every part in its place",
       "More time riding",
       "Ready to sort out your van?",
       "Everything for motocross",
       "Get in touch",
     ],
     sections: [
-      { link: "System", id: "system", heading: "A command center on wheels" },
-      { link: "Parts", id: "parts", heading: "Every part in its place" },
       { link: "Why", id: "why", heading: "More time riding" },
       { link: "Contact", id: "contact", heading: "Get in touch" },
     ],
     primaryAction: "Get in touch",
     secondaryAction: "See the system",
-    parts: ["Helmet mounts", "Boot mounts", "Hangers", "Modular shelves"],
     description: /^Your online motocross shop\./,
   },
 ];
@@ -96,12 +86,6 @@ for (const locale of locales) {
       }
     });
 
-    test("lists the four parts of the system", async ({ page }) => {
-      const parts = page.getByRole("main").locator("#parts");
-
-      await expect(parts.getByRole("heading", { level: 3 })).toHaveText(locale.parts);
-    });
-
     test("moves to each section from the header and the focus follows", async ({
       page,
       isMobile,
@@ -123,7 +107,7 @@ for (const locale of locales) {
       }
     });
 
-    test("the hero actions are reached with the keyboard and lead to their sections", async ({
+    test("the hero actions are reached with the keyboard and lead where they say", async ({
       page,
     }) => {
       const hero = page.getByRole("region", { name: locale.title });
@@ -131,13 +115,10 @@ for (const locale of locales) {
       const secondary = hero.getByRole("link", { name: locale.secondaryAction });
 
       await expect(primary).toHaveAttribute("href", `${locale.path}#contact`);
-      await expect(secondary).toHaveAttribute("href", `${locale.path}#system`);
+      await expect(secondary).toHaveAttribute("href", `${locale.path}/modular-system`);
 
       await secondary.focus();
       await expect(secondary).toBeFocused();
-      await page.keyboard.press("Enter");
-      await expect(page).toHaveURL(new RegExp(`${locale.path}#system$`));
-      await expect(page.locator("#system")).toBeFocused();
 
       await primary.focus();
       await expect(primary).toBeFocused();

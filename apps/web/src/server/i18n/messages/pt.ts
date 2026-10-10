@@ -17,8 +17,7 @@ export const pt = {
     main: "Principal",
     footer: "Rodapé",
     home: "Início",
-    system: "Sistema",
-    parts: "Peças",
+    modularSystem: "Sistema modular",
     why: "Porquê",
     contact: "Contacto",
   },
@@ -36,6 +35,31 @@ export const pt = {
     // {year} is replaced by the current year.
     copyright: "© {year} LockMX",
   },
+  modularSystem: {
+    eyebrow: "Sistema modular LockMX",
+    title: "Um quartel-general sobre rodas",
+    // The name of the page in the browser tab and in search results.
+    pageTitle: "Sistema modular",
+    description: "O sistema modular LockMX organiza o teu equipamento dentro da carrinha: suportes para capacetes e botas, cabides e prateleiras modulares.",
+    systemText: "Criado para aventureiros, riders e todos os que respiram desportos de ação, o sistema modular LockMX foi pensado para acompanhar o teu ritmo — sem compromissos. Transforma a tua campervan, motovan ou carrinha num verdadeiro quartel-general sobre rodas, totalmente funcional e pronto para qualquer missão.",
+    partsText: "Com suportes dedicados para capacetes, botas, cabides e prateleiras modulares, cada peça encaixa num sistema inteligente que maximiza o espaço, mantém o equipamento no sítio certo e resiste ao uso duro da estrada, do pó e da lama. Tudo com um design clean, técnico e cheio de atitude.",
+    helmets: {
+      title: "Suportes para capacetes",
+      text: "Suportes dedicados para os teus capacetes.",
+    },
+    boots: {
+      title: "Suportes para botas",
+      text: "Suportes dedicados para as tuas botas.",
+    },
+    hangers: {
+      title: "Cabides",
+      text: "Para pendurar o equipamento no sítio certo.",
+    },
+    shelves: {
+      title: "Prateleiras modulares",
+      text: "Prateleiras que encaixam no sistema.",
+    },
+  },
   home: {
     hero: {
       eyebrow: "Sistema modular LockMX",
@@ -46,32 +70,6 @@ export const pt = {
       primaryAction: "Fala connosco",
       secondaryAction: "Conhece o sistema",
       imageAlt: "Placa preta com o logótipo LockMX Modular System numa parede de pedra.",
-    },
-    system: {
-      eyebrow: "O sistema",
-      title: "Um quartel-general sobre rodas",
-      text: "Criado para aventureiros, riders e todos os que respiram desportos de ação, o sistema modular LockMX foi pensado para acompanhar o teu ritmo — sem compromissos. Transforma a tua campervan, motovan ou carrinha num verdadeiro quartel-general sobre rodas, totalmente funcional e pronto para qualquer missão.",
-    },
-    parts: {
-      eyebrow: "As peças",
-      title: "Cada peça no seu lugar",
-      text: "Com suportes dedicados para capacetes, botas, cabides e prateleiras modulares, cada peça encaixa num sistema inteligente que maximiza o espaço, mantém o equipamento no sítio certo e resiste ao uso duro da estrada, do pó e da lama. Tudo com um design clean, técnico e cheio de atitude.",
-      helmets: {
-        title: "Suportes para capacetes",
-        text: "Suportes dedicados para os teus capacetes.",
-      },
-      boots: {
-        title: "Suportes para botas",
-        text: "Suportes dedicados para as tuas botas.",
-      },
-      hangers: {
-        title: "Cabides",
-        text: "Para pendurar o equipamento no sítio certo.",
-      },
-      shelves: {
-        title: "Prateleiras modulares",
-        text: "Prateleiras que encaixam no sistema.",
-      },
     },
     why: {
       eyebrow: "Porquê LockMX",
