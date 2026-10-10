@@ -199,6 +199,13 @@ Decided by the owner on 2026-10-09:
 - Tests: a unit test that every mandatory field is present and non-empty; end-to-end for the footer link and the presence of each labelled value in both locales.
 - Commit: `feat: add company information and policy pages`
 
+### T7a. Placeholder legal pages
+- Added on 2026-10-10 by the owner, to move ahead of T7 while the client's data and texts are missing.
+- Description: the routes `/company`, `/privacy`, `/cookies` and `/terms` exist in both locales and are linked from the legal column of the footer. Each page shows its name and a line saying it is being prepared. T7 replaces each placeholder with its content.
+- Acceptance criteria: each page is one click from every page; it has its own title; it is not indexed and not in the sitemap while it is a placeholder; no sideways scroll at 320 px.
+- Tests: unit tests for the list of pages, the placeholder view and the footer; end-to-end for the footer links, the pages and the sitemap, in both locales.
+- Commit: `feat: add placeholder legal pages`
+
 ### T8. Architecture, checklist and status
 - Description: update `docs/architecture.md` (the `(marketing)` group, `components/site/`, `server/site/`, `lib/site/`, `e2e/`, the error pages, the `noindex` header of the switch) and `apps/web/AGENTS.md` where it lists what exists; write `docs/checklists/03-public-site.md` from what T1 to T7 did and add it to `docs/checklists/README.md`; set this spec to `done`. If T7 is still blocked, the spec stays `in progress` and the checklist says so.
 - Planned files: `docs/architecture.md`, `apps/web/AGENTS.md`, `docs/checklists/03-public-site.md`, `docs/checklists/README.md`, this spec.
@@ -310,6 +317,17 @@ Decided by the owner on 2026-10-09:
 - The "closes when the screen becomes wide" test of T5a now checks the closed state at 768 px, before narrowing again: two quick resizes could reach the page as one.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (55 files, 729 tests), `pnpm test:e2e` (342 passed, 2 skipped by design); screenshots in Chromium: `/pt` whole at 1024 and 1440 px, its top at 320 and 768 px, the parts and contact sections at 320 px, and the top of `/en` at 1024 px. One run of `pnpm test:e2e` ended with the runner crashing before any test (exit code -1073740791); the next run passed without a change.
 - Not checked: CI, a real phone, a screen reader, the rest of `/en` by eye, the other sections at 320 and 768 px by eye.
+
+### T7a (2026-10-10)
+
+- Source read: the bundled `04-functions/generate-metadata.md`, `robots`.
+- `lib/site/legal-pages.ts` lists the four pages and their paths. The four routes share `server/site/pending-legal-page.tsx` (metadata and view); a route stops using it when T7 gives it content.
+- The owner asked for a hardcoded "Em implementação". The line is in the dictionaries instead ("Em implementação" / "Under construction"), because the project allows no hardcoded visible string; the result on the page is the same.
+- The placeholders send `noindex` and are not in `publicPaths`, so not in the sitemap: a page without content should not reach search results. T7 adds each path to `publicPaths` and removes the `noindex` with the content.
+- The footer takes the legal links as a prop and shows them before the Complaints Book link; the current page is marked.
+- **Before launch:** the placeholders do not meet `../compliance/site-information-and-complaints.md`. The site cannot leave "coming soon" until T7 is done.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (57 files, 734 tests), `pnpm test:e2e` (478 passed, 2 skipped by design).
+- Not checked: CI; the pages by eye.
 
 ## Boundaries
 

@@ -111,6 +111,15 @@ export const pt = {
       emailLabel: "Email",
     },
   },
+  // The pages of the legal column of the footer. Their content waits for the client.
+  legal: {
+    company: "Informação da empresa",
+    privacy: "Política de privacidade",
+    cookies: "Política de cookies",
+    terms: "Termos e condições",
+    pending: "Em implementação",
+    home: "Voltar ao início",
+  },
   notFound: {
     title: "Página não encontrada",
     message: "O endereço que abriste não existe ou mudou.",

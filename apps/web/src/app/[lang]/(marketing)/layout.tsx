@@ -5,6 +5,7 @@ import { SectionFocus } from "@/components/site/section-focus";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SkipLink } from "@/components/site/skip-link";
+import { legalPageHref, legalPages } from "@/lib/site/legal-pages";
 import { sectionHref, sectionIds } from "@/lib/site/sections";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
@@ -14,7 +15,7 @@ const MAIN_ID = "main";
 // The shell of every public page: skip link, header, main content and footer.
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
   const locale = await getCurrentLocale();
-  const { navigation, header, footer, languageSwitcher, error } = await getMessages(locale);
+  const { navigation, header, footer, legal, languageSwitcher, error } = await getMessages(locale);
 
   const homeHref = `/${locale}`;
   const navigationItems = [
@@ -24,6 +25,10 @@ export default async function MarketingLayout({ children }: { children: React.Re
     { href: sectionHref(locale, sectionIds.why), label: navigation.why },
     { href: sectionHref(locale, sectionIds.contact), label: navigation.contact },
   ];
+  const legalItems = legalPages.map((page) => ({
+    href: legalPageHref(locale, page),
+    label: legal[page],
+  }));
   const copyright = footer.copyright.replace("{year}", String(new Date().getFullYear()));
 
   return (
@@ -51,6 +56,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
         navigationTitle={footer.navigationTitle}
         navigationItems={navigationItems}
         legalTitle={footer.legalTitle}
+        legalItems={legalItems}
         complaintsBookLabel={footer.complaintsBook}
         languageLabel={languageSwitcher.label}
         copyright={copyright}
