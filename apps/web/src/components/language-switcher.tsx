@@ -22,7 +22,8 @@ export function LanguageSwitcher({ label, current }: LanguageSwitcherProps) {
               href={switchLocalePath(pathname, locale)}
               lang={htmlLang[locale]}
               aria-current={locale === current ? "true" : undefined}
-              className="aria-[current=true]:font-bold aria-[current=true]:no-underline"
+              // The underline marks the language in use, as the bar marks the page in the navigation.
+              className="no-underline hover:underline aria-[current=true]:font-bold aria-[current=true]:underline"
             >
               {/* The code is what is seen; the name follows it in the accessible name. */}
               {localeCodes[locale]}{" "}
