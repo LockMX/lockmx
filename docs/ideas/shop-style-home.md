@@ -74,7 +74,7 @@ Decided by the owner on 2026-10-11: four cards, from the types the client's copy
 For the owner:
 
 - The design of the carousel in the Claude Design project: the owner creates it there from the brief in the spec, and it is read from here afterwards.
-- Where an example product card and a product type card lead while there are no product or category pages (open points 1 and 2 of the spec).
+- Which product type cards are shown: the four types of the client's copy, or only racks and tyres, which are the catalogue at launch (owner, 2026-10-11; open point 1 of the spec).
 - The final order of the landing page sections, after the layout is discussed with the client. Until then the page of spec 004 stays as it is, with "Porquê" under the hero, and the shop sections are added to it (owner, 2026-10-11).
 
 For the client:
