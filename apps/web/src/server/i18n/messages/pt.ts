@@ -109,6 +109,13 @@ export const pt = {
       emailLabel: "Email",
     },
   },
+  // The shop sections of the home page (spec 005).
+  shop: {
+    productTypes: {
+      modularSystem: "Sistema modular",
+      tyres: "Pneus",
+    },
+  },
   // The pages of the legal column of the footer. Their content waits for the client.
   legal: {
     company: "Informação da empresa",

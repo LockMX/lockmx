@@ -107,6 +107,12 @@ export const en: Messages = {
       emailLabel: "Email",
     },
   },
+  shop: {
+    productTypes: {
+      modularSystem: "Modular system",
+      tyres: "Tyres",
+    },
+  },
   legal: {
     company: "Company information",
     privacy: "Privacy policy",

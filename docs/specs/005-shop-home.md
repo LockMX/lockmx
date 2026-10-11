@@ -206,7 +206,14 @@ Where it differs from this spec or the project rules, and what T2 does:
 
 ## Task notes
 
-None yet.
+### T1 (2026-10-11)
+
+- `lib/shop/product.ts` has the types (`Money`, `ProductImage`, `ProductSummary`, `ProductTypeEntry`) and the product type keys, written to "Product data rules". `server/shop/example-catalogue.ts` has six example products, translated in the module, covering a reduced price, a price that varies, a product not for sale and no image (none has one, so the cards show the neutral placeholder). `server/shop/home-catalogue.ts` has `getFeaturedProducts` and `getProductTypes`; both are async, because T6 reads from the network.
+- The titles of the product types are in the dictionaries (`shop.productTypes`). The example titles are in the module: they stand in for text that will come from Shopify, already translated.
+- Not done here: the conversion of Shopify's decimal string to minor units (rule 1). It belongs to T6, where the string first exists.
+- `server/shop/` does not import `server-only`: it reads no secret, and the package does not resolve under Vitest. T5 settles how the Shopify modules are protected and still tested.
+- Nothing renders these modules yet, so the page is unchanged.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (747 tests, 59 files), `pnpm test:e2e` (534 passed, 2 skipped by design).
 
 ## Boundaries
 
