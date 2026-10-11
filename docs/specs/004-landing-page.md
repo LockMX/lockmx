@@ -351,6 +351,13 @@ Decided by the owner on 2026-10-09:
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (58 files, 735 tests), `pnpm test:e2e` (534 passed, 2 skipped by design); the page seen at 1440 px and its top at 320 px, in Chromium, `/pt` only.
 - Not checked: CI, a real phone, a screen reader.
 
+### T8 (2026-10-11)
+
+- `../architecture.md` has the `(marketing)` group, `components/site/`, `lib/site/`, `server/site/`, the files at the root of `app/` and a "Public site" section. `apps/web/AGENTS.md` says the group exists. `../checklists/03-public-site.md` is written from T1 to T7a and listed in the checklists index.
+- **The spec stays `in progress`:** T7 waits for the client. The checklist says so at its top.
+- Follow-up asked by the owner and not part of this spec: `../ideas/shop-style-home.md` (search bar in the hero, featured products carousel, product type cards).
+- Verified: every path named in the checklist and in the new rows of the architecture file exists (checked with a script). No code changed, so no test was run for this task.
+
 ## Boundaries
 
 - Always: the test first, seen failing; the bundled Next.js docs read before each convention is used; tokens and design system components only; every string in both dictionaries; all four widths in the visual check.
