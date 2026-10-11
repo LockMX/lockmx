@@ -39,11 +39,11 @@ Whatever the mechanism, `COMING_SOON` still covers the whole site until launch, 
 
 ### How the carousel moves
 
-Not decided. The owner asked whether an automatic carousel still allows moving it by hand.
+Decided by the owner on 2026-10-11: automatic, with a pause control. The owner had asked whether an automatic carousel still allows moving it by hand.
 
 - It does: an automatic carousel has the arrows, the swipe and the keyboard of a manual one, and also advances by itself.
-- What it adds is an obligation: content that moves by itself for more than five seconds needs a way to pause or stop it (WCAG 2.2.2, to be read at the official source when the component is designed), and it should stop while it has the focus or the pointer and under reduced motion.
-- Proposal: manual first (arrows, swipe, keyboard, scroll snap). Automatic movement can be added later as a prop of the same component, with the pause control, if the look asks for it.
+- What it adds is an obligation: content that starts moving by itself, lasts more than five seconds and is shown beside other content needs a way to pause, stop or hide it (WCAG 2.1, 2.2.2, level A, https://www.w3.org/WAI/WCAG21/Understanding/pause-stop-hide.html, read 2026-10-11). The APG carousel pattern (https://www.w3.org/WAI/ARIA/apg/patterns/carousel/, same date) adds that rotation stops while the carousel has the keyboard focus or the pointer over it.
+- Manual first, with automatic movement added later, was proposed and not taken.
 
 ### Product types
 
@@ -53,7 +53,7 @@ Decided by the owner on 2026-10-11: four cards, from the types the client's copy
 
 | Option | Assessment |
 |---|---|
-| Part of the shop spec, as its first tasks | The sections are the home of the shop and get their real data there. Proposed. |
+| Part of the shop spec, as its first tasks | The sections are the home of the shop and get their real data there. Decided by the owner on 2026-10-11. |
 | A spec of its own, before the shop idea | Faster to start, but builds the carousel and the cards without knowing the shape of Shopify's data, and may have to be redone. |
 
 ## Hidden assumptions
@@ -67,16 +67,15 @@ Decided by the owner on 2026-10-11: four cards, from the types the client's copy
 
 - Publishing example products, prices or a search that searches nothing.
 - Reading from Shopify, the cart, product pages, category pages: the shop spec.
-- Automatic movement of the carousel in the first version.
 - A new address or navigation entry for the shop: there is nothing behind it yet.
 
 ## Open questions
 
 For the owner:
 
-- Manual or automatic carousel (see above).
-- Whether this is built as the first tasks of the shop spec or as its own spec.
-- The design of the carousel in the Claude Design project: who starts it and when.
+- The design of the carousel in the Claude Design project: the owner creates it there from the brief in the spec, and it is read from here afterwards.
+- Where an example product card and a product type card lead while there are no product or category pages (open points 1 and 2 of the spec).
+- The final order of the landing page sections, after the layout is discussed with the client. Until then the page of spec 004 stays as it is, with "Porquê" under the hero, and the shop sections are added to it (owner, 2026-10-11).
 
 For the client:
 
@@ -86,4 +85,4 @@ For the client:
 
 ## Outcome
 
-None yet. Spec 004 records that these sections were asked for and not built (task notes of T6a).
+`../specs/005-shop-home.md` (draft, 2026-10-11).
