@@ -47,7 +47,7 @@ Decided by the owner on 2026-10-11: automatic, with a pause control. The owner h
 
 ### Product types
 
-Decided by the owner on 2026-10-11: four cards, from the types the client's copy names: modular system, tyres, parts, accessories. As placeholders, hidden together with "Destaques". The modular system card can already lead to `/modular-system`; the others have no destination until the shop has category pages.
+Decided by the owner on 2026-10-11: first four cards, from the types the client's copy names; then, the same day, only the two types the launch has, modular system and tyres, the others when they exist. Hidden together with "Destaques". The modular system card leads to `/modular-system`; tyres has no destination until the shop has category pages.
 
 ### Where the work goes
 
@@ -73,8 +73,7 @@ Decided by the owner on 2026-10-11: four cards, from the types the client's copy
 
 For the owner:
 
-- The design of the carousel in the Claude Design project: the owner creates it there from the brief in the spec, and it is read from here afterwards.
-- Which product type cards are shown: the four types of the client's copy, or only racks and tyres, which are the catalogue at launch (owner, 2026-10-11; open point 1 of the spec).
+- The carousel was designed in the Claude Design project and read on 2026-10-11; what is left to decide about it is open point 1 of the spec.
 - The final order of the landing page sections, after the layout is discussed with the client. Until then the page of spec 004 stays as it is, with "Porquê" under the hero, and the shop sections are added to it (owner, 2026-10-11).
 
 For the client:
@@ -85,4 +84,4 @@ For the client:
 
 ## Outcome
 
-`../specs/005-shop-home.md` (draft, 2026-10-11).
+`../specs/005-shop-home.md` (approved, 2026-10-11).
