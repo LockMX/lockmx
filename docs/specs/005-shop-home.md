@@ -58,18 +58,20 @@ Read on 2026-10-11 unless another date is given. A value marked "to confirm" is 
 4. **Carousel** (2026-10-11): automatic, with a pause control. A new design system component, designed in the Claude Design project first.
 5. **This is the start of the shop spec** (2026-10-11), so the cards and the search bar are born with the shape of the shop's data.
 6. **Addresses** stay in English and equal in both locales (spec 002).
+7. **Where an example product card leads** (2026-10-11): the contact section, until the product pages spec exists.
+8. **Where the product type cards lead** (2026-10-11): the modular system card leads to `/modular-system`; the others are plain cards without a link until category pages exist.
+9. **Catalogue at launch** (owner, 2026-10-11): racks and tyres. Some accessories come later.
 
 ## Open points
 
-1. **Where an example product card leads.** `ProductCard` needs an address, and there is no product page yet. Proposal: the contact section, until the product pages spec exists. To decide before T3.
-2. **Where the product type cards lead.** The modular system card can lead to `/modular-system`. The other three have no destination until category pages exist. Proposal: no link, a plain card, until then.
-3. **How many products the store has at launch.** With very few, a carousel may be the wrong component and a grid the right one. With the client.
-4. **Featured products in Shopify.** Proposal: one collection whose handle is a setting of the site (T6). To confirm with the client, who manages it in the admin.
-5. **Product photographs**, with the right to use them. With the client.
+1. **Which product type cards are shown.** Decision 1 names four types (modular system, tyres, parts, accessories); decision 9 says the launch has racks and tyres only. To decide before T4: the four cards, or only the types that have products.
+2. **How many products the store has at launch.** The types are known (decision 9), the number is not. With very few, a carousel may be the wrong component and a grid the right one. With the client.
+3. **Featured products in Shopify.** Proposal: one collection whose handle is a setting of the site (T6). To confirm with the client, who manages it in the admin.
+4. **Product photographs**, with the right to use them. With the client.
 
 ## Working branch
 
-`feat/005-shop-home`, created from `main` after spec 004 is merged, or from `feat/004-landing-page` if the owner prefers to keep working before that merge. This draft was written on `feat/004-landing-page`.
+`feat/005-shop-home` (owner, 2026-10-11: the spec lives on its own branch). It was created from `feat/004-landing-page`, which was not merged on that day, so it is rebased on `main` after spec 004 is merged.
 
 ## Conventions for every task
 
@@ -101,14 +103,14 @@ Added by this spec:
 - Commit: `feat: add carousel component`
 
 #### T3. Featured products section
-- Description: `components/site/sections/featured-products.tsx`: a named region ("Destaques") right after the hero, with the carousel of `ProductCard`s from `getFeaturedProducts`. A card of an example product shows the "Exemplo" mark (a `Badge`). Open point 1 decides where a card leads. With no products the section is not rendered.
+- Description: `components/site/sections/featured-products.tsx`: a named region ("Destaques") right after the hero, with the carousel of `ProductCard`s from `getFeaturedProducts`. A card of an example product shows the "Exemplo" mark (a `Badge`). A card leads to the contact section (decision 7). With no products the section is not rendered.
 - Planned files: the section and its test, `apps/web/src/app/[lang]/(marketing)/page.tsx`, dictionaries, `apps/web/e2e/shop-home.spec.ts`.
 - Acceptance criteria: the section follows the hero in both locales; every example card carries the mark; prices are formatted by `Price`; the heading order of the page still skips no level.
 - Tests: unit tests for the section (heading, one card per product, the mark, nothing with an empty list); end-to-end for its place in the page and the carousel controls, in both locales and on the mobile project.
 - Commit: `feat: add featured products section`
 
 #### T4. Product type cards and the hero search bar
-- Description: `components/site/sections/product-types.tsx`: one card per entry of `getProductTypes`, after "Destaques"; a card with an address is a link, one without is a plain card (open point 2). The hero gains an optional search slot under its actions, as wide as the two actions together, filled with `SearchBar`; in this task it has no suggestions and its submission leads nowhere, which is recorded in the task notes as the state T7 ends.
+- Description: `components/site/sections/product-types.tsx`: one card per entry of `getProductTypes`, after "Destaques"; a card with an address is a link, one without is a plain card (decision 8; open point 1 decides which cards exist). The hero gains an optional search slot under its actions, as wide as the two actions together, filled with `SearchBar`; in this task it has no suggestions and its submission leads nowhere, which is recorded in the task notes as the state T7 ends.
 - Planned files: the section and its test, `apps/web/src/components/site/sections/hero.tsx` and test, the page, dictionaries, `apps/web/e2e/shop-home.spec.ts`.
 - Acceptance criteria: four cards in both locales; the modular system card leads to `/modular-system`; the search bar has a label from the dictionaries and does not break the hero at 320 px; the hero still works without the search slot.
 - Tests: unit tests for the cards (link or not) and for the hero with and without the slot; end-to-end for both in the page.
@@ -124,7 +126,7 @@ Added by this spec:
 - Commit: `feat: add shopify storefront client`
 
 #### T6. Featured products and product types from Shopify
-- Description: `server/shopify/products.ts` reads the featured collection and maps it to the product summary of T1, with `@inContext` for the locale; `home-catalogue.ts` uses it when the Shopify variables are set and the example data otherwise. Read first: the `Image` object, the language codes and the behaviour for a missing translation, and the bundled docs on caching and on `images.remotePatterns`. The handle of the featured collection is a setting of the site (open point 4). A failed read shows the section's error or empty state, never a broken page.
+- Description: `server/shopify/products.ts` reads the featured collection and maps it to the product summary of T1, with `@inContext` for the locale; `home-catalogue.ts` uses it when the Shopify variables are set and the example data otherwise. Read first: the `Image` object, the language codes and the behaviour for a missing translation, and the bundled docs on caching and on `images.remotePatterns`. The handle of the featured collection is a setting of the site (open point 3). A failed read shows the section's error or empty state, never a broken page.
 - Planned files: `apps/web/src/server/shopify/products.ts` and test, `home-catalogue.ts`, `apps/web/next.config.ts`, the sections if they need an error state, `docs/architecture.md`.
 - Acceptance criteria: with the variables set, the cards show the store's products, in the language of the page, with Shopify's prices; without them, the example data, still marked; a Shopify failure does not take the landing page down.
 - Tests: unit tests for the mapping from a recorded response shape to the DTO, for both locales, for a product without image and for the failure path. The check against the real store is manual and recorded in the task notes with its date.
