@@ -1,6 +1,6 @@
 # 005. Shop: connection to Shopify and shop-style home
 
-- Status: draft (awaiting the owner's approval and the prerequisites below)
+- Status: approved (owner, 2026-10-11); phase B waits for prerequisites 2 to 5
 - Idea: `../ideas/shop-style-home.md`
 - Decisions: `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0013-e2e-test-runner.md`, `../decisions/0010-icons-lucide.md`
 
@@ -23,7 +23,7 @@ This is the first of the shop specs. Product pages, category pages, the cart, th
 
 Phase A (T1 to T4) needs only the first one. Phase B (T5 to T8) is blocked until all are true.
 
-1. **Carousel design.** The carousel is designed in the Claude Design project and read from there, as the storefront kit was. The brief for it is in "Carousel brief" below.
+1. **Carousel design.** Done on 2026-10-11: the owner designed it in the Claude Design project and it was read from there (read-only), as the storefront kit was. What it defines and where it differs from this spec is in "Carousel design" below.
 2. **A Shopify store** the frontend can read: the client's store or a development store. Not verified: whether one exists today.
 3. **The Headless channel** installed on that store with one storefront, and its Storefront API permissions set to read products and collections.
 4. **The private access token** of that storefront, given to the developer outside the repository, and the store domain (`<name>.myshopify.com`).
@@ -43,6 +43,11 @@ Read on 2026-10-11 unless another date is given. A value marked "to confirm" is 
 - Getting started with the Storefront API, https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/getting-started : the Headless channel creates a storefront with a public and a private token; permissions are set per storefront; at most 100 active storefronts and tokens per shop; private tokens can be rotated.
 - API versioning, https://shopify.dev/docs/api/usage/versioning : a version every three months, each supported at least 12 months; a request to an unsupported version is answered by the oldest supported one, and the `X-Shopify-API-Version` response header says which. Latest stable on the day read: `2026-10`, accessible until 2027-10-16.
 - `Product` object, https://shopify.dev/docs/api/storefront/latest/objects/Product : `id`, `handle`, `title`, `featuredImage`, `priceRange`, `compareAtPriceRange`, `availableForSale`, `productType`, `vendor`; needs the `unauthenticated_read_product_listings` access; `totalInventory` and metafields need a token. The fields of `Image` were not on the page read: to confirm in T6.
+- `Image` object, https://shopify.dev/docs/api/storefront/latest/objects/Image : `url` is `URL!` and takes a `transform` argument; `altText`, `width`, `height`, `id` and `thumbhash` are nullable (`width` and `height` are null when the image is not hosted by Shopify); `src`, `originalSrc` and `transformedSrc` are deprecated. Not on the page: the fields of `ImageTransformInput`. To confirm in T6.
+- `MoneyV2` object, https://shopify.dev/docs/api/storefront/latest/objects/MoneyV2 , and `Decimal` scalar, https://shopify.dev/docs/api/storefront/latest/scalars/Decimal : `amount` is `Decimal!`, "a signed decimal number, which supports arbitrary precision and is serialized as a string" (examples `"29.99"`, `"29.999"`); `currencyCode` is `CurrencyCode!`.
+- `ProductPriceRange` object, https://shopify.dev/docs/api/storefront/latest/objects/ProductPriceRange : `minVariantPrice` and `maxVariantPrice`, both `MoneyV2!`.
+- `Product` object, same page as above, read again: `id`, `handle`, `title`, `priceRange`, `compareAtPriceRange`, `availableForSale`, `productType` and `vendor` are non-null; `featuredImage` and `onlineStoreUrl` are nullable; `totalInventory` is nullable and needs a token. Not on the page: what `compareAtPriceRange` holds for a product without a compare-at price. To confirm in T6 against the store.
+- `collection` query, https://shopify.dev/docs/api/storefront/latest/queries/collection : takes `handle` or `id`, returns a nullable `Collection`; `Collection.products` takes `first`, `after`, `sortKey` (default `COLLECTION_DEFAULT`), `reverse` and `filters`.
 - `predictiveSearch` query, https://shopify.dev/docs/api/storefront/latest/queries/predictiveSearch : suggestions as the visitor types, for products, collections, pages and articles; `limit` from 1 to 10. Not read: the `search` query. To confirm in T7.
 - Languages, https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/markets/multiple-languages : `@inContext(language: ...)` returns translated titles and descriptions; the available languages come from the `localization` object and are set in the shop's Markets settings. Not on the page: the code for Portuguese of Portugal and what is returned when a translation is missing. To confirm in T6 against the store.
 - Cart guide, https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/cart/manage : read only to bound this spec; the cart is a later spec.
@@ -52,7 +57,7 @@ Read on 2026-10-11 unless another date is given. A value marked "to confirm" is 
 
 ## Decisions taken with the owner
 
-1. **Structure** (2026-10-10 and 2026-10-11): search bar inside the hero, under its two actions and as wide as the two together; "Destaques" right after the hero; four product type cards: modular system, tyres, parts, accessories.
+1. **Structure** (2026-10-10 and 2026-10-11): search bar inside the hero, under its two actions and as wide as the two together; "Destaques" right after the hero; one card per product type (two at launch, decision 10).
 2. **Placeholders** (2026-10-11): example products with name, price and a neutral image, each card with a visible "Exemplo" mark. The search bar is in place for its look and searches nothing until T7.
 3. **Launch without the shop** (2026-10-11): the search bar and the shop sections are hidden by hand for that launch and shown again only after the integration is complete. No environment switch.
 4. **Carousel** (2026-10-11): automatic, with a pause control. A new design system component, designed in the Claude Design project first.
@@ -61,10 +66,24 @@ Read on 2026-10-11 unless another date is given. A value marked "to confirm" is 
 7. **Where an example product card leads** (2026-10-11): the contact section, until the product pages spec exists.
 8. **Where the product type cards lead** (2026-10-11): the modular system card leads to `/modular-system`; the others are plain cards without a link until category pages exist.
 9. **Catalogue at launch** (owner, 2026-10-11): racks and tyres. Some accessories come later.
+10. **Product type cards** (owner, 2026-10-11): only the two types that have products, the others when they exist. The racks are the modular system (its page names the supports for helmets and boots), so the cards are: modular system, leading to `/modular-system`, and tyres, without a link.
+
+## Product data rules
+
+The shapes of T1 follow what the Storefront API returns (see "Sources"), so T6 is a mapping and no component changes.
+
+1. **Money.** Shopify gives a decimal string and a currency code. The DTO keeps whole minor units (`amountCents`) and a required `currencyCode`, which is what `Price` takes. T6 converts the string without passing through a floating-point number; an amount with more decimal places than the currency has is rejected, not rounded, and the product is left out. The frontend never adds, multiplies or discounts.
+2. **One price per card.** `price` is `priceRange.minVariantPrice`. `priceVaries` says the maximum differs, so a card can say "from" ("Desde"); the label and whether it is shown are decided in T3.
+3. **Compare-at price** is optional in the DTO. T6 leaves it out unless it is greater than the price; what Shopify returns when there is none is confirmed there.
+4. **Image** is optional (`featuredImage` is nullable): `url`, and optional `altText`, `width` and `height`. `ProductCard` fills its box, so it does not need the dimensions.
+5. **Stock.** Only `availableForSale` is carried. `ProductCard` also has a "low" state; it needs an inventory count (token only) and a threshold nobody decided, so it is not used until the owner sets one.
+6. **Product type.** `productType` is free text written by the merchant: it is shown, never used as a key. The product type cards have keys of ours.
+7. **Identity.** `id` is Shopify's global id (an opaque string) and `handle` is what a product address will use.
+8. **Locale.** Amounts are written for `htmlLang[locale]` (`pt-PT`, `en`), not the route segment.
 
 ## Open points
 
-1. **Which product type cards are shown.** Decision 1 names four types (modular system, tyres, parts, accessories); decision 9 says the launch has racks and tyres only. To decide before T4: the four cards, or only the types that have products.
+1. **Carousel design against the rules of the project** ("Carousel design" below): three new icons, the look of its buttons, and the slant motif appearing in the indicator and in each card's badge. To decide before T2.
 2. **How many products the store has at launch.** The types are known (decision 9), the number is not. With very few, a carousel may be the wrong component and a grid the right one. With the client.
 3. **Featured products in Shopify.** Proposal: one collection whose handle is a setting of the site (T6). To confirm with the client, who manages it in the admin.
 4. **Product photographs**, with the right to use them. With the client.
@@ -110,9 +129,9 @@ Added by this spec:
 - Commit: `feat: add featured products section`
 
 #### T4. Product type cards and the hero search bar
-- Description: `components/site/sections/product-types.tsx`: one card per entry of `getProductTypes`, after "Destaques"; a card with an address is a link, one without is a plain card (decision 8; open point 1 decides which cards exist). The hero gains an optional search slot under its actions, as wide as the two actions together, filled with `SearchBar`; in this task it has no suggestions and its submission leads nowhere, which is recorded in the task notes as the state T7 ends.
+- Description: `components/site/sections/product-types.tsx`: one card per entry of `getProductTypes`, after "Destaques"; a card with an address is a link, one without is a plain card (decisions 8 and 10). The hero gains an optional search slot under its actions, as wide as the two actions together, filled with `SearchBar`; in this task it has no suggestions and its submission leads nowhere, which is recorded in the task notes as the state T7 ends.
 - Planned files: the section and its test, `apps/web/src/components/site/sections/hero.tsx` and test, the page, dictionaries, `apps/web/e2e/shop-home.spec.ts`.
-- Acceptance criteria: four cards in both locales; the modular system card leads to `/modular-system`; the search bar has a label from the dictionaries and does not break the hero at 320 px; the hero still works without the search slot.
+- Acceptance criteria: two cards in both locales; the modular system card leads to `/modular-system`; the search bar has a label from the dictionaries and does not break the hero at 320 px; the hero still works without the search slot.
 - Tests: unit tests for the cards (link or not) and for the hero with and without the slot; end-to-end for both in the page.
 - Commit: `feat: add product type cards and hero search bar`
 
@@ -156,6 +175,34 @@ For the Claude Design project. Written so the design answers what T2 needs.
 - **States to draw:** rotating, paused, first and last position (or a loop), hover and focus of each control, a single card (no controls needed), an empty row.
 - **Surfaces:** on the page surface and on the subtle surface. Tokens of the design system only; the slant motif at most once.
 - **Motion:** slides only, with the durations and easings of the design system.
+
+## Carousel design
+
+Read on 2026-10-11 from `components/carousel/` of the Claude Design project (`Carousel.jsx`, `Carousel.d.ts`, `Carousel.prompt.md`, `Carousel Preview.html`), read-only. It is data for T2, not code to copy: it uses inline styles and fixed Portuguese strings.
+
+What it defines:
+
+- One, two, three or four cards per view from 0, 704, 960 and 1216 px of the carousel's own width (screens of 320, 768, 1024 and 1440 px with the shop's gutters). It moves a whole page at a time, every 6 s, with `--duration-slow` and `--ease-in-out`; it loops by default.
+- Controls in this order: pause or play, position (a bar with a skewed marker and "n / total"), previous, next. From 704 px they sit on the heading's line, at the right, 40 px each; below that, under the row, 48 px each, with the position bar filling the middle.
+- Buttons: card surface with a border at rest; filled black on hover; filled yellow with a black border and the focus ring on keyboard focus; sunken and faded when disabled. Pause and play are never disabled.
+- One card: no controls and no rotation. No cards: a message with an icon in place of the row.
+- Reduced motion: starts paused and never slides; previous and next change the page at once.
+- Accessibility as drawn: a region with `aria-roledescription`, each slide a group with "n de total", slides out of view `aria-hidden` and `inert`, a visually hidden live text with the page, `off` while rotating.
+- Touch: a swipe of more than 48 px changes the page.
+
+Where it differs from this spec or the project rules, and what T2 does:
+
+| Design | Rule | T2 |
+|---|---|---|
+| Icons `pause`, `play`, `package-open` | Not in the closed set (`arrow-left` and `arrow-right` are); a new icon is asked first | Open point 1 |
+| Its own button, `CarouselButton` | `IconButton` exists, with other hover and focus looks | Open point 1 |
+| Skewed position marker, and the slant badge of each `ProductCard` | The slant at most once | Open point 1 |
+| Rotation resumes when the focus or the pointer leaves | APG: after keyboard focus it does not resume until the visitor activates the control | Follows the APG |
+| Cards per view measured with `ResizeObserver` | The server renders before any measure, so the row would jump after hydration | Sizes the slides in CSS (container queries, to confirm in the Tailwind docs) |
+| A track moved with `transform` | "Boundaries" says scroll snap unless the design needs more | Decided in T2 after reading both against paging and `inert`; recorded in its notes |
+| An empty state | T3 does not render the section without products | The component has the empty state; the section still hides itself |
+| Fixed Portuguese strings, including the role descriptions | Every string through props, from the dictionaries | Props |
+| Inline styles, `--lmx-ink-950` | Tokens through Tailwind classes; no primitive colour in a component | Semantic tokens |
 
 ## Task notes
 
