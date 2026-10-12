@@ -71,6 +71,14 @@ export const pt = {
       secondaryAction: "Conhece o sistema",
       imageAlt: "Placa preta com o logótipo LockMX Modular System numa parede de pedra.",
     },
+    featured: {
+      eyebrow: "Produtos",
+      title: "Destaques",
+      carousel: "Produtos em destaque",
+      empty: "Ainda não há produtos em destaque.",
+      // On every card of an example product, until the catalogue exists.
+      example: "Exemplo",
+    },
     why: {
       eyebrow: "Porquê LockMX",
       title: "Mais tempo a rodar",
@@ -114,6 +122,24 @@ export const pt = {
     productTypes: {
       modularSystem: "Sistema modular",
       tyres: "Pneus",
+    },
+    product: {
+      inStock: "Em stock",
+      outOfStock: "Esgotado",
+      // Read before each amount of a reduced price.
+      compareAt: "Antes",
+      current: "Agora",
+    },
+    carousel: {
+      // Said in place of "region" and "group" by assistive technology.
+      roleDescription: "carrossel",
+      slideRoleDescription: "diapositivo",
+      // {index} and {total} are replaced by the position of the slide.
+      slide: "{index} de {total}",
+      pause: "Pausar rotação",
+      play: "Retomar rotação",
+      previous: "Anterior",
+      next: "Seguinte",
     },
   },
   // The pages of the legal column of the footer. Their content waits for the client.

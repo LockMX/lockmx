@@ -69,6 +69,13 @@ export const en: Messages = {
       secondaryAction: "See the system",
       imageAlt: "Black sign with the LockMX Modular System logo on a stone wall.",
     },
+    featured: {
+      eyebrow: "Products",
+      title: "Featured",
+      carousel: "Featured products",
+      empty: "There are no featured products yet.",
+      example: "Example",
+    },
     why: {
       eyebrow: "Why LockMX",
       title: "More time riding",
@@ -111,6 +118,21 @@ export const en: Messages = {
     productTypes: {
       modularSystem: "Modular system",
       tyres: "Tyres",
+    },
+    product: {
+      inStock: "In stock",
+      outOfStock: "Sold out",
+      compareAt: "Was",
+      current: "Now",
+    },
+    carousel: {
+      roleDescription: "carousel",
+      slideRoleDescription: "slide",
+      slide: "{index} of {total}",
+      pause: "Pause rotation",
+      play: "Resume rotation",
+      previous: "Previous",
+      next: "Next",
     },
   },
   legal: {

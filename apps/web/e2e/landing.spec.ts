@@ -7,6 +7,7 @@ const locales = [
     menu: "Menu",
     title: "Lock it, send it!",
     headings: [
+      "Destaques",
       "Mais tempo a rodar",
       "Pronto para arrumar a carrinha?",
       "Tudo para motocross",
@@ -26,6 +27,7 @@ const locales = [
     menu: "Menu",
     title: "Lock it, send it!",
     headings: [
+      "Featured",
       "More time riding",
       "Ready to sort out your van?",
       "Everything for motocross",
@@ -70,7 +72,7 @@ for (const locale of locales) {
 
       await expect(main.getByRole("heading", { level: 2 })).toHaveText(locale.headings);
       for (const heading of locale.headings) {
-        await expect(main.getByRole("region", { name: heading })).toBeVisible();
+        await expect(main.getByRole("region", { name: heading, exact: true })).toBeVisible();
       }
     });
 
@@ -184,8 +186,14 @@ for (const locale of locales) {
       );
     });
 
-    test("states no price", async ({ page }) => {
-      await expect(page.getByRole("main")).not.toContainText(/€|EUR/);
+    // The featured products are examples, each marked as one (shop-home.spec.ts).
+    test("states no price outside the example products", async ({ page }) => {
+      const parts = page.locator("main > :not(#featured)");
+
+      await expect(parts).not.toHaveCount(0);
+      for (const part of await parts.all()) {
+        await expect(part).not.toContainText(/€|EUR/);
+      }
     });
 
     for (const width of [320, 768, 1024, 1440]) {
