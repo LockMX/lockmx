@@ -2,6 +2,7 @@
 // https://playwright.dev/docs/test-webserver (webServer, reuseExistingServer)
 // https://playwright.dev/docs/test-projects (browser and device projects)
 // https://playwright.dev/docs/ci (one worker on CI)
+// https://playwright.dev/docs/test-reporters (github reporter), https://playwright.dev/docs/api/class-testconfig#test-config-max-failures
 // Bundled Next.js guide: 01-app/02-guides/testing/playwright.md (run against the production build)
 import { defineConfig, devices } from "@playwright/test";
 
@@ -24,7 +25,13 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [["list"], ["html", { open: "never" }]],
+  // A run where everything fails would retry every test until the job is
+  // cancelled by hand: in CI it stops after a few failures instead.
+  maxFailures: process.env.CI ? 10 : undefined,
+  // The github reporter turns each failure into an annotation on the run.
+  reporter: process.env.CI
+    ? [["list"], ["github"], ["html", { open: "never" }]]
+    : [["list"], ["html", { open: "never" }]],
   // Firefox is slow when the four projects run in parallel: a test there went
   // over the default 30 s, and a client navigation over the default 5 s.
   timeout: 60_000,
