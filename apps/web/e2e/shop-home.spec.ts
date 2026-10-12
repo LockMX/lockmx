@@ -14,6 +14,13 @@ const locales = [
     firstProduct: "Suporte de exemplo para capacetes",
     lastProduct: "Cabide de exemplo",
     contactHref: "/pt#contact",
+    categories: "Categorias",
+    types: ["Sistema modular", "Pneus"],
+    modularSystemHref: "/pt/modular-system",
+    soon: "Em breve",
+    search: "Pesquisar produtos",
+    submit: "Pesquisar",
+    actions: ["Fala connosco", "Conhece o sistema"],
   },
   {
     path: "/en",
@@ -27,6 +34,13 @@ const locales = [
     firstProduct: "Example helmet support",
     lastProduct: "Example hanger",
     contactHref: "/en#contact",
+    categories: "Categories",
+    types: ["Modular system", "Tyres"],
+    modularSystemHref: "/en/modular-system",
+    soon: "Coming soon",
+    search: "Search products",
+    submit: "Search",
+    actions: ["Get in touch", "See the system"],
   },
 ];
 
@@ -127,6 +141,65 @@ for (const locale of locales) {
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
       );
       expect(overflow).toBeLessThanOrEqual(0);
+    });
+  });
+}
+
+for (const locale of locales) {
+  test.describe(`${locale.path} product types and search`, () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto(locale.path);
+    });
+
+    test("has one card per product type, after the featured products", async ({ page }) => {
+      const main = page.getByRole("main");
+      const section = main.getByRole("region", { name: locale.categories, exact: true });
+
+      await expect(main.getByRole("heading", { level: 2 }).nth(1)).toHaveText(locale.categories);
+      await expect(section.getByRole("heading", { level: 3 })).toHaveText(locale.types);
+    });
+
+    test("the modular system card leads to its page and tyres leads nowhere yet", async ({
+      page,
+    }) => {
+      const section = page
+        .getByRole("main")
+        .getByRole("region", { name: locale.categories, exact: true });
+
+      await expect(section.getByRole("link")).toHaveCount(1);
+      await expect(section.getByRole("link", { name: locale.types[0] })).toHaveAttribute(
+        "href",
+        locale.modularSystemHref,
+      );
+      await expect(section.getByRole("listitem").nth(1)).toContainText(locale.soon);
+    });
+
+    test("the hero has a search bar under its actions, as wide as the two together", async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      const hero = page.getByRole("main").getByRole("region").first();
+      await expect(hero.getByRole("combobox", { name: locale.search })).toBeVisible();
+
+      const first = await hero.getByRole("link", { name: locale.actions[0] }).boundingBox();
+      const second = await hero.getByRole("link", { name: locale.actions[1] }).boundingBox();
+      const bar = await hero.getByRole("search").boundingBox();
+      if (!first || !second || !bar) throw new Error("The hero was not laid out");
+
+      expect(bar.y).toBeGreaterThan(first.y + first.height);
+      expect(Math.abs(bar.x - first.x)).toBeLessThan(1);
+      expect(Math.abs(bar.x + bar.width - (second.x + second.width))).toBeLessThan(1);
+    });
+
+    test("a search leads nowhere yet", async ({ page }) => {
+      const hero = page.getByRole("main").getByRole("region").first();
+      const field = hero.getByRole("combobox", { name: locale.search });
+
+      await field.fill("mx");
+      await hero.getByRole("button", { name: locale.submit, exact: true }).click();
+
+      await expect(page).toHaveURL(new RegExp(`${locale.path}$`));
+      await expect(field).toHaveValue("mx");
     });
   });
 }

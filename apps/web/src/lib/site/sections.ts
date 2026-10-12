@@ -5,6 +5,7 @@ import { localizedPath } from "@/lib/site/public-paths";
 // are the same in both locales, like the paths (spec 002).
 export const sectionIds = {
   featured: "featured",
+  categories: "categories",
   why: "why",
   buy: "buy",
   complements: "complements",

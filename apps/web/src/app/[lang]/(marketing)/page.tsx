@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
+import { HeroSearch } from "@/components/site/hero-search";
 import { Benefits } from "@/components/site/sections/benefits";
 import { Buy } from "@/components/site/sections/buy";
 import { Complements } from "@/components/site/sections/complements";
 import { Contact } from "@/components/site/sections/contact";
 import { FeaturedProducts } from "@/components/site/sections/featured-products";
 import { Hero, type HeroImage } from "@/components/site/sections/hero";
+import { ProductTypes } from "@/components/site/sections/product-types";
 import { htmlLang } from "@/lib/i18n/config";
 import { contactEmail } from "@/lib/site/contact";
 import { localizedPath, modularSystemPath } from "@/lib/site/public-paths";
 import { sectionHref, sectionIds } from "@/lib/site/sections";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
-import { getFeaturedProducts } from "@/server/shop/home-catalogue";
+import { getFeaturedProducts, getProductTypes } from "@/server/shop/home-catalogue";
 import { buildPageMetadata } from "@/server/site/page-metadata";
 
 // A mockup of the client's identity pack (M5), exported at this size.
@@ -32,6 +34,7 @@ export default async function Home() {
   const locale = await getCurrentLocale();
   const { home, shop } = await getMessages(locale);
   const featuredProducts = await getFeaturedProducts(locale);
+  const productTypes = await getProductTypes(locale);
   const contactHref = sectionHref(locale, sectionIds.contact);
 
   return (
@@ -48,6 +51,7 @@ export default async function Home() {
           label: home.hero.secondaryAction,
         }}
         image={{ ...HERO_IMAGE, alt: home.hero.imageAlt }}
+        search={<HeroSearch labels={shop.search} />}
       />
       <FeaturedProducts
         id={sectionIds.featured}
@@ -64,6 +68,13 @@ export default async function Home() {
           ...shop.product,
         }}
         carouselLabels={shop.carousel}
+      />
+      <ProductTypes
+        id={sectionIds.categories}
+        eyebrow={home.productTypes.eyebrow}
+        title={home.productTypes.title}
+        soonLabel={home.productTypes.soon}
+        types={productTypes}
       />
       <Benefits
         id={sectionIds.why}

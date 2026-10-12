@@ -90,7 +90,7 @@ The shapes of T1 follow what the Storefront API returns (see "Sources"), so T6 i
 
 ## Working branch
 
-`feat/005-shop-home` (owner, 2026-10-11: the spec lives on its own branch). It was created from `feat/004-landing-page`, which was not merged on that day, so it is rebased on `main` after spec 004 is merged.
+`feat/005-shop-home` (owner, 2026-10-11: the spec lives on its own branch). It was created from `feat/004-landing-page` and rebased on `main` on 2026-10-12, after that branch was merged.
 
 ## Conventions for every task
 
@@ -239,6 +239,17 @@ Where it differs from this spec or the project rules, and what T2 does:
 - Spec 004's end-to-end test "states no price" now excludes the featured section; `shop-home.spec.ts` checks that every card there is marked as an example. The page is still behind `COMING_SOON`.
 - First run of the carousel in real browsers: pause and resume, previous and next with wrap, cards out of view inert, Tab stopping the rotation, reduced motion starting paused, no sideways scroll at 320 px. Looked at by eye on screenshots at 320, 768 and 1440 px (one, two and four cards).
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (780 tests, 61 files), `pnpm test:e2e` (602 passed, 2 skipped by design).
+
+### T4 (2026-10-12)
+
+- `components/site/sections/product-types.tsx`, after "Destaques", on the subtle surface, with the section id `categories` and the heading "Categorias": two cards (decision 10). The modular system card is one link to `/modular-system`; tyres is a plain card that says "Em breve", a text added here so the card does not look broken.
+- `Hero` has an optional `search` slot under its actions. The slot adds no width of its own and stretches to the width of the two actions (`w-0 min-w-full`); at 320 px the actions wrap and it takes the column.
+- `components/site/hero-search.tsx` (client) fills the slot with `SearchBar`. **State T7 ends:** no suggestions, and a submission is prevented, so it leads nowhere and the text stays in the field. Typing announces "Sem sugestões" to assistive technology, which is true.
+- New strings: `home.productTypes.*`, `shop.search.*`.
+- The tests and the code of this task were written in one pass, not test first.
+- Looked at by eye on screenshots at 320 and 1440 px (hero and cards).
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (788 tests, 63 files), `pnpm test:e2e` (634 passed, 2 skipped by design).
+- Phase A is done. Phase B waits for prerequisites 2 to 5.
 
 ## Boundaries
 
