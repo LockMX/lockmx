@@ -8,6 +8,7 @@ const locales = [
     title: "Lock it, send it!",
     headings: [
       "Destaques",
+      "Categorias",
       "Mais tempo a rodar",
       "Pronto para arrumar a carrinha?",
       "Tudo para motocross",
@@ -28,6 +29,7 @@ const locales = [
     title: "Lock it, send it!",
     headings: [
       "Featured",
+      "Categories",
       "More time riding",
       "Ready to sort out your van?",
       "Everything for motocross",

@@ -79,6 +79,12 @@ export const pt = {
       // On every card of an example product, until the catalogue exists.
       example: "Exemplo",
     },
+    productTypes: {
+      eyebrow: "Catálogo",
+      title: "Categorias",
+      // On a product type that has no page yet.
+      soon: "Em breve",
+    },
     why: {
       eyebrow: "Porquê LockMX",
       title: "Mais tempo a rodar",
@@ -129,6 +135,15 @@ export const pt = {
       // Read before each amount of a reduced price.
       compareAt: "Antes",
       current: "Agora",
+    },
+    search: {
+      label: "Pesquisar produtos",
+      submit: "Pesquisar",
+      placeholder: "Pneus, suportes",
+      list: "Sugestões",
+      // {count} is replaced by the number of suggestions.
+      results: { one: "{count} sugestão", other: "{count} sugestões" },
+      noResults: "Sem sugestões",
     },
     carousel: {
       // Said in place of "region" and "group" by assistive technology.

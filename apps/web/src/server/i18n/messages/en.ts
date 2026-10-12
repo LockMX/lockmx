@@ -76,6 +76,11 @@ export const en: Messages = {
       empty: "There are no featured products yet.",
       example: "Example",
     },
+    productTypes: {
+      eyebrow: "Catalogue",
+      title: "Categories",
+      soon: "Coming soon",
+    },
     why: {
       eyebrow: "Why LockMX",
       title: "More time riding",
@@ -124,6 +129,14 @@ export const en: Messages = {
       outOfStock: "Sold out",
       compareAt: "Was",
       current: "Now",
+    },
+    search: {
+      label: "Search products",
+      submit: "Search",
+      placeholder: "Tyres, supports",
+      list: "Suggestions",
+      results: { one: "{count} suggestion", other: "{count} suggestions" },
+      noResults: "No suggestions",
     },
     carousel: {
       roleDescription: "carousel",

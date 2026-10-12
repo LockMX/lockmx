@@ -37,6 +37,22 @@ describe("Hero", () => {
     expect(links.map((link) => link.getAttribute("href"))).toEqual(["/pt#contact", "/pt#system"]);
   });
 
+  test("has no search bar unless it is given one", () => {
+    render(<Hero {...props} />);
+
+    expect(screen.queryByRole("search")).toBeNull();
+  });
+
+  test("shows the search bar it is given after the actions", () => {
+    render(<Hero {...props} search={<form role="search" aria-label="Pesquisar" />} />);
+    const search = screen.getByRole("search", { name: "Pesquisar" });
+    const lastAction = screen.getByRole("link", { name: "Conhece o sistema" });
+
+    expect(
+      lastAction.compareDocumentPosition(search) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
   test("works without an image", () => {
     render(<Hero {...props} />);
 
