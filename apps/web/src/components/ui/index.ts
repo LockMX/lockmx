@@ -44,6 +44,11 @@ export { Select, type SelectOption, type SelectProps } from "./forms/select";
 export { Switch, type SwitchProps } from "./forms/switch";
 export { Textarea, type TextareaProps } from "./forms/textarea";
 export { Card, type CardProps } from "./surfaces/card";
+export {
+  Carousel,
+  type CarouselLabels,
+  type CarouselProps,
+} from "./surfaces/carousel";
 export { Dialog, type DialogProps } from "./surfaces/dialog";
 export { Tabs, type TabItem, type TabsProps } from "./surfaces/tabs";
 export {
