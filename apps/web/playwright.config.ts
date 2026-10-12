@@ -13,8 +13,14 @@ const baseURL = `http://localhost:${port}`;
 // The origin the pages are built with. In CI the build step sets the same value.
 const siteUrl = "https://lockmx.com";
 
+// Next.js is started with node, not through `pnpm exec`: when the run ends
+// Playwright kills the process group of the command and waits for its output
+// to close. On the Linux runner of CI the server outlived that kill behind
+// pnpm, and the run never ended although every test had passed.
+const next = "node node_modules/next/dist/bin/next";
+
 // CI builds in its own step before the tests; locally the command builds first.
-const start = `pnpm exec next start --port ${port}`;
+const start = `${next} start --port ${port}`;
 
 // A second server on the same build, with the coming soon switch on (e2e/seo.spec.ts).
 const comingSoonPort = 3101;
@@ -48,7 +54,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: process.env.CI ? start : `pnpm exec next build && ${start}`,
+      command: process.env.CI ? start : `${next} build && ${start}`,
       url: baseURL,
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
@@ -57,7 +63,7 @@ export default defineConfig({
       env: { COMING_SOON: "false", SITE_URL: siteUrl },
     },
     {
-      command: `pnpm exec next start --port ${comingSoonPort}`,
+      command: `${next} start --port ${comingSoonPort}`,
       url: `http://localhost:${comingSoonPort}`,
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
