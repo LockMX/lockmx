@@ -3,12 +3,15 @@ import { Benefits } from "@/components/site/sections/benefits";
 import { Buy } from "@/components/site/sections/buy";
 import { Complements } from "@/components/site/sections/complements";
 import { Contact } from "@/components/site/sections/contact";
+import { FeaturedProducts } from "@/components/site/sections/featured-products";
 import { Hero, type HeroImage } from "@/components/site/sections/hero";
+import { htmlLang } from "@/lib/i18n/config";
 import { contactEmail } from "@/lib/site/contact";
 import { localizedPath, modularSystemPath } from "@/lib/site/public-paths";
 import { sectionHref, sectionIds } from "@/lib/site/sections";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
+import { getFeaturedProducts } from "@/server/shop/home-catalogue";
 import { buildPageMetadata } from "@/server/site/page-metadata";
 
 // A mockup of the client's identity pack (M5), exported at this size.
@@ -27,7 +30,8 @@ export async function generateMetadata(): Promise<Metadata> {
 // The landing page: it presents the brand and leads to the modular system and to contact.
 export default async function Home() {
   const locale = await getCurrentLocale();
-  const { home } = await getMessages(locale);
+  const { home, shop } = await getMessages(locale);
+  const featuredProducts = await getFeaturedProducts(locale);
   const contactHref = sectionHref(locale, sectionIds.contact);
 
   return (
@@ -44,6 +48,22 @@ export default async function Home() {
           label: home.hero.secondaryAction,
         }}
         image={{ ...HERO_IMAGE, alt: home.hero.imageAlt }}
+      />
+      <FeaturedProducts
+        id={sectionIds.featured}
+        eyebrow={home.featured.eyebrow}
+        title={home.featured.title}
+        products={featuredProducts}
+        priceLocale={htmlLang[locale]}
+        // Until the product pages exist, a card leads to contact.
+        productHref={contactHref}
+        labels={{
+          carousel: home.featured.carousel,
+          empty: home.featured.empty,
+          example: home.featured.example,
+          ...shop.product,
+        }}
+        carouselLabels={shop.carousel}
       />
       <Benefits
         id={sectionIds.why}

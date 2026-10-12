@@ -225,8 +225,20 @@ Where it differs from this spec or the project rules, and what T2 does:
 - **Follows the APG where the design differs:** keyboard focus coming in stops the rotation and only the control restarts it. A click is not keyboard focus (`:focus-visible`), so it does not stop it.
 - **Left out of the design's props:** `loop` (it always wraps), `defaultPage`, `showIndicator`, `controlsPlacement`, `surface` (the section owns the background), the reduced motion override and `onPageChange`. Nothing uses them.
 - Known limit: a second press on next while the first slide is still moving asks for the same page again.
-- Not verified in a browser yet: no page renders the carousel until T3, whose end-to-end tests run it in the three engines. The build does contain its container queries (`@container (min-width:44rem)` found in the built CSS).
+- Not verified in a browser in this task: no page renders the carousel until T3, whose end-to-end tests run it in the three engines (they pass, see T3). The build does contain its container queries (`@container (min-width:44rem)` found in the built CSS).
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (773 tests, 60 files), `pnpm test:e2e` (534 passed, 2 skipped by design).
+
+### T3 (2026-10-12)
+
+- `components/site/sections/featured-products.tsx`, composed by the landing page right after the hero, on the subtle surface, with the section id `featured`. The page asks `getFeaturedProducts` and passes the products, the labels and where a card leads (the contact section, decision 7).
+- The "Exemplo" mark is a `Badge` over the card, at the top right, on every product flagged as an example; it lets the pointer through, since the card is one link.
+- Stock is "Em stock" or "Esgotado" from `availableForSale` (rule 5).
+- **"Desde" is not shown** for a product whose price varies: `ProductCard` has no place for it. `priceVaries` is carried and unused; the label is decided with the product pages, before real products with variants are shown.
+- The controls sit on their own line under the heading of the section, at the right, and not on the heading's line as drawn: the heading belongs to `Section`.
+- New strings: `home.featured.*`, `shop.product.*`, `shop.carousel.*`.
+- Spec 004's end-to-end test "states no price" now excludes the featured section; `shop-home.spec.ts` checks that every card there is marked as an example. The page is still behind `COMING_SOON`.
+- First run of the carousel in real browsers: pause and resume, previous and next with wrap, cards out of view inert, Tab stopping the rotation, reduced motion starting paused, no sideways scroll at 320 px. Looked at by eye on screenshots at 320, 768 and 1440 px (one, two and four cards).
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (780 tests, 61 files), `pnpm test:e2e` (602 passed, 2 skipped by design).
 
 ## Boundaries
 
