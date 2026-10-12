@@ -67,6 +67,7 @@ Read on 2026-10-11 unless another date is given. A value marked "to confirm" is 
 8. **Where the product type cards lead** (2026-10-11): the modular system card leads to `/modular-system`; the others are plain cards without a link until category pages exist.
 9. **Catalogue at launch** (owner, 2026-10-11): racks and tyres. Some accessories come later.
 10. **Product type cards** (owner, 2026-10-11): only the two types that have products, the others when they exist. The racks are the modular system (its page names the supports for helmets and boots), so the cards are: modular system, leading to `/modular-system`, and tyres, without a link.
+11. **Carousel against the rules of the project** (owner, 2026-10-12): the icons `pause`, `play` and `package-open` join the closed set; the buttons are the existing `IconButton`, not a style of their own; the position marker is straight, so the slant stays with the badge of the cards.
 
 ## Product data rules
 
@@ -83,10 +84,9 @@ The shapes of T1 follow what the Storefront API returns (see "Sources"), so T6 i
 
 ## Open points
 
-1. **Carousel design against the rules of the project** ("Carousel design" below): three new icons, the look of its buttons, and the slant motif appearing in the indicator and in each card's badge. To decide before T2.
-2. **How many products the store has at launch.** The types are known (decision 9), the number is not. With very few, a carousel may be the wrong component and a grid the right one. With the client.
-3. **Featured products in Shopify.** Proposal: one collection whose handle is a setting of the site (T6). To confirm with the client, who manages it in the admin.
-4. **Product photographs**, with the right to use them. With the client.
+1. **How many products the store has at launch.** The types are known (decision 9), the number is not. With very few, a carousel may be the wrong component and a grid the right one. With the client.
+2. **Featured products in Shopify.** Proposal: one collection whose handle is a setting of the site (T6). To confirm with the client, who manages it in the admin.
+3. **Product photographs**, with the right to use them. With the client.
 
 ## Working branch
 
@@ -145,7 +145,7 @@ Added by this spec:
 - Commit: `feat: add shopify storefront client`
 
 #### T6. Featured products and product types from Shopify
-- Description: `server/shopify/products.ts` reads the featured collection and maps it to the product summary of T1, with `@inContext` for the locale; `home-catalogue.ts` uses it when the Shopify variables are set and the example data otherwise. Read first: the `Image` object, the language codes and the behaviour for a missing translation, and the bundled docs on caching and on `images.remotePatterns`. The handle of the featured collection is a setting of the site (open point 3). A failed read shows the section's error or empty state, never a broken page.
+- Description: `server/shopify/products.ts` reads the featured collection and maps it to the product summary of T1, with `@inContext` for the locale; `home-catalogue.ts` uses it when the Shopify variables are set and the example data otherwise. Read first: the `Image` object, the language codes and the behaviour for a missing translation, and the bundled docs on caching and on `images.remotePatterns`. The handle of the featured collection is a setting of the site (open point 2). A failed read shows the section's error or empty state, never a broken page.
 - Planned files: `apps/web/src/server/shopify/products.ts` and test, `home-catalogue.ts`, `apps/web/next.config.ts`, the sections if they need an error state, `docs/architecture.md`.
 - Acceptance criteria: with the variables set, the cards show the store's products, in the language of the page, with Shopify's prices; without them, the example data, still marked; a Shopify failure does not take the landing page down.
 - Tests: unit tests for the mapping from a recorded response shape to the DTO, for both locales, for a product without image and for the failure path. The check against the real store is manual and recorded in the task notes with its date.
@@ -194,12 +194,12 @@ Where it differs from this spec or the project rules, and what T2 does:
 
 | Design | Rule | T2 |
 |---|---|---|
-| Icons `pause`, `play`, `package-open` | Not in the closed set (`arrow-left` and `arrow-right` are); a new icon is asked first | Open point 1 |
-| Its own button, `CarouselButton` | `IconButton` exists, with other hover and focus looks | Open point 1 |
-| Skewed position marker, and the slant badge of each `ProductCard` | The slant at most once | Open point 1 |
+| Icons `pause`, `play`, `package-open` | Not in the closed set (`arrow-left` and `arrow-right` are); a new icon is asked first | Added (decision 11) |
+| Its own button, `CarouselButton` | `IconButton` exists, with other hover and focus looks | `IconButton` (decision 11) |
+| Skewed position marker, and the slant badge of each `ProductCard` | The slant at most once | Straight marker (decision 11) |
 | Rotation resumes when the focus or the pointer leaves | APG: after keyboard focus it does not resume until the visitor activates the control | Follows the APG |
 | Cards per view measured with `ResizeObserver` | The server renders before any measure, so the row would jump after hydration | Sizes the slides in CSS (container queries, to confirm in the Tailwind docs) |
-| A track moved with `transform` | "Boundaries" says scroll snap unless the design needs more | Decided in T2 after reading both against paging and `inert`; recorded in its notes |
+| A track moved with `transform` | "Boundaries" says scroll snap unless the design needs more | Scroll snap: see the notes of T2 |
 | An empty state | T3 does not render the section without products | The component has the empty state; the section still hides itself |
 | Fixed Portuguese strings, including the role descriptions | Every string through props, from the dictionaries | Props |
 | Inline styles, `--lmx-ink-950` | Tokens through Tailwind classes; no primitive colour in a component | Semantic tokens |
@@ -214,6 +214,19 @@ Where it differs from this spec or the project rules, and what T2 does:
 - `server/shop/` does not import `server-only`: it reads no secret, and the package does not resolve under Vitest. T5 settles how the Shopify modules are protected and still tested.
 - Nothing renders these modules yet, so the page is unchanged.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (747 tests, 59 files), `pnpm test:e2e` (534 passed, 2 skipped by design).
+
+### T2 (2026-10-12)
+
+- `components/ui/surfaces/carousel.tsx`, exported from `components/ui`; three icons added (32 in the set); `docs/design/components.md` has the row and the behaviour.
+- **Scroll snap, not a moved track.** The design moves a track with `transform`, which needs a computed inline style, and the design system accepts none. The row is a scroll container with snap points at the start of each page; the buttons and the rotation call `scrollTo`, and the page shown is read back from the scroll. Touch needs no code of ours. The slide uses the browser's smooth scroll, so its duration is the browser's and not `--duration-slow`.
+- **Slides per view in CSS**, by container queries at 44, 60 and 76 rem (the design's 704, 960 and 1216 px). The script only reads how many fit, to count pages and to make the slides out of view `inert`; it does that after the first measure, so a page without script keeps every slide reachable.
+- **Position bar:** one segment per page, the current one dark, instead of a marker that slides: a marker needs a computed position.
+- **Buttons** are 48 px at every width (`IconButton` `lg`). The design has 40 px from 704 px; a size per width would mean a class that repeats one the button sets, which the design system forbids.
+- **Follows the APG where the design differs:** keyboard focus coming in stops the rotation and only the control restarts it. A click is not keyboard focus (`:focus-visible`), so it does not stop it.
+- **Left out of the design's props:** `loop` (it always wraps), `defaultPage`, `showIndicator`, `controlsPlacement`, `surface` (the section owns the background), the reduced motion override and `onPageChange`. Nothing uses them.
+- Known limit: a second press on next while the first slide is still moving asks for the same page again.
+- Not verified in a browser yet: no page renders the carousel until T3, whose end-to-end tests run it in the three engines. The build does contain its container queries (`@container (min-width:44rem)` found in the built CSS).
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (773 tests, 60 files), `pnpm test:e2e` (534 passed, 2 skipped by design).
 
 ## Boundaries
 

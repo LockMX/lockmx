@@ -8,6 +8,7 @@ describe("components/ui entry point", () => {
       "Button",
       "ButtonLink",
       "Card",
+      "Carousel",
       "CartLine",
       "Checkbox",
       "DataTable",
