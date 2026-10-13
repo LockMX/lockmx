@@ -8,6 +8,8 @@ For the owner and the client, who decide the look of the page before the shop ex
 
 Raised by the owner on 2026-10-10 and refined on 2026-10-11, after seeing the landing page of spec 004. The shop is Shopify behind this frontend (ADR 0014) and has no idea or spec yet; this idea is the first piece of it and stays in development until the shop is connected.
 
+Update of 2026-10-13: the owner moved the shop sections off the landing page, to a shop route of its own. Criterion 1 and the last line of "Not doing" are replaced by `landing-focus-and-shop-route.md`; the rest stands.
+
 ## Criteria
 
 1. The landing page gains, in page order: a search bar inside the hero, under its two actions and as wide as the two together; a "Destaques" section right after the hero, with a carousel of featured products; and a section with one card per product type.

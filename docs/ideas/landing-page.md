@@ -73,6 +73,15 @@ The form stays in its own spec. Recorded here so that spec starts from them:
 - Still needed, and not decided: a service that sends that one email (Resend, ADR 0005, or the AWS SES account that already receives the mailboxes); a validation library for the input on the server; the privacy information shown next to the form, since name, email and message are personal data; and a rate limit (see below).
 - Rate limit: Turnstile reduces automated submissions, it does not stop a person or a paid solving service from sending many. Each submission costs one email of the sending quota and lands in the client's inbox. A limit per address of origin caps that. Where its counters live without a database, or whether the hosting provides it, is not researched yet.
 
+### Update (owner, 2026-10-13)
+
+- **The sender gets an acknowledgement after all**, sent with Resend: a short email saying the LockMX team received the message. The client then answers by email. This reverses "no automatic email to the sender" above, and brings back what that line avoided: the form can make our domain send mail to an address someone else typed. The form spec answers it: the acknowledgement carries no text typed by the visitor (not the message, and the name only if it passes a strict check), Turnstile, and a limit per address of origin and per recipient.
+- The model for the email is a template of another project of the owner (a card with a logo, a heading, a paragraph, a sign-off and a footer with the site and the privacy policy), to be redone with the LockMX logo and colours. An email needs colour values written inline, which the rule "tokens only" does not cover; the form spec says where those values come from.
+- The privacy link of the template and of the form points at `/privacy`, which exists and says "Em implementação" until the client delivers the text. The form is not published before that text exists (same reason as before: name, email and message are personal data).
+- Turnstile: the owner is creating the Cloudflare account.
+- ADR 0005 is still "proposed" and was written for the custom shop; it is updated and accepted for this one use before the spec. How its templates are written (React Email, a new dependency, or HTML built by our code) is decided there.
+- Each submission is now two emails. On the free plan of Resend (100 a day, 3,000 a month, ADR 0005, read 2026-10-08) that is 50 submissions a day.
+
 ## Open questions
 
 For the client:
