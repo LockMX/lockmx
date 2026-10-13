@@ -9,8 +9,6 @@ export type Part = {
 
 type ModularSystemProps = {
   id: string;
-  /** 1 on its own page: the parts are then one level below. */
-  level?: 1 | 2;
   eyebrow: string;
   title: string;
   /** What the system is and what it is made of, in the words of the client. */
@@ -19,21 +17,12 @@ type ModularSystemProps = {
 };
 
 /**
- * The modular system and its parts, one card each. A photograph replaces the
- * icon of a part when one exists.
+ * The modular system and its parts, one card each. It opens its page, so its
+ * heading is the `h1`. A photograph replaces the icon of a part when one exists.
  */
-export function ModularSystem({
-  id,
-  level = 2,
-  eyebrow,
-  title,
-  paragraphs,
-  parts,
-}: ModularSystemProps) {
-  const PartHeading = level === 1 ? "h2" : "h3";
-
+export function ModularSystem({ id, eyebrow, title, paragraphs, parts }: ModularSystemProps) {
   return (
-    <Section id={id} level={level} surface="subtle" eyebrow={eyebrow} title={title}>
+    <Section id={id} level={1} surface="subtle" eyebrow={eyebrow} title={title}>
       <div className="flex flex-col gap-4 lg:w-2/3">
         {paragraphs.map((paragraph) => (
           <p key={paragraph} className="text-lg leading-body">
@@ -47,9 +36,9 @@ export function ModularSystem({
             <span className="grid size-12 place-items-center rounded-sm bg-surface-inverse text-yellow">
               <Icon name={part.icon} size="lg" />
             </span>
-            <PartHeading className="font-display text-heading-md leading-tight font-extrabold text-text-strong uppercase italic">
+            <h2 className="font-display text-heading-md leading-tight font-extrabold text-text-strong uppercase italic">
               {part.title}
-            </PartHeading>
+            </h2>
             <p className="text-md leading-snug">{part.text}</p>
           </Card>
         ))}

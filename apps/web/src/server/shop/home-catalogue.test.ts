@@ -1,8 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { locales } from "@/lib/i18n/config";
-import { productTypeKeys } from "@/lib/shop/product";
 import { exampleFeaturedProducts } from "@/server/shop/example-catalogue";
-import { getFeaturedProducts, getProductTypes } from "@/server/shop/home-catalogue";
+import { getFeaturedProducts } from "@/server/shop/home-catalogue";
 
 describe("getFeaturedProducts", () => {
   test.each(locales)("%s: returns the example products, every one flagged", async (locale) => {
@@ -60,27 +59,5 @@ describe("getFeaturedProducts", () => {
 
     expect(new Set(products.map((product) => product.id)).size).toBe(products.length);
     expect(new Set(products.map((product) => product.handle)).size).toBe(products.length);
-  });
-});
-
-describe("getProductTypes", () => {
-  test("one entry per product type, in order", async () => {
-    const types = await getProductTypes("pt");
-
-    expect(types.map((type) => type.key)).toEqual([...productTypeKeys]);
-  });
-
-  test("pt: the modular system leads to its section of the landing page and tyres nowhere yet", async () => {
-    expect(await getProductTypes("pt")).toEqual([
-      { key: "modular-system", title: "Sistema modular", href: "/pt#system" },
-      { key: "tyres", title: "Pneus" },
-    ]);
-  });
-
-  test("en: same paths under its locale, translated titles", async () => {
-    expect(await getProductTypes("en")).toEqual([
-      { key: "modular-system", title: "Modular system", href: "/en#system" },
-      { key: "tyres", title: "Tyres" },
-    ]);
   });
 });

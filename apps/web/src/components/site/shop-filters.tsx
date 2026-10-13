@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button, Checkbox } from "@/components/ui";
+import { classNames } from "@/components/ui/class-names";
 import { AVAILABILITY_PARAM } from "@/lib/shop/listing-filters";
 import type { Availability, ShopSection, ShopSectionEntry } from "@/lib/shop/product";
 
@@ -83,17 +84,20 @@ export function ShopFilters({
         </ul>
       </nav>
       <form action={action} method="get" className="flex flex-col gap-4">
-        <fieldset className="flex flex-col gap-3">
-          <legend className={GROUP_TITLE}>{labels.availability}</legend>
-          {options.map((option) => (
-            <Checkbox
-              key={option.value}
-              name={AVAILABILITY_PARAM}
-              value={option.value}
-              defaultChecked={availability.includes(option.value)}
-              label={option.label}
-            />
-          ))}
+        <fieldset>
+          {/* A legend takes no part in a flex layout, so the gap is its own. */}
+          <legend className={classNames(GROUP_TITLE, "mb-3")}>{labels.availability}</legend>
+          <div className="flex flex-col gap-3">
+            {options.map((option) => (
+              <Checkbox
+                key={option.value}
+                name={AVAILABILITY_PARAM}
+                value={option.value}
+                defaultChecked={availability.includes(option.value)}
+                label={option.label}
+              />
+            ))}
+          </div>
         </fieldset>
         <div className="flex flex-wrap items-center gap-4">
           <Button type="submit" variant="secondary" size="sm">

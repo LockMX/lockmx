@@ -18,8 +18,8 @@ export const pt = {
     footer: "Rodapé",
     home: "Início",
     modularSystem: "Sistema modular",
-    why: "Porquê",
-    contact: "Contacto",
+    merchandise: "Merchandise",
+    contact: "Contactos",
     shop: "Loja",
     cart: "Carrinho",
   },
@@ -102,15 +102,9 @@ export const pt = {
       titleLead: "Lock it,",
       titleAccent: "send it!",
       text: "Um sistema modular que organiza o teu equipamento dentro da carrinha.",
-      primaryAction: "Fala connosco",
+      primaryAction: "Ver a loja",
       secondaryAction: "Conhece o sistema",
       imageAlt: "Placa preta com o logótipo LockMX Modular System numa parede de pedra.",
-    },
-    contact: {
-      eyebrow: "Contacto",
-      title: "Pronto para arrumar a carrinha?",
-      text: "Tens uma pergunta sobre o sistema? Escreve-nos.",
-      emailLabel: "Email",
     },
   },
   // The shop (spec 005).
@@ -131,16 +125,6 @@ export const pt = {
       empty: "Ainda não há produtos em destaque.",
       // On every card of an example product, until the catalogue exists.
       example: "Exemplo",
-    },
-    categories: {
-      eyebrow: "Catálogo",
-      title: "Categorias",
-      // On a product type that has no page yet.
-      soon: "Em breve",
-    },
-    productTypes: {
-      modularSystem: "Sistema modular",
-      tyres: "Pneus",
     },
     // The sections of the shop (spec 005, amendment 2).
     sections: {

@@ -15,6 +15,8 @@ const locales = [
     clear: "Limpar filtros",
     empty: "Nenhum produto corresponde aos filtros.",
     search: "Pesquisar produtos",
+    shop: "Loja",
+    all: "Todos",
     sections: [
       { key: "racks", title: "Suportes LockMX", count: 4, first: "Suporte de exemplo para capacetes" },
       { key: "tyres", title: "Pneus", count: 2, first: "Pneu traseiro de exemplo" },
@@ -34,6 +36,8 @@ const locales = [
     clear: "Clear filters",
     empty: "No product matches the filters.",
     search: "Search products",
+    shop: "Shop",
+    all: "All",
     sections: [
       { key: "racks", title: "LockMX mounts", count: 4, first: "Example helmet support" },
       { key: "tyres", title: "Tyres", count: 2, first: "Example rear tyre" },
@@ -169,6 +173,64 @@ for (const locale of locales) {
         expect(overflow).toBeLessThanOrEqual(0);
       });
     }
+  });
+
+  test.describe(`${locale.path}/shop`, () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto(`${locale.path}/shop`);
+    });
+
+    test("lists every product of every section and marks the first filter link", async ({
+      page,
+    }) => {
+      const main = page.getByRole("main");
+      const total = locale.sections.reduce((sum, section) => sum + section.count, 0);
+
+      await expect(main.getByRole("heading", { level: 1 })).toHaveText([locale.shop]);
+      await expect(
+        main.getByRole("region", { name: locale.products, exact: true }).locator("article"),
+      ).toHaveCount(total);
+      await expect(
+        page
+          .getByRole("complementary", { name: locale.filters })
+          .getByRole("link", { name: locale.all, exact: true }),
+      ).toHaveAttribute("aria-current", "page");
+    });
+
+    test("the availability filter works on the whole shop", async ({ page }) => {
+      const filters = page.getByRole("complementary", { name: locale.filters });
+
+      await filters.getByRole("checkbox", { name: locale.soldOut }).check();
+      await filters.getByRole("button", { name: locale.apply }).click();
+
+      await expect(page).toHaveURL(new RegExp(`${locale.path}/shop\\?availability=out$`));
+      await expect(
+        page.getByRole("main").getByRole("region", { name: locale.products, exact: true }).locator("article"),
+      ).toHaveCount(2);
+    });
+
+    test("a search leads nowhere yet", async ({ page }) => {
+      const main = page.getByRole("main");
+      const field = main.getByRole("combobox", { name: locale.search });
+
+      await field.fill("mx");
+      await field.press("Enter");
+
+      await expect(page).toHaveURL(new RegExp(`${locale.path}/shop$`));
+      await expect(field).toHaveValue("mx");
+    });
+
+    test("has its own title and canonical address, and is not in the sitemap", async ({
+      page,
+      request,
+    }) => {
+      await expect(page).toHaveTitle(`${locale.shop} | LockMX`);
+      await expect(page.locator('head link[rel="canonical"]')).toHaveAttribute(
+        "href",
+        `https://lockmx.com${locale.path}/shop`,
+      );
+      expect(await (await request.get("/sitemap.xml")).text()).not.toContain("/shop");
+    });
   });
 
   test(`${locale.path}/shop/no-such-section is not found`, async ({ request }) => {

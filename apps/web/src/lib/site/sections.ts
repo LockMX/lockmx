@@ -1,19 +1,6 @@
-import type { Locale } from "@/lib/i18n/config";
-import { localizedPath } from "@/lib/site/public-paths";
-
-// The sections of the landing page and of the shop home. The ids are part of
+// The sections of the landing page a link can lead to. The ids are part of
 // the address, so they are the same in both locales, like the paths (spec 002).
 export const sectionIds = {
   featured: "featured",
-  categories: "categories",
-  system: "system",
-  why: "why",
-  contact: "contact",
+  shopSections: "shop-sections",
 } as const;
-
-export type SectionId = (typeof sectionIds)[keyof typeof sectionIds];
-
-// The address of a section of the landing page, usable from any page.
-export function sectionHref(locale: Locale, id: SectionId): string {
-  return `${localizedPath(locale, "/")}#${id}`;
-}
