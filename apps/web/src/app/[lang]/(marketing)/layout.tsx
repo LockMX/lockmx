@@ -7,8 +7,14 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SkipLink } from "@/components/site/skip-link";
 import { contactEmail, instagramUrl } from "@/lib/site/contact";
 import { legalPageHref, legalPages } from "@/lib/site/legal-pages";
-import { cartPath, localizedPath, shopPath } from "@/lib/site/public-paths";
-import { sectionHref, sectionIds } from "@/lib/site/sections";
+import {
+  cartPath,
+  contactPath,
+  localizedPath,
+  modularSystemPath,
+  shopPath,
+  shopSectionPath,
+} from "@/lib/site/public-paths";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
 
@@ -23,9 +29,12 @@ export default async function MarketingLayout({ children }: { children: React.Re
   const homeHref = `/${locale}`;
   const navigationItems = [
     { href: homeHref, label: navigation.home },
-    { href: sectionHref(locale, sectionIds.system), label: navigation.modularSystem },
-    { href: sectionHref(locale, sectionIds.why), label: navigation.why },
-    { href: sectionHref(locale, sectionIds.contact), label: navigation.contact },
+    { href: localizedPath(locale, modularSystemPath), label: navigation.modularSystem },
+    {
+      href: localizedPath(locale, shopSectionPath("merchandise")),
+      label: navigation.merchandise,
+    },
+    { href: localizedPath(locale, contactPath), label: navigation.contact },
   ];
   const shop = { href: localizedPath(locale, shopPath), label: navigation.shop };
   const cart = { href: localizedPath(locale, cartPath), label: navigation.cart };

@@ -1,10 +1,10 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
-// The shop home (spec 005), with example data.
+// The shop sections of the landing page (spec 005, amendment 2), with example data.
 const locales = [
   {
     path: "/pt",
-    title: "Loja",
+    title: "Lock it, send it!",
     featured: "Destaques",
     carousel: "Produtos em destaque",
     example: "Exemplo",
@@ -14,17 +14,11 @@ const locales = [
     next: "Seguinte",
     firstProduct: "Suporte de exemplo para capacetes",
     lastProduct: "Cabide de exemplo",
-    contactHref: "/pt#contact",
-    categories: "Categorias",
-    types: ["Sistema modular", "Pneus"],
-    modularSystemHref: "/pt#system",
-    soon: "Em breve",
-    search: "Pesquisar produtos",
-    submit: "Pesquisar",
+    contactHref: "/pt/contact",
   },
   {
     path: "/en",
-    title: "Shop",
+    title: "Lock it, send it!",
     featured: "Featured",
     carousel: "Featured products",
     example: "Example",
@@ -34,13 +28,7 @@ const locales = [
     next: "Next",
     firstProduct: "Example helmet support",
     lastProduct: "Example hanger",
-    contactHref: "/en#contact",
-    categories: "Categories",
-    types: ["Modular system", "Tyres"],
-    modularSystemHref: "/en#system",
-    soon: "Coming soon",
-    search: "Search products",
-    submit: "Search",
+    contactHref: "/en/contact",
   },
 ];
 
@@ -51,9 +39,9 @@ function carouselOf(page: Page, name: string): Locator {
 }
 
 for (const locale of locales) {
-  test.describe(`${locale.path}/shop featured products`, () => {
+  test.describe(`${locale.path} featured products`, () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(`${locale.path}/shop`);
+      await page.goto(locale.path);
     });
 
     test("the page has one h1 and the section is the first under it", async ({ page }) => {
@@ -74,7 +62,7 @@ for (const locale of locales) {
       );
     });
 
-    test("an example card leads to the contact section", async ({ page }) => {
+    test("an example card leads to the contact page", async ({ page }) => {
       const link = carouselOf(page, locale.carousel).getByRole("link", {
         name: locale.firstProduct,
       });
@@ -148,70 +136,9 @@ for (const locale of locales) {
   });
 }
 
-for (const locale of locales) {
-  test.describe(`${locale.path}/shop product types and search`, () => {
-    test.beforeEach(async ({ page }) => {
-      await page.goto(`${locale.path}/shop`);
-    });
-
-    test("has one card per product type, after the featured products", async ({ page }) => {
-      const main = page.getByRole("main");
-      const section = main.getByRole("region", { name: locale.categories, exact: true });
-
-      await expect(main.getByRole("heading", { level: 2 }).nth(1)).toHaveText(locale.categories);
-      await expect(section.getByRole("heading", { level: 3 })).toHaveText(locale.types);
-    });
-
-    test("the modular system card leads to the landing page and tyres leads nowhere yet", async ({
-      page,
-    }) => {
-      const section = page
-        .getByRole("main")
-        .getByRole("region", { name: locale.categories, exact: true });
-
-      await expect(section.getByRole("link")).toHaveCount(1);
-      await expect(section.getByRole("link", { name: locale.types[0] })).toHaveAttribute(
-        "href",
-        locale.modularSystemHref,
-      );
-      await expect(section.getByRole("listitem").nth(1)).toContainText(locale.soon);
-    });
-
-    test("the search bar is under the h1, before the featured products", async ({ page }) => {
-      const top = page.getByRole("main").getByRole("region", { name: locale.title, exact: true });
-
-      await expect(top.getByRole("combobox", { name: locale.search })).toBeVisible();
-      await expect(page.getByRole("main").getByRole("search")).toHaveCount(1);
-    });
-
-    test("a search leads nowhere yet", async ({ page }) => {
-      const top = page.getByRole("main").getByRole("region", { name: locale.title, exact: true });
-      const field = top.getByRole("combobox", { name: locale.search });
-
-      await field.fill("mx");
-      await top.getByRole("button", { name: locale.submit, exact: true }).click();
-
-      await expect(page).toHaveURL(new RegExp(`${locale.path}/shop$`));
-      await expect(field).toHaveValue("mx");
-    });
-
-    test("has its own title and canonical address, and is not in the sitemap", async ({
-      page,
-      request,
-    }) => {
-      await expect(page).toHaveTitle(`${locale.title} | LockMX`);
-      await expect(page.locator('head link[rel="canonical"]')).toHaveAttribute(
-        "href",
-        `https://lockmx.com${locale.path}/shop`,
-      );
-      expect(await (await request.get("/sitemap.xml")).text()).not.toContain("/shop");
-    });
-  });
-}
-
 test("with reduced motion the carousel starts paused", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/pt/shop");
+  await page.goto("/pt");
 
   await expect(
     carouselOf(page, "Produtos em destaque").getByRole("button").first(),

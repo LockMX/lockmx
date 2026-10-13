@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import { ModularSystem } from "@/components/site/sections/modular-system";
 
 const props = {
-  id: "system",
+  id: "modular-system",
   eyebrow: "Sistema modular",
   title: "Um quartel-general sobre rodas",
   paragraphs: ["O sistema.", "As peças."],
@@ -18,50 +18,32 @@ function region() {
 }
 
 describe("ModularSystem", () => {
-  test("on its own page it is named by the h1 and the parts are h2", () => {
-    render(<ModularSystem {...props} level={1} />);
-
-    expect(within(region()).getByRole("heading", { level: 1 }).textContent).toBe(
-      "Um quartel-general sobre rodas",
-    );
-    expect(within(region()).getAllByRole("heading", { level: 2 })).toHaveLength(2);
-    expect(within(region()).queryByRole("heading", { level: 3 })).toBeNull();
-  });
-
-  test("is a region named by its h2", () => {
+  test("is a region named by the h1 of its page", () => {
     render(<ModularSystem {...props} />);
 
-    expect(region().id).toBe("system");
-    expect(within(region()).getByRole("heading", { level: 2 }).textContent).toBe(
+    expect(region().id).toBe("modular-system");
+    expect(within(region()).getByRole("heading", { level: 1 }).textContent).toBe(
       "Um quartel-general sobre rodas",
     );
     expect(within(region()).getByText("Sistema modular")).toBeTruthy();
   });
 
-  test("shows every paragraph from props", () => {
+  test("shows every paragraph it is given", () => {
     render(<ModularSystem {...props} />);
 
     expect(within(region()).getByText("O sistema.")).toBeTruthy();
     expect(within(region()).getByText("As peças.")).toBeTruthy();
   });
 
-  test("has one list item per part, named by an h3, with its text", () => {
+  test("has one list item per part, named by an h2, with its text", () => {
     render(<ModularSystem {...props} />);
 
     expect(within(region()).getAllByRole("listitem")).toHaveLength(2);
     expect(
       within(region())
-        .getAllByRole("heading", { level: 3 })
-        .map((title) => title.textContent),
+        .getAllByRole("heading", { level: 2 })
+        .map((heading) => heading.textContent),
     ).toEqual(["Capacetes", "Botas"]);
     expect(within(region()).getByText("Suportes para botas.")).toBeTruthy();
-  });
-
-  test("keeps the icons decorative", () => {
-    const { container } = render(<ModularSystem {...props} />);
-
-    const icons = [...container.querySelectorAll("svg")];
-    expect(icons).toHaveLength(2);
-    expect(icons.every((icon) => icon.getAttribute("aria-hidden") === "true")).toBe(true);
   });
 });

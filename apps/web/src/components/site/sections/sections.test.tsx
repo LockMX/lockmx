@@ -1,7 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { Benefits } from "@/components/site/sections/benefits";
-import { Contact } from "@/components/site/sections/contact";
 
 const heading = { eyebrow: "Sobrancelha", title: "Título" };
 
@@ -50,24 +49,5 @@ describe("Benefits", () => {
       within(region()).getByRole("list").compareDocumentPosition(link) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
-  });
-});
-
-describe("Contact", () => {
-  const props = { ...heading, text: "Escreve-nos.", emailLabel: "Email", email: "a@example.com" };
-
-  test("is a named region with its text", () => {
-    render(<Contact id="contact" {...props} />);
-
-    expect(region().id).toBe("contact");
-    expect(within(region()).getByText("Escreve-nos.")).toBeTruthy();
-  });
-
-  test("shows the address as a mail link, labelled from props", () => {
-    render(<Contact id="contact" {...props} />);
-
-    const link = within(region()).getByRole("link", { name: "a@example.com" });
-    expect(link.getAttribute("href")).toBe("mailto:a@example.com");
-    expect(within(region()).getByText("Email")).toBeTruthy();
   });
 });

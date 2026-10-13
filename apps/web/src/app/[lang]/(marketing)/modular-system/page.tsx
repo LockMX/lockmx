@@ -29,7 +29,6 @@ export default async function ModularSystemPage() {
     <>
       <ModularSystem
         id="modular-system"
-        level={1}
         eyebrow={modularSystem.eyebrow}
         title={modularSystem.title}
         paragraphs={[modularSystem.systemText, modularSystem.partsText]}

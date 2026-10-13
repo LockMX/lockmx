@@ -18,7 +18,7 @@ export const en: Messages = {
     footer: "Footer",
     home: "Home",
     modularSystem: "Modular system",
-    why: "Why",
+    merchandise: "Merchandise",
     contact: "Contact",
     shop: "Shop",
     cart: "Cart",
@@ -100,15 +100,9 @@ export const en: Messages = {
       titleLead: "Lock it,",
       titleAccent: "send it!",
       text: "A modular system that organizes your gear inside your van.",
-      primaryAction: "Get in touch",
+      primaryAction: "See the shop",
       secondaryAction: "See the system",
       imageAlt: "Black sign with the LockMX Modular System logo on a stone wall.",
-    },
-    contact: {
-      eyebrow: "Contact",
-      title: "Ready to sort out your van?",
-      text: "Do you have a question about the system? Write to us.",
-      emailLabel: "Email",
     },
   },
   shop: {
@@ -127,15 +121,6 @@ export const en: Messages = {
       carousel: "Featured products",
       empty: "There are no featured products yet.",
       example: "Example",
-    },
-    categories: {
-      eyebrow: "Catalogue",
-      title: "Categories",
-      soon: "Coming soon",
-    },
-    productTypes: {
-      modularSystem: "Modular system",
-      tyres: "Tyres",
     },
     // The sections of the shop (spec 005, amendment 2).
     sections: {

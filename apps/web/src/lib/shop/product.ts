@@ -59,15 +59,3 @@ export type ShopSectionEntry = {
 export const availabilities = ["in", "out"] as const;
 
 export type Availability = (typeof availabilities)[number];
-
-// The product types the home page shows, in order. Keys of ours, not Shopify's.
-export const productTypeKeys = ["modular-system", "tyres"] as const;
-
-export type ProductTypeKey = (typeof productTypeKeys)[number];
-
-export type ProductTypeEntry = {
-  key: ProductTypeKey;
-  title: string;
-  /** Left out while the type has no page to lead to. */
-  href?: string;
-};

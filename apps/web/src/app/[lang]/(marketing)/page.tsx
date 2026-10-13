@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { Benefits } from "@/components/site/sections/benefits";
-import { Contact } from "@/components/site/sections/contact";
+import { FeaturedProducts } from "@/components/site/sections/featured-products";
 import { Hero, type HeroImage } from "@/components/site/sections/hero";
-import { ModularSystem } from "@/components/site/sections/modular-system";
-import { contactEmail } from "@/lib/site/contact";
-import { sectionHref, sectionIds } from "@/lib/site/sections";
+import { ShopSections } from "@/components/site/sections/shop-sections";
+import { htmlLang } from "@/lib/i18n/config";
+import type { ShopSection } from "@/lib/shop/product";
+import { contactPath, localizedPath, modularSystemPath, shopPath } from "@/lib/site/public-paths";
+import { sectionIds } from "@/lib/site/sections";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
+import { getFeaturedProducts } from "@/server/shop/home-catalogue";
+import { getShopSections } from "@/server/shop/shop-listing";
 import { buildPageMetadata } from "@/server/site/page-metadata";
 
 // A mockup of the client's identity pack (M5), exported at this size.
@@ -16,23 +19,23 @@ const HERO_IMAGE: Omit<HeroImage, "alt"> = {
   height: 1600,
 };
 
+// The sections of the shop that get a large card (owner, 2026-10-13).
+const HOME_SECTIONS: readonly ShopSection[] = ["racks", "tyres"];
+
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getCurrentLocale();
   const { metadata } = await getMessages(locale);
   return buildPageMetadata({ locale, path: "/", description: metadata.description });
 }
 
-type WhyMessages = Awaited<ReturnType<typeof getMessages>>["modularSystem"]["why"];
-
-function whyBenefits(why: WhyMessages) {
-  return [why.space, why.place, why.tough, why.time];
-}
-
-// The landing page: it presents the modular system and leads to contact.
+// The landing page is the home of the shop (spec 005, amendment 2): the hero,
+// the featured products and one large card per section of the shop. It shows
+// example data until the store is connected.
 export default async function Home() {
   const locale = await getCurrentLocale();
-  const { home, modularSystem } = await getMessages(locale);
-  const contactHref = sectionHref(locale, sectionIds.contact);
+  const { home, shop } = await getMessages(locale);
+  const featuredProducts = await getFeaturedProducts(locale);
+  const shopSections = await getShopSections(locale);
 
   return (
     <>
@@ -41,40 +44,33 @@ export default async function Home() {
         titleLead={home.hero.titleLead}
         titleAccent={home.hero.titleAccent}
         text={home.hero.text}
-        // Until the shop exists, the main action of the page leads to contact.
-        primaryAction={{ href: contactHref, label: home.hero.primaryAction }}
+        primaryAction={{ href: localizedPath(locale, shopPath), label: home.hero.primaryAction }}
         secondaryAction={{
-          href: sectionHref(locale, sectionIds.system),
+          href: localizedPath(locale, modularSystemPath),
           label: home.hero.secondaryAction,
         }}
         image={{ ...HERO_IMAGE, alt: home.hero.imageAlt }}
       />
-      <ModularSystem
-        id={sectionIds.system}
-        eyebrow={modularSystem.eyebrow}
-        title={modularSystem.title}
-        paragraphs={[modularSystem.systemText, modularSystem.partsText]}
-        parts={[
-          { icon: "hard-hat", ...modularSystem.helmets },
-          { icon: "footprints", ...modularSystem.boots },
-          { icon: "shirt", ...modularSystem.hangers },
-          { icon: "shelving-unit", ...modularSystem.shelves },
-        ]}
+      <FeaturedProducts
+        id={sectionIds.featured}
+        eyebrow={shop.featured.eyebrow}
+        title={shop.featured.title}
+        products={featuredProducts}
+        priceLocale={htmlLang[locale]}
+        // Until the product pages exist, a card leads to the contact page.
+        productHref={localizedPath(locale, contactPath)}
+        labels={{
+          carousel: shop.featured.carousel,
+          empty: shop.featured.empty,
+          example: shop.featured.example,
+          ...shop.product,
+        }}
+        carouselLabels={shop.carousel}
       />
-      <Benefits
-        id={sectionIds.why}
-        eyebrow={modularSystem.why.eyebrow}
-        title={modularSystem.why.title}
-        benefits={whyBenefits(modularSystem.why)}
-        action={{ href: contactHref, label: modularSystem.why.action }}
-      />
-      <Contact
-        id={sectionIds.contact}
-        eyebrow={home.contact.eyebrow}
-        title={home.contact.title}
-        text={home.contact.text}
-        emailLabel={home.contact.emailLabel}
-        email={contactEmail}
+      <ShopSections
+        id={sectionIds.shopSections}
+        title={shop.home.title}
+        sections={shopSections.filter((section) => HOME_SECTIONS.includes(section.key))}
       />
     </>
   );
