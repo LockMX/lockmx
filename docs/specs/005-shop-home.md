@@ -188,7 +188,7 @@ From `../ideas/landing-focus-and-shop-route.md`. T9 depends on no answer of the 
 
 ### Details (owner, 2026-10-13)
 
-- The header on a narrow screen: the logo at the left; at the right the menu button and, to its left, the cart and a shop icon in place of the shop button. Measured at 320 px: 288 px between the gutters, the logo takes about 115 px and three 40 px buttons 120 px, which leaves 53 px for the gaps. The language switcher (about 54 px) does not fit beside them, so on a narrow screen it has to move into the menu: asked to the owner, not answered yet. The icon set has no shop icon; `store` is added in T11.
+- The header on a narrow screen: the logo at the left; at the right the menu button and, to its left, the cart and a shop icon in place of the shop button. Measured at 320 px: 288 px between the gutters, the logo takes about 115 px and three 40 px buttons 120 px, which leaves 53 px for the gaps. The language switcher (about 54 px) does not fit beside them, so on a narrow screen it moves into the menu (owner, 2026-10-13: "if it does not fit, it moves"). The icon set has no shop icon; `store` is added in T11.
 - The racks card keeps the label "Sistema modular".
 - The `h1` of `/shop` is "Loja" and of `/cart` "Carrinho". The text of the empty cart is proposed in T11.
 
@@ -321,6 +321,18 @@ Done before T9, so the shop sections had a page to move to and their end-to-end 
 - `Benefits` has an optional `action`. New string: `home.why.action`.
 - The hero and the section after it have the same eyebrow, "Sistema modular LockMX". Left as it is; a text for the owner to change if it reads as a repetition.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (786 tests, 63 files), `pnpm test:e2e` (602 passed, 2 skipped by design).
+
+### T11 (2026-10-13)
+
+- The header has, at the right, the shop link (the primary button with the new `store` icon; its name is shown from `lg` up and is always in the link) and the cart (`IconButton` with `shopping-cart`), in `components/site/site-header-actions.tsx` (client, to mark the current page). The footer navigation ends with the shop link.
+- **`IconButton` takes `href`** and is then a link with the same look, as `Card` does. A change to a design system component made without asking first, because the cart of the header is navigation and a button that navigates would be the wrong element; recorded in `docs/design/components.md`.
+- **The header changes from menu button to links at `lg` (64rem), not at `md`.** With the shop, the cart and the language switcher beside the four links, the page scrolled sideways by 40 px at 768 px in Portuguese, and after tightening it "Sistema modular" still broke in two lines. Found by the end-to-end run and by eye. Spec 004 had the change at `md`.
+- Below `lg` the language switcher of the header is the last item of the menu; from `lg` up it is in the bar. Both are in the HTML and one is shown at a time. On a narrow screen the menu button is the last thing in the bar but comes before the shop and the cart in the keyboard order, so that its links follow it.
+- `/cart` is a page with the `h1` "Carrinho", the text "O teu carrinho está vazio." and a link to the shop, marked `noindex` and out of the sitemap. No cart id, cookie or request to Shopify.
+- New strings: `navigation.shop`, `navigation.cart`, `shop.cart.*`.
+- The shop is now linked from every page. T8 (the single switch that hides it) has to be done before a launch without the shop.
+- Looked at by eye on screenshots of the header at 320, 768, 1024 and 1440 px, and of the cart.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (794 tests, 64 files), `pnpm test:e2e` (634 passed, 2 skipped by design).
 
 ## Boundaries
 

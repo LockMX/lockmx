@@ -93,6 +93,8 @@ The owner agreed on 2026-10-13 to a limit of 3 messages per hour per address of 
 | Amazon DynamoDB, on demand | $0.625 per million writes and $0.125 per million reads in US East; 25 GB of storage in the monthly free benefits; no pause for inactivity mentioned (https://aws.amazon.com/dynamodb/pricing/on-demand/). Not read: the price in an EU region, and how items expire. | Always on, and the owner already has the AWS account. Needs the AWS SDK (a new dependency) and credentials on the hosting. Fits both limits. |
 | Upstash Redis, free tier | 250 MB and 500,000 commands a month (https://upstash.com/pricing/redis). Not on the page: EU regions, and what happens to an idle free database. | Made for counters with an expiry. A new account, a new processor and a new dependency. |
 
+Owner, 2026-10-13: the counters go in DynamoDB, since counters are needed in any case. Whether the sender gets the acknowledgement by email or only on the screen is still open; on the screen only, there is no template and no limit per recipient.
+
 Not researched: a rate limit by Cloudflare, which needs the domain served through Cloudflare, and where the DNS of `lockmx.com` is managed.
 
 ## Open questions
