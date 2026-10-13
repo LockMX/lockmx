@@ -1,5 +1,10 @@
 import { describe, expect, test } from "vitest";
-import { buildSitemap, localizedPath, publicPaths } from "@/lib/site/public-paths";
+import {
+  buildSitemap,
+  localizedPath,
+  publicPaths,
+  shopSectionPath,
+} from "@/lib/site/public-paths";
 
 describe("localizedPath", () => {
   test.each([
@@ -9,6 +14,12 @@ describe("localizedPath", () => {
     ["en", "company/", "/en/company"],
   ] as const)("%s and %s give %s", (locale, path, expected) => {
     expect(localizedPath(locale, path)).toBe(expected);
+  });
+});
+
+describe("shopSectionPath", () => {
+  test("is the shop path followed by the section", () => {
+    expect(shopSectionPath("tyres")).toBe("/shop/tyres");
   });
 });
 

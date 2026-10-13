@@ -38,6 +38,28 @@ export type ProductSummary = {
   isExample: boolean;
 };
 
+// The sections of the shop, in order. Keys of ours and part of the address
+// (`/shop/tyres`); each maps to a Shopify collection once the store is
+// connected (spec 005, amendment 2).
+export const shopSections = ["racks", "tyres", "merchandise"] as const;
+
+export type ShopSection = (typeof shopSections)[number];
+
+export function isShopSection(value: string): value is ShopSection {
+  return (shopSections as readonly string[]).includes(value);
+}
+
+export type ShopSectionEntry = {
+  key: ShopSection;
+  title: string;
+  href: string;
+};
+
+// What the availability filter of a listing can ask for.
+export const availabilities = ["in", "out"] as const;
+
+export type Availability = (typeof availabilities)[number];
+
 // The product types the home page shows, in order. Keys of ours, not Shopify's.
 export const productTypeKeys = ["modular-system", "tyres"] as const;
 
