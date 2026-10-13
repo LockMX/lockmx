@@ -22,6 +22,12 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata({ locale, path: "/", description: metadata.description });
 }
 
+type WhyMessages = Awaited<ReturnType<typeof getMessages>>["modularSystem"]["why"];
+
+function whyBenefits(why: WhyMessages) {
+  return [why.space, why.place, why.tough, why.time];
+}
+
 // The landing page: it presents the modular system and leads to contact.
 export default async function Home() {
   const locale = await getCurrentLocale();
@@ -57,10 +63,10 @@ export default async function Home() {
       />
       <Benefits
         id={sectionIds.why}
-        eyebrow={home.why.eyebrow}
-        title={home.why.title}
-        benefits={[home.why.space, home.why.place, home.why.tough, home.why.time]}
-        action={{ href: contactHref, label: home.why.action }}
+        eyebrow={modularSystem.why.eyebrow}
+        title={modularSystem.why.title}
+        benefits={whyBenefits(modularSystem.why)}
+        action={{ href: contactHref, label: modularSystem.why.action }}
       />
       <Contact
         id={sectionIds.contact}

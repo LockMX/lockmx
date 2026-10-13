@@ -13,8 +13,8 @@ describe("localizedPath", () => {
 });
 
 describe("publicPaths", () => {
-  test("has the home page and no placeholder", () => {
-    expect(publicPaths).toContain("/");
+  test("has the home page, the modular system and contact, and no placeholder", () => {
+    expect(publicPaths).toEqual(["/", "/modular-system", "/contact"]);
     expect(publicPaths.some((path) => path.includes("coming-soon"))).toBe(false);
   });
 });

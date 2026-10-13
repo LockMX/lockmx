@@ -18,6 +18,16 @@ function region() {
 }
 
 describe("ModularSystem", () => {
+  test("on its own page it is named by the h1 and the parts are h2", () => {
+    render(<ModularSystem {...props} level={1} />);
+
+    expect(within(region()).getByRole("heading", { level: 1 }).textContent).toBe(
+      "Um quartel-general sobre rodas",
+    );
+    expect(within(region()).getAllByRole("heading", { level: 2 })).toHaveLength(2);
+    expect(within(region()).queryByRole("heading", { level: 3 })).toBeNull();
+  });
+
   test("is a region named by its h2", () => {
     render(<ModularSystem {...props} />);
 

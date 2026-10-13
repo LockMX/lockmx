@@ -10,6 +10,15 @@ const props = {
   locale: "pt" as const,
   logoAlt: "LockMX Modular System",
   tagline: "Lock it, send it!",
+  contactLinks: [
+    { href: "mailto:a@example.com", label: "E-mail", icon: "mail" as const },
+    {
+      href: "https://www.instagram.com/example",
+      label: "Instagram",
+      icon: "instagram" as const,
+      external: true,
+    },
+  ],
   navigationLabel: "Rodapé",
   navigationTitle: "Navegação",
   navigationItems: [{ href: "/pt", label: "Início" }],
@@ -37,6 +46,17 @@ describe("SiteFooter", () => {
     expect(screen.getByRole("img", { name: "LockMX Modular System" })).toBeTruthy();
     expect(screen.getByText("Lock it, send it!")).toBeTruthy();
     expect(screen.getByText("© 2026 LockMX")).toBeTruthy();
+  });
+
+  test("has the contact links as named icons", () => {
+    render(<SiteFooter {...props} />);
+
+    expect(screen.getByRole("link", { name: "E-mail" }).getAttribute("href")).toBe(
+      "mailto:a@example.com",
+    );
+    const instagram = screen.getByRole("link", { name: "Instagram" });
+    expect(instagram.getAttribute("href")).toBe("https://www.instagram.com/example");
+    expect(instagram.getAttribute("rel")).toBe("noopener noreferrer");
   });
 
   test("has the footer navigation under its title", () => {

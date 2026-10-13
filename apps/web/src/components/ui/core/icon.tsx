@@ -32,9 +32,19 @@ import {
   Truck,
   User,
   X,
+  createLucideIcon,
   type LucideIcon,
 } from "lucide-react";
 import { classNames } from "@/components/ui/class-names";
+
+// Lucide ships no brand icons, so this one is ours (ADR 0010, update of
+// 2026-10-13): the outline Lucide drew for Instagram before it dropped brands,
+// built with its own helper so it takes size, colour and stroke like the rest.
+const Instagram = createLucideIcon("instagram", [
+  ["rect", { width: "20", height: "20", x: "2", y: "2", rx: "5", ry: "5", key: "frame" }],
+  ["path", { d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z", key: "lens" }],
+  ["line", { x1: "17.5", x2: "17.51", y1: "6.5", y2: "6.5", key: "flash" }],
+]);
 
 // The closed set of icons the design system uses (ADR 0010). Importing each by
 // name keeps the others out of the bundle; adding an icon is one line here.
@@ -50,6 +60,7 @@ const ICONS = {
   "hard-hat": HardHat,
   image: ImageGlyph,
   info: Info,
+  instagram: Instagram,
   "key-round": KeyRound,
   "loader-circle": LoaderCircle,
   lock: Lock,

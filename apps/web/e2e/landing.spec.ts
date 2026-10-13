@@ -165,17 +165,6 @@ for (const locale of locales) {
       );
     });
 
-    test("the modular system has no page of its own", async ({ page, request }) => {
-      expect((await request.get(`${locale.path}/modular-system`)).status()).toBe(404);
-      expect(await (await request.get("/sitemap.xml")).text()).not.toContain("modular-system");
-      await expect(
-        page
-          .getByRole("contentinfo")
-          .getByRole("navigation", { name: locale.footerNavigation })
-          .getByRole("link", { name: locale.sections[0].link, exact: true }),
-      ).toHaveAttribute("href", `${locale.path}#system`);
-    });
-
     test("opening the address of a section puts the focus on it", async ({ page }) => {
       await page.goto(`${locale.path}#contact`);
 

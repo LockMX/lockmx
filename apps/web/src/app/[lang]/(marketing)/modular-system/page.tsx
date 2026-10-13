@@ -1,0 +1,52 @@
+import type { Metadata } from "next";
+import { Benefits } from "@/components/site/sections/benefits";
+import { ModularSystem } from "@/components/site/sections/modular-system";
+import { contactPath, localizedPath, modularSystemPath } from "@/lib/site/public-paths";
+import { getCurrentLocale } from "@/server/i18n/current-locale";
+import { getMessages } from "@/server/i18n/messages";
+import { buildPageMetadata } from "@/server/site/page-metadata";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getCurrentLocale();
+  const { modularSystem } = await getMessages(locale);
+
+  return buildPageMetadata({
+    locale,
+    path: modularSystemPath,
+    title: modularSystem.pageTitle,
+    description: modularSystem.description,
+  });
+}
+
+// The main product of the site: what the modular system is, its parts and why
+// (spec 005, amendment 2).
+export default async function ModularSystemPage() {
+  const locale = await getCurrentLocale();
+  const { modularSystem } = await getMessages(locale);
+  const { why } = modularSystem;
+
+  return (
+    <>
+      <ModularSystem
+        id="modular-system"
+        level={1}
+        eyebrow={modularSystem.eyebrow}
+        title={modularSystem.title}
+        paragraphs={[modularSystem.systemText, modularSystem.partsText]}
+        parts={[
+          { icon: "hard-hat", ...modularSystem.helmets },
+          { icon: "footprints", ...modularSystem.boots },
+          { icon: "shirt", ...modularSystem.hangers },
+          { icon: "shelving-unit", ...modularSystem.shelves },
+        ]}
+      />
+      <Benefits
+        id="why"
+        eyebrow={why.eyebrow}
+        title={why.title}
+        benefits={[why.space, why.place, why.tough, why.time]}
+        action={{ href: localizedPath(locale, contactPath), label: why.action }}
+      />
+    </>
+  );
+}
