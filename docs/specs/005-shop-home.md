@@ -1,6 +1,6 @@
 # 005. Shop: connection to Shopify and shop-style home
 
-- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); phase B waits for prerequisites 2 to 5
+- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); amendment 2 requested by the owner on 2026-10-13, after the client's answer, and waiting for its open points; phase B waits for prerequisites 2 to 5
 - Idea: `../ideas/shop-style-home.md`, `../ideas/landing-focus-and-shop-route.md`
 - Decisions: `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0013-e2e-test-runner.md`, `../decisions/0010-icons-lucide.md`
 
@@ -214,6 +214,82 @@ From `../ideas/landing-focus-and-shop-route.md`. T9 depends on no answer of the 
 - Acceptance criteria: both entries reachable by keyboard and named for assistive technology; the header does not overflow at 320 px; the current page is marked in the navigation.
 - Tests: unit tests for the header and footer; end-to-end for the links, at the mobile and desktop widths.
 - Commit: `feat: add shop and cart entries to the header`
+
+## Amendment 2 (requested by the owner, 2026-10-13; waiting for approval of the open points)
+
+After the owner showed amendment 1 to the client. The client wants the landing page directed at selling: the shop comes back to the landing page, right after the hero, and the explanation of the modular system goes back to a route of its own. The contact form becomes optional, and contact gets a simple page. The client gave https://teammxag57.com as the reference for the organization (a Shopify store).
+
+### The reference (read 2026-10-13)
+
+- Home: a hero, then a carousel of new products, then rows of large cards with a photograph behind the text, each leading to a collection.
+- Collection page (`/collections/pneus`): the name of the collection, a column of filter groups with counts (availability, product type, brand, size, price, colour, tyre dimension), a sort control, a grid of small product cards, pagination. On a narrow screen the filters open from a button.
+- Contact page (`/pages/contatos`): the email and a telephone under the title, then "Redes Sociais", then a short form.
+- Footer: columns of links, then the social icons.
+
+It is the reference for the organization, not for content: no text, product, price or image comes from it.
+
+### What it replaces
+
+- **Decision 12** (landing page: system, "Porquê", contact) and **decision 13** (`/modular-system` removed). Both reversed.
+- **Decision 14**: the shop home is the landing page again; `/shop` becomes the product listing.
+- The "Catálogo / Categorias" heading of the type cards, and the label "Sistema modular" on the racks card ("Details" of amendment 1).
+- The contact section of the landing page: replaced by the page `/contact`.
+- Spec 006 (contact form): on hold.
+- T8: with the shop as the landing page, hiding the shop leaves the home with the hero alone. See open point 6.
+
+### Decisions (owner, 2026-10-13)
+
+17. **Landing page:** hero; "Produtos / Destaques" with the carousel, as it is; then large cards, one per section of the shop, at first "Suportes LockMX" and "Pneus", each with the place for a background image. No "Catálogo / Categorias" heading.
+18. **A large card opens the shop on that section:** filters at the left, products at the right, in small cards like the ones of "Destaques".
+19. **`/modular-system` comes back** as the page that explains the system, and now holds "Porquê LockMX" too.
+20. **`/contact`** is a simple page, reached from the header and the footer: a subsection "E-mail" with the address, and a subsection "Redes Sociais" with the Instagram icon leading to the LockMX page.
+21. **Navigation:** Início, Sistema modular, Merchandise, Contactos. "Merchandise" opens the shop on the LockMX merchandise.
+22. **Footer:** the email and the Instagram icons under the logo.
+23. **Contact form:** optional for the client. Spec 006 goes on hold; if it is built, it lives on `/contact`.
+
+### Proposed, where the request leaves room (approved with the amendment)
+
+- **Addresses.** `/shop` lists every product; `/shop/racks`, `/shop/tyres` and `/shop/merchandise` list one section each. In English in both locales, like every path (spec 002). The shop button of the header keeps leading to `/shop`; the header keeps the cart.
+- **Sections of the shop** are keys of ours (`racks`, `tyres`, `merchandise`), mapped to Shopify collections in phase B. Merchandise has no large card on the landing page: the owner named two.
+- **Example data.** The listing uses the example catalogue, with a few merchandise examples added and flagged like the others. Nothing of it is the client's catalogue.
+- **Filters.** A filter is only real when the catalogue has the data behind it (in Shopify: product type, vendor, tags, metafields). Built now: the sections of the shop as links ("Todos", "Suportes LockMX", "Pneus", "Merchandise") and availability (in stock, sold out), which the example data has. Brand, size and price wait for the catalogue. See open point 3. The filters are a plain form sent with GET, so they work without script, and the server does the filtering: the address carries the choice.
+- **No sort control and no pagination** until the number of products asks for them.
+- **Search bar.** At the top of the listing. It still searches nothing (T7).
+- **Large cards.** A site component, not a change to `Card`: a link with the title over a placeholder surface, and a `next/image` behind the title once a photograph exists. The placeholder is a surface of the design system, not an image: no stock or placeholder photograph is published (spec 004).
+- **Heading order.** The cards section keeps an `h2` for assistive technology only ("Loja"), so the page has no gap between the `h1` and the card titles.
+- **Hero.** Primary action "Ver a loja" to `/shop`; secondary "Conhece o sistema" to `/modular-system`.
+- **`/modular-system`:** restored from the commit before T9 (`5fb00f2`), with "Porquê LockMX" after the parts; its closing action leads to `/contact`.
+- **`/contact`:** `h1` "Contactos", one sentence, "E-mail" and "Redes Sociais" as `h2`. The title "Pronto para arrumar a carrinha?" goes with the section that had it. In the sitemap, like `/modular-system`.
+- **Navigation labels:** "Contactos" / "Contact", "Merchandise" in both.
+
+### Open points
+
+1. **The Instagram icon.** The installed Lucide (1.48.0) has no brand icons: no `instagram` file exists in the package. Options: the Instagram glyph drawn as an icon of ours, outside Lucide (an exception to ADR 0010, after reading Meta's brand rules); or the word "Instagram" as a link with a generic icon. Ask first: it is a new icon.
+2. **The address of the LockMX Instagram page.** Not found by search; not guessed.
+3. **Which filters** beyond section and availability, and from when.
+4. **Background images** of the large cards: from the client.
+5. **Whether the header fits** "Merchandise" beside the other entries, the shop button, the cart and PT/EN at 1024 px: measured in T14; if it does not, it is raised.
+6. **Launch.** With the shop as the landing page, a launch before Shopify is connected has almost nothing to show. Whether the launch now waits for phase B is the owner's and the client's call.
+
+### Tasks
+
+#### T12. Modular system page and contact page
+- Description: restore `/modular-system` (page, path constant, sitemap entry, strings, end-to-end file) from the commit before T9, and render `Benefits` after the parts with its action leading to `/contact`. Add `/contact` as decision 20 describes, with the email as a `mailto:` link; the Instagram link follows open points 1 and 2 and is left out until they are answered. Delete the `Contact` section component and the section ids `system`, `why` and `contact`.
+- Acceptance criteria: both pages in both locales, each with one `h1`, its own title and canonical address, in the sitemap; no sideways scroll at 320 px.
+- Tests: unit tests for the sections and paths; end-to-end for the content and the head of both pages.
+- Commit: `feat: add modular system and contact pages`
+
+#### T13. Shop listing
+- Description: `/shop` and `/shop/[category]` render one listing: the name of the section as `h1`, the search bar, the filters and the grid of product cards from `server/shop/`. An unknown section answers not found. The bundled docs on dynamic segments, `generateStaticParams` and `searchParams` are read first.
+- Acceptance criteria: each section shows only its products; the availability filter narrows the grid and survives a reload; every card carries "Exemplo"; an empty result says so; the filters are usable with the keyboard and at 320 px; the browser decides nothing (the server reads the address and filters).
+- Tests: unit tests for the filtering and the example data; end-to-end for the three sections, the filter and the unknown address.
+- Commit: `feat: add shop listing with filters`
+
+#### T14. Landing page as the shop home, navigation and footer
+- Description: the landing page as decision 17, with the large cards leading to the listings; the hero actions as proposed; the navigation of decision 21; the footer with the contact icons under the logo; "Sistema modular" and "Contactos" marked as the current page on their pages. `ProductTypes` gives way to the large cards.
+- Acceptance criteria: the order of decision 17 in both locales; one `h1`; the header without sideways scroll and without a wrapped entry at 320, 768, 1024 and 1440 px; every link of the header and the footer leads to a page that exists.
+- Tests: unit tests for the cards, the header and the footer; end-to-end for the landing page, the navigation and the widths.
+- Commit: `feat: make the landing page the shop home`
 
 ## Carousel brief
 

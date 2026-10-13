@@ -86,6 +86,12 @@ For the owner:
 
 - Approval of amendment 1 of spec 005.
 
+## Update (client, through the owner, 2026-10-13)
+
+The client prefers the landing page directed at selling. So the direction of this idea is reversed the day it was built: the shop is the landing page again, right after the hero, the modular system is explained on its own page, and contact is a simple page; the contact form is optional. The reference given is https://teammxag57.com. What stays from this idea: the shop button and the cart in the header, and `/shop` as an address. Recorded as amendment 2 of `../specs/005-shop-home.md`.
+
+Of the open questions below, this answers "featured only in the shop" (they are on the landing page) and leaves open how the racks are sold.
+
 ## Outcome
 
 `../specs/005-shop-home.md`, amendment 1 (proposed, 2026-10-13).
