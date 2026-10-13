@@ -95,6 +95,8 @@ The owner agreed on 2026-10-13 to a limit of 3 messages per hour per address of 
 
 Owner, 2026-10-13: the counters go in DynamoDB, since counters are needed in any case. Whether the sender gets the acknowledgement by email or only on the screen is still open; on the screen only, there is no template and no limit per recipient.
 
+Owner, later on 2026-10-13: confirmation on the screen only, so no acknowledgement email, no template and no limit per recipient; and the limit goes in the Vercel firewall instead of DynamoDB. The fields are first name, surname, email, telephone and message. This closes the update above where it says the sender gets an acknowledgement. Recorded in `../decisions/0015-contact-form-rate-limit.md`, the "Contact form" section of ADR 0005 and `../specs/006-contact-form.md`. A possible form for the shop is left pending there.
+
 Not researched: a rate limit by Cloudflare, which needs the domain served through Cloudflare, and where the DNS of `lockmx.com` is managed.
 
 ## Open questions
@@ -120,3 +122,4 @@ For the owner:
 
 - `../decisions/0013-e2e-test-runner.md` (accepted 2026-10-09).
 - `../specs/004-landing-page.md` (draft), on branch `feat/004-landing-page`.
+- `../decisions/0015-contact-form-rate-limit.md` and `../specs/006-contact-form.md` (draft, 2026-10-13), for the contact form.

@@ -1,7 +1,7 @@
 # 0005. Transactional email with Resend
 
-- Status: proposed
-- Date: 2026-09-30 (updated 2026-10-08)
+- Status: proposed for the shop. For the contact form, Resend was chosen by the owner on 2026-10-13; that use is accepted with the approval of spec 006 (see "Contact form").
+- Date: 2026-09-30 (updated 2026-10-08 and 2026-10-13)
 
 ## Context
 
@@ -15,6 +15,24 @@ Sending is done only from the server layer, through a small internal function (a
 
 The owner has not yet confirmed this choice over sending through SES as well (see "Comparison with Amazon SES"). The ADR stays proposed until he does.
 
+## Contact form (owner, 2026-10-13)
+
+The shop is now Shopify (ADR 0014), which sends its own account and order emails, so most of this ADR waits to be revisited. The contact form of the landing page (spec 006) is the one email this project sends itself, and the first use of Resend. What applies to it replaces, for this use, what the rest of the ADR says:
+
+- **One email per submission, to the client.** To `crew@lockmx.com`, with the visitor's address in `reply_to`, so the client answers from the mailbox. The SES forwarder keeps an existing `Reply-To` (`../integrations/aws-ses-mailboxes.md`), so the answer reaches the visitor from the Outlook mailbox too.
+- **No email to the sender.** The visitor is told on the screen that the message was received. The form cannot make our domain send mail to an address someone typed, and there is no acknowledgement template. This reverses the acknowledgement named in "Consequences" below.
+- **Plain text, built by our code.** No React Email and no template language: one short text with the fields. `from`, `to` and `subject` are the required fields of the API, and `text` is accepted on its own according to the parameter table; the first real send confirms it (spec 006).
+- **No SDK.** One `POST https://api.resend.com/emails` with `fetch`, behind the email port described in "Decision". No new dependency. The API key is read in the server layer only.
+- **Quota.** One email per submission: 100 submissions a day and 3,000 a month on the free plan (pricing page, read again 2026-10-13). Over the daily quota the send fails, and the form shows its failure message with the email address.
+- **Data.** The email holds name, email address, telephone and message, so Resend is a processor of personal data and goes in the processor inventory of the privacy policy. Read on 2026-10-13:
+  - The data processing agreement needs no signature: it "shall become legally binding upon Customer entering into the Agreement". The processor is Plus Five Five, Inc.
+  - "Company's primary processing operations take place in the United States." Transfers from the EEA use the EU standard contractual clauses, and the agreement states a certification under the EU-U.S. Data Privacy Framework.
+  - A sending region in the EU exists (Ireland, `eu-west-1`), but "All account data, including email metadata, logs, and API records, is stored in the United States", whatever the region. So choosing the EU region does not keep the message in the EU.
+  - The pricing page lists a data retention of 30 days for emails and logs on the free and Pro plans. Whether the content of a message can be kept out of the dashboard was not found.
+  - So "nothing is stored" is true of this project and not of the processor: the message stays in the Resend account for the retention period. The privacy text the client delivers has to say so.
+- **Sender address.** Still the open point of "Mailbox setup": the planned subdomain is `shop.lockmx.com` (`../integrations/aws-ses-mailboxes.md`). The address is configuration, not code; the owner sets it when the domain is verified in Resend.
+- **Rate limit:** ADR 0015.
+
 ## Mailbox setup
 
 The client's existing mailbox `lock_mx@outlook.com` is the single place where everything arrives. On AWS, SES receives mail for `@lockmx.com` into an S3 bucket and a Lambda function forwards each message to that Outlook mailbox. In the forwarded message the original sender is in "Reply-To", the recipient is the Outlook mailbox, and the "mailed-by" shows the custom MAIL FROM subdomain of the domain. The owner uses the same pattern in another project.
@@ -23,7 +41,8 @@ The client's existing mailbox `lock_mx@outlook.com` is the single place where ev
 |---|---|---|
 | `shop@lockmx.com` | Sender of every automatic email of the shop (codes, welcome, order, payment, shipping status, form acknowledgement, invoices). Send only: it does not receive. | Every template sets `Reply-To: support@lockmx.com`, so a customer who replies reaches support and no reply bounces. Every template also says the message is automatic and points to `support@`. |
 | `support@lockmx.com` | Public help address for anything about a purchase. Shown on the site. | Alias forwarded to the client's mailbox. |
-| `fabio.ramalhinho@lockmx.com` | Direct relationship with customers, used by the person when he chooses. Receives the contact form messages and the "payment confirmed" notification. | Whether he answers from this address or from `support@` is not decided and does not affect the design. |
+| `crew@lockmx.com` | Receives the contact form messages (owner, 2026-10-09). The client answers from it. | Alias forwarded to the client's mailbox. |
+| `fabio.ramalhinho@lockmx.com` | Direct relationship with customers, used by the person when he chooses. Received the contact form messages until `crew@` replaced it for that; the "payment confirmed" notification is revisited with the shop (ADR 0014). | Whether he answers from this address or from `support@` is not decided and does not affect the design. |
 | `privacy@lockmx.com`, `terms@lockmx.com` | Data protection and legal terms contacts. | Exist already. |
 | `postmaster@lockmx.com`, `abuse@lockmx.com` | Role mailboxes expected by email conventions. Not a legal requirement. | Aliases. |
 | `dev@lockmx.com` | Owner of the accounts of third-party services (Resend, AWS, Cloudflare, domain registrar, payment provider). | The owner's convention across his projects. |
@@ -90,4 +109,8 @@ Recommendation: keep Resend for the shop's transactional email and SES for the m
 - Amazon SES sandbox and production access, https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html (2026-10-08).
 - Amazon SES custom MAIL FROM domain, https://docs.aws.amazon.com/ses/latest/dg/mail-from.html (2026-10-08).
 - Verifying Amazon SNS message signatures, https://docs.aws.amazon.com/sns/latest/dg/sns-verify-signature-of-message.html (2026-10-08).
+- Resend send email API, https://resend.com/docs/api-reference/emails/send-email (2026-10-13): endpoint, required fields, `reply_to`, `text`.
+- Resend data processing agreement, https://resend.com/legal/dpa (page last updated 2025-12-31, read 2026-10-13).
+- Resend regions, https://resend.com/docs/dashboard/domains/regions (2026-10-13): sending regions, where account data and logs are stored.
+- Resend pricing, https://resend.com/pricing (2026-10-13): quotas unchanged, data retention.
 - Better Auth Email OTP plugin, `sendVerificationOTP` callback, via Context7 (2026-09-30).
