@@ -22,6 +22,7 @@ describe("Icon", () => {
       "hard-hat",
       "image",
       "info",
+      "instagram",
       "key-round",
       "loader-circle",
       "lock",

@@ -58,18 +58,9 @@ export const pt = {
       title: "Prateleiras modulares",
       text: "Prateleiras que encaixam no sistema.",
     },
-  },
-  home: {
-    hero: {
-      eyebrow: "Sistema modular LockMX",
-      // The tagline of the brand, in English in both locales.
-      titleLead: "Lock it,",
-      titleAccent: "send it!",
-      text: "Um sistema modular que organiza o teu equipamento dentro da carrinha.",
-      primaryAction: "Fala connosco",
-      secondaryAction: "Conhece o sistema",
-      imageAlt: "Placa preta com o logótipo LockMX Modular System numa parede de pedra.",
-    },
+    // The name of the page in the browser tab and in search results.
+    pageTitle: "Sistema modular",
+    description: "O sistema modular LockMX organiza o teu equipamento dentro da carrinha: suportes para capacetes e botas, cabides e prateleiras modulares.",
     why: {
       eyebrow: "Porquê LockMX",
       title: "Mais tempo a rodar",
@@ -90,6 +81,30 @@ export const pt = {
         text: "Menos tempo perdido a procurar e a arrumar. Mais tempo a rodar, a explorar e a enviar.",
       },
       action: "Fala connosco",
+    },
+  },
+  // The contact page (spec 005, amendment 2).
+  contact: {
+    eyebrow: "LockMX",
+    title: "Contactos",
+    text: "Tens uma pergunta? Escreve-nos ou segue-nos.",
+    description: "Fala com a LockMX por email ou segue-nos no Instagram.",
+    emailTitle: "E-mail",
+    socialTitle: "Redes Sociais",
+    // The names of the links, also for the icons of the footer.
+    email: "E-mail",
+    instagram: "Instagram",
+  },
+  home: {
+    hero: {
+      eyebrow: "Sistema modular LockMX",
+      // The tagline of the brand, in English in both locales.
+      titleLead: "Lock it,",
+      titleAccent: "send it!",
+      text: "Um sistema modular que organiza o teu equipamento dentro da carrinha.",
+      primaryAction: "Fala connosco",
+      secondaryAction: "Conhece o sistema",
+      imageAlt: "Placa preta com o logótipo LockMX Modular System numa parede de pedra.",
     },
     contact: {
       eyebrow: "Contacto",

@@ -57,17 +57,9 @@ export const en: Messages = {
       title: "Modular shelves",
       text: "Shelves that fit into the system.",
     },
-  },
-  home: {
-    hero: {
-      eyebrow: "LockMX modular system",
-      titleLead: "Lock it,",
-      titleAccent: "send it!",
-      text: "A modular system that organizes your gear inside your van.",
-      primaryAction: "Get in touch",
-      secondaryAction: "See the system",
-      imageAlt: "Black sign with the LockMX Modular System logo on a stone wall.",
-    },
+    // The name of the page in the browser tab and in search results.
+    pageTitle: "Modular system",
+    description: "The LockMX modular system organizes your gear inside your van: mounts for helmets and boots, hangers and modular shelves.",
     why: {
       eyebrow: "Why LockMX",
       title: "More time riding",
@@ -88,6 +80,29 @@ export const en: Messages = {
         text: "Less time searching and organizing. More time riding, exploring, and sending it.",
       },
       action: "Get in touch",
+    },
+  },
+  // The contact page (spec 005, amendment 2).
+  contact: {
+    eyebrow: "LockMX",
+    title: "Contact",
+    text: "Do you have a question? Write to us or follow us.",
+    description: "Reach LockMX by email or follow us on Instagram.",
+    emailTitle: "Email",
+    socialTitle: "Social media",
+    // The names of the links, also for the icons of the footer.
+    email: "Email",
+    instagram: "Instagram",
+  },
+  home: {
+    hero: {
+      eyebrow: "LockMX modular system",
+      titleLead: "Lock it,",
+      titleAccent: "send it!",
+      text: "A modular system that organizes your gear inside your van.",
+      primaryAction: "Get in touch",
+      secondaryAction: "See the system",
+      imageAlt: "Black sign with the LockMX Modular System logo on a stone wall.",
     },
     contact: {
       eyebrow: "Contact",

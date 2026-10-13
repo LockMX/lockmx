@@ -5,6 +5,7 @@ import { SectionFocus } from "@/components/site/section-focus";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SkipLink } from "@/components/site/skip-link";
+import { contactEmail, instagramUrl } from "@/lib/site/contact";
 import { legalPageHref, legalPages } from "@/lib/site/legal-pages";
 import { cartPath, localizedPath, shopPath } from "@/lib/site/public-paths";
 import { sectionHref, sectionIds } from "@/lib/site/sections";
@@ -16,7 +17,8 @@ const MAIN_ID = "main";
 // The shell of every public page: skip link, header, main content and footer.
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
   const locale = await getCurrentLocale();
-  const { navigation, header, footer, legal, languageSwitcher, error } = await getMessages(locale);
+  const { navigation, header, footer, legal, languageSwitcher, error, contact } =
+    await getMessages(locale);
 
   const homeHref = `/${locale}`;
   const navigationItems = [
@@ -56,6 +58,10 @@ export default async function MarketingLayout({ children }: { children: React.Re
         locale={locale}
         logoAlt={footer.logoAlt}
         tagline={footer.tagline}
+        contactLinks={[
+          { href: `mailto:${contactEmail}`, label: contact.email, icon: "mail" },
+          { href: instagramUrl, label: contact.instagram, icon: "instagram", external: true },
+        ]}
         navigationLabel={navigation.footer}
         navigationTitle={footer.navigationTitle}
         navigationItems={[...navigationItems, shop]}

@@ -4,7 +4,7 @@ import {
   SiteNavigationLink,
   type SiteNavigationItem,
 } from "@/components/site/site-navigation";
-import { Logo } from "@/components/ui";
+import { IconButton, Logo, type IconName } from "@/components/ui";
 import type { Locale } from "@/lib/i18n/config";
 
 // The official platform of the electronic Complaints Book (DL 156/2005, art. 5.º-B).
@@ -13,10 +13,20 @@ const COMPLAINTS_BOOK_URL = "https://www.livroreclamacoes.pt";
 
 const COLUMN_TITLE = "text-2xs leading-tight font-bold tracking-label text-yellow uppercase";
 
+export type SiteFooterContactLink = {
+  href: string;
+  /** The accessible name of the icon. */
+  label: string;
+  icon: IconName;
+  external?: boolean;
+};
+
 type SiteFooterProps = {
   locale: Locale;
   logoAlt: string;
   tagline: string;
+  /** The email and the social networks, as icons under the logo. */
+  contactLinks: SiteFooterContactLink[];
   navigationLabel: string;
   navigationTitle: string;
   navigationItems: SiteNavigationItem[];
@@ -34,6 +44,7 @@ export function SiteFooter({
   locale,
   logoAlt,
   tagline,
+  contactLinks,
   navigationLabel,
   navigationTitle,
   navigationItems,
@@ -55,6 +66,19 @@ export function SiteFooter({
             className="h-auto w-48"
           />
           <p className="text-sm leading-body text-text-inverse-muted">{tagline}</p>
+          <ul className="flex gap-2">
+            {contactLinks.map((link) => (
+              <li key={link.href}>
+                <IconButton
+                  href={link.href}
+                  icon={link.icon}
+                  label={link.label}
+                  variant="ghost-inverse"
+                  rel={link.external ? "noopener noreferrer" : undefined}
+                />
+              </li>
+            ))}
+          </ul>
         </div>
         <div className="flex flex-col gap-3">
           <p className={COLUMN_TITLE}>{navigationTitle}</p>

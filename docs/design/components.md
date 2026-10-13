@@ -17,7 +17,7 @@ The inventory of `apps/web/src/components/ui/`. Each component task of spec 003 
 | Component | Group | File | Client | Props | States | Text props |
 |---|---|---|---|---|---|---|
 | `Logo` | core | `core/logo.tsx` | no | `variant` (`lockup`, `wide`, `wordmark`; default `wordmark`), `tone` (`dark`, `light`, `mono`; default `dark`), `sizes` (required), `className`, other `next/image` props except `src`, `width`, `height`, `fill`, `style` | none (static image) | `alt` (required) |
-| `Icon` | core | `core/icon.tsx` | no | `name` (closed set of 33 Lucide icons), `size` (`sm`, `md`, `lg`; default `md`), `className` | none | none: always decorative |
+| `Icon` | core | `core/icon.tsx` | no | `name` (closed set of 34 icons: 33 from Lucide and `instagram`, drawn here), `size` (`sm`, `md`, `lg`; default `md`), `className` | none | none: always decorative |
 | `Button` | core | `core/button.tsx` | no | `variant` (`primary`, `secondary`, `outline`, `outline-inverse`, `ghost`, `danger`; default `primary`), `size` (`sm`, `md`, `lg`; default `md`), `slanted`, `fullWidth`, `iconLeft`, `iconRight`, `loading`, native `button` props (`type` defaults to `button`) | hover, active, focus, disabled, loading (`aria-busy`, spinner, not activatable) | `children` |
 | `ButtonLink` | core | `core/button-link.tsx` | no | the appearance props of `Button`, `iconLeft`, `iconRight`, `next/link` props (`href` required) | hover, active, focus | `children` |
 | `IconButton` | core | `core/icon-button.tsx` | no | `icon`, `variant` (`ghost`, `ghost-inverse`, `outline`, `primary`, `secondary`; default `ghost`), `size` (`sm`, `md`, `lg`; default `md`), `count`, native `button` props, or `href` and the `next/link` props | hover, focus, disabled | `label` (required: accessible name and tooltip) |
@@ -47,7 +47,7 @@ Usage notes for `Logo` are in `brand.md`.
 
 ## Notes per component
 
-- **Icon.** Adding an icon is one import and one line in the map in `core/icon.tsx`. An icon never has a name of its own: the control around it does (ADR 0010).
+- **Icon.** Adding an icon is one import and one line in the map in `core/icon.tsx`. An icon never has a name of its own: the control around it does (ADR 0010). `instagram` is the one icon that is not imported from Lucide, which ships no brand icons: it is defined in the same file with `createLucideIcon`, so it takes size, colour and stroke like the others (ADR 0010, update of 2026-10-13).
 - **Button.** Navigation uses `ButtonLink`, so it is an anchor; `Button` is only for actions. While `loading` the native `disabled` attribute is set, which is what keeps the button a Server Component; the page changes the label if it wants the wait announced in words. `variant="outline-inverse"` and the `ghost-inverse` icon button belong on an inverse surface.
 - **Slanted button.** The background is a clipped pseudo-element, not the button itself, so the focus outline is not cut. It has no visible border, so the outline variants are not meant to be slanted.
 - **IconButton.** With `href` it is a link, announced as one, with the same look and the same name rules (spec 005, T11). With a `count` above zero the accessible name is the label followed by the number ("Carrinho 3"), and the number is not read a second time. The ring around the count takes the colour of the surface the variant is made for (`ghost-inverse`: the inverse surface).
