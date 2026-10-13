@@ -1,7 +1,7 @@
 # 005. Shop: connection to Shopify and shop-style home
 
-- Status: approved (owner, 2026-10-11); phase B waits for prerequisites 2 to 5
-- Idea: `../ideas/shop-style-home.md`
+- Status: approved (owner, 2026-10-11); amendment 1 proposed on 2026-10-13, not approved; phase B waits for prerequisites 2 to 5
+- Idea: `../ideas/shop-style-home.md`, `../ideas/landing-focus-and-shop-route.md`
 - Decisions: `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0013-e2e-test-runner.md`, `../decisions/0010-icons-lucide.md`
 
 ## Objective
@@ -164,6 +164,56 @@ Added by this spec:
 - Acceptance criteria: with the constant off, the page is the page of spec 004 and no example product, price or search bar is in the HTML; every path named in the docs exists.
 - Tests: end-to-end for both states.
 - Commit: `feat: add switch for the shop sections of the landing page`
+
+## Amendment 1 (proposed 2026-10-13, not approved)
+
+From `../ideas/landing-focus-and-shop-route.md`. Nothing below is implemented until the owner approves it. T9 depends on no answer of the client; T10 and T11 need none either, since the content they show is the example data of phase A.
+
+### What it replaces
+
+- **Objective.** The landing page presents the modular system and leads to contact; the shop home is `/shop`.
+- **Decision 1** (structure of the landing page). The search bar, "Destaques" and the product type cards move to `/shop`.
+- **Decisions 8 and 10** (where the type cards lead). `/modular-system` is removed, so neither card has a destination until category pages exist.
+- **Out of scope, "changing the sections spec 004 built".** T9 changes them.
+- **T7** gives its behaviour to the search bar of `/shop`, not of the hero.
+- **T8**: the single constant hides the shop as a whole: the routes of T10 and T11 answer not found, and the header and the footer lose their shop entries. With it off, no example product, price, search bar or cart is in the HTML of any page.
+
+### Decisions (owner, 2026-10-13)
+
+12. The landing page is: hero, modular system, "Porquê LockMX" ending with a "Fala connosco" button, contact with the title "Pronto para arrumar a carrinha?", footer.
+13. `/modular-system` is removed, without a redirect: the site was never public.
+14. The shop is at `/shop`: search bar, "Destaques", "Categorias" with two large cards (racks, tyres).
+15. The header gets a shop button in the primary style and the cart, both to the left of the language switcher; the footer links to the shop.
+16. The cart is its header entry and an empty state until the cart spec; it keeps no lines, prices or totals of its own.
+
+### To decide in the task, and ask if it is not obvious
+
+- The header at 320 px: proposal, the shop button moves into the menu and the cart stays visible.
+- The `h1` of `/shop` and of `/cart`, and the text of the empty cart: new strings, proposed in the task.
+- The label of the racks card: "Sistema modular" (today) or "Suportes" (the owner's word on 2026-10-13).
+
+### Tasks
+
+#### T9. Landing page focused on the modular system
+- Description: compose the landing page as decision 12. The `ModularSystem` section moves from its page to the landing page, right after the hero, with an `h2` and its parts as `h3`; `Benefits` gains an optional action shown after the list; `Contact` takes the title of the buy block. Removed from the page: the hero search slot's content, "Destaques", the product types, `Buy` and `Complements` (the last two deleted with their strings and tests). The route `/modular-system`, its path constant and its sitemap entry are deleted; the navigation entry and the hero's secondary action lead to the section. `FeaturedProducts`, `ProductTypes` and `HeroSearch` are not deleted: T10 renders them.
+- Planned files: `apps/web/src/app/[lang]/(marketing)/page.tsx` and `layout.tsx`, `modular-system/page.tsx` (deleted), `components/site/sections/` (`modular-system`, `benefits`, `buy`, `complements`, tests), `lib/site/sections.ts`, `lib/site/public-paths.ts`, the sitemap, dictionaries, `e2e/landing.spec.ts`, `e2e/shop-home.spec.ts`, spec 004 (a note that its page changed).
+- Acceptance criteria: the sections in the order of decision 12, in both locales; one `h1` and no skipped heading level; `/modular-system` answers not found; no price and no product card on the landing page; no sideways scroll at 320 px.
+- Tests: unit tests for the changed sections (heading levels, the optional action); end-to-end for the order of the headings, the navigation and the removed address.
+- Commit: `feat: focus the landing page on the modular system`
+
+#### T10. Shop home at `/shop`
+- Description: a page at `/shop`, inside the same shell, with an `h1`, the search bar (state of T4: it searches nothing), `FeaturedProducts` and `ProductTypes` with large cards. Which route group it lives in is decided here, after reading the bundled docs on route groups and layouts. `HeroSearch` is renamed for what it is now. Page metadata and the sitemap entry follow the constant of T8.
+- Planned files: the route, `components/site/` (search, `product-types`), `server/shop/home-catalogue.ts`, `lib/site/public-paths.ts`, dictionaries, `e2e/shop-home.spec.ts`.
+- Acceptance criteria: the three blocks in order in both locales; every product card carries "Exemplo"; the page works at 320 px; the carousel behaves as in T3.
+- Tests: the end-to-end tests of T3 and T4 moved to the new address; unit tests for the large cards.
+- Commit: `feat: add shop home route`
+
+#### T11. Shop and cart in the header and the footer
+- Description: the header gets the shop button and the cart (`IconButton`, `shopping-cart`, count hidden at zero); the footer gets a shop link. The cart leads to `/cart`, a page with the empty state and a link to the shop. No cart id, cookie or request to Shopify in this task.
+- Planned files: `components/site/site-header.tsx`, `site-header-navigation.tsx`, `site-footer.tsx`, tests, `(marketing)/layout.tsx`, the `/cart` route, dictionaries, end-to-end tests.
+- Acceptance criteria: both entries reachable by keyboard and named for assistive technology; the header does not overflow at 320 px; the current page is marked in the navigation.
+- Tests: unit tests for the header and footer; end-to-end for the links, at the mobile and desktop widths.
+- Commit: `feat: add shop and cart entries to the header`
 
 ## Carousel brief
 
