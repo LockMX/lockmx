@@ -1,6 +1,6 @@
 # 005. Shop: connection to Shopify and shop-style home
 
-- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); amendment 2 requested by the owner on 2026-10-13, after the client's answer, and waiting for its open points; phase B waits for prerequisites 2 to 5
+- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); amendment 2 approved (owner, 2026-10-13) and implemented; phase B waits for prerequisites 2 to 5
 - Idea: `../ideas/shop-style-home.md`, `../ideas/landing-focus-and-shop-route.md`
 - Decisions: `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0013-e2e-test-runner.md`, `../decisions/0010-icons-lucide.md`
 
@@ -215,7 +215,7 @@ From `../ideas/landing-focus-and-shop-route.md`. T9 depends on no answer of the 
 - Tests: unit tests for the header and footer; end-to-end for the links, at the mobile and desktop widths.
 - Commit: `feat: add shop and cart entries to the header`
 
-## Amendment 2 (requested by the owner, 2026-10-13; waiting for approval of the open points)
+## Amendment 2 (approved by the owner, 2026-10-13)
 
 After the owner showed amendment 1 to the client. The client wants the landing page directed at selling: the shop comes back to the landing page, right after the hero, and the explanation of the modular system goes back to a route of its own. The contact form becomes optional, and contact gets a simple page. The client gave https://teammxag57.com as the reference for the organization (a Shopify store).
 
@@ -263,6 +263,8 @@ It is the reference for the organization, not for content: no text, product, pri
 - **Navigation labels:** "Contactos" / "Contact", "Merchandise" in both.
 
 ### Open points
+
+Answered by the owner on 2026-10-13: (1) the glyph as an icon of ours; (2) the page is `https://www.instagram.com/lockmx_modularsystem`; (3) section and availability only, the rest with the real catalogue. Points 4 and 6 stay open; point 5 was measured in T14 and fits.
 
 1. **The Instagram icon.** The installed Lucide (1.48.0) has no brand icons: no `instagram` file exists in the package. Options: the Instagram glyph drawn as an icon of ours, outside Lucide (an exception to ADR 0010, after reading Meta's brand rules); or the word "Instagram" as a link with a generic icon. Ask first: it is a new icon.
 2. **The address of the LockMX Instagram page.** Not found by search; not guessed.
@@ -409,6 +411,40 @@ Done before T9, so the shop sections had a page to move to and their end-to-end 
 - The shop is now linked from every page. T8 (the single switch that hides it) has to be done before a launch without the shop.
 - Looked at by eye on screenshots of the header at 320, 768, 1024 and 1440 px, and of the cart.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (794 tests, 64 files), `pnpm test:e2e` (634 passed, 2 skipped by design).
+
+### T12 (2026-10-13)
+
+- `/modular-system` is back, with "Porquê LockMX" after the parts and its action leading to `/contact`; the strings of the benefits moved from `home.why` to `modularSystem.why`.
+- `/contact`: `h1` "Contactos", one sentence, and `ContactChannels` with "E-mail" (`crew@lockmx.com`) and "Redes Sociais" (the Instagram handle, with the icon). Both pages are in the sitemap.
+- The address the owner gave for Instagram carried a tracking parameter of the share link; it was left out. The address and the handle are in `lib/site/contact.ts`.
+- **`instagram` joins the icon set** (34), drawn with the helper of Lucide, which ships no brand icons. Recorded in ADR 0010. It is the outline Lucide used to ship, not Meta's official asset: the page of Meta that was read does not give the rules for the glyph. Raised with the owner.
+- The footer has the email and the Instagram icons under the logo (`IconButton` with `href`).
+- The landing page was left as it was in this task, so every commit keeps the site whole; T14 recomposes it.
+- The tests were written with the code, not before it.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (800 tests, 65 files), and the end-to-end files of the pages, the landing page, the shell and the sitemap in the four projects (426 passed, 2 skipped by design).
+
+### T13 (2026-10-13)
+
+- Sources read: the bundled `03-file-conventions/dynamic-routes.md` (`params` is a promise) and `page.md` (`searchParams` is a promise; reading it renders the page at request time).
+- `/shop/[category]` for `racks`, `tyres` and `merchandise`; any other value is not found. The page is `server/shop/listing-page.tsx`, shared with `/shop` (T14).
+- The sections of the shop are `shopSections` in `lib/shop/product.ts`; `server/shop/shop-listing.ts` answers with their entries and with the products of a listing. The example catalogue gained a section per product and three merchandise examples (nine in all; the carousel keeps its six).
+- Filters (`ShopFilters`): the sections as links, and availability as checkboxes in a form sent with GET. `lib/shop/listing-filters.ts` reads the address and keeps only the values it knows; the server filters. Choosing nothing, or both, shows everything.
+- `ProductGrid` and the carousel share `ProductSummaryCard`, taken out of `FeaturedProducts`. An empty result is said in a status region.
+- A card leads to `/contact` until product pages exist.
+- No sort control, no pagination, no filter button on a narrow screen: there the filters sit above the grid.
+- English label of the racks section: "LockMX mounts". Working copy.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (830 tests, 69 files), and the end-to-end files of the shop in the four projects (259 passed; one carousel test failed once in Firefox and passed 16 times in a row when repeated).
+
+### T14 (2026-10-13)
+
+- The landing page is: hero, "Produtos / Destaques" with the carousel, and `ShopSections` with the large cards "Suportes LockMX" and "Pneus", each leading to its listing. The cards section has an `h2` "Loja" for assistive technology only.
+- A large card is a dark surface with the mark of an image to come. No photograph is used; the client's replace the mark.
+- The hero leads to `/shop` ("Ver a loja") and to `/modular-system`. `/shop` is the listing of every product.
+- Navigation of the header and the footer: Início, Sistema modular, Merchandise (`/shop/merchandise`), Contactos; the footer also has Loja. At 1024 px the four entries, the shop button, the cart and PT/EN fit on one line (test and screenshot).
+- Deleted: `ProductTypes`, the `Contact` section, `getProductTypes`, `sectionHref`, the section ids `system`, `why`, `contact` and `categories`, and the strings `home.contact`, `shop.categories`, `shop.productTypes` and `navigation.why`.
+- The search bar is on the listings only, and still searches nothing (T7).
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (823 tests, 68 files), `pnpm test:e2e` (884 tests: 880 passed, 2 skipped by design, 2 failed on the mobile project because the test counted the language links of the open menu; the test was corrected and its file passed in the four projects, 144 tests). After that a spacing fix in the filters was checked with lint, typecheck, the unit tests and the listing file in Chromium and on the mobile project (92 passed); the whole suite was not run again.
+- Seen in Chromium, `/pt` only: the landing page and the contact page at 320 and 1440 px, the racks listing at 320, 1024 and 1440 px, the header at 1024 px. Not looked at: `/en`, 768 px, a real phone, a screen reader.
 
 ## Boundaries
 

@@ -22,7 +22,7 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 |---|---|---|
 | `app/` | exists | Routes, layouts and composition only. No business logic in pages. |
 | `app/[lang]/` | exists | Root segment for the locale (`pt` or `en`). Holds the root layout and every page. |
-| `app/[lang]/(marketing)` | exists | The public pages and their shell: the layout (skip link, header, `main`, footer), the landing page, `modular-system`, the placeholder legal pages (`company`, `privacy`, `cookies`, `terms`), `not-found`, `error` and a catch-all route that sends unknown addresses to `not-found`. |
+| `app/[lang]/(marketing)` | exists | The public pages and their shell: the layout (skip link, header, `main`, footer), the landing page (the home of the shop), `modular-system`, `contact`, `shop` and `shop/[category]` (the listings), `cart`, the placeholder legal pages (`company`, `privacy`, `cookies`, `terms`), `not-found`, `error` and a catch-all route that sends unknown addresses to `not-found`. |
 | `app/[lang]/coming-soon` | exists | The placeholder page, outside the group, so without the shell. |
 | `app/global-error.tsx`, `app/sitemap.ts`, `app/robots.ts` | exist | The error page of last resort, with its own `<html>`; the sitemap and the robots file. |
 | `app/[lang]/(shop)`, `(account)`, `(admin)` | planned | Route groups, one per site section, inside `[lang]`. |
