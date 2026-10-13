@@ -66,6 +66,21 @@ describe("SiteHeaderNavigation", () => {
     ]);
   });
 
+  test("shows what it is given at the end of the menu, on narrow screens only", () => {
+    render(
+      <SiteHeaderNavigation {...props}>
+        <span>Idioma</span>
+      </SiteHeaderNavigation>,
+    );
+
+    const items = within(list()).getAllByRole("listitem");
+    const last = items[items.length - 1];
+
+    expect(items).toHaveLength(3);
+    expect(within(last).getByText("Idioma")).toBeTruthy();
+    expect(last.classList.contains("lg:hidden")).toBe(true);
+  });
+
   test("marks only the link of the current page", () => {
     render(<SiteHeaderNavigation {...props} />);
 
@@ -82,11 +97,11 @@ describe("SiteHeaderNavigation", () => {
     expect(isShownOnNarrowScreens()).toBe(false);
   });
 
-  test("the button is for narrow screens only, and the list always shows from md up", () => {
+  test("the button is for narrow screens only, and the list always shows from lg up", () => {
     render(<SiteHeaderNavigation {...props} />);
 
-    expect(menuButton().classList.contains("md:hidden")).toBe(true);
-    expect(list().classList.contains("md:flex")).toBe(true);
+    expect(menuButton().classList.contains("lg:hidden")).toBe(true);
+    expect(list().classList.contains("lg:flex")).toBe(true);
   });
 
   test("opens and closes with the button, keeping its name", async () => {
@@ -143,7 +158,7 @@ describe("SiteHeaderNavigation", () => {
     expect(document.activeElement).toBe(link);
   });
 
-  test("closes when the width passes the md breakpoint", async () => {
+  test("closes when the width passes the lg breakpoint", async () => {
     render(<SiteHeaderNavigation {...props} />);
 
     await userEvent.click(menuButton());

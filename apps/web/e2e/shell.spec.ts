@@ -10,6 +10,10 @@ const locales = [
     logo: "LockMX, página inicial",
     menu: "Menu",
     language: "Idioma",
+    shop: "Loja",
+    cart: "Carrinho",
+    emptyCart: "O teu carrinho está vazio.",
+    toShop: "Ir para a loja",
     complaintsBook: "Livro de Reclamações",
     other: "English",
     otherPath: "/en",
@@ -23,6 +27,10 @@ const locales = [
     logo: "LockMX, home",
     menu: "Menu",
     language: "Language",
+    shop: "Shop",
+    cart: "Cart",
+    emptyCart: "Your cart is empty.",
+    toShop: "Go to the shop",
     complaintsBook: "Complaints Book",
     other: "Português",
     otherPath: "/pt",
@@ -45,11 +53,14 @@ for (const locale of locales) {
       const banner = page.getByRole("banner");
       const footer = page.getByRole("contentinfo");
 
+      // Below the `lg` breakpoint the language switcher of the header is in the menu.
+      if (isMobile) await banner.getByRole("button", { name: locale.menu }).click();
       await expect(banner.getByRole("navigation", { name: locale.language })).toBeVisible();
+      if (isMobile) await banner.getByRole("button", { name: locale.menu }).click();
       await expect(footer.getByRole("navigation", { name: locale.footerNavigation })).toBeVisible();
       await expect(footer.getByRole("navigation", { name: locale.language })).toBeVisible();
 
-      // Below the `md` breakpoint the links of the header are behind the menu button.
+      // Below the `lg` breakpoint the links of the header are behind the menu button.
       const main = banner.getByRole("navigation", { name: locale.mainNavigation });
       await expect(main).toBeVisible();
       if (isMobile) await expect(main.getByRole("link")).toHaveCount(0);
@@ -70,6 +81,42 @@ for (const locale of locales) {
     test.describe("on a narrow screen", () => {
       test.beforeEach(async ({ page }) => {
         await page.setViewportSize({ width: 320, height: 640 });
+      });
+
+      test("the logo, the shop, the cart and the menu button sit on one line, in that order", async ({
+        page,
+      }) => {
+        const banner = page.getByRole("banner");
+        const boxes = [];
+        for (const item of [
+          banner.getByRole("link", { name: locale.logo }),
+          banner.getByRole("link", { name: locale.shop, exact: true }),
+          banner.getByRole("link", { name: locale.cart, exact: true }),
+          banner.getByRole("button", { name: locale.menu }),
+        ]) {
+          await expect(item).toBeVisible();
+          const box = await item.boundingBox();
+          if (!box) throw new Error("The header was not laid out");
+          boxes.push(box);
+        }
+
+        for (let index = 1; index < boxes.length; index += 1) {
+          expect(boxes[index].x).toBeGreaterThanOrEqual(boxes[index - 1].x + boxes[index - 1].width);
+        }
+        expect(boxes[3].x + boxes[3].width).toBeLessThanOrEqual(320);
+        await expect(banner.getByRole("navigation", { name: locale.language })).toBeHidden();
+      });
+
+      test("the language switcher is in the menu and changes the language", async ({ page }) => {
+        const banner = page.getByRole("banner");
+
+        await banner.getByRole("button", { name: locale.menu }).click();
+        await banner
+          .getByRole("navigation", { name: locale.language })
+          .getByRole("link", { name: locale.other })
+          .click();
+
+        await expect(page).toHaveURL(new RegExp(`${locale.otherPath}$`));
       });
 
       test("opens the header links with the menu button and follows one", async ({ page }) => {
@@ -112,26 +159,69 @@ for (const locale of locales) {
         await expect(button).toBeFocused();
       });
 
-      // One pixel either side of `md` (48rem): the script and the classes must agree on it.
+      // One pixel either side of `lg` (64rem): the script and the classes must agree on it.
       test("closes the menu when the screen becomes wide", async ({ page }) => {
         const main = page.getByRole("banner").getByRole("navigation", { name: locale.mainNavigation });
         const button = main.getByRole("button", { name: locale.menu });
 
-        await page.setViewportSize({ width: 767, height: 640 });
+        await page.setViewportSize({ width: 1023, height: 640 });
         await button.click();
         await expect(button).toHaveAttribute("aria-expanded", "true");
 
-        await page.setViewportSize({ width: 768, height: 640 });
+        await page.setViewportSize({ width: 1024, height: 640 });
         await expect(button).toBeHidden();
         // Checked here, before narrowing again: two quick resizes can reach the page as one.
         // The button is hidden now, so it is not found by its role.
         await expect(main.locator("button")).toHaveAttribute("aria-expanded", "false");
         await expect(main.getByRole("link", { name: locale.home })).toBeVisible();
 
-        await page.setViewportSize({ width: 767, height: 640 });
+        await page.setViewportSize({ width: 1023, height: 640 });
         await expect(button).toHaveAttribute("aria-expanded", "false");
         await expect(main.getByRole("link", { name: locale.home })).toBeHidden();
       });
+    });
+
+    test("the header leads to the shop and to the cart, and the footer to the shop", async ({
+      page,
+    }) => {
+      const banner = page.getByRole("banner");
+
+      await expect(banner.getByRole("link", { name: locale.shop, exact: true })).toHaveAttribute(
+        "href",
+        `${locale.path}/shop`,
+      );
+      await expect(banner.getByRole("link", { name: locale.cart, exact: true })).toHaveAttribute(
+        "href",
+        `${locale.path}/cart`,
+      );
+      await expect(
+        page
+          .getByRole("contentinfo")
+          .getByRole("navigation", { name: locale.footerNavigation })
+          .getByRole("link", { name: locale.shop, exact: true }),
+      ).toHaveAttribute("href", `${locale.path}/shop`);
+    });
+
+    test("the cart is empty, leads to the shop and is kept out of search results", async ({
+      page,
+    }) => {
+      await page.getByRole("banner").getByRole("link", { name: locale.cart, exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`${locale.path}/cart$`));
+
+      const main = page.getByRole("main");
+      await expect(main.getByRole("heading", { level: 1 })).toHaveText([locale.cart]);
+      await expect(main.getByText(locale.emptyCart)).toBeVisible();
+      await expect(main).not.toContainText(/€|EUR/);
+      await expect(page.locator('head meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+      await expect(
+        page.getByRole("banner").getByRole("link", { name: locale.cart, exact: true }),
+      ).toHaveAttribute("aria-current", "page");
+
+      await main.getByRole("link", { name: locale.toShop }).click();
+      await expect(page).toHaveURL(new RegExp(`${locale.path}/shop$`));
+      await expect(
+        page.getByRole("banner").getByRole("link", { name: locale.shop, exact: true }),
+      ).toHaveAttribute("aria-current", "page");
     });
 
     test("marks the home link as the current page", async ({ page }) => {

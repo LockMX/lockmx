@@ -20,6 +20,8 @@ export const pt = {
     modularSystem: "Sistema modular",
     why: "Porquê",
     contact: "Contacto",
+    shop: "Loja",
+    cart: "Carrinho",
   },
   header: {
     skipToContent: "Saltar para o conteúdo",
@@ -101,6 +103,11 @@ export const pt = {
     home: {
       eyebrow: "LockMX",
       title: "Loja",
+    },
+    cart: {
+      title: "Carrinho",
+      empty: "O teu carrinho está vazio.",
+      action: "Ir para a loja",
     },
     featured: {
       eyebrow: "Produtos",

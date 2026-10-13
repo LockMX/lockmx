@@ -230,8 +230,8 @@ for (const locale of locales) {
       });
     }
 
-    test("shows every header link beside the logo at the md breakpoint", async ({ page }) => {
-      await page.setViewportSize({ width: 768, height: 800 });
+    test("shows every header link beside the logo at the lg breakpoint", async ({ page }) => {
+      await page.setViewportSize({ width: 1024, height: 800 });
       const banner = page.getByRole("banner");
       const navigation = banner.getByRole("navigation", { name: locale.mainNavigation });
 
