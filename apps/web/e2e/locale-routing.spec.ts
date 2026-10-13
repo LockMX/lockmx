@@ -32,9 +32,11 @@ for (const home of homes) {
       await expect(page.locator("html")).toHaveAttribute("lang", home.lang);
     });
 
-    test("marks the current language and leads to the other one", async ({ page }) => {
+    test("marks the current language and leads to the other one", async ({ page, isMobile }) => {
       await page.goto(home.path);
-      // The header and the footer both have the switcher.
+      // The header and the footer both have the switcher; on a narrow screen
+      // the one of the header is in the menu.
+      if (isMobile) await page.getByRole("banner").getByRole("button", { name: "Menu" }).click();
       const switcher = page.getByRole("banner").getByRole("navigation", { name: home.switcher });
 
       await expect(switcher.getByRole("link", { name: home.current })).toHaveAttribute(

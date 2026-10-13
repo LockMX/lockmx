@@ -64,6 +64,17 @@ describe("IconButton", () => {
     expect(onClick).toHaveBeenCalledTimes(3);
   });
 
+  test("with an address it is a link named by its label, with the count", () => {
+    render(<IconButton href="/pt/cart" icon="shopping-cart" label="Carrinho" count={2} />);
+
+    const link = screen.getByRole("link", { name: "Carrinho 2" });
+
+    expect(link.getAttribute("href")).toBe("/pt/cart");
+    expect(link.getAttribute("title")).toBe("Carrinho");
+    expect(link.getAttribute("type")).toBeNull();
+    expect(screen.queryByRole("button")).toBeNull();
+  });
+
   test("does not fire onClick when disabled", async () => {
     const onClick = vi.fn();
     render(<IconButton icon="x" label="Fechar" disabled onClick={onClick} />);

@@ -20,6 +20,8 @@ export const en: Messages = {
     modularSystem: "Modular system",
     why: "Why",
     contact: "Contact",
+    shop: "Shop",
+    cart: "Cart",
   },
   header: {
     skipToContent: "Skip to content",
@@ -98,6 +100,11 @@ export const en: Messages = {
     home: {
       eyebrow: "LockMX",
       title: "Shop",
+    },
+    cart: {
+      title: "Cart",
+      empty: "Your cart is empty.",
+      action: "Go to the shop",
     },
     featured: {
       eyebrow: "Products",

@@ -39,6 +39,7 @@ describe("Icon", () => {
       "shelving-unit",
       "shirt",
       "shopping-cart",
+      "store",
       "trash-2",
       "truck",
       "user",

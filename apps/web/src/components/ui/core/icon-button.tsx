@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { classNames } from "@/components/ui/class-names";
 import { Icon, type IconName, type IconSize } from "@/components/ui/core/icon";
 
@@ -48,10 +49,7 @@ const COUNT_RING_CLASSES: Record<IconButtonVariant, string> = {
   secondary: "ring-surface-page",
 };
 
-export type IconButtonProps = Omit<
-  React.ComponentProps<"button">,
-  "style" | "children" | "aria-label" | "title"
-> & {
+type IconButtonAppearance = {
   icon: IconName;
   /** The accessible name, also shown as the tooltip. */
   label: string;
@@ -61,32 +59,28 @@ export type IconButtonProps = Omit<
   count?: number;
 };
 
-export function IconButton({
-  icon,
-  label,
-  variant = "ghost",
-  size = "md",
-  count = 0,
-  type = "button",
-  className,
-  ...buttonProps
-}: IconButtonProps) {
-  const hasCount = count > 0;
+type NamedByLabel = "style" | "children" | "aria-label" | "title";
 
-  return (
-    <button
-      {...buttonProps}
-      type={type}
-      // The count is part of the name, so it is announced with the label.
-      aria-label={hasCount ? `${label} ${count}` : label}
-      title={label}
-      className={classNames(
-        BASE_CLASSES,
-        VARIANT_CLASSES[variant],
-        SIZE_CLASSES[size],
-        className,
-      )}
-    >
+type ActionIconButtonProps = Omit<React.ComponentProps<"button">, NamedByLabel> &
+  IconButtonAppearance & { href?: undefined };
+
+type LinkIconButtonProps = Omit<React.ComponentProps<typeof Link>, NamedByLabel> &
+  IconButtonAppearance;
+
+export type IconButtonProps = ActionIconButtonProps | LinkIconButtonProps;
+
+/** A control with only an icon. With `href` it is a link and is announced as one. */
+export function IconButton(props: IconButtonProps) {
+  const { icon, label, variant = "ghost", size = "md", count = 0, className, ...rest } = props;
+  const hasCount = count > 0;
+  const shared = {
+    // The count is part of the name, so it is announced with the label.
+    "aria-label": hasCount ? `${label} ${count}` : label,
+    title: label,
+    className: classNames(BASE_CLASSES, VARIANT_CLASSES[variant], SIZE_CLASSES[size], className),
+  };
+  const content = (
+    <>
       <Icon name={icon} size={ICON_SIZES[size]} />
       {hasCount && (
         <span
@@ -96,6 +90,22 @@ export function IconButton({
           {count}
         </span>
       )}
+    </>
+  );
+
+  if (rest.href !== undefined) {
+    return (
+      <Link {...rest} {...shared}>
+        {content}
+      </Link>
+    );
+  }
+
+  const { type = "button", ...buttonProps } = rest;
+
+  return (
+    <button {...buttonProps} {...shared} type={type}>
+      {content}
     </button>
   );
 }

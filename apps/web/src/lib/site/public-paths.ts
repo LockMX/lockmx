@@ -9,6 +9,7 @@ export const publicPaths: readonly string[] = ["/"];
 
 // The shop is not in the sitemap while it shows example products (spec 005, T8).
 export const shopPath = "/shop";
+export const cartPath = "/cart";
 
 // The address of a page in a locale: "/" gives "/pt", "/company" gives "/pt/company".
 export function localizedPath(locale: Locale, path: string): string {

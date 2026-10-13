@@ -10,9 +10,9 @@ import { SiteNavigationLink, type SiteNavigationItem } from "@/components/site/s
 import { IconButton } from "@/components/ui";
 import { classNames } from "@/components/ui/class-names";
 
-// Tailwind's default `md` breakpoint, the one the `md:` classes below use.
-// Source: node_modules/tailwindcss/theme.css (`--breakpoint-md: 48rem`).
-const DESKTOP_QUERY = "(min-width: 48rem)";
+// Tailwind's default `lg` breakpoint, the one the `lg:` classes below use.
+// Source: node_modules/tailwindcss/theme.css (`--breakpoint-lg: 64rem`).
+const DESKTOP_QUERY = "(min-width: 64rem)";
 
 type SiteHeaderNavigationProps = {
   /** Accessible name of the landmark, without the word "navigation". */
@@ -20,14 +20,21 @@ type SiteHeaderNavigationProps = {
   /** Name of the button that opens the links on a narrow screen. */
   menuLabel: string;
   items: SiteNavigationItem[];
+  /** Shown at the end of the menu, on a narrow screen only. */
+  children?: React.ReactNode;
 };
 
 /**
- * The links of the header. From `md` up they sit in a row; below it a button
+ * The links of the header. From `lg` up they sit in a row; below it a button
  * opens them under the header. The list is hidden with `display` only, so it
  * is never shown without also being exposed to assistive technology.
  */
-export function SiteHeaderNavigation({ label, menuLabel, items }: SiteHeaderNavigationProps) {
+export function SiteHeaderNavigation({
+  label,
+  menuLabel,
+  items,
+  children,
+}: SiteHeaderNavigationProps) {
   const pathname = usePathname();
   const listId = useId();
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -68,14 +75,14 @@ export function SiteHeaderNavigation({ label, menuLabel, items }: SiteHeaderNavi
         variant="ghost-inverse"
         aria-expanded={open}
         aria-controls={listId}
-        className="md:hidden"
+        className="lg:hidden"
         onClick={() => setOpenAt(open ? null : pathname)}
       />
       <ul
         id={listId}
         className={classNames(
           "absolute inset-x-0 top-full flex-col items-start gap-2 border-b border-border-inverse bg-surface-inverse px-gutter py-4",
-          "md:static md:flex md:flex-row md:items-center md:gap-6 md:border-b-0 md:p-0",
+          "lg:static lg:flex lg:flex-row lg:items-center lg:gap-6 lg:border-b-0 lg:p-0",
           open ? "flex" : "hidden",
         )}
       >
@@ -84,6 +91,7 @@ export function SiteHeaderNavigation({ label, menuLabel, items }: SiteHeaderNavi
             <SiteNavigationLink item={item} appearance="row" onClick={close} />
           </li>
         ))}
+        {children && <li className="pt-2 text-sm leading-tight lg:hidden">{children}</li>}
       </ul>
     </nav>
   );
