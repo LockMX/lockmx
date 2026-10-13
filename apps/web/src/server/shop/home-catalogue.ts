@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 import type { ProductSummary, ProductTypeEntry } from "@/lib/shop/product";
-import { localizedPath, modularSystemPath } from "@/lib/site/public-paths";
+import { sectionHref, sectionIds } from "@/lib/site/sections";
 import { getMessages } from "@/server/i18n/messages";
 import { exampleFeaturedProducts } from "@/server/shop/example-catalogue";
 
@@ -12,7 +12,8 @@ export async function getFeaturedProducts(locale: Locale): Promise<ProductSummar
   return exampleFeaturedProducts(locale);
 }
 
-// Tyres has no address until the shop has category pages.
+// Until the shop has category pages, the modular system leads to its section
+// of the landing page and tyres has no address.
 export async function getProductTypes(locale: Locale): Promise<ProductTypeEntry[]> {
   const { shop } = await getMessages(locale);
 
@@ -20,7 +21,7 @@ export async function getProductTypes(locale: Locale): Promise<ProductTypeEntry[
     {
       key: "modular-system",
       title: shop.productTypes.modularSystem,
-      href: localizedPath(locale, modularSystemPath),
+      href: sectionHref(locale, sectionIds.system),
     },
     { key: "tyres", title: shop.productTypes.tyres },
   ];

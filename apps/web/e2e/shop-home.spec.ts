@@ -17,7 +17,7 @@ const locales = [
     contactHref: "/pt#contact",
     categories: "Categorias",
     types: ["Sistema modular", "Pneus"],
-    modularSystemHref: "/pt/modular-system",
+    modularSystemHref: "/pt#system",
     soon: "Em breve",
     search: "Pesquisar produtos",
     submit: "Pesquisar",
@@ -37,7 +37,7 @@ const locales = [
     contactHref: "/en#contact",
     categories: "Categories",
     types: ["Modular system", "Tyres"],
-    modularSystemHref: "/en/modular-system",
+    modularSystemHref: "/en#system",
     soon: "Coming soon",
     search: "Search products",
     submit: "Search",
@@ -162,7 +162,7 @@ for (const locale of locales) {
       await expect(section.getByRole("heading", { level: 3 })).toHaveText(locale.types);
     });
 
-    test("the modular system card leads to its page and tyres leads nowhere yet", async ({
+    test("the modular system card leads to the landing page and tyres leads nowhere yet", async ({
       page,
     }) => {
       const section = page

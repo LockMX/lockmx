@@ -6,16 +6,15 @@ const locales = [
     mainNavigation: "Principal",
     menu: "Menu",
     title: "Lock it, send it!",
-    headings: [
-      "Mais tempo a rodar",
-      "Pronto para arrumar a carrinha?",
-      "Tudo para motocross",
-      "Fala connosco",
-    ],
+    footerNavigation: "Rodapé",
+    headings: ["Um quartel-general sobre rodas", "Mais tempo a rodar", "Pronto para arrumar a carrinha?"],
     sections: [
+      { link: "Sistema modular", id: "system", heading: "Um quartel-general sobre rodas" },
       { link: "Porquê", id: "why", heading: "Mais tempo a rodar" },
-      { link: "Contacto", id: "contact", heading: "Fala connosco" },
+      { link: "Contacto", id: "contact", heading: "Pronto para arrumar a carrinha?" },
     ],
+    parts: ["Suportes para capacetes", "Suportes para botas", "Cabides", "Prateleiras modulares"],
+    opening: /^Criado para aventureiros/,
     primaryAction: "Fala connosco",
     secondaryAction: "Conhece o sistema",
     description: /^A tua loja online de motocross\./,
@@ -25,16 +24,15 @@ const locales = [
     mainNavigation: "Main",
     menu: "Menu",
     title: "Lock it, send it!",
-    headings: [
-      "More time riding",
-      "Ready to sort out your van?",
-      "Everything for motocross",
-      "Get in touch",
-    ],
+    footerNavigation: "Footer",
+    headings: ["A command center on wheels", "More time riding", "Ready to sort out your van?"],
     sections: [
+      { link: "Modular system", id: "system", heading: "A command center on wheels" },
       { link: "Why", id: "why", heading: "More time riding" },
-      { link: "Contact", id: "contact", heading: "Get in touch" },
+      { link: "Contact", id: "contact", heading: "Ready to sort out your van?" },
     ],
+    parts: ["Helmet mounts", "Boot mounts", "Hangers", "Modular shelves"],
+    opening: /^Pure organization for those who live on the edge\./,
     primaryAction: "Get in touch",
     secondaryAction: "See the system",
     description: /^Your online motocross shop\./,
@@ -115,7 +113,7 @@ for (const locale of locales) {
       const secondary = hero.getByRole("link", { name: locale.secondaryAction });
 
       await expect(primary).toHaveAttribute("href", `${locale.path}#contact`);
-      await expect(secondary).toHaveAttribute("href", `${locale.path}/modular-system`);
+      await expect(secondary).toHaveAttribute("href", `${locale.path}#system`);
 
       await secondary.focus();
       await expect(secondary).toBeFocused();
@@ -146,6 +144,36 @@ for (const locale of locales) {
         page,
         page.getByRole("main").getByRole("heading", { name: section.heading, level: 2 }),
       );
+    });
+
+    test("the modular system follows the hero, with the text of the client and its parts", async ({
+      page,
+    }) => {
+      const system = page.getByRole("main").getByRole("region", { name: locale.headings[0] });
+
+      await expect(system.getByText(locale.opening)).toBeVisible();
+      await expect(system.getByRole("heading", { level: 3 })).toHaveText(locale.parts);
+    });
+
+    test("the benefits end with the main action, which leads to contact", async ({ page }) => {
+      const why = page.getByRole("main").getByRole("region", { name: locale.headings[1] });
+
+      await expect(why.getByRole("link")).toHaveCount(1);
+      await expect(why.getByRole("link", { name: locale.primaryAction })).toHaveAttribute(
+        "href",
+        `${locale.path}#contact`,
+      );
+    });
+
+    test("the modular system has no page of its own", async ({ page, request }) => {
+      expect((await request.get(`${locale.path}/modular-system`)).status()).toBe(404);
+      expect(await (await request.get("/sitemap.xml")).text()).not.toContain("modular-system");
+      await expect(
+        page
+          .getByRole("contentinfo")
+          .getByRole("navigation", { name: locale.footerNavigation })
+          .getByRole("link", { name: locale.sections[0].link, exact: true }),
+      ).toHaveAttribute("href", `${locale.path}#system`);
     });
 
     test("opening the address of a section puts the focus on it", async ({ page }) => {

@@ -6,9 +6,8 @@ import { localizedPath } from "@/lib/site/public-paths";
 export const sectionIds = {
   featured: "featured",
   categories: "categories",
+  system: "system",
   why: "why",
-  buy: "buy",
-  complements: "complements",
   contact: "contact",
 } as const;
 

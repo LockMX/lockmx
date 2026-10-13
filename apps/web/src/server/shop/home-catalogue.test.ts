@@ -70,16 +70,16 @@ describe("getProductTypes", () => {
     expect(types.map((type) => type.key)).toEqual([...productTypeKeys]);
   });
 
-  test("pt: the modular system leads to its page and tyres leads nowhere yet", async () => {
+  test("pt: the modular system leads to its section of the landing page and tyres nowhere yet", async () => {
     expect(await getProductTypes("pt")).toEqual([
-      { key: "modular-system", title: "Sistema modular", href: "/pt/modular-system" },
+      { key: "modular-system", title: "Sistema modular", href: "/pt#system" },
       { key: "tyres", title: "Pneus" },
     ]);
   });
 
   test("en: same paths under its locale, translated titles", async () => {
     expect(await getProductTypes("en")).toEqual([
-      { key: "modular-system", title: "Modular system", href: "/en/modular-system" },
+      { key: "modular-system", title: "Modular system", href: "/en#system" },
       { key: "tyres", title: "Tyres" },
     ]);
   });
