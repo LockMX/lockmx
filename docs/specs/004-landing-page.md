@@ -1,6 +1,6 @@
 # 004. Public site shell and landing page
 
-- Status: in progress (approved by the owner on 2026-10-09)
+- Status: in progress (approved by the owner on 2026-10-09). The landing page it built was recomposed on 2026-10-13 by amendment 1 of `005-shop-home.md`: the modular system is a section of it again, `/modular-system`, the buy block and the complements block are gone.
 - Idea: `../ideas/landing-page.md`
 - Decisions: `../decisions/0013-e2e-test-runner.md`, `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0001-monorepo-single-web-app.md`
 
