@@ -100,10 +100,26 @@ describe("IconButton", () => {
     ["sm", "size-8"],
     ["md", "size-10"],
     ["lg", "size-12"],
+    ["xl", "size-14"],
   ] as const)("size %s is a %s square", (size, square) => {
     render(<IconButton icon="x" label="Fechar" size={size} />);
 
     expect(screen.getByRole("button").className.split(" ")).toContain(square);
+  });
+
+  test("on the inverse surface the icon turns yellow on hover and the background stays", () => {
+    render(<IconButton icon="x" label="Fechar" variant="ghost-inverse" />);
+
+    const classes = screen.getByRole("button").className.split(" ");
+
+    expect(classes).toContain("hover:text-yellow");
+    expect(classes.filter((name) => name.startsWith("hover:bg-"))).toEqual([]);
+  });
+
+  test("the extra large size holds an icon of 2rem", () => {
+    const { container } = render(<IconButton icon="instagram" label="Instagram" size="xl" />);
+
+    expect(container.querySelector("svg")?.getAttribute("class")?.split(" ")).toContain("size-8");
   });
 
   // Checked by `pnpm typecheck`: the elements are built, never rendered.

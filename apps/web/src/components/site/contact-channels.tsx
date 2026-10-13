@@ -29,7 +29,7 @@ export function ContactChannels({ channels }: ContactChannelsProps) {
             rel={channel.external ? "noopener noreferrer" : undefined}
             className="inline-flex items-center gap-2 self-start text-lg leading-snug font-semibold break-all"
           >
-            <Icon name={channel.icon} />
+            <Icon name={channel.icon} size="xl" />
             {channel.text}
           </a>
         </div>

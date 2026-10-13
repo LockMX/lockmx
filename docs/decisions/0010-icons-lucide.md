@@ -32,6 +32,15 @@ The contact page and the footer link to the Instagram page of LockMX with an ico
 - It is a drawing in the stroke style of the set, not the official asset. Meta asks that only the logos of its Brand Resource Center are used; the page read (https://www.meta.com/brand/resources/instagram/instagram-brand/, 2026-10-13) does not give the rules for the glyph itself (colour, redrawing, size), and the page that does was not read. If the client wants the official glyph, it is downloaded from that centre and replaces this drawing; raised with the owner.
 - No other brand icon is added without asking.
 
+## Update (owner, 2026-10-13): the official Instagram glyph
+
+The owner accepted Meta's terms, downloaded the asset pack from the Brand Resource Center (`IG_brand_asset_pack_2023.zip`) and asked for the official glyph in place of the drawing.
+
+- The pack holds the glyph only, in gradient, white and black, as `.ai`, `.svg`, `.png` and `.jpg`. It holds no guidelines document.
+- `core/icon.tsx` now carries the path of `Instagram_Glyph_Black.svg` (one path on 1000 units), unchanged, scaled to the 24 units of the set and filled with the colour of the text. The files of the pack are not in the repository.
+- **Not verified at the source:** the rules for the glyph. The page of Meta that held them answers 404 at every address its redirects lead to (2026-10-13). Secondary summaries (for example https://www.sendible.com/insights/social-media-icons, 2026-10-13) say: any single solid colour, no change of shape or rotation, clear space of half the glyph, never under 29 by 29 pixels. They are followed as if true: the glyph is drawn at 2rem (`Icon` size `xl`, new), in white, in the text colour or in yellow on hover, with at least 1.5rem between it and its neighbour in the footer.
+- The mail icon beside it is a stroke icon, so the two differ in weight. Accepted by the owner with the choice of the official glyph.
+
 ## Sources
 
 - Lucide guide for `lucide-react`: https://lucide.dev/guide/packages/lucide-react (2026-10-07): tree-shaken named imports, size, colour and stroke width props, ISC licence. The page does not state the `aria-hidden` default or React 19 support; both are confirmed in the package documentation and tests at install time (spec 003, T4) before the dependency is added.

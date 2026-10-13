@@ -66,7 +66,7 @@ export function SiteFooter({
             className="h-auto w-48"
           />
           <p className="text-sm leading-body text-text-inverse-muted">{tagline}</p>
-          <ul className="flex gap-2">
+          <ul className="-ml-3 flex gap-2">
             {contactLinks.map((link) => (
               <li key={link.href}>
                 <IconButton
@@ -74,6 +74,7 @@ export function SiteFooter({
                   icon={link.icon}
                   label={link.label}
                   variant="ghost-inverse"
+                  size="xl"
                   rel={link.external ? "noopener noreferrer" : undefined}
                 />
               </li>
