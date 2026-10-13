@@ -1,8 +1,8 @@
 import type { Locale } from "@/lib/i18n/config";
 import { localizedPath } from "@/lib/site/public-paths";
 
-// The sections of the landing page. The ids are part of the address, so they
-// are the same in both locales, like the paths (spec 002).
+// The sections of the landing page and of the shop home. The ids are part of
+// the address, so they are the same in both locales, like the paths (spec 002).
 export const sectionIds = {
   featured: "featured",
   categories: "categories",

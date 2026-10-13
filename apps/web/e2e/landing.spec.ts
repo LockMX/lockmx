@@ -7,8 +7,6 @@ const locales = [
     menu: "Menu",
     title: "Lock it, send it!",
     headings: [
-      "Destaques",
-      "Categorias",
       "Mais tempo a rodar",
       "Pronto para arrumar a carrinha?",
       "Tudo para motocross",
@@ -28,8 +26,6 @@ const locales = [
     menu: "Menu",
     title: "Lock it, send it!",
     headings: [
-      "Featured",
-      "Categories",
       "More time riding",
       "Ready to sort out your van?",
       "Everything for motocross",
@@ -188,14 +184,11 @@ for (const locale of locales) {
       );
     });
 
-    // The featured products are examples, each marked as one (shop-home.spec.ts).
-    test("states no price outside the example products", async ({ page }) => {
-      const parts = page.locator("main > :not(#featured)");
+    test("states no price and has no search bar", async ({ page }) => {
+      const main = page.getByRole("main");
 
-      await expect(parts).not.toHaveCount(0);
-      for (const part of await parts.all()) {
-        await expect(part).not.toContainText(/€|EUR/);
-      }
+      await expect(main).not.toContainText(/€|EUR/);
+      await expect(main.getByRole("search")).toHaveCount(0);
     });
 
     for (const width of [320, 768, 1024, 1440]) {
