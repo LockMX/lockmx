@@ -82,6 +82,19 @@ The form stays in its own spec. Recorded here so that spec starts from them:
 - ADR 0005 is still "proposed" and was written for the custom shop; it is updated and accepted for this one use before the spec. How its templates are written (React Email, a new dependency, or HTML built by our code) is decided there.
 - Each submission is now two emails. On the free plan of Resend (100 a day, 3,000 a month, ADR 0005, read 2026-10-08) that is 50 submissions a day.
 
+### Where the rate limit counters live (read 2026-10-13, nothing decided)
+
+The owner agreed on 2026-10-13 to a limit of 3 messages per hour per address of origin, and that 50 submissions a day (the Resend quota) are enough for now. A limit per recipient of the acknowledgement needs a counter keyed by something of the request body, so a firewall rule alone does not give it.
+
+| Option | What was read | Assessment |
+|---|---|---|
+| Supabase, free plan | "Free projects are paused after 1 week of inactivity." (https://supabase.com/pricing) | Raised and set aside by the owner: a form with little traffic would pause the project, and the limit would fail when it is needed. |
+| Vercel WAF rate limiting | Available on all plans. Hobby: 1 rule per project, key IP or JA4, fixed window from 10 s to 10 min, 1,000,000 allowed requests included. Counters are per region. (https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting) | No database, no code, no dependency. The longest window is 10 minutes, so "3 per hour" becomes, for example, 1 per 10 minutes. It counts by address of origin only, and ties the limit to the hosting, whose ADR (0012) is provisional. |
+| Amazon DynamoDB, on demand | $0.625 per million writes and $0.125 per million reads in US East; 25 GB of storage in the monthly free benefits; no pause for inactivity mentioned (https://aws.amazon.com/dynamodb/pricing/on-demand/). Not read: the price in an EU region, and how items expire. | Always on, and the owner already has the AWS account. Needs the AWS SDK (a new dependency) and credentials on the hosting. Fits both limits. |
+| Upstash Redis, free tier | 250 MB and 500,000 commands a month (https://upstash.com/pricing/redis). Not on the page: EU regions, and what happens to an idle free database. | Made for counters with an expiry. A new account, a new processor and a new dependency. |
+
+Not researched: a rate limit by Cloudflare, which needs the domain served through Cloudflare, and where the DNS of `lockmx.com` is managed.
+
 ## Open questions
 
 For the client:

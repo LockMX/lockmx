@@ -1,6 +1,6 @@
 # 005. Shop: connection to Shopify and shop-style home
 
-- Status: approved (owner, 2026-10-11); amendment 1 proposed on 2026-10-13, not approved; phase B waits for prerequisites 2 to 5
+- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); phase B waits for prerequisites 2 to 5
 - Idea: `../ideas/shop-style-home.md`, `../ideas/landing-focus-and-shop-route.md`
 - Decisions: `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0013-e2e-test-runner.md`, `../decisions/0010-icons-lucide.md`
 
@@ -165,9 +165,9 @@ Added by this spec:
 - Tests: end-to-end for both states.
 - Commit: `feat: add switch for the shop sections of the landing page`
 
-## Amendment 1 (proposed 2026-10-13, not approved)
+## Amendment 1 (approved by the owner, 2026-10-13)
 
-From `../ideas/landing-focus-and-shop-route.md`. Nothing below is implemented until the owner approves it. T9 depends on no answer of the client; T10 and T11 need none either, since the content they show is the example data of phase A.
+From `../ideas/landing-focus-and-shop-route.md`. T9 depends on no answer of the client; T10 and T11 need none either, since the content they show is the example data of phase A.
 
 ### What it replaces
 
@@ -186,11 +186,11 @@ From `../ideas/landing-focus-and-shop-route.md`. Nothing below is implemented un
 15. The header gets a shop button in the primary style and the cart, both to the left of the language switcher; the footer links to the shop.
 16. The cart is its header entry and an empty state until the cart spec; it keeps no lines, prices or totals of its own.
 
-### To decide in the task, and ask if it is not obvious
+### Details (owner, 2026-10-13)
 
-- The header at 320 px: proposal, the shop button moves into the menu and the cart stays visible.
-- The `h1` of `/shop` and of `/cart`, and the text of the empty cart: new strings, proposed in the task.
-- The label of the racks card: "Sistema modular" (today) or "Suportes" (the owner's word on 2026-10-13).
+- The header on a narrow screen: the logo at the left; at the right the menu button and, to its left, the cart and a shop icon in place of the shop button. Measured at 320 px: 288 px between the gutters, the logo takes about 115 px and three 40 px buttons 120 px, which leaves 53 px for the gaps. The language switcher (about 54 px) does not fit beside them, so on a narrow screen it has to move into the menu: asked to the owner, not answered yet. The icon set has no shop icon; `store` is added in T11.
+- The racks card keeps the label "Sistema modular".
+- The `h1` of `/shop` is "Loja" and of `/cart` "Carrinho". The text of the empty cart is proposed in T11.
 
 ### Tasks
 
@@ -300,6 +300,27 @@ Where it differs from this spec or the project rules, and what T2 does:
 - Looked at by eye on screenshots at 320 and 1440 px (hero and cards).
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (788 tests, 63 files), `pnpm test:e2e` (634 passed, 2 skipped by design).
 - Phase A is done. Phase B waits for prerequisites 2 to 5.
+
+### T10 (2026-10-13)
+
+Done before T9, so the shop sections had a page to move to and their end-to-end tests never stopped running.
+
+- `/shop` is `app/[lang]/(marketing)/shop/page.tsx`: it stays in the group that holds the shell, since a second group would need a second copy of the layout. The `(shop)` group named in `apps/web/AGENTS.md` is not created.
+- The page: an `h1` "Loja" with the search bar under it, then `FeaturedProducts` and `ProductTypes`, unchanged but for the cards of the types, now with the large padding and a display-size title.
+- `HeroSearch` is now `components/site/shop-search.tsx` (`ShopSearch`). The `search` slot of `Hero` was removed with its tests: nothing fills it.
+- The strings moved from `home.featured` and `home.productTypes` to `shop.featured` and `shop.categories`; new: `shop.home.*`. The meta description is the client's short description of the site, which is about the shop.
+- `/shop` is not in the sitemap and not linked from any page yet (T11). T8 decides when it is.
+- The first block is as tall as any section, so at 1280 by 720 the product cards start below the fold. Two end-to-end tests scroll the carousel into view for that reason. Whether the top of the shop should be shorter is a design question for T11.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (786 tests, 63 files), `pnpm test:e2e` (626 passed, 2 skipped by design, 16 failed: 12 were the two tests above, fixed; 4 in WebKit, on pages this task did not touch, passed when their files were run again with the fixed ones, 196 passed).
+
+### T9 (2026-10-13)
+
+- The landing page is: hero, modular system (`#system`, on the subtle surface, an `h2` with the four parts as `h3`), "Porquê" ending with "Fala connosco", contact with the title "Pronto para arrumar a carrinha?".
+- Deleted: the route `/modular-system` with its path constant, page title and description; `Buy` and `Complements` with their strings; `e2e/modular-system.spec.ts`, whose checks that still apply moved to `landing.spec.ts`.
+- The navigation entry "Sistema modular", the hero's second action and the modular system card of the shop lead to `#system`. This differs from the amendment, which left that card without a destination: the section is where the system is presented.
+- `Benefits` has an optional `action`. New string: `home.why.action`.
+- The hero and the section after it have the same eyebrow, "Sistema modular LockMX". Left as it is; a text for the owner to change if it reads as a repetition.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (786 tests, 63 files), `pnpm test:e2e` (602 passed, 2 skipped by design).
 
 ## Boundaries
 
