@@ -2,7 +2,7 @@
 
 import { SearchBar } from "@/components/ui";
 
-export type HeroSearchLabels = {
+export type ShopSearchLabels = {
   label: string;
   submit: string;
   placeholder: string;
@@ -11,17 +11,17 @@ export type HeroSearchLabels = {
   noResults: string;
 };
 
-type HeroSearchProps = {
-  labels: HeroSearchLabels;
+type ShopSearchProps = {
+  labels: ShopSearchLabels;
   className?: string;
 };
 
 /**
- * The search bar of the hero. In place for its look only (spec 005, T4): it
- * has no suggestions and a submission leads nowhere, until the search task
- * (T7) gives it both.
+ * The search bar of the shop home. In place for its look only (spec 005,
+ * T4 and T10): it has no suggestions and a submission leads nowhere, until
+ * the search task (T7) gives it both.
  */
-export function HeroSearch({ labels, className }: HeroSearchProps) {
+export function ShopSearch({ labels, className }: ShopSearchProps) {
   return (
     <SearchBar
       label={labels.label}

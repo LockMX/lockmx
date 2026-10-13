@@ -14,11 +14,12 @@ type ProductTypesProps = {
 const CARD_CLASSES = "flex items-center justify-between gap-4";
 
 const TITLE_CLASSES =
-  "font-display text-heading-md leading-tight font-extrabold text-text-strong uppercase italic";
+  "font-display text-display-sm leading-display font-extrabold text-text-strong uppercase italic";
 
 /**
- * One card per product type of the shop (spec 005, T4). A type with an
- * address is a link; one without is a plain card that says it comes soon.
+ * One large card per product type, on the shop home (spec 005, T4 and T10).
+ * A type with an address is a link; one without is a plain card that says it
+ * comes soon.
  */
 export function ProductTypes({ id, eyebrow, title, soonLabel, types }: ProductTypesProps) {
   if (types.length === 0) return null;
@@ -29,13 +30,13 @@ export function ProductTypes({ id, eyebrow, title, soonLabel, types }: ProductTy
         {types.map((type) =>
           type.href ? (
             <li key={type.key} className="grid">
-              <Card href={type.href} className={CARD_CLASSES}>
+              <Card href={type.href} padding="lg" className={CARD_CLASSES}>
                 <h3 className={TITLE_CLASSES}>{type.title}</h3>
                 <Icon name="arrow-right" size="lg" />
               </Card>
             </li>
           ) : (
-            <Card as="li" key={type.key} className={CARD_CLASSES}>
+            <Card as="li" key={type.key} padding="lg" className={CARD_CLASSES}>
               <h3 className={TITLE_CLASSES}>{type.title}</h3>
               <span className="text-sm leading-tight text-text-muted">{soonLabel}</span>
             </Card>

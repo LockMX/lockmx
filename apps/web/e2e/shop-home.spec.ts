@@ -1,9 +1,10 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
-// The shop sections of the landing page (spec 005), with example data.
+// The shop home (spec 005), with example data.
 const locales = [
   {
     path: "/pt",
+    title: "Loja",
     featured: "Destaques",
     carousel: "Produtos em destaque",
     example: "Exemplo",
@@ -20,10 +21,10 @@ const locales = [
     soon: "Em breve",
     search: "Pesquisar produtos",
     submit: "Pesquisar",
-    actions: ["Fala connosco", "Conhece o sistema"],
   },
   {
     path: "/en",
+    title: "Shop",
     featured: "Featured",
     carousel: "Featured products",
     example: "Example",
@@ -40,7 +41,6 @@ const locales = [
     soon: "Coming soon",
     search: "Search products",
     submit: "Search",
-    actions: ["Get in touch", "See the system"],
   },
 ];
 
@@ -51,14 +51,15 @@ function carouselOf(page: Page, name: string): Locator {
 }
 
 for (const locale of locales) {
-  test.describe(`${locale.path} featured products`, () => {
+  test.describe(`${locale.path}/shop featured products`, () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(locale.path);
+      await page.goto(`${locale.path}/shop`);
     });
 
-    test("the section comes right after the hero", async ({ page }) => {
+    test("the page has one h1 and the section is the first under it", async ({ page }) => {
       const main = page.getByRole("main");
 
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText([locale.title]);
       await expect(main.getByRole("heading", { level: 2 }).first()).toHaveText(locale.featured);
       await expect(main.getByRole("region", { name: locale.featured, exact: true })).toBeVisible();
     });
@@ -98,6 +99,7 @@ for (const locale of locales) {
       const last = carousel.getByRole("link", { name: locale.lastProduct });
       // Paused first, so only the buttons move it.
       await carousel.getByRole("button", { name: locale.pause }).click();
+      await carousel.scrollIntoViewIfNeeded();
 
       await expect(first).toBeInViewport();
       await carousel.getByRole("button", { name: locale.previous }).click();
@@ -110,6 +112,7 @@ for (const locale of locales) {
     test("cards out of view cannot be reached with the keyboard", async ({ page }) => {
       const carousel = carouselOf(page, locale.carousel);
       await carousel.getByRole("button", { name: locale.pause }).click();
+      await carousel.scrollIntoViewIfNeeded();
 
       // Hidden from assistive technology and inert: found only by a plain locator.
       const hidden = carousel.locator("[inert]");
@@ -146,9 +149,9 @@ for (const locale of locales) {
 }
 
 for (const locale of locales) {
-  test.describe(`${locale.path} product types and search`, () => {
+  test.describe(`${locale.path}/shop product types and search`, () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(locale.path);
+      await page.goto(`${locale.path}/shop`);
     });
 
     test("has one card per product type, after the featured products", async ({ page }) => {
@@ -174,39 +177,41 @@ for (const locale of locales) {
       await expect(section.getByRole("listitem").nth(1)).toContainText(locale.soon);
     });
 
-    test("the hero has a search bar under its actions, as wide as the two together", async ({
-      page,
-    }) => {
-      await page.setViewportSize({ width: 1440, height: 900 });
-      const hero = page.getByRole("main").getByRole("region").first();
-      await expect(hero.getByRole("combobox", { name: locale.search })).toBeVisible();
+    test("the search bar is under the h1, before the featured products", async ({ page }) => {
+      const top = page.getByRole("main").getByRole("region", { name: locale.title, exact: true });
 
-      const first = await hero.getByRole("link", { name: locale.actions[0] }).boundingBox();
-      const second = await hero.getByRole("link", { name: locale.actions[1] }).boundingBox();
-      const bar = await hero.getByRole("search").boundingBox();
-      if (!first || !second || !bar) throw new Error("The hero was not laid out");
-
-      expect(bar.y).toBeGreaterThan(first.y + first.height);
-      expect(Math.abs(bar.x - first.x)).toBeLessThan(1);
-      expect(Math.abs(bar.x + bar.width - (second.x + second.width))).toBeLessThan(1);
+      await expect(top.getByRole("combobox", { name: locale.search })).toBeVisible();
+      await expect(page.getByRole("main").getByRole("search")).toHaveCount(1);
     });
 
     test("a search leads nowhere yet", async ({ page }) => {
-      const hero = page.getByRole("main").getByRole("region").first();
-      const field = hero.getByRole("combobox", { name: locale.search });
+      const top = page.getByRole("main").getByRole("region", { name: locale.title, exact: true });
+      const field = top.getByRole("combobox", { name: locale.search });
 
       await field.fill("mx");
-      await hero.getByRole("button", { name: locale.submit, exact: true }).click();
+      await top.getByRole("button", { name: locale.submit, exact: true }).click();
 
-      await expect(page).toHaveURL(new RegExp(`${locale.path}$`));
+      await expect(page).toHaveURL(new RegExp(`${locale.path}/shop$`));
       await expect(field).toHaveValue("mx");
+    });
+
+    test("has its own title and canonical address, and is not in the sitemap", async ({
+      page,
+      request,
+    }) => {
+      await expect(page).toHaveTitle(`${locale.title} | LockMX`);
+      await expect(page.locator('head link[rel="canonical"]')).toHaveAttribute(
+        "href",
+        `https://lockmx.com${locale.path}/shop`,
+      );
+      expect(await (await request.get("/sitemap.xml")).text()).not.toContain("/shop");
     });
   });
 }
 
 test("with reduced motion the carousel starts paused", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/pt");
+  await page.goto("/pt/shop");
 
   await expect(
     carouselOf(page, "Produtos em destaque").getByRole("button").first(),

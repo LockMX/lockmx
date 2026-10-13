@@ -69,18 +69,6 @@ export const en: Messages = {
       secondaryAction: "See the system",
       imageAlt: "Black sign with the LockMX Modular System logo on a stone wall.",
     },
-    featured: {
-      eyebrow: "Products",
-      title: "Featured",
-      carousel: "Featured products",
-      empty: "There are no featured products yet.",
-      example: "Example",
-    },
-    productTypes: {
-      eyebrow: "Catalogue",
-      title: "Categories",
-      soon: "Coming soon",
-    },
     why: {
       eyebrow: "Why LockMX",
       title: "More time riding",
@@ -120,6 +108,22 @@ export const en: Messages = {
     },
   },
   shop: {
+    home: {
+      eyebrow: "LockMX",
+      title: "Shop",
+    },
+    featured: {
+      eyebrow: "Products",
+      title: "Featured",
+      carousel: "Featured products",
+      empty: "There are no featured products yet.",
+      example: "Example",
+    },
+    categories: {
+      eyebrow: "Catalogue",
+      title: "Categories",
+      soon: "Coming soon",
+    },
     productTypes: {
       modularSystem: "Modular system",
       tyres: "Tyres",

@@ -71,20 +71,6 @@ export const pt = {
       secondaryAction: "Conhece o sistema",
       imageAlt: "Placa preta com o logótipo LockMX Modular System numa parede de pedra.",
     },
-    featured: {
-      eyebrow: "Produtos",
-      title: "Destaques",
-      carousel: "Produtos em destaque",
-      empty: "Ainda não há produtos em destaque.",
-      // On every card of an example product, until the catalogue exists.
-      example: "Exemplo",
-    },
-    productTypes: {
-      eyebrow: "Catálogo",
-      title: "Categorias",
-      // On a product type that has no page yet.
-      soon: "Em breve",
-    },
     why: {
       eyebrow: "Porquê LockMX",
       title: "Mais tempo a rodar",
@@ -123,8 +109,26 @@ export const pt = {
       emailLabel: "Email",
     },
   },
-  // The shop sections of the home page (spec 005).
+  // The shop (spec 005).
   shop: {
+    home: {
+      eyebrow: "LockMX",
+      title: "Loja",
+    },
+    featured: {
+      eyebrow: "Produtos",
+      title: "Destaques",
+      carousel: "Produtos em destaque",
+      empty: "Ainda não há produtos em destaque.",
+      // On every card of an example product, until the catalogue exists.
+      example: "Exemplo",
+    },
+    categories: {
+      eyebrow: "Catálogo",
+      title: "Categorias",
+      // On a product type that has no page yet.
+      soon: "Em breve",
+    },
     productTypes: {
       modularSystem: "Sistema modular",
       tyres: "Pneus",

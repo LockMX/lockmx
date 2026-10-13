@@ -23,8 +23,6 @@ type HeroProps = {
   secondaryAction: HeroAction;
   /** The hero works without an image: the text then takes the row. */
   image?: HeroImage;
-  /** A search bar under the actions, as wide as the two together. */
-  search?: React.ReactNode;
 };
 
 const HEADING_ID = "hero-heading";
@@ -38,7 +36,6 @@ export function Hero({
   primaryAction,
   secondaryAction,
   image,
-  search,
 }: HeroProps) {
   return (
     <section
@@ -59,24 +56,19 @@ export function Hero({
             <span className="block text-yellow">{titleAccent}</span>
           </h1>
           <p className="text-lg leading-body text-text-inverse-muted">{text}</p>
-          {/* The actions give this column its width; the search bar adds none
-              of its own and stretches to it. */}
-          <div className="flex max-w-full flex-col gap-4">
-            <div className="flex flex-wrap gap-4">
-              <ButtonLink
-                href={primaryAction.href}
-                variant="primary"
-                size="lg"
-                slanted
-                iconRight="arrow-right"
-              >
-                {primaryAction.label}
-              </ButtonLink>
-              <ButtonLink href={secondaryAction.href} variant="outline-inverse" size="lg">
-                {secondaryAction.label}
-              </ButtonLink>
-            </div>
-            {search && <div className="w-0 min-w-full">{search}</div>}
+          <div className="flex flex-wrap gap-4">
+            <ButtonLink
+              href={primaryAction.href}
+              variant="primary"
+              size="lg"
+              slanted
+              iconRight="arrow-right"
+            >
+              {primaryAction.label}
+            </ButtonLink>
+            <ButtonLink href={secondaryAction.href} variant="outline-inverse" size="lg">
+              {secondaryAction.label}
+            </ButtonLink>
           </div>
         </div>
         {image && (
