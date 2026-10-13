@@ -59,10 +59,19 @@ describe("Icon", () => {
     ["sm", "size-4"],
     ["md", "size-5"],
     ["lg", "size-6"],
+    ["xl", "size-8"],
   ] as const)("size %s uses %s", (size, sizeClass) => {
     const svg = renderedSvg(<Icon name="check" size={size} />);
 
     expect(svg.getAttribute("class")?.split(" ")).toContain(sizeClass);
+  });
+
+  test("draws the Instagram glyph as one filled shape, with no stroke", () => {
+    const paths = renderedSvg(<Icon name="instagram" />).querySelectorAll("path");
+
+    expect(paths).toHaveLength(1);
+    expect(paths[0]?.getAttribute("fill")).toBe("currentColor");
+    expect(paths[0]?.getAttribute("stroke")).toBe("none");
   });
 
   test("defaults to the medium size and does not shrink in a flex row", () => {

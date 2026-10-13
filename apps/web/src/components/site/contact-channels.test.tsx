@@ -33,6 +33,17 @@ describe("ContactChannels", () => {
     );
   });
 
+  test("draws each icon at 2rem, above the smallest size of a brand glyph", () => {
+    const { container } = render(<ContactChannels channels={channels} />);
+
+    const icons = [...container.querySelectorAll("svg")];
+
+    expect(icons).toHaveLength(2);
+    for (const icon of icons) {
+      expect(icon.getAttribute("class")?.split(" ")).toContain("size-8");
+    }
+  });
+
   test("only a link that leaves the site drops the opener", () => {
     render(<ContactChannels channels={channels} />);
 

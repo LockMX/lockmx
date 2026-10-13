@@ -446,6 +446,13 @@ Done before T9, so the shop sections had a page to move to and their end-to-end 
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (823 tests, 68 files), `pnpm test:e2e` (884 tests: 880 passed, 2 skipped by design, 2 failed on the mobile project because the test counted the language links of the open menu; the test was corrected and its file passed in the four projects, 144 tests). After that a spacing fix in the filters was checked with lint, typecheck, the unit tests and the listing file in Chromium and on the mobile project (92 passed); the whole suite was not run again.
 - Seen in Chromium, `/pt` only: the landing page and the contact page at 320 and 1440 px, the racks listing at 320, 1024 and 1440 px, the header at 1024 px. Not looked at: `/en`, 768 px, a real phone, a screen reader.
 
+### After T14: official Instagram glyph and hover (2026-10-13)
+
+- Asked by the owner after seeing the pages. The drawing of T12 is replaced by the path of Meta's own file, from the pack the owner downloaded (ADR 0010, second update of 2026-10-13). The rules for the glyph could not be read at the source; the ones secondary summaries give are followed.
+- New size `xl` for `Icon` (2rem) and `IconButton` (3.5rem), used by the two icons of the footer and by the icons of `/contact`. Chosen by the owner over keeping 1.25rem.
+- `ghost-inverse` no longer lightens its background on hover: the icon turns yellow, as the links of the inverse surface do. The cause was the variant fixing the text colour, which beat the rule of the links. This also changes the cart and menu buttons of the header and the close button of the toast. Chosen by the owner over a variant for the footer alone.
+- Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (829 tests, 68 files), and the end-to-end files of the contact page, the shell and the landing page in the four projects. Seen in Chromium, `/pt`: the footer at 320 and 1440 px, at rest and with the pointer on the Instagram icon, `/contact` at 1440 px, and the header with the pointer on the cart.
+
 ## Boundaries
 
 - No new production dependency without asking: the client is `fetch`, the carousel is built on the platform (scroll snap) unless the design needs more and the owner approves a library.

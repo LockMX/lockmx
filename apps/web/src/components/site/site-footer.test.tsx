@@ -57,6 +57,7 @@ describe("SiteFooter", () => {
     const instagram = screen.getByRole("link", { name: "Instagram" });
     expect(instagram.getAttribute("href")).toBe("https://www.instagram.com/example");
     expect(instagram.getAttribute("rel")).toBe("noopener noreferrer");
+    expect(instagram.querySelector("svg")?.getAttribute("class")?.split(" ")).toContain("size-8");
   });
 
   test("has the footer navigation under its title", () => {

@@ -8,15 +8,15 @@ type IconButtonVariant =
   | "outline"
   | "primary"
   | "secondary";
-type IconButtonSize = "sm" | "md" | "lg";
+type IconButtonSize = "sm" | "md" | "lg" | "xl";
 
 const BASE_CLASSES =
   "relative inline-grid place-items-center rounded-sm border transition-colors disabled:pointer-events-none disabled:opacity-40";
 
 const VARIANT_CLASSES: Record<IconButtonVariant, string> = {
   ghost: "border-transparent text-text-strong hover:bg-surface-sunken",
-  "ghost-inverse":
-    "border-transparent text-text-inverse hover:bg-surface-inverse-raised",
+  // On the inverse surface a link turns yellow under the pointer; so does this.
+  "ghost-inverse": "border-transparent text-text-inverse hover:text-yellow",
   outline: "border-border-control text-text-strong hover:bg-surface-sunken",
   primary:
     "border-transparent bg-action-primary text-text-on-accent hover:bg-action-primary-hover",
@@ -28,12 +28,14 @@ const SIZE_CLASSES: Record<IconButtonSize, string> = {
   sm: "size-8",
   md: "size-10",
   lg: "size-12",
+  xl: "size-14",
 };
 
 const ICON_SIZES: Record<IconButtonSize, IconSize> = {
   sm: "sm",
   md: "md",
   lg: "lg",
+  xl: "xl",
 };
 
 const COUNT_CLASSES =
