@@ -142,6 +142,25 @@ export const pt = {
       modularSystem: "Sistema modular",
       tyres: "Pneus",
     },
+    // The sections of the shop (spec 005, amendment 2).
+    sections: {
+      racks: "Suportes LockMX",
+      tyres: "Pneus",
+      merchandise: "Merchandise",
+    },
+    listing: {
+      eyebrow: "Loja",
+      // The link of the filters that shows every section.
+      all: "Todos",
+      filters: "Filtros",
+      sections: "Secções",
+      availability: "Disponibilidade",
+      apply: "Aplicar",
+      clear: "Limpar filtros",
+      // The name of the grid, for assistive technology.
+      products: "Produtos",
+      empty: "Nenhum produto corresponde aos filtros.",
+    },
     product: {
       inStock: "Em stock",
       outOfStock: "Esgotado",

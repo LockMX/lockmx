@@ -14,6 +14,11 @@ export const publicPaths: readonly string[] = ["/", modularSystemPath, contactPa
 export const shopPath = "/shop";
 export const cartPath = "/cart";
 
+// The listing of one section of the shop: "tyres" gives "/shop/tyres".
+export function shopSectionPath(section: string): string {
+  return `${shopPath}/${section}`;
+}
+
 // The address of a page in a locale: "/" gives "/pt", "/company" gives "/pt/company".
 export function localizedPath(locale: Locale, path: string): string {
   const segments = path.split("/").filter(Boolean);

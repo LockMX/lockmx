@@ -137,6 +137,25 @@ export const en: Messages = {
       modularSystem: "Modular system",
       tyres: "Tyres",
     },
+    // The sections of the shop (spec 005, amendment 2).
+    sections: {
+      racks: "LockMX mounts",
+      tyres: "Tyres",
+      merchandise: "Merchandise",
+    },
+    listing: {
+      eyebrow: "Shop",
+      // The link of the filters that shows every section.
+      all: "All",
+      filters: "Filters",
+      sections: "Sections",
+      availability: "Availability",
+      apply: "Apply",
+      clear: "Clear filters",
+      // The name of the grid, for assistive technology.
+      products: "Products",
+      empty: "No product matches the filters.",
+    },
     product: {
       inStock: "In stock",
       outOfStock: "Sold out",
