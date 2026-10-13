@@ -4,7 +4,7 @@ import { ProductTypes } from "@/components/site/sections/product-types";
 import type { ProductTypeEntry } from "@/lib/shop/product";
 
 const TYPES: ProductTypeEntry[] = [
-  { key: "modular-system", title: "Sistema modular", href: "/pt/modular-system" },
+  { key: "modular-system", title: "Sistema modular", href: "/pt#system" },
   { key: "tyres", title: "Pneus" },
 ];
 
@@ -42,7 +42,7 @@ describe("ProductTypes", () => {
     const links = within(region()).getAllByRole("link");
 
     expect(links).toHaveLength(1);
-    expect(links[0].getAttribute("href")).toBe("/pt/modular-system");
+    expect(links[0].getAttribute("href")).toBe("/pt#system");
     expect(within(links[0]).getByRole("heading", { level: 3 }).textContent).toBe("Sistema modular");
   });
 

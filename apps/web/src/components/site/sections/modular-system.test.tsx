@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import { ModularSystem } from "@/components/site/sections/modular-system";
 
 const props = {
-  id: "modular-system",
+  id: "system",
   eyebrow: "Sistema modular",
   title: "Um quartel-general sobre rodas",
   paragraphs: ["O sistema.", "As peças."],
@@ -18,11 +18,11 @@ function region() {
 }
 
 describe("ModularSystem", () => {
-  test("is a region named by the h1 of its page", () => {
+  test("is a region named by its h2", () => {
     render(<ModularSystem {...props} />);
 
-    expect(region().id).toBe("modular-system");
-    expect(within(region()).getByRole("heading", { level: 1 }).textContent).toBe(
+    expect(region().id).toBe("system");
+    expect(within(region()).getByRole("heading", { level: 2 }).textContent).toBe(
       "Um quartel-general sobre rodas",
     );
     expect(within(region()).getByText("Sistema modular")).toBeTruthy();
@@ -35,13 +35,13 @@ describe("ModularSystem", () => {
     expect(within(region()).getByText("As peças.")).toBeTruthy();
   });
 
-  test("has one list item per part, named by an h2, with its text", () => {
+  test("has one list item per part, named by an h3, with its text", () => {
     render(<ModularSystem {...props} />);
 
     expect(within(region()).getAllByRole("listitem")).toHaveLength(2);
     expect(
       within(region())
-        .getAllByRole("heading", { level: 2 })
+        .getAllByRole("heading", { level: 3 })
         .map((title) => title.textContent),
     ).toEqual(["Capacetes", "Botas"]);
     expect(within(region()).getByText("Suportes para botas.")).toBeTruthy();

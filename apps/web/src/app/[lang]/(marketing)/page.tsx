@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Benefits } from "@/components/site/sections/benefits";
-import { Buy } from "@/components/site/sections/buy";
-import { Complements } from "@/components/site/sections/complements";
 import { Contact } from "@/components/site/sections/contact";
 import { Hero, type HeroImage } from "@/components/site/sections/hero";
+import { ModularSystem } from "@/components/site/sections/modular-system";
 import { contactEmail } from "@/lib/site/contact";
-import { localizedPath, modularSystemPath } from "@/lib/site/public-paths";
 import { sectionHref, sectionIds } from "@/lib/site/sections";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
@@ -24,10 +22,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata({ locale, path: "/", description: metadata.description });
 }
 
-// The landing page: it presents the brand and leads to the modular system and to contact.
+// The landing page: it presents the modular system and leads to contact.
 export default async function Home() {
   const locale = await getCurrentLocale();
-  const { home } = await getMessages(locale);
+  const { home, modularSystem } = await getMessages(locale);
   const contactHref = sectionHref(locale, sectionIds.contact);
 
   return (
@@ -40,29 +38,29 @@ export default async function Home() {
         // Until the shop exists, the main action of the page leads to contact.
         primaryAction={{ href: contactHref, label: home.hero.primaryAction }}
         secondaryAction={{
-          href: localizedPath(locale, modularSystemPath),
+          href: sectionHref(locale, sectionIds.system),
           label: home.hero.secondaryAction,
         }}
         image={{ ...HERO_IMAGE, alt: home.hero.imageAlt }}
+      />
+      <ModularSystem
+        id={sectionIds.system}
+        eyebrow={modularSystem.eyebrow}
+        title={modularSystem.title}
+        paragraphs={[modularSystem.systemText, modularSystem.partsText]}
+        parts={[
+          { icon: "hard-hat", ...modularSystem.helmets },
+          { icon: "footprints", ...modularSystem.boots },
+          { icon: "shirt", ...modularSystem.hangers },
+          { icon: "shelving-unit", ...modularSystem.shelves },
+        ]}
       />
       <Benefits
         id={sectionIds.why}
         eyebrow={home.why.eyebrow}
         title={home.why.title}
         benefits={[home.why.space, home.why.place, home.why.tough, home.why.time]}
-      />
-      <Buy
-        id={sectionIds.buy}
-        eyebrow={home.buy.eyebrow}
-        title={home.buy.title}
-        text={home.buy.text}
-        action={{ href: contactHref, label: home.buy.action }}
-      />
-      <Complements
-        id={sectionIds.complements}
-        eyebrow={home.complements.eyebrow}
-        title={home.complements.title}
-        text={home.complements.text}
+        action={{ href: contactHref, label: home.why.action }}
       />
       <Contact
         id={sectionIds.contact}

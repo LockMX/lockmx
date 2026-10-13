@@ -37,9 +37,6 @@ export const en: Messages = {
   modularSystem: {
     eyebrow: "LockMX modular system",
     title: "A command center on wheels",
-    // The name of the page in the browser tab and in search results.
-    pageTitle: "Modular system",
-    description: "The LockMX modular system organizes your gear inside your van: mounts for helmets and boots, hangers and modular shelves.",
     systemText: "Pure organization for those who live on the edge. Built for adventurers, riders, and everyone driven by action sports, the LockMX modular system is designed to keep up with your pace — no compromises. Turn your campervan, motovan, or regular van into a true mobile command center, fully functional and ready for any mission.",
     partsText: "With dedicated mounts for helmets, boots, hangers, and modular shelves, every component fits into an intelligent system that maximizes space, keeps your gear exactly where it belongs, and stands up to the toughest conditions — road, dust, mud, and miles of abuse. All wrapped in a clean, technical design with serious attitude.",
     helmets: {
@@ -88,21 +85,11 @@ export const en: Messages = {
         title: "Less time organizing",
         text: "Less time searching and organizing. More time riding, exploring, and sending it.",
       },
-    },
-    buy: {
-      eyebrow: "LockMX",
-      title: "Ready to sort out your van?",
-      text: "Get in touch and we will tell you how to get the LockMX modular system.",
       action: "Get in touch",
-    },
-    complements: {
-      eyebrow: "Shop",
-      title: "Everything for motocross",
-      text: "Besides the exclusive LockMX products, you will find tyres, parts, accessories and everything you need to raise your experience on and off the track.",
     },
     contact: {
       eyebrow: "Contact",
-      title: "Get in touch",
+      title: "Ready to sort out your van?",
       text: "Do you have a question about the system? Write to us.",
       emailLabel: "Email",
     },

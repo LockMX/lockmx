@@ -1,8 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { Benefits } from "@/components/site/sections/benefits";
-import { Buy } from "@/components/site/sections/buy";
-import { Complements } from "@/components/site/sections/complements";
 import { Contact } from "@/components/site/sections/contact";
 
 const heading = { eyebrow: "Sobrancelha", title: "Título" };
@@ -29,36 +27,29 @@ describe("Benefits", () => {
     ).toEqual(["Espaço", "Tempo"]);
     expect(within(region()).getByText("Menos tempo a arrumar.")).toBeTruthy();
   });
-});
 
-describe("Buy", () => {
-  test("is a named region on the inverse surface with its text and one action", () => {
+  test("has no link unless it is given an action", () => {
+    render(<Benefits id="why" {...heading} benefits={benefits} />);
+
+    expect(within(region()).queryByRole("link")).toBeNull();
+  });
+
+  test("shows the action it is given after the benefits", () => {
     render(
-      <Buy
-        id="buy"
+      <Benefits
+        id="why"
         {...heading}
-        text="Fala connosco."
+        benefits={benefits}
         action={{ href: "/pt#contact", label: "Contactar" }}
       />,
     );
+    const link = within(region()).getByRole("link", { name: "Contactar" });
 
-    expect(region().id).toBe("buy");
-    expect(region().getAttribute("data-surface")).toBe("inverse");
-    expect(within(region()).getByText("Fala connosco.")).toBeTruthy();
-
-    const links = within(region()).getAllByRole("link");
-    expect(links).toHaveLength(1);
-    expect(links[0].textContent).toBe("Contactar");
-    expect(links[0].getAttribute("href")).toBe("/pt#contact");
-  });
-});
-
-describe("Complements", () => {
-  test("is a named region with the text from props", () => {
-    render(<Complements id="complements" {...heading} text="Pneus, peças e acessórios." />);
-
-    expect(region().id).toBe("complements");
-    expect(within(region()).getByText("Pneus, peças e acessórios.")).toBeTruthy();
+    expect(link.getAttribute("href")).toBe("/pt#contact");
+    expect(
+      within(region()).getByRole("list").compareDocumentPosition(link) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   });
 });
 

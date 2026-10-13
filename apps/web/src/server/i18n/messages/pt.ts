@@ -38,9 +38,6 @@ export const pt = {
   modularSystem: {
     eyebrow: "Sistema modular LockMX",
     title: "Um quartel-general sobre rodas",
-    // The name of the page in the browser tab and in search results.
-    pageTitle: "Sistema modular",
-    description: "O sistema modular LockMX organiza o teu equipamento dentro da carrinha: suportes para capacetes e botas, cabides e prateleiras modulares.",
     systemText: "Criado para aventureiros, riders e todos os que respiram desportos de ação, o sistema modular LockMX foi pensado para acompanhar o teu ritmo — sem compromissos. Transforma a tua campervan, motovan ou carrinha num verdadeiro quartel-general sobre rodas, totalmente funcional e pronto para qualquer missão.",
     partsText: "Com suportes dedicados para capacetes, botas, cabides e prateleiras modulares, cada peça encaixa num sistema inteligente que maximiza o espaço, mantém o equipamento no sítio certo e resiste ao uso duro da estrada, do pó e da lama. Tudo com um design clean, técnico e cheio de atitude.",
     helmets: {
@@ -90,21 +87,11 @@ export const pt = {
         title: "Menos tempo a arrumar",
         text: "Menos tempo perdido a procurar e a arrumar. Mais tempo a rodar, a explorar e a enviar.",
       },
-    },
-    buy: {
-      eyebrow: "LockMX",
-      title: "Pronto para arrumar a carrinha?",
-      text: "Fala connosco e dizemos-te como ter o sistema modular LockMX.",
       action: "Fala connosco",
-    },
-    complements: {
-      eyebrow: "Loja",
-      title: "Tudo para motocross",
-      text: "Além dos produtos exclusivos LockMX, encontras pneus, peças, acessórios e tudo o que precisas para elevar a tua experiência dentro e fora da pista.",
     },
     contact: {
       eyebrow: "Contacto",
-      title: "Fala connosco",
+      title: "Pronto para arrumar a carrinha?",
       text: "Tens uma pergunta sobre o sistema? Escreve-nos.",
       emailLabel: "Email",
     },
