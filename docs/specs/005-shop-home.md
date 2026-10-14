@@ -24,7 +24,7 @@ This is the first of the shop specs. Product pages, category pages, the cart, th
 Phase A (T1 to T4) needs only the first one. Phase B (T5 to T8) is blocked until all are true.
 
 1. **Carousel design.** Done on 2026-10-11: the owner designed it in the Claude Design project and it was read from there (read-only), as the storefront kit was. What it defines and where it differs from this spec is in "Carousel design" below.
-2. **A Shopify store** the frontend can read: the client's store or a development store. Not verified: whether one exists today.
+2. **A Shopify store** the frontend can read: the client's store or a development store. Not verified: whether one exists today. On 2026-10-14 none exists; how to create it, and why a client transfer store rather than a dev store, is in `../integrations/shopify-setup.md`.
 3. **The Headless channel** installed on that store with one storefront, and its Storefront API permissions set to read products and collections.
 4. **The private access token** of that storefront, given to the developer outside the repository, and the store domain (`<name>.myshopify.com`).
 5. **At least one collection of featured products** and a few products with images, in PT-PT and EN, so the reads can be checked against real data.
