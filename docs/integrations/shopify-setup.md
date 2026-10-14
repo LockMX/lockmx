@@ -15,20 +15,22 @@ Each statement says how sure it is: **verified** (official Shopify page read), *
 | | A. Client transfer store, built by the developer | B. The client signs up directly |
 |---|---|---|
 | Who creates it | The developer, from the Dev Dashboard of a Partner account | The client, at shopify.com |
-| Cost while building | Not stated by Shopify for transfer stores; the client chooses and pays a plan when the store is transferred | 3 days free, then 1 EUR per month for 3 months, then the plan (Basic 27 EUR monthly or 19 EUR per month billed yearly) |
+| Cost while building | No fee is stated; the developer can create unlimited transfer stores. The client chooses and pays a plan when the store is transferred, and **a transferred store gets no promotions or free trial** | 3 days free, then 1 EUR per month for 3 months, then the plan (Basic 27 EUR monthly or 19 EUR per month billed yearly) |
 | Real payments | No: test gateway or Shopify Payments test mode only | Yes, once Shopify Payments is set up |
 | Password page | Always on, cannot be removed until transfer | Can be removed at launch |
-| Features | Mirror the Advanced plan | Those of the chosen plan |
-| Handover | Transfer to the client's email; the client accepts within 7 days and picks a plan; the developer keeps collaborator access | Nothing to hand over; the client sends the developer a 4-digit collaborator request code |
+| Features | Most of the Advanced plan; only free and partner-friendly apps, no custom apps | Those of the chosen plan |
+| Handover | Transfer to the client's email; the client accepts within 7 days and picks a plan. Shopify Payments must be off when the transfer is sent | Nothing to hand over; the client sends the developer a 4-digit collaborator request code |
 
-Sources: client transfer stores and dev stores on shopify.dev; Portuguese pricing page; collaborator accounts (verified).
+Sources: client transfer stores (read as raw text) and dev stores on shopify.dev; Portuguese pricing page; collaborator accounts (verified).
+
+- **The transfer page contradicts itself** on access after the handover: its text says twice that the developer keeps collaborator access; its status table says a completed transfer leaves "no collaborator relationship" and "You no longer have access to the store." If access is lost, the client gives a collaborator request code, as in path B.
 
 - A **dev store** (as opposed to a transfer store) can never become the real store and cannot be transferred: never build the catalogue on one.
-- **Not verified:** whether the Headless channel installs on a transfer store. No page says yes or no. It takes minutes to try, and it decides path A.
+- **Not verified:** whether the Headless channel installs on a transfer store. Transfer stores accept free apps and Headless is free and made by Shopify, but no page says so. It takes minutes to try, and it decides path A.
 - **Community:** a password-protected store has been reported to send the `checkoutUrl` back to the password page. This does not block phase B, which only reads products, but a full test order through our frontend may need path B.
 - A Shopify Collective test needs a real order with Shopify Payments (verified, Collective testing page, 2026-10-09), so it can only happen on the client's live store.
 
-**Recommendation:** path A if the Headless channel installs on a transfer store, since nothing is billed to the client before the shop is ready; otherwise path B. In both, the client should own the account from the start of real sales.
+**Recommendation:** path A if the Headless channel installs on a transfer store, since nothing is billed to the client before the shop is ready, at the cost of the sign-up promotion; otherwise path B. In both, the client owns the account from the start of real sales.
 
 ## Setting up the store (Shopify admin)
 
@@ -52,7 +54,7 @@ In order. "Client" means the decision or data is the client's; "Owner" is the de
 ## Products
 
 - **By hand** in Products, or **by CSV** (template from Shopify; only Title is required for a new product; variants as extra rows with the same handle and Option1, Option2, Option3 columns; images by public `https://` address, up to 250 per product; UTF-8). **A product can have up to 3 options.** (Verified, CSV help page.) The maximum number of variants was not verified today.
-- **Collections** carry the structure of our site: one per shop section (`racks`, `tyres`, `merchandise`) and one for the featured products of the landing page carousel. Their handles become settings of the site (spec 005, T6, open point 2). How each collection is filled (by hand or by rules) is the client's choice.
+- **Collections (a proposal of ours, not a Shopify rule):** one per shop section of the site (`racks`, `tyres`, `merchandise`) and one for the featured products of the landing page carousel, their handles kept as settings of the site. Decided in the amendment of phase B (below). How each collection is filled (by hand or by rules) is the client's choice.
 - **Translations** of title, description and options for EN, with Translate & Adapt.
 - **Publishing:** a product only reaches our frontend when it is published to the Headless channel (sales channel availability on the product). (Verified, Headless management page: the channel supports product publishing.)
 - **Metafields** (extra fields such as compatible vans) work, but Collective is incompatible with metafields (verified): imported supplier products would not carry them.
@@ -68,6 +70,8 @@ In order. "Client" means the decision or data is the client's; "Owner" is the de
 **Limits that disagree:** the pricing page lists "1" headless storefront on Basic, Grow and Advanced and 25 on Plus; the developer docs say a store can have up to 100 active storefronts and tokens. One storefront is all this project needs.
 
 ## How the frontend connects (spec 005, phase B)
+
+**Phase B must be amended before it starts.** It was written before amendment 2 of spec 005: T6 reads "product types", which T14 deleted; T8 hides the search slot and the product types of a landing page that no longer has them; nothing covers the `/shop` listings, their section and availability filters, the large section cards or merchandise. T5 (the client) is unaffected. The amendment needs the owner's approval.
 
 - **T5:** a server-only client in `apps/web/src/server/shopify/` posts GraphQL to `https://<store>.myshopify.com/api/<version>/graphql.json` with the private token header. The token, the domain and the pinned API version are environment variables of the hosting.
 - **T6:** the featured collection and the section collections are read with `@inContext(language: PT | EN)`; prices and stock come only from Shopify. Pages are refreshed on a time basis at first; Shopify webhooks need an app (below) and are left for later.
@@ -104,7 +108,7 @@ For each supplier the client brings: country, whether it has Shopify, whether it
 | 5 | A few real products with images, in PT and EN, published to Headless | Client, Owner | Prerequisite 5 |
 | 6 | Headless channel, storefront, permissions | Owner | Prerequisite 3 |
 | 7 | Private token and store domain handed over outside the repository | Owner | Prerequisite 4, T5 |
-| 8 | Phase B (T5 to T8) | Owner | |
+| 8 | Amend phase B to amendment 2, then T5 to T8 | Owner | |
 | 9 | Taxes, shipping, policies, notifications, invoicing app | Client, accountant | Launch |
 | 10 | Shopify Payments, Multibanco, MB WAY request | Client | Launch |
 | 11 | Transfer (path A), plan, remove password, checkout subdomain | Client, Owner | Launch |
@@ -112,7 +116,7 @@ For each supplier the client brings: country, whether it has Shopify, whether it
 
 ## Not researched
 
-Partner sign-up, Markets beyond languages, tax set-up, shipping and carriers, the Customer Account API, webhooks, reading Shopify's policies through the API, the fees of Multibanco and MB WAY, Collective's behaviour in a headless storefront.
+Partner sign-up, Markets beyond languages, tax set-up, shipping and carriers, the Customer Account API, webhooks, reading Shopify's policies through the API, the fees of Multibanco and MB WAY, Collective's behaviour in a headless storefront, Shopify and Stripe as data processors in the privacy policy, the sender domain of Shopify's emails (DNS shared with the mail set-up), and cookie consent across our site and Shopify's checkout (still open in `AGENTS.md`).
 
 ## Sources (read 2026-10-14)
 
@@ -125,7 +129,7 @@ Partner sign-up, Markets beyond languages, tax set-up, shipping and carriers, th
 - Hydrogen getting started: https://shopify.dev/docs/storefronts/headless/getting-started
 - Checkout subdomain: https://shopify.dev/docs/storefronts/headless/hydrogen/migrate/redirect-traffic
 - Dev stores: https://shopify.dev/docs/api/development-stores
-- Client transfer stores: https://shopify.dev/docs/apps/build/stores/client-transfer-stores
+- Client transfer stores: https://shopify.dev/docs/apps/build/stores/client-transfer-stores (raw text: the same address with `.md`)
 - Collaborator accounts: https://help.shopify.com/en/manual/your-account/users/security/collaborator-accounts
 - Product CSV: https://help.shopify.com/en/manual/products/import-export/using-csv
 - Local payment methods: https://help.shopify.com/en/manual/payments/shopify-payments/local-payment-methods, `/mb-way`, `/multibanco`
