@@ -88,6 +88,7 @@ Consequence for the site: a visible, prominent link to the Complaints Book platf
   - Centro de Arbitragem de Conflitos de Consumo da Madeira: https://www.madeira.gov.pt/cacc
   - Centro de Arbitragem da Universidade Autónoma de Lisboa: national; http://arbitragem.autonoma.pt/
   - Specific competence (motor vehicles, insurance, travel agencies) does not concern this shop.
+  - The list is undated and may be out of date: for CIMAAL it gives `www.consumidoronline.pt` while its 2026 regulation is published on `consumoalgarve.pt`. Every name and address is checked live before it appears on the public site.
 - Art. 18.º n.º 2: the information goes on the website and also in written contracts or another durable medium. For this shop: the terms of sale and the order confirmation email (a Shopify notification template).
 - **Open with the client:** whether to adhere to a centre (voluntary); the text of the notice, in the terms of sale and in the footer or a page of its own.
 
