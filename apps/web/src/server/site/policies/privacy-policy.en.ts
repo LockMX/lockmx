@@ -2,8 +2,9 @@ import type { PolicyDocument } from "@/lib/site/policy-document";
 
 // The privacy policy as the owner delivered it on 2026-11-17 (exported from
 // Termly, last updated 2026-11-16), converted to plain data. The text is kept
-// exactly as delivered; only the generator's styles and markers were dropped.
-// From now on the policy is changed here, not in Termly.
+// as delivered except for the owner's changes recorded in the notes of T7 of
+// spec 004; the generator's styles and markers were dropped. From now on the
+// policy is changed here, not in Termly.
 export const privacyPolicyEn: PolicyDocument = {
   blocks: [
     { kind: "paragraph", text: [{ text: "Last updated November 16, 2026", strong: true }] },
@@ -58,7 +59,6 @@ export const privacyPolicyEn: PolicyDocument = {
     },
     { kind: "paragraph", id: "sensitiveinfo", text: [{ text: "Sensitive Information.", strong: true }, " We do not process sensitive information."] },
     { kind: "paragraph", text: [{ text: "Payment Data.", strong: true }, " We may collect data necessary to process your payment if you choose to make purchases, such as your payment instrument number, and the security code associated with your payment instrument. All payment data is handled and stored by Shopify. You may find their privacy notice link(s) here: ", { text: "https://www.shopify.com/legal/privacy", href: "https://www.shopify.com/legal/privacy" }, "."] },
-    { kind: "paragraph", text: ["MBWAY"] },
     { kind: "paragraph", text: ["All personal information that you provide to us must be true, complete, and accurate, and you must notify us of any changes to such personal information."] },
     { kind: "heading", level: 2, id: "infouse", text: ["2. HOW DO WE PROCESS YOUR INFORMATION?"] },
     { kind: "paragraph", text: [{ text: "In Short:", strong: true, em: true }, " ", { text: "We process your information to provide, improve, and administer our Services, communicate with you, for security and fraud prevention, and to comply with law. We process the personal information for the following purposes listed below. We may also process your information for other purposes only with your prior explicit consent.", em: true }] },

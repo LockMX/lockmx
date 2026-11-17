@@ -19,7 +19,7 @@ export const returnPolicyPt: PolicyDocument = {
     { kind: "paragraph", text: ["Portugal"] },
     { kind: "paragraph", text: ["Tenha em atenção que será responsável por todas as despesas de envio da devolução. Recomendamos vivamente que utilize um método de envio com rastreio para enviar a sua devolução."] },
     { kind: "heading", level: 2, text: ["REEMBOLSOS"] },
-    { kind: "paragraph", text: ["Após receber a sua devolução e verificar o estado do artigo, processaremos a sua devolução ou troca. Por favor, aguarde pelo menos oito (8) dias a contar da receção do artigo para processar a sua devolução ou troca. Os reembolsos podem levar 1 a 2 ciclos de faturação a surgir no extrato do cartão de crédito, consoante a entidade emitente do seu cartão. Notificá-lo-emos por email quando a sua devolução tiver sido processada."] },
+    { kind: "paragraph", text: ["Após receber a sua devolução e verificar o estado do artigo, processaremos a sua devolução ou troca. Por favor, aguarde pelo menos oito (8) dias a contar da receção do artigo para processar a sua devolução ou troca. Os reembolsos são efetuados através da Shopify, para o meio de pagamento utilizado na compra; o tempo que demoram a surgir depende desse meio. Notificá-lo-emos por email quando a sua devolução tiver sido processada."] },
     { kind: "heading", level: 2, text: ["EXCEÇÕES"] },
     { kind: "paragraph", text: ["Para produtos com defeito ou danificados, contacte-nos através dos dados de contacto abaixo para combinar um reembolso ou uma troca."] },
     { kind: "heading", level: 2, text: ["PERGUNTAS"] },

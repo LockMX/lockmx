@@ -2,8 +2,9 @@ import type { PolicyDocument } from "@/lib/site/policy-document";
 
 // The return policy as the owner delivered it on 2026-11-17 (exported from
 // Termly, last updated 2026-11-16), converted to plain data. The text is kept
-// exactly as delivered; only the generator's styles and markers were dropped.
-// From now on the policy is changed here, not in Termly.
+// as delivered except for the owner's changes recorded in the notes of T7 of
+// spec 004; the generator's styles and markers were dropped. From now on the
+// policy is changed here, not in Termly.
 export const returnPolicyEn: PolicyDocument = {
   blocks: [
     { kind: "paragraph", text: [{ text: "Last updated November 16, 2026", strong: true }] },
@@ -20,7 +21,7 @@ export const returnPolicyEn: PolicyDocument = {
     { kind: "paragraph", text: ["Portugal"] },
     { kind: "paragraph", text: ["Please note, you will be responsible for all return shipping charges. We strongly recommend that you use a trackable method to mail your return."] },
     { kind: "heading", level: 2, text: ["REFUNDS"] },
-    { kind: "paragraph", text: ["After receiving your return and inspecting the condition of your item, we will process your return or exchange. Please allow at least eight (8) days from the receipt of your item to process your return or exchange. Refunds may take 1-2 billing cycles to appear on your credit card statement, depending on your credit card company. We will notify you by email when your return has been processed."] },
+    { kind: "paragraph", text: ["After receiving your return and inspecting the condition of your item, we will process your return or exchange. Please allow at least eight (8) days from the receipt of your item to process your return or exchange. Refunds are made through Shopify to the payment method used for the purchase; the time they take to appear depends on that method. We will notify you by email when your return has been processed."] },
     { kind: "heading", level: 2, text: ["EXCEPTIONS"] },
     { kind: "paragraph", text: ["For defective or damaged products, please contact us at the contact details below to arrange a refund or exchange."] },
     { kind: "heading", level: 2, text: ["QUESTIONS"] },

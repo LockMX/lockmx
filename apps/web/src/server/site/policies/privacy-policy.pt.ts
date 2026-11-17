@@ -57,7 +57,6 @@ export const privacyPolicyPt: PolicyDocument = {
     },
     { kind: "paragraph", id: "sensitiveinfo", text: [{ text: "Informações sensíveis.", strong: true }, " Não tratamos informações sensíveis."] },
     { kind: "paragraph", text: [{ text: "Dados de pagamento.", strong: true }, " Poderemos recolher os dados necessários para processar o seu pagamento caso decida efetuar compras, como o número do seu instrumento de pagamento e o código de segurança associado a esse instrumento. Todos os dados de pagamento são tratados e armazenados pela Shopify. Pode consultar a(s) ligação(ões) para o respetivo aviso de privacidade aqui: ", { text: "https://www.shopify.com/legal/privacy", href: "https://www.shopify.com/legal/privacy" }, "."] },
-    { kind: "paragraph", text: ["MBWAY"] },
     { kind: "paragraph", text: ["Todas as informações pessoais que nos forneça devem ser verdadeiras, completas e exatas, e deve notificar-nos de quaisquer alterações a essas informações pessoais."] },
     { kind: "heading", level: 2, id: "infouse", text: ["2. COMO TRATAMOS AS SUAS INFORMAÇÕES?"] },
     { kind: "paragraph", text: [{ text: "Em resumo:", strong: true, em: true }, " ", { text: "Tratamos as suas informações para fornecer, melhorar e administrar os nossos Serviços, para comunicar consigo, para segurança e prevenção de fraude e para cumprir a lei. Tratamos as informações pessoais para as finalidades indicadas abaixo. Poderemos também tratar as suas informações para outras finalidades apenas com o seu consentimento explícito prévio.", em: true }] },

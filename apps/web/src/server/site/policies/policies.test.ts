@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { locales } from "@/lib/i18n/config";
+import { localizedPath, publicPaths } from "@/lib/site/public-paths";
 import {
   blockTexts,
   runHref,
@@ -17,8 +18,12 @@ function ids(document: PolicyDocument): string[] {
   return document.blocks.flatMap((block) => (block.id ? [block.id] : []));
 }
 
+// A link to another page of the site carries the locale of the text.
+const sitePage = /^\/(pt|en)(\/.*)?$/;
+
 // What a translation must keep: the blocks, their ids and levels, and in each
-// text the same runs with the same marks and addresses.
+// text the same runs with the same marks and addresses (a link to a page of
+// the site differs only by its locale).
 function skeleton(block: PolicyBlock) {
   return {
     kind: block.kind,
@@ -26,7 +31,9 @@ function skeleton(block: PolicyBlock) {
     level: block.kind === "heading" ? block.level : undefined,
     texts: blockTexts(block).map((text) =>
       text.map((run) =>
-        typeof run === "string" ? "text" : { strong: run.strong, em: run.em, href: run.href },
+        typeof run === "string"
+          ? "text"
+          : { strong: run.strong, em: run.em, href: run.href?.replace(sitePage, "/:locale$2") },
       ),
     ),
   };
@@ -54,6 +61,20 @@ describe.each(cases)("the %s policy in %s", (name, locale) => {
     for (const target of targets) {
       expect(ids(policy)).toContain(target);
     }
+  });
+
+  test("leads every link to a page of the site to a public page in its locale", () => {
+    const pages = runs(policy)
+      .map(runHref)
+      .filter((href) => href?.startsWith("/"));
+
+    for (const href of pages) {
+      expect(publicPaths.map((path) => localizedPath(locale, path))).toContain(href);
+    }
+  });
+
+  test("does not link to the old address of the return policy", () => {
+    expect(runs(policy).map(runHref)).not.toContain("http://www.lockmx.com/return-policy");
   });
 
   // The page heading is the h1, so the text starts at h2 and never skips one.
