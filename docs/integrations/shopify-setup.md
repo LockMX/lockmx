@@ -30,6 +30,8 @@ Sources: client transfer stores (read as raw text) and dev stores on shopify.dev
 - **Community:** a password-protected store has been reported to send the `checkoutUrl` back to the password page. This does not block phase B, which only reads products, but a full test order through our frontend may need path B.
 - A Shopify Collective test needs a real order with Shopify Payments (verified, Collective testing page, 2026-10-09), so it can only happen on the client's live store.
 
+**Chosen: path B.** The client signed up at shopify.com on or before 2026-11-17 (owner); the store has no setup yet. The trial and the promotional months started then. The developer joins as a collaborator with the client's request code.
+
 **Recommendation:** path A if the Headless channel installs on a transfer store, since nothing is billed to the client before the shop is ready, at the cost of the sign-up promotion; otherwise path B. In both, the client owns the account from the start of real sales.
 
 ## Setting up the store (Shopify admin)
