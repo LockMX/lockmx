@@ -1,6 +1,6 @@
 # 004. Public site shell and landing page
 
-- Status: in progress (approved by the owner on 2026-10-09). The landing page it built was recomposed on 2026-10-13 by amendment 1 of `005-shop-home.md`: the modular system is a section of it again, `/modular-system`, the buy block and the complements block are gone. Amendment 2 of the same spec, also of 2026-10-13, reverses that after the client's answer: the landing page is the shop home, `/modular-system` is back and contact is the page `/contact`. T7 is split (2026-11-17): the privacy policy and the terms are done; the company page and the cookie policy wait.
+- Status: in progress (approved by the owner on 2026-10-09). The landing page it built was recomposed on 2026-10-13 by amendment 1 of `005-shop-home.md`: the modular system is a section of it again, `/modular-system`, the buy block and the complements block are gone. Amendment 2 of the same spec, also of 2026-10-13, reverses that after the client's answer: the landing page is the shop home, `/modular-system` is back and contact is the page `/contact`. T7 is split (2026-11-17): the privacy policy, the terms and the return policy are done; the company page and the cookie policy wait.
 - Idea: `../ideas/landing-page.md`
 - Decisions: `../decisions/0013-e2e-test-runner.md`, `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0001-monorepo-single-web-app.md`
 
@@ -381,6 +381,17 @@ Decided by the owner on 2026-10-09:
 - **Translation notes:** the English text writes "Portugese" for the language of arbitration; it is kept there and translated as "português". "Sales tax" was translated literally ("imposto sobre as vendas"), not as IVA: a legal reviewer decides.
 - `lockmx.com/terms/` answers 308 to `/terms`, which answers 307 to the visitor's locale (`/pt/terms`), checked with `next start` on 2026-11-17. Visual check at 320 and 1440 px on `/pt/terms`.
 - Tests: `policies.test.ts` covers both policies; `e2e/policy-pages.spec.ts` (replaces `privacy-policy.spec.ts`) covers both pages and the old `/privacy` address.
+
+### T7, part 3: return policy (2026-11-17)
+
+- Added by the owner the same day, from line 184 of the same file (Termly, last updated 2026-11-16, English), with a new footer entry "Política de devolução" / "Return policy" at `/returns`, after the terms. Same conversion (every character compared with the HTML; no anchors; the hidden, empty data request link of Termly is dropped) and the same agent translation to PT-PT, kept in `server/site/policies/return-policy.*.ts`.
+- **Kept as delivered, to be reviewed by the owner and the client:**
+  - Section 7 of the terms still sends to `http://www.lockmx.com/return-policy`, not to `/returns`. The fix is in the text of the terms, both files.
+  - Returns within 15 days of the purchase date, in new and unused condition, with the return shipping paid by the buyer. Distance sales to consumers in Portugal have a legal right of withdrawal with its own rules (period, from when it counts, who pays the return, refund deadline); this text was not checked against them, and `../compliance/` has no file on it yet.
+  - Refunds "1-2 billing cycles" on the credit card statement; payment methods also include MB WAY.
+  - The return address (Bairro Resid. da BA11 Bloco A9 2 Esq, 7800-399 Beja) is the first full postal address in the policies; the terms still have "__________" and the privacy policy only "Beja, Portugal".
+  - The contact is `returns@lockmx.com`, which is not in the list of mailboxes of `../integrations/aws-ses-mailboxes.md`: mail sent to it may not be received.
+- Tests: the policy content tests and `e2e/policy-pages.spec.ts` cover it; the anchor test is skipped for a policy without a table of contents.
 
 ### T8 (2026-10-11)
 

@@ -7,7 +7,7 @@ const pages = [
     home: "/pt",
     title: "Política de privacidade",
     lastUpdated: "Última atualização: 16 de novembro de 2026",
-    contents: "ÍNDICE",
+    firstHeading: "ÍNDICE",
     firstSection: "1. QUE INFORMAÇÕES RECOLHEMOS?",
     firstSectionId: "infocollect",
   },
@@ -16,7 +16,7 @@ const pages = [
     home: "/en",
     title: "Privacy policy",
     lastUpdated: "Last updated November 16, 2026",
-    contents: "TABLE OF CONTENTS",
+    firstHeading: "TABLE OF CONTENTS",
     firstSection: "1. WHAT INFORMATION DO WE COLLECT?",
     firstSectionId: "infocollect",
   },
@@ -25,7 +25,7 @@ const pages = [
     home: "/pt",
     title: "Termos e condições",
     lastUpdated: "Última atualização 16 de novembro de 2026",
-    contents: "ÍNDICE",
+    firstHeading: "ÍNDICE",
     firstSection: "1. OS NOSSOS SERVIÇOS",
     firstSectionId: "services",
   },
@@ -34,9 +34,27 @@ const pages = [
     home: "/en",
     title: "Terms and conditions",
     lastUpdated: "Last updated November 16, 2026",
-    contents: "TABLE OF CONTENTS",
+    firstHeading: "TABLE OF CONTENTS",
     firstSection: "1. OUR SERVICES",
     firstSectionId: "services",
+  },
+  {
+    address: "/pt/returns",
+    home: "/pt",
+    title: "Política de devolução",
+    lastUpdated: "Última atualização: 16 de novembro de 2026",
+    firstHeading: "DEVOLUÇÕES",
+    firstSection: "",
+    firstSectionId: "",
+  },
+  {
+    address: "/en/returns",
+    home: "/en",
+    title: "Return policy",
+    lastUpdated: "Last updated November 16, 2026",
+    firstHeading: "RETURNS",
+    firstSection: "",
+    firstSectionId: "",
   },
 ];
 
@@ -56,16 +74,17 @@ for (const policy of pages) {
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(policy.title);
     });
 
-    test("shows the policy text, with its contents", async ({ page }) => {
+    test("shows the policy text, with its first section", async ({ page }) => {
       const response = await page.goto(address);
 
       expect(response?.status()).toBe(200);
       const main = page.getByRole("main");
       await expect(main.getByText(policy.lastUpdated)).toBeVisible();
-      await expect(main.getByRole("heading", { level: 2, name: policy.contents })).toBeVisible();
+      await expect(main.getByRole("heading", { level: 2, name: policy.firstHeading, exact: true })).toBeVisible();
     });
 
     test("leads the contents to its section", async ({ page }) => {
+      test.skip(!policy.firstSectionId, "a policy without a table of contents");
       await page.goto(address);
       await page
         .getByRole("main")
