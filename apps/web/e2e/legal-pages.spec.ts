@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-// The pages wait for the company data and the policy texts of the client
-// (spec 004, T7). Until then each one only says it is being prepared.
+// The pages that still wait for the company data and the policy texts of the
+// client (spec 004, T7) only say they are being prepared. The privacy policy
+// has its text: see privacy-policy.spec.ts.
 const locales = [
   {
     path: "/pt",
@@ -10,7 +11,6 @@ const locales = [
     home: "Voltar ao início",
     pages: [
       { slug: "company", title: "Informação da empresa" },
-      { slug: "privacy", title: "Política de privacidade" },
       { slug: "cookies", title: "Política de cookies" },
       { slug: "terms", title: "Termos e condições" },
     ],
@@ -22,7 +22,6 @@ const locales = [
     home: "Back to home",
     pages: [
       { slug: "company", title: "Company information" },
-      { slug: "privacy", title: "Privacy policy" },
       { slug: "cookies", title: "Cookie policy" },
       { slug: "terms", title: "Terms and conditions" },
     ],
@@ -85,14 +84,14 @@ for (const locale of locales) {
 test("the sitemap does not list the pages while they are placeholders", async ({ request }) => {
   const xml = await (await request.get("/sitemap.xml")).text();
 
-  for (const slug of ["company", "privacy", "cookies", "terms"]) {
+  for (const slug of ["company", "cookies", "terms"]) {
     expect(xml).not.toContain(`/${slug}<`);
   }
 });
 
 test("the footer does not scroll sideways at 320 px with the legal links", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 640 });
-  await page.goto("/pt/privacy");
+  await page.goto("/pt/company");
 
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

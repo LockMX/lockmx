@@ -25,7 +25,7 @@ const props = {
   legalTitle: "Legal",
   legalItems: [
     { href: "/pt/company", label: "Informação da empresa" },
-    { href: "/pt/privacy", label: "Política de privacidade" },
+    { href: "/pt/privacy-policy", label: "Política de privacidade" },
   ],
   complaintsBookLabel: "Livro de Reclamações",
   languageLabel: "Idioma",

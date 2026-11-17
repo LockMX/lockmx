@@ -1,6 +1,6 @@
 # 004. Public site shell and landing page
 
-- Status: in progress (approved by the owner on 2026-10-09). The landing page it built was recomposed on 2026-10-13 by amendment 1 of `005-shop-home.md`: the modular system is a section of it again, `/modular-system`, the buy block and the complements block are gone. Amendment 2 of the same spec, also of 2026-10-13, reverses that after the client's answer: the landing page is the shop home, `/modular-system` is back and contact is the page `/contact`.
+- Status: in progress (approved by the owner on 2026-10-09). The landing page it built was recomposed on 2026-10-13 by amendment 1 of `005-shop-home.md`: the modular system is a section of it again, `/modular-system`, the buy block and the complements block are gone. Amendment 2 of the same spec, also of 2026-10-13, reverses that after the client's answer: the landing page is the shop home, `/modular-system` is back and contact is the page `/contact`. T7 is split (2026-11-17): the privacy policy is done; the company page, the cookie policy and the terms wait.
 - Idea: `../ideas/landing-page.md`
 - Decisions: `../decisions/0013-e2e-test-runner.md`, `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0001-monorepo-single-web-app.md`
 
@@ -350,6 +350,18 @@ Decided by the owner on 2026-10-09:
 - **Not built, raised with the owner:** a search bar under the hero actions, a "Destaques" carousel of products after the hero, and cards for product types. They need the catalogue (Shopify, ADR 0014) and a carousel, which is a new design system component; this spec builds nothing that talks to the shop and shows no product. They belong to the shop idea and spec.
 - Verified: `pnpm lint`, `pnpm typecheck`, `pnpm test` (58 files, 735 tests), `pnpm test:e2e` (534 passed, 2 skipped by design); the page seen at 1440 px and its top at 320 px, in Chromium, `/pt` only.
 - Not checked: CI, a real phone, a screen reader.
+
+### T7, part 1: privacy policy (2026-11-17)
+
+- Split from T7 as the task says, because only the privacy policy arrived. The company page, the cookie policy and the terms remain in T7.
+- **Source:** the owner exported the policy from Termly (last updated 2026-11-16) and gave its HTML on 2026-11-17, in English only. The owner decided that from now on the policy texts are changed in the repository, not in Termly.
+- **Address:** `/privacy-policy`, asked by the owner. It replaces the `/privacy` of T7a (no redirect: the site is not launched). `/cookies` and `/terms` keep the T7a addresses for now.
+- **Conversion:** a script turned the HTML into typed data (`lib/site/policy-document.ts`, content in `server/site/policies/privacy-policy.en.ts`), dropping Termly's styles, markers, logo and the duplicate `id="control"`. The text is as delivered: words, links and the 17 anchor ids were compared with the HTML. The only changes are presentational: the policy's own "PRIVACY POLICY" title gives way to the page's `h1`, and Termly's one-list-per-item markup became one list.
+- **Translation:** the owner asked for a PT-PT translation made by an agent (`privacy-policy.pt.ts`), in a formal register. A unit test checks that the two files have the same blocks, ids, links and marks. The translation was not reviewed by a lawyer.
+- **Kept as delivered, to be fixed by the owner in the text (decision of the owner, 2026-11-17):** a stray "MBWAY" line under payment data; section 7 is only "__________"; section 4 says "the following third parties" and names none (Shopify is not listed); the table of section 10 says identifiers are not collected, against section 1; "log in to your account settings" and a stray "shopify" item, while the site has no accounts; the postal address is only "Beja, Portugal"; UK, Swiss and Canadian content, and the Portuguese authority (CNPD) is not named.
+- **Still tied to Termly:** the three "data subject access request" links go to a form on `app.termly.io`, and the last line credits Termly's generator. If the Termly account is closed, the form stops working. Whether Termly's terms allow the text to be published without the account was not checked.
+- Tests: `privacy-policy.test.ts` (anchors resolve, ids unique, no heading level skipped, translation structure), `policy-document-view.test.tsx`, `legal-pages.test.ts`, `public-paths.test.ts`, `e2e/privacy-policy.spec.ts` (footer link, content, anchor, head, sitemap, widths, old address answers 404).
+- Visual check at 320 and 1440 px on `/pt/privacy-policy` (top, lists, section headings); 768 and 1024 only through the sideways-scroll test. At 1440 px the lines are long: the design system has no text-width token, so none was added.
 
 ### T8 (2026-10-11)
 
