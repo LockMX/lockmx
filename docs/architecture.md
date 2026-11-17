@@ -22,7 +22,7 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 |---|---|---|
 | `app/` | exists | Routes, layouts and composition only. No business logic in pages. |
 | `app/[lang]/` | exists | Root segment for the locale (`pt` or `en`). Holds the root layout and every page. |
-| `app/[lang]/(marketing)` | exists | The public pages and their shell: the layout (skip link, header, `main`, footer), the landing page (the home of the shop), `modular-system`, `contact`, `shop` and `shop/[category]` (the listings), `cart`, the placeholder legal pages (`company`, `privacy`, `cookies`, `terms`), `not-found`, `error` and a catch-all route that sends unknown addresses to `not-found`. |
+| `app/[lang]/(marketing)` | exists | The public pages and their shell: the layout (skip link, header, `main`, footer), the landing page (the home of the shop), `modular-system`, `contact`, `shop` and `shop/[category]` (the listings), `cart`, `privacy-policy` (the privacy policy), the placeholder legal pages (`company`, `cookies`, `terms`), `not-found`, `error` and a catch-all route that sends unknown addresses to `not-found`. |
 | `app/[lang]/coming-soon` | exists | The placeholder page, outside the group, so without the shell. |
 | `app/global-error.tsx`, `app/sitemap.ts`, `app/robots.ts` | exist | The error page of last resort, with its own `<html>`; the sitemap and the robots file. |
 | `app/[lang]/(shop)`, `(account)`, `(admin)` | planned | Route groups, one per site section, inside `[lang]`. |
@@ -33,8 +33,8 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 | `styles/` | exists | `tokens.css`, the design tokens and single source of truth for visual values, with the contrast and theme guard tests. Wired into Tailwind by `app/globals.css`. |
 | `lib/i18n/` | exists | Locale configuration, locale negotiation from `Accept-Language`, path switching. No server dependencies. |
 | `server/i18n/` | exists | Typed dictionaries (`messages/pt.ts` defines the shape, `messages/en.ts` follows it), `getMessages(locale)` and `getCurrentLocale()`. |
-| `lib/site/` | exists | What the public site knows about itself, without server dependencies: the public paths and the sitemap built from them, the section ids of the landing page, the legal pages, the contact address. |
-| `server/site/` | exists | `site-url.ts`, the only reader of `SITE_URL`; the builder of page metadata (canonical address and language alternates); the placeholder shared by the legal pages. |
+| `lib/site/` | exists | What the public site knows about itself, without server dependencies: the public paths and the sitemap built from them, the section ids of the landing page, the legal pages, the contact address, the shape of a policy text (`policy-document.ts`). |
+| `server/site/` | exists | `site-url.ts`, the only reader of `SITE_URL`; the builder of page metadata (canonical address and language alternates); the placeholder shared by the legal pages; `policies/`, the policy texts, one file per locale. |
 | `server/` (other modules) | planned | Server-only layer, see below. |
 | `lib/` (other modules) | planned | Code shared by server and client that has no server dependencies (for example validation schemas). |
 | `test/` | exists | Test setup (`setup.ts`) and the alias smoke test. Unit tests live next to the code they cover. |
@@ -72,7 +72,7 @@ Specified in `specs/004-landing-page.md`; how to repeat it is in `checklists/03-
 - A page is public when its path is in `publicPaths` (`lib/site/public-paths.ts`): the sitemap and the alternate-language links are built from that list, so they cannot differ.
 - Addresses are in English and the same in both locales (`/modular-system`, `/company`).
 - A link to a section of the landing page is `/<locale>#<id>`; the layout moves the focus to the section.
-- The legal pages are placeholders with `noindex` until the client delivers their content (T7 of the spec). The site cannot be launched with them.
+- The privacy policy is at `/privacy-policy`, indexed and in the sitemap. Its text is data in `server/site/policies/` (one file per locale, the PT file a translation of the EN one, a test keeps their structure equal), rendered by `components/site/policy-document-view.tsx`. The repository is the source of the policy texts: they are changed there, not in the generator they came from. The other legal pages are placeholders with `noindex` until the client delivers their content (T7 of the spec). The site cannot be launched with them.
 
 ## Design system
 

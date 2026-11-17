@@ -7,8 +7,14 @@ import { defaultLocale, htmlLang, locales, type Locale } from "@/lib/i18n/config
 // here, so it reaches the sitemap. The placeholder is not a public page.
 export const modularSystemPath = "/modular-system";
 export const contactPath = "/contact";
+export const privacyPolicyPath = "/privacy-policy";
 
-export const publicPaths: readonly string[] = ["/", modularSystemPath, contactPath];
+export const publicPaths: readonly string[] = [
+  "/",
+  modularSystemPath,
+  contactPath,
+  privacyPolicyPath,
+];
 
 // The shop is not in the sitemap while it shows example products (spec 005, T8).
 export const shopPath = "/shop";

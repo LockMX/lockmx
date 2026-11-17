@@ -173,10 +173,12 @@ export const pt = {
       next: "Seguinte",
     },
   },
-  // The pages of the legal column of the footer. Their content waits for the client.
+  // The pages of the legal column of the footer. The privacy policy has its text;
+  // the others wait for the client.
   legal: {
     company: "Informação da empresa",
     privacy: "Política de privacidade",
+    privacyDescription: "A política de privacidade da LockMX.",
     cookies: "Política de cookies",
     terms: "Termos e condições",
     pending: "Em implementação",

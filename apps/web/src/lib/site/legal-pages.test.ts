@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { legalPageHref, legalPages } from "@/lib/site/legal-pages";
+import { legalPageHref, legalPagePaths, legalPages } from "@/lib/site/legal-pages";
 import { publicPaths } from "@/lib/site/public-paths";
 
 describe("legalPages", () => {
@@ -9,13 +9,18 @@ describe("legalPages", () => {
 
   test("gives each page its address in a locale", () => {
     expect(legalPageHref("pt", "company")).toBe("/pt/company");
+    expect(legalPageHref("en", "privacy")).toBe("/en/privacy-policy");
     expect(legalPageHref("en", "terms")).toBe("/en/terms");
   });
 
-  // They join the sitemap with their real content (spec 004, T7).
-  test("is not in the sitemap while the pages are placeholders", () => {
-    for (const page of legalPages) {
-      expect(publicPaths).not.toContain(`/${page}`);
+  // A page joins the sitemap with its real content (spec 004, T7).
+  test("puts the privacy policy in the sitemap", () => {
+    expect(publicPaths).toContain(legalPagePaths.privacy);
+  });
+
+  test("keeps the placeholders out of the sitemap", () => {
+    for (const page of ["company", "cookies", "terms"] as const) {
+      expect(publicPaths).not.toContain(legalPagePaths[page]);
     }
   });
 });

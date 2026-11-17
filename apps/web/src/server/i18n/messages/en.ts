@@ -168,6 +168,7 @@ export const en: Messages = {
   legal: {
     company: "Company information",
     privacy: "Privacy policy",
+    privacyDescription: "The LockMX privacy policy.",
     cookies: "Cookie policy",
     terms: "Terms and conditions",
     pending: "Under construction",
