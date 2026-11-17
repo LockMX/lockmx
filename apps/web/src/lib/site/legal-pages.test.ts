@@ -14,12 +14,13 @@ describe("legalPages", () => {
   });
 
   // A page joins the sitemap with its real content (spec 004, T7).
-  test("puts the privacy policy in the sitemap", () => {
+  test("puts the privacy policy and the terms in the sitemap", () => {
     expect(publicPaths).toContain(legalPagePaths.privacy);
+    expect(publicPaths).toContain(legalPagePaths.terms);
   });
 
   test("keeps the placeholders out of the sitemap", () => {
-    for (const page of ["company", "cookies", "terms"] as const) {
+    for (const page of ["company", "cookies"] as const) {
       expect(publicPaths).not.toContain(legalPagePaths[page]);
     }
   });

@@ -7,7 +7,7 @@ import {
   type PolicyDocument,
   type PolicyRun,
 } from "@/lib/site/policy-document";
-import { getPrivacyPolicy } from "@/server/site/policies/privacy-policy";
+import { getPolicy, policies } from "@/server/site/policies/policies";
 
 function runs(document: PolicyDocument): PolicyRun[] {
   return document.blocks.flatMap((block) => blockTexts(block).flat());
@@ -32,8 +32,10 @@ function skeleton(block: PolicyBlock) {
   };
 }
 
-describe.each(locales)("the privacy policy in %s", (locale) => {
-  const policy = getPrivacyPolicy(locale);
+const cases = policies.flatMap((name) => locales.map((locale) => [name, locale] as const));
+
+describe.each(cases)("the %s policy in %s", (name, locale) => {
+  const policy = getPolicy(name, locale);
 
   test("has content", () => {
     expect(policy.blocks.length).toBeGreaterThan(0);
@@ -75,10 +77,16 @@ describe.each(locales)("the privacy policy in %s", (locale) => {
   });
 });
 
-describe("the translation of the privacy policy", () => {
+describe.each(policies)("the translation of the %s policy", (name) => {
   test("follows the English text block by block", () => {
-    expect(getPrivacyPolicy("pt").blocks.map(skeleton)).toEqual(
-      getPrivacyPolicy("en").blocks.map(skeleton),
+    expect(getPolicy(name, "pt").blocks.map(skeleton)).toEqual(
+      getPolicy(name, "en").blocks.map(skeleton),
     );
+  });
+});
+
+describe("policies", () => {
+  test("are the privacy policy and the terms", () => {
+    expect(policies).toEqual(["privacy", "terms"]);
   });
 });

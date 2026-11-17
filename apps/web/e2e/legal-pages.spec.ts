@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 // The pages that still wait for the company data and the policy texts of the
-// client (spec 004, T7) only say they are being prepared. The privacy policy
-// has its text: see privacy-policy.spec.ts.
+// client (spec 004, T7) only say they are being prepared. The policies with
+// their text are in policy-pages.spec.ts.
 const locales = [
   {
     path: "/pt",
@@ -12,7 +12,6 @@ const locales = [
     pages: [
       { slug: "company", title: "Informação da empresa" },
       { slug: "cookies", title: "Política de cookies" },
-      { slug: "terms", title: "Termos e condições" },
     ],
   },
   {
@@ -23,7 +22,6 @@ const locales = [
     pages: [
       { slug: "company", title: "Company information" },
       { slug: "cookies", title: "Cookie policy" },
-      { slug: "terms", title: "Terms and conditions" },
     ],
   },
 ];
@@ -84,7 +82,7 @@ for (const locale of locales) {
 test("the sitemap does not list the pages while they are placeholders", async ({ request }) => {
   const xml = await (await request.get("/sitemap.xml")).text();
 
-  for (const slug of ["company", "cookies", "terms"]) {
+  for (const slug of ["company", "cookies"]) {
     expect(xml).not.toContain(`/${slug}<`);
   }
 });

@@ -1,6 +1,6 @@
 # 004. Public site shell and landing page
 
-- Status: in progress (approved by the owner on 2026-10-09). The landing page it built was recomposed on 2026-10-13 by amendment 1 of `005-shop-home.md`: the modular system is a section of it again, `/modular-system`, the buy block and the complements block are gone. Amendment 2 of the same spec, also of 2026-10-13, reverses that after the client's answer: the landing page is the shop home, `/modular-system` is back and contact is the page `/contact`. T7 is split (2026-11-17): the privacy policy is done; the company page, the cookie policy and the terms wait.
+- Status: in progress (approved by the owner on 2026-10-09). The landing page it built was recomposed on 2026-10-13 by amendment 1 of `005-shop-home.md`: the modular system is a section of it again, `/modular-system`, the buy block and the complements block are gone. Amendment 2 of the same spec, also of 2026-10-13, reverses that after the client's answer: the landing page is the shop home, `/modular-system` is back and contact is the page `/contact`. T7 is split (2026-11-17): the privacy policy and the terms are done; the company page and the cookie policy wait.
 - Idea: `../ideas/landing-page.md`
 - Decisions: `../decisions/0013-e2e-test-runner.md`, `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0001-monorepo-single-web-app.md`
 
@@ -360,8 +360,27 @@ Decided by the owner on 2026-10-09:
 - **Translation:** the owner asked for a PT-PT translation made by an agent (`privacy-policy.pt.ts`), in a formal register. A unit test checks that the two files have the same blocks, ids, links and marks. The translation was not reviewed by a lawyer.
 - **Kept as delivered, to be fixed by the owner in the text (decision of the owner, 2026-11-17):** a stray "MBWAY" line under payment data; section 7 is only "__________"; section 4 says "the following third parties" and names none (Shopify is not listed); the table of section 10 says identifiers are not collected, against section 1; "log in to your account settings" and a stray "shopify" item, while the site has no accounts; the postal address is only "Beja, Portugal"; UK, Swiss and Canadian content, and the Portuguese authority (CNPD) is not named.
 - **Still tied to Termly:** the three "data subject access request" links go to a form on `app.termly.io`, and the last line credits Termly's generator. If the Termly account is closed, the form stops working. Whether Termly's terms allow the text to be published without the account was not checked.
-- Tests: `privacy-policy.test.ts` (anchors resolve, ids unique, no heading level skipped, translation structure), `policy-document-view.test.tsx`, `legal-pages.test.ts`, `public-paths.test.ts`, `e2e/privacy-policy.spec.ts` (footer link, content, anchor, head, sitemap, widths, old address answers 404).
+- Tests: `privacy-policy.test.ts`, now `policies.test.ts` (anchors resolve, ids unique, no heading level skipped, translation structure), `policy-document-view.test.tsx`, `legal-pages.test.ts`, `public-paths.test.ts`, `e2e/privacy-policy.spec.ts`, now `policy-pages.spec.ts` (footer link, content, anchor, head, sitemap, widths, old address answers 404).
 - Visual check at 320 and 1440 px on `/pt/privacy-policy` (top, lists, section headings); 768 and 1024 only through the sideways-scroll test. At 1440 px the lines are long: the design system has no text-width token, so none was added.
+
+### T7, part 2: terms and conditions (2026-11-17)
+
+- Delivered by the owner the same day, in the same file as the privacy policy (from line 58), exported from Termly, last updated 2026-11-16, in English. Same path as part 1: converted by the same script (every character of the text compared with the HTML; 28 anchor ids, all links within the page resolve), translated to PT-PT by an agent, kept in `server/site/policies/terms.*.ts`. The texts are now read through `policies.ts`.
+- **Address:** `/terms`, the address of T7a, confirmed by the owner.
+- **Presentational changes only:** the payment methods, written by Termly as lines starting with "- ", are a list; Termly's own "TERMS AND CONDITIONS" title gives way to the page's `h1`.
+- **Kept as delivered, to be reviewed by the owner and the client:**
+  - The company name is written "LockmMX Modular System" (with an extra "m") in the identification and in the contact section.
+  - The postal address is "__________, __________, Portugal".
+  - The VAT number 254870112 has a valid check digit; it starts with 2, the range of individual taxpayers in Portugal (not verified at the tax authority's source in this task). Whether the seller is a company or a sole trader changes the identification the site must show (`../compliance/site-information-and-complaints.md`).
+  - Section 6 lists "mbway" and "shopify" as payment methods.
+  - Section 7 sends to a return policy at `http://www.lockmx.com/return-policy`, which does not exist on the site. The withdrawal right of distance sales has no text yet.
+  - Section 14 says the Services are hosted in Ireland. Hosting is not decided (ADR 0007, ADR 0012 proposed).
+  - Section 18 sends disputes to binding arbitration at the European Court of Arbitration; section 25 is about California. Whether this fits consumer sales in Portugal (alternative dispute resolution, `../compliance/site-information-and-complaints.md`) is for the client's legal review.
+  - The minimum age is 13; the contact address is `crew@lockmx.com`, while the compliance file names `support@lockmx.com` for questions about orders.
+  - The last line credits Termly's generator.
+- **Translation notes:** the English text writes "Portugese" for the language of arbitration; it is kept there and translated as "português". "Sales tax" was translated literally ("imposto sobre as vendas"), not as IVA: a legal reviewer decides.
+- `lockmx.com/terms/` answers 308 to `/terms`, which answers 307 to the visitor's locale (`/pt/terms`), checked with `next start` on 2026-11-17. Visual check at 320 and 1440 px on `/pt/terms`.
+- Tests: `policies.test.ts` covers both policies; `e2e/policy-pages.spec.ts` (replaces `privacy-policy.spec.ts`) covers both pages and the old `/privacy` address.
 
 ### T8 (2026-10-11)
 

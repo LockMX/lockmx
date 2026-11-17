@@ -5,7 +5,7 @@ import { privacyPolicyPath } from "@/lib/site/public-paths";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
 import { buildPageMetadata } from "@/server/site/page-metadata";
-import { getPrivacyPolicy } from "@/server/site/policies/privacy-policy";
+import { getPolicy } from "@/server/site/policies/policies";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getCurrentLocale();
@@ -27,7 +27,7 @@ export default async function PrivacyPolicyPage() {
 
   return (
     <Section id="privacy-policy" level={1} eyebrow={footer.legalTitle} title={legal.privacy}>
-      <PolicyDocumentView document={getPrivacyPolicy(locale)} />
+      <PolicyDocumentView document={getPolicy("privacy", locale)} />
     </Section>
   );
 }
