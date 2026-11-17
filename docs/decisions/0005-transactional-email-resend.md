@@ -44,6 +44,7 @@ The client's existing mailbox `lock_mx@outlook.com` is the single place where ev
 | `crew@lockmx.com` | Receives the contact form messages (owner, 2026-10-09). The client answers from it. | Alias forwarded to the client's mailbox. |
 | `fabio.ramalhinho@lockmx.com` | Direct relationship with customers, used by the person when he chooses. Received the contact form messages until `crew@` replaced it for that; the "payment confirmed" notification is revisited with the shop (ADR 0014). | Whether he answers from this address or from `support@` is not decided and does not affect the design. |
 | `privacy@lockmx.com`, `terms@lockmx.com` | Data protection and legal terms contacts. | Exist already. |
+| `returns@lockmx.com` | Return requests, named in the return policy. | Exists (configured by the owner, 2026-11-17). |
 | `postmaster@lockmx.com`, `abuse@lockmx.com` | Role mailboxes expected by email conventions. Not a legal requirement. | Aliases. |
 | `dev@lockmx.com` | Owner of the accounts of third-party services (Resend, AWS, Cloudflare, domain registrar, payment provider). | The owner's convention across his projects. |
 | `dmarc@lockmx.com` (proposed) | Receives DMARC aggregate reports. | Alias, to keep them out of people's inboxes. |

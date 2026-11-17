@@ -4,7 +4,7 @@ Status: in use (being migrated to the v2 function). Written on 2026-10-08. The m
 
 ## Purpose
 
-The company mailboxes (`support@`, `crew@`, `fabio.ramalhinho@`, `privacy@`, `terms@`, `dev@`, `abuse@`, `postmaster@`) do not exist as real mailboxes. SES receives the mail for them and a Lambda forwards a copy to the client's inbox (`lock_mx@outlook.com`). Transactional shop mail (`shop@`, send only) does not use this path: it goes through Resend on its own subdomain, so the two reputations stay separate.
+The company mailboxes (`support@`, `crew@`, `fabio.ramalhinho@`, `privacy@`, `terms@`, `returns@`, `dev@`, `abuse@`, `postmaster@`) do not exist as real mailboxes. SES receives the mail for them and a Lambda forwards a copy to the client's inbox (`lock_mx@outlook.com`). `returns@` (named in the return policy) was added on 2026-11-17: the owner configured it in SES and reported that the client added it to their Gmail as an alias; not checked from this repository. Transactional shop mail (`shop@`, send only) does not use this path: it goes through Resend on its own subdomain, so the two reputations stay separate.
 
 ## Flow
 
@@ -21,7 +21,7 @@ Code: `aws-ses-forwarder.py` (this folder). Locally tested with a stubbed `boto3
 | `Region` | SES region |
 | `MailS3Bucket` | bucket where the receipt rules store the mail |
 | `MailRecipient` | inbox that receives the copies |
-| `ForwardPrefixes` | comma separated mailbox names allowed to be forwarded, for example `support,fabio.ramalhinho,privacy,terms,dev,abuse,postmaster` |
+| `ForwardPrefixes` | comma separated mailbox names allowed to be forwarded, for example `support,fabio.ramalhinho,privacy,terms,returns,dev,abuse,postmaster` |
 | `ConfigurationSet` | optional SES configuration set, to get bounce and complaint metrics for forwarded mail |
 
 Function settings to raise from the defaults (128 MB and 3 s, with which the function timed out in a console test on 2026-10-08): memory (the message is read, parsed and serialized again, so several copies of it live in memory; 512 MB or more) and timeout (60 s for large attachments). The IAM role needs `s3:GetObject` on the bucket and `ses:SendEmail` for the sending identity.

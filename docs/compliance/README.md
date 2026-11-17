@@ -11,7 +11,8 @@ Legal and regulatory requirements that the site and the shop must meet, each wit
 ## Files
 
 - `site-information-and-complaints.md`: information the site must show (identification and contacts), the Complaints Book, consumer dispute resolution, and the EU dispute resolution platform that no longer exists.
+- `returns-and-withdrawal.md`: the return policy against the withdrawal right of distance sales and the legal guarantee of goods, with the discrepancies to take to the client.
 
 ## Planned
 
-Cookies and consent, privacy policy and processor inventory, terms of sale and withdrawal right, invoicing certified by the tax authority. They get their own file when their spec starts.
+Cookies and consent, privacy policy and processor inventory, terms of sale, invoicing certified by the tax authority. They get their own file when their spec starts.

@@ -393,6 +393,12 @@ Decided by the owner on 2026-10-09:
   - The contact is `returns@lockmx.com`, which is not in the list of mailboxes of `../integrations/aws-ses-mailboxes.md`: mail sent to it may not be received.
 - Tests: the policy content tests and `e2e/policy-pages.spec.ts` cover it; the anchor test is skipped for a policy without a table of contents.
 
+### Changes to the policy texts (owner, 2026-11-17)
+
+- The texts are no longer exactly as delivered. At the owner's request: section 7 of the terms links to `/returns` (in the page's locale); payments are described as processed by Shopify, which shows the methods at checkout (terms section 6 instead of the list Visa, Mastercard, "mbway", "shopify"; the stray "MBWAY" line of the privacy policy removed; the refund sentence of the return policy). A test checks that every link to a page of the site leads to a public page in the text's locale.
+- `returns@` is in the SES mailbox list (`../integrations/aws-ses-mailboxes.md`): the owner configured it.
+- The return policy was compared with the law: `../compliance/returns-and-withdrawal.md`. It has to be rewritten by the client; the discrepancies are listed there.
+
 ### T8 (2026-10-11)
 
 - `../architecture.md` has the `(marketing)` group, `components/site/`, `lib/site/`, `server/site/`, the files at the root of `app/` and a "Public site" section. `apps/web/AGENTS.md` says the group exists. `../checklists/03-public-site.md` is written from T1 to T7a and listed in the checklists index.
