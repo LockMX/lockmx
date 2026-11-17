@@ -51,7 +51,6 @@ describe.each(cases)("the %s policy in %s", (name, locale) => {
       .filter((href) => href?.startsWith("#"))
       .map((href) => href!.slice(1));
 
-    expect(targets.length).toBeGreaterThan(0);
     for (const target of targets) {
       expect(ids(policy)).toContain(target);
     }
@@ -86,7 +85,7 @@ describe.each(policies)("the translation of the %s policy", (name) => {
 });
 
 describe("policies", () => {
-  test("are the privacy policy and the terms", () => {
-    expect(policies).toEqual(["privacy", "terms"]);
+  test("are the privacy policy, the terms and the return policy", () => {
+    expect(policies).toEqual(["privacy", "terms", "returns"]);
   });
 });

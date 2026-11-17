@@ -31,6 +31,7 @@ describe("publicPaths", () => {
       "/contact",
       "/privacy-policy",
       "/terms",
+      "/returns",
     ]);
     expect(publicPaths.some((path) => path.includes("coming-soon"))).toBe(false);
   });

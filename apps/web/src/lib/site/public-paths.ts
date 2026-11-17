@@ -9,6 +9,7 @@ export const modularSystemPath = "/modular-system";
 export const contactPath = "/contact";
 export const privacyPolicyPath = "/privacy-policy";
 export const termsPath = "/terms";
+export const returnPolicyPath = "/returns";
 
 export const publicPaths: readonly string[] = [
   "/",
@@ -16,6 +17,7 @@ export const publicPaths: readonly string[] = [
   contactPath,
   privacyPolicyPath,
   termsPath,
+  returnPolicyPath,
 ];
 
 // The shop is not in the sitemap while it shows example products (spec 005, T8).

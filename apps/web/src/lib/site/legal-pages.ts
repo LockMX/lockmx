@@ -1,5 +1,10 @@
 import type { Locale } from "@/lib/i18n/config";
-import { localizedPath, privacyPolicyPath, termsPath } from "@/lib/site/public-paths";
+import {
+  localizedPath,
+  privacyPolicyPath,
+  returnPolicyPath,
+  termsPath,
+} from "@/lib/site/public-paths";
 
 // The pages the footer links to under "Legal": the identification of the
 // company and the policy texts (spec 004, T7). The paths are the same in both
@@ -9,6 +14,7 @@ export const legalPagePaths = {
   privacy: privacyPolicyPath,
   cookies: "/cookies",
   terms: termsPath,
+  returns: returnPolicyPath,
 } as const;
 
 export type LegalPage = keyof typeof legalPagePaths;
