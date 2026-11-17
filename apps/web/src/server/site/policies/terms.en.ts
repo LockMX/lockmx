@@ -2,9 +2,9 @@ import type { PolicyDocument } from "@/lib/site/policy-document";
 
 // The terms and conditions as the owner delivered them on 2026-11-17 (exported
 // from Termly, last updated 2026-11-16), converted to plain data. The text is
-// kept exactly as delivered; only the generator's styles and markers were
-// dropped, and the payment methods, written as lines starting with "- ",
-// became a list. From now on the terms are changed here, not in Termly.
+// kept as delivered except for the owner's changes recorded in the notes of
+// T7 of spec 004; the generator's styles and markers were dropped. From now on
+// the terms are changed here, not in Termly.
 export const termsEn: PolicyDocument = {
   blocks: [
     { kind: "paragraph", text: [{ text: "Last updated", strong: true }, " ", { text: "November 16, 2026", strong: true }] },
@@ -93,21 +93,12 @@ export const termsEn: PolicyDocument = {
     { kind: "heading", level: 2, id: "products", text: ["5. PRODUCTS"] },
     { kind: "paragraph", text: ["We make every effort to display as accurately as possible the colors, features, specifications, and details of the products available on the Services. However, we do not guarantee that the colors, features, specifications, and details of the products will be accurate, complete, reliable, current, or free of other errors, and your electronic display may not accurately reflect the actual colors and details of the products. All products are subject to availability, and we cannot guarantee that items will be in stock. We reserve the right to discontinue any products at any time for any reason. Prices for all products are subject to change."] },
     { kind: "heading", level: 2, id: "purchases", text: ["6. PURCHASES AND PAYMENT"] },
-    { kind: "paragraph", text: ["We accept the following forms of payment:"] },
-    {
-      kind: "list",
-      items: [
-        ["Visa"],
-        ["Mastercard"],
-        ["mbway"],
-        ["shopify"],
-      ],
-    },
+    { kind: "paragraph", text: ["All payments are processed by Shopify, through its checkout. The payment methods available are shown at checkout, where you choose how to pay."] },
     { kind: "paragraph", text: ["You agree to provide current, complete, and accurate purchase and account information for all purchases made via the Services. You further agree to promptly update account and payment information, including email address, payment method, and payment card expiration date, so that we can complete your transactions and contact you as needed. Sales tax will be added to the price of purchases as deemed required by us. We may change prices at any time. All payments shall be in Euros."] },
     { kind: "paragraph", text: ["You agree to pay all charges at the prices then in effect for your purchases and any applicable shipping fees, and you authorize us to charge your chosen payment provider for any such amounts upon placing your order. We reserve the right to correct any errors or mistakes in pricing, even if we have already requested or received payment."] },
     { kind: "paragraph", text: ["We reserve the right to refuse any order placed through the Services. We may, in our sole discretion, limit or cancel quantities purchased per person, per household, or per order. These restrictions may include orders placed by or under the same customer account, the same payment method, and/or orders that use the same billing or shipping address. We reserve the right to limit or prohibit orders that, in our sole judgment, appear to be placed by dealers, resellers, or distributors."] },
     { kind: "heading", level: 2, id: "returnyes", text: ["7. RETURN POLICY"] },
-    { kind: "paragraph", text: ["Please review our Return Policy prior to making any purchases: ", { text: "http://www.lockmx.com/return-policy", href: "http://www.lockmx.com/return-policy" }, "."] },
+    { kind: "paragraph", text: ["Please review our Return Policy prior to making any purchases: ", { text: "https://www.lockmx.com/returns", href: "/en/returns" }, "."] },
     { kind: "heading", level: 2, id: "prohibited", text: ["8. PROHIBITED ACTIVITIES"] },
     { kind: "paragraph", text: ["You may not access or use the Services for any purpose other than that for which we make the Services available. The Services may not be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us."] },
     { kind: "paragraph", text: ["As a user of the Services, you agree not to:"] },
