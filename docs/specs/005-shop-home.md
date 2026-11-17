@@ -1,6 +1,6 @@
 # 005. Shop: connection to Shopify and shop-style home
 
-- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); amendment 2 approved (owner, 2026-10-13) and implemented; phase B waits for prerequisites 2 to 5
+- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); amendment 2 approved (owner, 2026-10-13) and implemented; amendment 3 (phase B rewritten) proposed on 2026-11-17, waiting for the owner's approval
 - Idea: `../ideas/shop-style-home.md`, `../ideas/landing-focus-and-shop-route.md`
 - Decisions: `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0013-e2e-test-runner.md`, `../decisions/0010-icons-lucide.md`
 
@@ -135,7 +135,7 @@ Added by this spec:
 - Tests: unit tests for the cards (link or not) and for the hero with and without the slot; end-to-end for both in the page.
 - Commit: `feat: add product type cards and hero search bar`
 
-### Phase B: real data (blocked on prerequisites 2 to 5)
+### Phase B: real data (blocked on prerequisites 2 to 5; replaced by amendment 3 once approved)
 
 #### T5. Shopify Storefront API client
 - Description: `server/shopify/config.ts` reads and validates `SHOPIFY_STORE_DOMAIN`, `SHOPIFY_STOREFRONT_PRIVATE_TOKEN` and `SHOPIFY_STOREFRONT_API_VERSION` (pinned to a stable version, `2026-10` on the day this was written). `server/shopify/client.ts` exports one function that posts a GraphQL document to the versioned endpoint with the private token header, takes `fetch` as a parameter, returns typed data or a typed error (network, HTTP status, GraphQL errors), and reports when the `X-Shopify-API-Version` response header differs from the pinned version. It never logs the token or a full request. The buyer IP header is added by the task that first makes a request on behalf of a buyer; reads for a cached page do not need it. `.env.example` gets the three names without values. Whether the variables are required at build time is decided here, after reading the bundled Next.js docs, so that CI keeps building without a store.
@@ -292,6 +292,58 @@ Answered by the owner on 2026-10-13: (1) the glyph as an icon of ours; (2) the p
 - Acceptance criteria: the order of decision 17 in both locales; one `h1`; the header without sideways scroll and without a wrapped entry at 320, 768, 1024 and 1440 px; every link of the header and the footer leads to a page that exists.
 - Tests: unit tests for the cards, the header and the footer; end-to-end for the landing page, the navigation and the widths.
 - Commit: `feat: make the landing page the shop home`
+
+## Amendment 3 (proposed, 2026-11-17)
+
+Phase B (T5 to T8) was written before amendment 2 and no longer fits the site: T6 reads the product types, which T14 removed; T8 hides a search slot and type cards the landing page no longer has; nothing reads the `/shop` listings, their sections and filters, or merchandise. This amendment replaces T5 to T8 with T15 to T19. Phase A, amendments 1 and 2, the product data rules and the conventions stay.
+
+### What changed since phase B was written
+
+- **The store (owner, 2026-11-17).** The client signed up at shopify.com (path B of `../integrations/shopify-setup.md`); nothing is set up yet, and the set-up is done by the owner with the client. The developer joins as a collaborator.
+- **Two kinds of products.** The client's own products (LockMX racks and tyres), created and managed by the client in the Shopify admin; and resale of the whole catalogue of a contact's existing Shopify store, the supplier shipping to the customer. The resale is meant to go through Shopify Collective (ADR 0014): the supplier's products are imported into the LockMX store by Shopify and kept in sync, not copied by us. Whether the supplier is eligible is not known yet.
+- **What the site reads** is the same for both kinds: products published to the Headless channel. That Collective products reach a headless storefront this way is inferred, not stated by Shopify (ADR 0014, "Not yet verified"); T18 proves it.
+
+### Decisions to approve
+
+24. **Sections map to collections with fixed handles.** `racks`, `tyres` and `merchandise` are collections created with those handles, plus `featured` for "Destaques". The handles are constants of the site in `server/shopify/`, not settings: we create the collections. `/shop` lists every product published to the channel, not a collection. This answers open point 2 of the spec.
+25. **The example data stays as the fallback** when the Shopify variables are not set (development, CI, the "coming soon" deployment), with its "Exemplo" mark. Real products never carry the mark. The launch checklist requires the variables.
+26. **No switch to hide the shop (old T8 is dropped).** The shop is the landing page since amendment 2, so a launch without it has nothing to show (open point 6 of amendment 2): the launch waits for the shop.
+27. **Where supplier products go** is the client's call (open point 4 below). Until then they are read like any product: they appear in `/shop`, and in a section only if they are added to its collection.
+28. **The product cards keep leading to `/contact`** (decision 7) until the product pages spec, which comes right after this one.
+
+### Open points
+
+1. **Prerequisites 2 to 5** of this spec, now in the order of `../integrations/shopify-setup.md` ("Next steps").
+2. **The supplier and Collective:** country, currency, Shopify Payments, and whether they accept to join Collective as a supplier. If they cannot, their products are created as LockMX products (`shopify-setup.md`, "Supplier products").
+3. **How many products** the supplier's catalogue has: from about 250 products a listing needs pagination, and the filters of amendment 2 (open point 3) may need product type and brand.
+4. **Sections for supplier products:** whether they fit `racks`, `tyres` and `merchandise` or need new sections (new keys, new large cards, new navigation entries).
+
+### Tasks
+
+#### T15. Shopify Storefront API client
+- Replaces T5, with the same description, files, acceptance criteria and tests. It needs no store: every test uses a `fetch` double. The API version is the latest stable one on the day of the task, read again at the source.
+- Commit: `feat: add shopify storefront client`
+
+#### T16. Listings and featured products from Shopify
+- Description: `server/shopify/catalogue.ts` reads, with `@inContext(language)` for the locale: the products of a section's collection by handle (decision 24), every product of the channel for `/shop`, and the `featured` collection. It maps each product to `ProductSummary` following the product data rules (money conversion, compare-at price, image, availability). `server/shop/home-catalogue.ts` and `server/shop/shop-listing.ts` use it when the Shopify variables are set and the example data otherwise (decision 25); the pages do not change. The availability filter is applied by the API if it offers a filter for it, by the server otherwise. Read first, and record in the task notes: the `collection(handle:)` and `products` queries, the product filters of a collection, the maximum page size, the language codes and the behaviour of a missing translation, the image host for `images.remotePatterns`, and the bundled Next.js docs on caching and revalidation (pages refresh on a time basis; no webhooks in this spec). A failed or empty read shows the listing's empty state or hides "Destaques", never a broken page; an unknown collection is an empty section, not an error page.
+- Planned files: `apps/web/src/server/shopify/catalogue.ts` and test, `home-catalogue.ts`, `shop-listing.ts`, `apps/web/next.config.ts`, the listing and section components if they need an error state, `docs/architecture.md`.
+- Acceptance criteria: with the variables set, the landing page and the listings show the store's products in the page's language with Shopify's prices and availability; without them, the example data, still marked; a Shopify failure leaves every page working; the frontend computes no price.
+- Tests: unit tests for the mapping from recorded response shapes (both locales, a product without image, a compare-at price equal to the price, an amount with too many decimals), for the choice between Shopify and example data, and for the failure path. The check against the real store is manual and recorded with its date.
+- Commit: `feat: read the shop listings from shopify`
+
+#### T17. Search suggestions
+- Replaces T7, with the same description, applied to the search bar of the listing (amendment 2 moved it there from the hero). The rate limit of the endpoint follows ADR 0015 and the hosting decision (ADR 0007, ADR 0012), which this task raises if they are still open.
+- Commit: `feat: add search suggestions`
+
+#### T18. Supplier products through Collective
+- Description: no code unless the check finds a difference. When the client's store and the supplier's store are connected through Collective and some supplier products are imported and published to the Headless channel: read them through the client of T15 and T16, and record in the task notes whether they come back like the client's own products (fields, prices, availability, images, translations). Then one real order of a supplier product through the checkout, recorded with its date. Any difference found becomes a task here.
+- Acceptance criteria: the two checks are recorded; ADR 0014 "Not yet verified" is updated.
+- Tests: unit tests only if a mapping changes.
+- Commit: only if code or docs change (`docs: record the collective check`).
+
+#### T19. Architecture, checklist and status
+- Replaces T8 without the switch (decision 26): update `docs/architecture.md` (`server/shopify/`, `server/shop/`, `lib/shop/`), write `docs/checklists/04-shop-home.md` from what was done, and set this spec to `done`, or to `in progress` naming what waits for the client or the supplier.
+- Commit: `docs: add shop home checklist`
 
 ## Carousel brief
 
