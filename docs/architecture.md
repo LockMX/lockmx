@@ -22,7 +22,7 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 |---|---|---|
 | `app/` | exists | Routes, layouts and composition only. No business logic in pages. |
 | `app/[lang]/` | exists | Root segment for the locale (`pt` or `en`). Holds the root layout and every page. |
-| `app/[lang]/(marketing)` | exists | The public pages and their shell: the layout (skip link, header, `main`, footer), the landing page (the home of the shop), `modular-system`, `contact`, `shop` and `shop/[category]` (the listings), `cart`, `privacy-policy` (the privacy policy), the placeholder legal pages (`company`, `cookies`, `terms`), `not-found`, `error` and a catch-all route that sends unknown addresses to `not-found`. |
+| `app/[lang]/(marketing)` | exists | The public pages and their shell: the layout (skip link, header, `main`, footer), the landing page (the home of the shop), `modular-system`, `contact`, `shop` and `shop/[category]` (the listings), `cart`, `privacy-policy` and `terms` (the policy texts), the placeholder legal pages (`company`, `cookies`), `not-found`, `error` and a catch-all route that sends unknown addresses to `not-found`. |
 | `app/[lang]/coming-soon` | exists | The placeholder page, outside the group, so without the shell. |
 | `app/global-error.tsx`, `app/sitemap.ts`, `app/robots.ts` | exist | The error page of last resort, with its own `<html>`; the sitemap and the robots file. |
 | `app/[lang]/(shop)`, `(account)`, `(admin)` | planned | Route groups, one per site section, inside `[lang]`. |
@@ -72,7 +72,7 @@ Specified in `specs/004-landing-page.md`; how to repeat it is in `checklists/03-
 - A page is public when its path is in `publicPaths` (`lib/site/public-paths.ts`): the sitemap and the alternate-language links are built from that list, so they cannot differ.
 - Addresses are in English and the same in both locales (`/modular-system`, `/company`).
 - A link to a section of the landing page is `/<locale>#<id>`; the layout moves the focus to the section.
-- The privacy policy is at `/privacy-policy`, indexed and in the sitemap. Its text is data in `server/site/policies/` (one file per locale, the PT file a translation of the EN one, a test keeps their structure equal), rendered by `components/site/policy-document-view.tsx`. The repository is the source of the policy texts: they are changed there, not in the generator they came from. The other legal pages are placeholders with `noindex` until the client delivers their content (T7 of the spec). The site cannot be launched with them.
+- The privacy policy (`/privacy-policy`) and the terms (`/terms`) are indexed and in the sitemap. Their text is data in `server/site/policies/` (one file per policy and locale, read through `policies.ts`; the PT file a translation of the EN one, a test keeps their structure equal), rendered by `components/site/policy-document-view.tsx`. The repository is the source of the policy texts: they are changed there, not in the generator they came from. The other legal pages are placeholders with `noindex` until the client delivers their content (T7 of the spec). The site cannot be launched with them.
 
 ## Design system
 

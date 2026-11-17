@@ -24,8 +24,14 @@ describe("shopSectionPath", () => {
 });
 
 describe("publicPaths", () => {
-  test("has the home page, the modular system, contact and the privacy policy, and no placeholder", () => {
-    expect(publicPaths).toEqual(["/", "/modular-system", "/contact", "/privacy-policy"]);
+  test("has the home page, the modular system, contact and the policies, and no placeholder", () => {
+    expect(publicPaths).toEqual([
+      "/",
+      "/modular-system",
+      "/contact",
+      "/privacy-policy",
+      "/terms",
+    ]);
     expect(publicPaths.some((path) => path.includes("coming-soon"))).toBe(false);
   });
 });

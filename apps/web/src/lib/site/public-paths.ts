@@ -8,12 +8,14 @@ import { defaultLocale, htmlLang, locales, type Locale } from "@/lib/i18n/config
 export const modularSystemPath = "/modular-system";
 export const contactPath = "/contact";
 export const privacyPolicyPath = "/privacy-policy";
+export const termsPath = "/terms";
 
 export const publicPaths: readonly string[] = [
   "/",
   modularSystemPath,
   contactPath,
   privacyPolicyPath,
+  termsPath,
 ];
 
 // The shop is not in the sitemap while it shows example products (spec 005, T8).
