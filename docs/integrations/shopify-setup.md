@@ -4,6 +4,38 @@ Guide for the owner and the client, from creating the account to the phase B of 
 
 Each statement says how sure it is: **verified** (official Shopify page read), **community** (forum or third party, not official), **not researched**.
 
+## State and next steps (2026-11-17)
+
+**State.** The client has signed up at shopify.com (path B below); the store has no set-up. All the set-up is done by the owner, with the client's data and decisions. The plan (owner, 2026-11-17):
+
+- The client's own products, the LockMX racks and the tyres, are created in the LockMX store and managed there by the client.
+- The client also resells the whole catalogue of a contact's existing Shopify store, the supplier shipping to the customer. This is meant to go through Shopify Collective ("Supplier products", path 1): Shopify imports the supplier's products into the LockMX store and keeps them in sync; we do not copy them. If the supplier is not eligible, path 2 of the same section applies.
+- Our frontend reads both through the Headless channel. Spec 005 phase B is rewritten for this by amendment 3 (`../specs/005-shop-home.md`), proposed on 2026-11-17.
+
+**Next steps, in order.** Steps 1 to 3 can run at the same time.
+
+| # | Step | Who | Status |
+|---|---|---|---|
+| 1 | The client generates a collaborator request code and sends it; the owner creates a Partner account and joins the store as a collaborator | Client, owner | To do |
+| 2 | Ask the supplier the questions below, before anything is built on Collective | Owner, client | To do |
+| 3 | Amendment 3 of spec 005 approved; T15 (Storefront API client) is done without the store | Owner, developer | Amendment written, waiting for approval |
+| 4 | Store details, EUR, PT-PT default and EN published ("Setting up the store", 1 and 2) | Client, owner | To do |
+| 5 | Collections with the handles `racks`, `tyres`, `merchandise` and `featured` (amendment 3, decision 24) | Owner | To do |
+| 6 | The first LockMX products with photographs, in PT and EN, published to Headless | Client, owner | To do |
+| 7 | Headless channel, storefront, read permissions for products and collections; private token and store domain handed to the developer outside the repository | Owner | To do |
+| 8 | T16: the site reads the store | Developer | Waits for 3 and 7 |
+| 9 | Shopify Payments, taxes, shipping, Collective installed as retailer; the supplier connected and its products imported | Client, owner, supplier | To do |
+| 10 | T18: supplier products read through our API, and one real order | Owner, developer | Waits for 9 |
+| 11 | The rest of "Setting up the store" (policies in Shopify, notifications, invoicing app) and launch | Client, accountant, owner | Later |
+
+**Questions for the supplier** (Collective requirements, read 2026-10-09 in `../ideas/build-vs-shopify.md`):
+
+1. Is the store established in Portugal and does it sell in EUR?
+2. Does it use Shopify Payments, with payouts active, and Shopify Tax, Basic Tax or a tax app (not manual tax)? Is its VAT number verified?
+3. Does it accept to join Collective as a supplier, and to ship LockMX orders to the customer?
+4. How many products, and do they use metafields (Collective does not carry them)?
+5. Who handles returns of its products, and under which conditions? The return policy of the site has to cover them (`../compliance/returns-and-withdrawal.md`).
+
 ## Who owns what
 
 - **The client's company is the account holder** of the store: it signs up Shopify Payments (identity and business checks, bank account for payouts), the VAT number and the billing of the plan. A developer cannot hold these for the client.
@@ -73,7 +105,7 @@ In order. "Client" means the decision or data is the client's; "Owner" is the de
 
 ## How the frontend connects (spec 005, phase B)
 
-**Phase B must be amended before it starts.** It was written before amendment 2 of spec 005: T6 reads "product types", which T14 deleted; T8 hides the search slot and the product types of a landing page that no longer has them; nothing covers the `/shop` listings, their section and availability filters, the large section cards or merchandise. T5 (the client) is unaffected. The amendment needs the owner's approval.
+**Phase B was rewritten by amendment 3 of spec 005** (proposed 2026-11-17, waiting for the owner's approval): it was written before amendment 2 and read "product types", which T14 deleted, and nothing covered the `/shop` listings. The task numbers below are those of phase B; amendment 3 renames them T15 (client), T16 (listings and featured), T17 (search), T18 (Collective check) and T19 (docs).
 
 - **T5:** a server-only client in `apps/web/src/server/shopify/` posts GraphQL to `https://<store>.myshopify.com/api/<version>/graphql.json` with the private token header. The token, the domain and the pinned API version are environment variables of the hosting.
 - **T6:** the featured collection and the section collections are read with `@inContext(language: PT | EN)`; prices and stock come only from Shopify. Pages are refreshed on a time basis at first; Shopify webhooks need an app (below) and are left for later.
@@ -110,7 +142,7 @@ For each supplier the client brings: country, whether it has Shopify, whether it
 | 5 | A few real products with images, in PT and EN, published to Headless | Client, Owner | Prerequisite 5 |
 | 6 | Headless channel, storefront, permissions | Owner | Prerequisite 3 |
 | 7 | Private token and store domain handed over outside the repository | Owner | Prerequisite 4, T5 |
-| 8 | Amend phase B to amendment 2, then T5 to T8 | Owner | |
+| 8 | Amend phase B to amendment 2 (done: amendment 3, waiting for approval), then T15 to T19 | Owner | |
 | 9 | Taxes, shipping, policies, notifications, invoicing app | Client, accountant | Launch |
 | 10 | Shopify Payments, Multibanco, MB WAY request | Client | Launch |
 | 11 | Transfer (path A), plan, remove password, checkout subdomain | Client, Owner | Launch |
