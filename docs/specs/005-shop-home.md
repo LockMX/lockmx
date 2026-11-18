@@ -1,6 +1,6 @@
 # 005. Shop: connection to Shopify and shop-style home
 
-- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); amendment 2 approved (owner, 2026-10-13) and implemented; amendment 3 (phase B rewritten) proposed on 2026-11-17, waiting for the owner's approval
+- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); amendment 2 approved (owner, 2026-10-13) and implemented; amendment 3 (phase B rewritten) approved with changes (owner, 2026-11-18)
 - Idea: `../ideas/shop-style-home.md`, `../ideas/landing-focus-and-shop-route.md`
 - Decisions: `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0013-e2e-test-runner.md`, `../decisions/0010-icons-lucide.md`
 
@@ -293,7 +293,7 @@ Answered by the owner on 2026-10-13: (1) the glyph as an icon of ours; (2) the p
 - Tests: unit tests for the cards, the header and the footer; end-to-end for the landing page, the navigation and the widths.
 - Commit: `feat: make the landing page the shop home`
 
-## Amendment 3 (proposed, 2026-11-17)
+## Amendment 3 (proposed 2026-11-17, approved with changes by the owner, 2026-11-18)
 
 Phase B (T5 to T8) was written before amendment 2 and no longer fits the site: T6 reads the product types, which T14 removed; T8 hides a search slot and type cards the landing page no longer has; nothing reads the `/shop` listings, their sections and filters, or merchandise. This amendment replaces T5 to T8 with T15 to T19. Phase A, amendments 1 and 2, the product data rules and the conventions stay.
 
@@ -303,20 +303,22 @@ Phase B (T5 to T8) was written before amendment 2 and no longer fits the site: T
 - **Two kinds of products.** The client's own products (LockMX racks and tyres), created and managed by the client in the Shopify admin; and resale of the whole catalogue of a contact's existing Shopify store, the supplier shipping to the customer. The resale is meant to go through Shopify Collective (ADR 0014): the supplier's products are imported into the LockMX store by Shopify and kept in sync, not copied by us. Whether the supplier is eligible is not known yet.
 - **What the site reads** is the same for both kinds: products published to the Headless channel. That Collective products reach a headless storefront this way is inferred, not stated by Shopify (ADR 0014, "Not yet verified"); T18 proves it.
 
-### Decisions to approve
+### Decisions (approved by the owner, 2026-11-18)
 
-24. **Sections map to collections with fixed handles.** `racks`, `tyres` and `merchandise` are collections created with those handles, plus `featured` for "Destaques". The handles are constants of the site in `server/shopify/`, not settings: we create the collections. `/shop` lists every product published to the channel, not a collection. This answers open point 2 of the spec.
-25. **The example data stays as the fallback** when the Shopify variables are not set (development, CI, the "coming soon" deployment), with its "Exemplo" mark. Real products never carry the mark. The launch checklist requires the variables.
-26. **No switch to hide the shop (old T8 is dropped).** The shop is the landing page since amendment 2, so a launch without it has nothing to show (open point 6 of amendment 2): the launch waits for the shop.
-27. **Where supplier products go** is the client's call (open point 4 below). Until then they are read like any product: they appear in `/shop`, and in a section only if they are added to its collection.
-28. **The product cards keep leading to `/contact`** (decision 7) until the product pages spec, which comes right after this one.
+The owner approved the amendment on 2026-11-18 and changed decisions 24, 25 and 27 as below. They follow what Shopify does with supplier products (read 2026-11-18, sources in `../integrations/shopify-setup.md`): Collective imports a supplier's products with their title, description, media, variants, vendor, category and product type, and can keep them in sync, but **"Collections, tags, metafields, and discount codes aren't imported from a supplier's store"**. The supplier's sections never reach the LockMX store; they are rebuilt there once, by rules.
+
+24. **The sections come from the store, not from the code.** A menu of the store with the handle `shop` (Content > Menus) lists the sections, in the client's order. Each top-level item that links to a collection is a section: its address is `/shop/<collection handle>`, its name is the collection's title in the page's language (`@inContext`; menu item titles are not among Shopify's translatable resources, collection titles are), its image the collection's image. A section added, renamed, reordered or removed in the admin changes the site with no code change. Only `featured` ("Destaques") stays a fixed handle. `/shop` lists every product published to the channel. This replaces the fixed `racks`, `tyres` and `merchandise` keys of amendment 2 and answers open point 2 of the spec. Nested menu items (subsections) are not read in this spec (open point 4).
+25. **The example data only while the store is not connected:** when the Shopify variables are not set (development, CI, the "coming soon" deployment), with its "Exemplo" mark. Once they are set, the site never shows example data, also when Shopify fails (empty state instead). The launch checklist requires the variables.
+26. **No switch to hide the shop (old T8 is dropped).** The shop is the landing page since amendment 2: the launch is with the whole shop, not the landing page alone.
+27. **Supplier products are sorted by automated collections in the client's store.** `/shop` shows the whole store, the client's products and the supplier's. Each section is a collection whose conditions match the products (for supplier products, "Product type is equal to ..." or "Vendor is equal to ...", kept in sync by Collective), so new or retyped products move by themselves. Creating a collection for a new section and adding it to the `shop` menu is admin work done once per section, not code. What cannot be automatic: a supplier reorganising its own collections without changing its product types.
+28. **The product cards keep leading to `/contact`** (decision 7) until the product pages spec, which comes right after this one. The content of those pages (name, description, photographs, variants, price, stock) is the store's; the layout is the site's.
 
 ### Open points
 
 1. **Prerequisites 2 to 5** of this spec, now in the order of `../integrations/shopify-setup.md` ("Next steps").
 2. **The supplier and Collective:** country, currency, Shopify Payments, and whether they accept to join Collective as a supplier. If they cannot, their products are created as LockMX products (`shopify-setup.md`, "Supplier products").
 3. **How many products** the supplier's catalogue has: from about 250 products a listing needs pagination, and the filters of amendment 2 (open point 3) may need product type and brand.
-4. **Sections for supplier products:** whether they fit `racks`, `tyres` and `merchandise` or need new sections (new keys, new large cards, new navigation entries).
+4. **Sections for supplier products:** which sections the client wants, and whether subsections (nested menu items) are needed; the supplier's product types decide whether automated collections can sort them (question 6 in `shopify-setup.md`).
 
 ### Tasks
 
@@ -325,7 +327,7 @@ Phase B (T5 to T8) was written before amendment 2 and no longer fits the site: T
 - Commit: `feat: add shopify storefront client`
 
 #### T16. Listings and featured products from Shopify
-- Description: `server/shopify/catalogue.ts` reads, with `@inContext(language)` for the locale: the products of a section's collection by handle (decision 24), every product of the channel for `/shop`, and the `featured` collection. It maps each product to `ProductSummary` following the product data rules (money conversion, compare-at price, image, availability). `server/shop/home-catalogue.ts` and `server/shop/shop-listing.ts` use it when the Shopify variables are set and the example data otherwise (decision 25); the pages do not change. The availability filter is applied by the API if it offers a filter for it, by the server otherwise. Read first, and record in the task notes: the `collection(handle:)` and `products` queries, the product filters of a collection, the maximum page size, the language codes and the behaviour of a missing translation, the image host for `images.remotePatterns`, and the bundled Next.js docs on caching and revalidation (pages refresh on a time basis; no webhooks in this spec). A failed or empty read shows the listing's empty state or hides "Destaques", never a broken page; an unknown collection is an empty section, not an error page.
+- Description: `server/shopify/catalogue.ts` reads, with `@inContext(language)` for the locale: the sections from the `shop` menu and their collections' titles and images (decision 24), the products of a section's collection by handle, every product of the channel for `/shop`, and the `featured` collection. The fixed section keys of `lib/shop/product.ts`, their dictionary labels and `isShopSection` give way to the sections read from the store; a handle that is not in the menu is not found. It maps each product to `ProductSummary` following the product data rules (money conversion, compare-at price, image, availability). `server/shop/home-catalogue.ts` and `server/shop/shop-listing.ts` use it when the Shopify variables are set and the example data otherwise (decision 25); the pages do not change. The availability filter is applied by the API if it offers a filter for it, by the server otherwise. Read first, and record in the task notes: the `collection(handle:)` and `products` queries, the product filters of a collection, the maximum page size, the language codes and the behaviour of a missing translation, the image host for `images.remotePatterns`, and the bundled Next.js docs on caching and revalidation (pages refresh on a time basis; no webhooks in this spec). A failed or empty read shows the listing's empty state or hides "Destaques", never a broken page; an unknown collection is an empty section, not an error page.
 - Planned files: `apps/web/src/server/shopify/catalogue.ts` and test, `home-catalogue.ts`, `shop-listing.ts`, `apps/web/next.config.ts`, the listing and section components if they need an error state, `docs/architecture.md`.
 - Acceptance criteria: with the variables set, the landing page and the listings show the store's products in the page's language with Shopify's prices and availability; without them, the example data, still marked; a Shopify failure leaves every page working; the frontend computes no price.
 - Tests: unit tests for the mapping from recorded response shapes (both locales, a product without image, a compare-at price equal to the price, an amount with too many decimals), for the choice between Shopify and example data, and for the failure path. The check against the real store is manual and recorded with its date.
