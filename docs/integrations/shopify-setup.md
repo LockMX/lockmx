@@ -10,7 +10,7 @@ Each statement says how sure it is: **verified** (official Shopify page read), *
 
 - The client's own products, the LockMX racks and the tyres, are created in the LockMX store and managed there by the client.
 - The client also resells the whole catalogue of a contact's existing Shopify store, the supplier shipping to the customer. This is meant to go through Shopify Collective ("Supplier products", path 1): Shopify imports the supplier's products into the LockMX store and keeps them in sync; we do not copy them. If the supplier is not eligible, path 2 of the same section applies.
-- Our frontend reads both through the Headless channel. Spec 005 phase B is rewritten for this by amendment 3 (`../specs/005-shop-home.md`), proposed on 2026-11-17.
+- Our frontend reads both through the Headless channel. Spec 005 phase B is rewritten for this by amendment 3 (`../specs/005-shop-home.md`), approved with changes on 2026-11-18: the sections of the site come from a menu of the store, and supplier products are sorted by automated collections.
 
 **Next steps, in order.** Steps 1 to 3 can run at the same time.
 
@@ -18,9 +18,9 @@ Each statement says how sure it is: **verified** (official Shopify page read), *
 |---|---|---|---|
 | 1 | The client generates a collaborator request code and sends it; the owner creates a Partner account and joins the store as a collaborator | Client, owner | To do |
 | 2 | Ask the supplier the questions below, before anything is built on Collective | Owner, client | To do |
-| 3 | Amendment 3 of spec 005 approved; T15 (Storefront API client) is done without the store | Owner, developer | Amendment written, waiting for approval |
+| 3 | Amendment 3 of spec 005 approved; T15 (Storefront API client) is done without the store | Owner, developer | Approved 2026-11-18; T15 to do |
 | 4 | Store details, EUR, PT-PT default and EN published ("Setting up the store", 1 and 2) | Client, owner | To do |
-| 5 | Collections with the handles `racks`, `tyres`, `merchandise` and `featured` (amendment 3, decision 24) | Owner | To do |
+| 5 | Section collections, the `featured` collection and the `shop` menu ("Test store set-up" below, part 4) | Owner | To do |
 | 6 | The first LockMX products with photographs, in PT and EN, published to Headless | Client, owner | To do |
 | 7 | Headless channel, storefront, read permissions for products and collections; private token and store domain handed to the developer outside the repository | Owner | To do |
 | 8 | T16: the site reads the store | Developer | Waits for 3 and 7 |
@@ -35,6 +35,48 @@ Each statement says how sure it is: **verified** (official Shopify page read), *
 3. Does it accept to join Collective as a supplier, and to ship LockMX orders to the customer?
 4. How many products, and do they use metafields (Collective does not carry them)?
 5. Who handles returns of its products, and under which conditions? The return policy of the site has to cover them (`../compliance/returns-and-withdrawal.md`).
+6. Does every product have a product type (and the same type for products of the same kind)? Its collections are not imported by Collective, so the LockMX sections sort its products by product type or vendor (spec 005, decision 27).
+
+## Test store set-up (2026-11-18)
+
+What the owner does now, in the client's store, so T16 can read real data. Admin paths read on 2026-11-18; Shopify renames menus often, so search the admin when a path differs. Payments, taxes, shipping, invoicing and Collective are not needed to read products and stay in "Setting up the store" below.
+
+**1. Access**
+- [ ] The client: Settings > Users (or "Users & permissions") > Security, click the 4-digit collaborator request code to copy it and send it to the owner. A new one: "Generate new code" in the Collaborators section (old codes stop working).
+- [ ] The owner: a Shopify Partner account with a passkey or two-step authentication (required for collaborators), then a collaborator request to the store with that code.
+- [ ] The client: Settings > Users > filter "Requests", open the request, check the role's permissions (at least products, collections, content/navigation, apps and sales channels, settings), "Accept request".
+
+**2. Store basics** (client's data)
+- [ ] Settings > General: legal name, address in Portugal, currency EUR, time zone Lisbon, metric units. The domestic market follows the store's address and currency.
+- [ ] Settings > Languages: PT-PT default; English added **and published**. Without publishing, `@inContext(language: EN)` has nothing to return.
+- [ ] Settings > Markets: Portugal active, with both languages available in it (the languages available to each country come from Markets).
+- [ ] Not now: Shopify Payments, taxes, shipping (needed for orders and for Collective, not for reading products).
+
+**3. Products** (a few real ones are enough to start)
+- [ ] Products > Add product: title, description, photographs (the client's, with the right to use them), price in EUR, compare-at price only for a real discount, **product type** filled in (`Suporte`, `Pneu`, ...: the automated collections use it), vendor `LockMX`, variants for sizes or models (up to 3 options), inventory tracked.
+- [ ] Status **Active** and, under "Sales channels", **Headless** ticked (after part 5 exists; go back and tick it). A product not published to Headless never reaches the site.
+- [ ] One product with a compare-at price, one without photograph and one out of stock, for T16's checks.
+- [ ] English: Settings > Languages > Translate (Translate & Adapt app), title, description and options of each product.
+
+**4. Sections** (spec 005, decisions 24 and 27)
+- [ ] Products > Collections > Create collection, **automated**, one per section: for example "Suportes" with "Product type is equal to Suporte", "Pneus" with "Product type is equal to Pneu". New products of that type join by themselves. Give each an image (the section card) and translate its title to English.
+- [ ] Check each collection's handle (the end of its address; where the admin shows it was not checked): it becomes `/shop/<handle>`. Set it before launch; changing it later changes the site's address.
+- [ ] A **manual** collection with the handle `featured` ("Destaques"), with the products to show on the landing page.
+- [ ] Content > Menus > add a menu named "Shop", handle **`shop`**; one item per section, each linking to its collection, in the order of the site. Only the top level is read for now.
+- [ ] Every collection published to the Headless channel (the collection's "Sales channels").
+
+**5. Headless channel**
+- [ ] Install **Headless** (Shopify App Store, by Shopify, free). Then Sales channels > Headless > **Add storefront**.
+- [ ] "Storefront API permissions" > Edit: `unauthenticated_read_product_listings` (products and collections), `unauthenticated_read_product_inventory` (stock), `unauthenticated_read_content` (the menu). Save. Nothing about customers or checkouts yet.
+- [ ] Copy the **private access token** (sent in the `Shopify-Storefront-Private-Token` header, server only) and the store domain `<name>.myshopify.com`.
+
+**6. What the developer needs, outside the repository**
+- [ ] The store domain `<name>.myshopify.com`.
+- [ ] The private access token, by a password manager or another private channel, never by email in plain text, chat logs or the repository. It goes in `apps/web/.env.local` (ignored by git) and later in the hosting's variables.
+- [ ] The API version is chosen by the developer: **2026-10** is the latest stable today (accessible until 2027-10-16; each version lasts at least 12 months).
+- [ ] Confirmation that parts 3 and 4 are done, with the handles of the section collections.
+
+**Common mistakes.** A product or collection not ticked for the Headless channel (it does not appear and there is no error). English not published (the site shows Portuguese in `/en`). The menu with another handle (the site shows no sections). A collection's handle changed after launch (old addresses break). The public token handed over instead of the private one.
 
 ## Who owns what
 
@@ -88,7 +130,7 @@ In order. "Client" means the decision or data is the client's; "Owner" is the de
 ## Products
 
 - **By hand** in Products, or **by CSV** (template from Shopify; only Title is required for a new product; variants as extra rows with the same handle and Option1, Option2, Option3 columns; images by public `https://` address, up to 250 per product; UTF-8). **A product can have up to 3 options.** (Verified, CSV help page.) The maximum number of variants was not verified today.
-- **Collections (a proposal of ours, not a Shopify rule):** one per shop section of the site (`racks`, `tyres`, `merchandise`) and one for the featured products of the landing page carousel, their handles kept as settings of the site. Decided in the amendment of phase B (below). How each collection is filled (by hand or by rules) is the client's choice.
+- **Collections (spec 005, amendment 3):** one automated collection per shop section, listed in the `shop` menu, and the manual `featured` collection for the landing page carousel. The site reads the sections from the menu, so new sections need no code. Automated collection conditions (read 2026-11-18): product title, variant title, type, vendor, category, tag, status, price, compare-at price, weight, stock, and metafields marked for it; up to 5,000 such collections per store. Collective does not import a supplier's collections or tags, so its products are sorted by product type or vendor.
 - **Translations** of title, description and options for EN, with Translate & Adapt.
 - **Publishing:** a product only reaches our frontend when it is published to the Headless channel (sales channel availability on the product). (Verified, Headless management page: the channel supports product publishing.)
 - **Metafields** (extra fields such as compatible vans) work, but Collective is incompatible with metafields (verified): imported supplier products would not carry them.
@@ -153,6 +195,9 @@ For each supplier the client brings: country, whether it has Shopify, whether it
 Partner sign-up, Markets beyond languages, tax set-up, shipping and carriers, the Customer Account API, webhooks, reading Shopify's policies through the API, the fees of Multibanco and MB WAY, Collective's behaviour in a headless storefront, Shopify and Stripe as data processors in the privacy policy, the sender domain of Shopify's emails (DNS shared with the mail set-up), and cookie consent across our site and Shopify's checkout (still open in `AGENTS.md`).
 
 ## Sources (read 2026-10-14)
+
+Read 2026-11-18: Collective importing and product policies (https://help.shopify.com/en/manual/online-sales-channels/shopify-collective/retailers/importing-products, `/policies/products`, https://shopify.dev/docs/apps/build/collective/products); automated collections and conditions (https://help.shopify.com/en/manual/products/collections/automated-collections, `/conditions`); menus (https://help.shopify.com/en/manual/online-store/menus-and-links, `/editing-menus`, `/drop-down-menus`; https://shopify.dev/docs/api/storefront/latest/queries/menu); access scopes and authentication headers (https://shopify.dev/docs/api/usage/access-scopes, https://shopify.dev/docs/api/usage/authentication); translatable resources (https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/markets); API versions (https://shopify.dev/docs/api/usage/versioning); markets (https://help.shopify.com/en/manual/markets/getting-started/set-up-markets).
+
 
 - Pricing, Portugal: https://www.shopify.com/pt/precos
 - Storefront API, getting started: https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/getting-started
