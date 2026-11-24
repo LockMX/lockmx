@@ -13,7 +13,7 @@ export type SearchSuggestion = {
   icon?: IconName;
 };
 
-export type SearchBarProps = Omit<
+export type SearchBarProps<T extends SearchSuggestion = SearchSuggestion> = Omit<
   React.ComponentProps<"form">,
   | "style"
   | "role"
@@ -40,11 +40,18 @@ export type SearchBarProps = Omit<
   defaultValue?: string;
   size?: SearchBarSize;
   /** The candidates. The bar shows the ones that contain the text. */
-  suggestions?: SearchSuggestion[];
+  suggestions?: T[];
+  /**
+   * False when the candidates already match the text, found elsewhere (a
+   * search that tolerates typing errors): they are shown as given.
+   */
+  filter?: boolean;
+  /** True while the candidates for the text are not known: nothing is announced. */
+  pending?: boolean;
   onChange?: (value: string) => void;
   /** Called before the form submits; prevent the event to stop the navigation. */
   onSubmit?: (query: string, event: React.FormEvent<HTMLFormElement>) => void;
-  onSelect?: (suggestion: SearchSuggestion) => void;
+  onSelect?: (suggestion: T) => void;
 };
 
 const MAX_SUGGESTIONS = 6;
@@ -90,10 +97,10 @@ function fold(text: string): string {
   return text.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 }
 
-function matching(suggestions: SearchSuggestion[], query: string): SearchSuggestion[] {
+function matching<T extends SearchSuggestion>(suggestions: T[], query: string, filter: boolean): T[] {
   const wanted = fold(query);
   return suggestions
-    .filter((suggestion) => fold(suggestion.label).includes(wanted))
+    .filter((suggestion) => !filter || fold(suggestion.label).includes(wanted))
     .slice(0, MAX_SUGGESTIONS);
 }
 
@@ -102,7 +109,7 @@ function matching(suggestions: SearchSuggestion[], query: string): SearchSuggest
  * selection): the focus stays in the field and the arrows move an active
  * option. Without `onSubmit` it submits like any form, under `name`.
  */
-export function SearchBar({
+export function SearchBar<T extends SearchSuggestion = SearchSuggestion>({
   label,
   submitLabel,
   listLabel,
@@ -114,12 +121,14 @@ export function SearchBar({
   defaultValue = "",
   size = "md",
   suggestions = [],
+  filter = true,
+  pending = false,
   onChange,
   onSubmit,
   onSelect,
   className,
   ...formProps
-}: SearchBarProps) {
+}: SearchBarProps<T>) {
   const listId = useId();
   const [innerValue, setInnerValue] = useState(defaultValue);
   // Suggesting starts with typing or an arrow and ends when the list is
@@ -127,7 +136,7 @@ export function SearchBar({
   const [suggesting, setSuggesting] = useState(false);
   const [activeIndex, setActiveIndex] = useState(NO_OPTION);
   const query = value ?? innerValue;
-  const list = suggesting && query ? matching(suggestions, query) : [];
+  const list = suggesting && query ? matching(suggestions, query, filter) : [];
   const open = list.length > 0;
   const active = list[activeIndex];
 
@@ -145,7 +154,7 @@ export function SearchBar({
     setActiveIndex(NO_OPTION);
   }
 
-  function select(suggestion: SearchSuggestion) {
+  function select(suggestion: T) {
     change(suggestion.label);
     onSelect?.(suggestion);
     dismiss();
@@ -159,7 +168,7 @@ export function SearchBar({
 
   function moveActive(key: "ArrowDown" | "ArrowUp") {
     if (!open) {
-      const count = query ? matching(suggestions, query).length : 0;
+      const count = query ? matching(suggestions, query, filter).length : 0;
       setSuggesting(true);
       setActiveIndex(key === "ArrowDown" ? 0 : count - 1);
       return;
@@ -189,7 +198,7 @@ export function SearchBar({
   }
 
   function statusText(): string {
-    if (!suggesting || !query) return "";
+    if (!suggesting || !query || pending) return "";
     if (!open) return noResultsLabel;
     const template = list.length === 1 ? resultsLabel.one : resultsLabel.other;
     return template.replace("{count}", String(list.length));

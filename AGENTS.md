@@ -69,6 +69,7 @@ Online store for LockMX (motocross products: tyres and racks for carrying equipm
 - Decided: Next.js, pnpm monorepo, a single web app. The shop is Shopify behind this frontend (headless, ADR 0014): catalogue, stock, orders, customers, checkout and payments live on Shopify.
 - Written for a custom shop and to be revisited before anything is built on them (ADR 0014): Drizzle with PostgreSQL (ADR 0002), Better Auth (ADR 0003), Resend (ADR 0005, except its contact form section), database provider (ADR 0006).
 - Contact form: one email to the client through Resend (ADR 0005), rate limit in the hosting firewall (ADR 0015).
+- Search suggestions: rate limit in the hosting firewall (ADR 0016).
 - Open (ADR before choosing): hosting, cookie consent management.
 - Accepted: Vitest as unit test runner (ADR 0004), Playwright as end-to-end test runner (ADR 0013).
 - Web app specific rules: `apps/web/AGENTS.md`.

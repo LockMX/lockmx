@@ -144,6 +144,8 @@ export const pt = {
       // The name of the grid, for assistive technology.
       products: "Produtos",
       empty: "Nenhum produto corresponde aos filtros.",
+      // Shown when a search of the shop finds nothing.
+      noMatch: "Nenhum produto corresponde à pesquisa.",
     },
     product: {
       inStock: "Em stock",
@@ -160,6 +162,8 @@ export const pt = {
       // {count} is replaced by the number of suggestions.
       results: { one: "{count} sugestão", other: "{count} sugestões" },
       noResults: "Sem sugestões",
+      // Beside a suggestion that is a section of the shop.
+      section: "Secção",
     },
     carousel: {
       // Said in place of "region" and "group" by assistive technology.

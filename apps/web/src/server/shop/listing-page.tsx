@@ -7,6 +7,7 @@ import { ShopSearch } from "@/components/site/shop-search";
 import { htmlLang } from "@/lib/i18n/config";
 import { AVAILABILITY_PARAM, parseAvailability } from "@/lib/shop/listing-filters";
 import type { ShopSectionEntry } from "@/lib/shop/product";
+import { SEARCH_PARAM, parseSearchQuery } from "@/lib/shop/search";
 import { contactPath, localizedPath, shopPath, shopSectionPath } from "@/lib/site/public-paths";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
 import { getMessages } from "@/server/i18n/messages";
@@ -46,9 +47,12 @@ export async function ShopListingPage({ section, searchParams }: ShopListingPage
   const locale = await getCurrentLocale();
   const { shop } = await getMessages(locale);
   // The address is untrusted input: only the values the filter knows are kept.
-  const availability = parseAvailability((await searchParams)[AVAILABILITY_PARAM]);
+  const params = await searchParams;
+  const availability = parseAvailability(params[AVAILABILITY_PARAM]);
+  // A search is of the whole shop (T17): a section listing ignores it.
+  const query = section ? undefined : (parseSearchQuery(params[SEARCH_PARAM]) ?? undefined);
   const sections = await getShopSections(locale);
-  const products = await getShopProducts(locale, { section: section?.key, availability });
+  const products = await getShopProducts(locale, { section: section?.key, query, availability });
 
   return (
     <Section
@@ -58,7 +62,14 @@ export async function ShopListingPage({ section, searchParams }: ShopListingPage
       title={section ? section.title : shop.home.title}
     >
       <div className="md:w-2/3 lg:w-1/2">
-        <ShopSearch labels={shop.search} />
+        <ShopSearch
+          // A new search starts from what the address says.
+          key={query}
+          locale={locale}
+          action={localizedPath(locale, shopPath)}
+          defaultValue={query}
+          labels={shop.search}
+        />
       </div>
       <div className="grid items-start gap-10 lg:grid-cols-[1fr_3fr]">
         <ShopFilters
@@ -66,6 +77,7 @@ export async function ShopListingPage({ section, searchParams }: ShopListingPage
           allHref={localizedPath(locale, shopPath)}
           sections={sections}
           current={section?.key}
+          query={query}
           availability={availability}
           labels={{
             filters: shop.listing.filters,
@@ -85,7 +97,7 @@ export async function ShopListingPage({ section, searchParams }: ShopListingPage
           // Until the product pages exist, a card leads to the contact page.
           productHref={localizedPath(locale, contactPath)}
           labels={{
-            empty: shop.listing.empty,
+            empty: query ? shop.listing.noMatch : shop.listing.empty,
             example: shop.featured.example,
             ...shop.product,
           }}

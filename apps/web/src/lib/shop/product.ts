@@ -39,7 +39,7 @@ export type ProductSummary = {
 };
 
 // A section of the shop is named by the handle of its Shopify collection,
-// which is also part of its address (`/shop/suportes-modulares`). The store
+// which is also part of its address (`/shop/modular-supports`). The store
 // decides which sections exist and in what order (spec 005, amendment 3,
 // decision 24); the example catalogue has its own.
 export type ShopSection = string;

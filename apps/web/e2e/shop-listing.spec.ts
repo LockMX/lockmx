@@ -15,6 +15,10 @@ const locales = [
     clear: "Limpar filtros",
     empty: "Nenhum produto corresponde aos filtros.",
     search: "Pesquisar produtos",
+    // A search of the example shop: one section and two products.
+    query: "pneu",
+    querySection: "Pneus",
+    noMatch: "Nenhum produto corresponde à pesquisa.",
     shop: "Loja",
     all: "Todos",
     sections: [
@@ -36,6 +40,9 @@ const locales = [
     clear: "Clear filters",
     empty: "No product matches the filters.",
     search: "Search products",
+    query: "tyre",
+    querySection: "Tyres",
+    noMatch: "No product matches the search.",
     shop: "Shop",
     all: "All",
     sections: [
@@ -209,15 +216,53 @@ for (const locale of locales) {
       ).toHaveCount(2);
     });
 
-    test("a search leads nowhere yet", async ({ page }) => {
+    test("a search lists the products that match, and keeps the text in the field", async ({
+      page,
+    }) => {
       const main = page.getByRole("main");
       const field = main.getByRole("combobox", { name: locale.search });
 
-      await field.fill("mx");
+      await field.fill(locale.query);
       await field.press("Enter");
 
-      await expect(page).toHaveURL(new RegExp(`${locale.path}/shop$`));
-      await expect(field).toHaveValue("mx");
+      await expect(page).toHaveURL(new RegExp(`${locale.path}/shop\\?q=${locale.query}$`));
+      await expect(
+        main.getByRole("region", { name: locale.products, exact: true }).locator("article"),
+      ).toHaveCount(2);
+      await expect(main.getByRole("combobox", { name: locale.search })).toHaveValue(locale.query);
+    });
+
+    test("suggests while typing, and a section suggestion leads to its listing", async ({
+      page,
+    }) => {
+      const field = page.getByRole("main").getByRole("combobox", { name: locale.search });
+
+      await field.pressSequentially(locale.query);
+      const options = page.getByRole("listbox").getByRole("option");
+      await expect(options).toHaveCount(3);
+      await options.filter({ hasText: locale.querySection }).click();
+
+      await expect(page).toHaveURL(new RegExp(`${locale.path}/shop/tyres$`));
+    });
+
+    test("the availability filter keeps the search", async ({ page }) => {
+      await page.goto(`${locale.path}/shop?q=${locale.query}`);
+      const filters = page.getByRole("complementary", { name: locale.filters });
+
+      await filters.getByRole("checkbox", { name: locale.inStock }).check();
+      await filters.getByRole("button", { name: locale.apply }).click();
+
+      await expect(page).toHaveURL(
+        new RegExp(`${locale.path}/shop\\?q=${locale.query}&availability=in$`),
+      );
+    });
+
+    test("a search that finds nothing says so", async ({ page }) => {
+      await page.goto(`${locale.path}/shop?q=zzzz`);
+
+      await expect(
+        page.getByRole("main").getByRole("region", { name: locale.products, exact: true }).getByRole("status"),
+      ).toHaveText(locale.noMatch);
     });
 
     test("has its own title and canonical address, and is not in the sitemap", async ({
@@ -237,3 +282,24 @@ for (const locale of locales) {
     expect((await request.get(`${locale.path}/shop/no-such-section`)).status()).toBe(404);
   });
 }
+
+// The endpoint of the suggestions (spec 005, T17).
+test.describe("/api/search", () => {
+  test("answers with the suggestions for the text in the language asked", async ({ request }) => {
+    const response = await request.get("/api/search?q=pneu&lang=pt");
+
+    expect(response.status()).toBe(200);
+    expect((await response.json()).suggestions[0]).toEqual({
+      kind: "section",
+      label: "Pneus",
+      href: "/pt/shop/tyres",
+    });
+  });
+
+  test("refuses a language the site does not have, and a text too short suggests nothing", async ({
+    request,
+  }) => {
+    expect((await request.get("/api/search?q=pneu&lang=fr")).status()).toBe(400);
+    expect(await (await request.get("/api/search?q=p&lang=pt")).json()).toEqual({ suggestions: [] });
+  });
+});
