@@ -35,6 +35,7 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 | `server/i18n/` | exists | Typed dictionaries (`messages/pt.ts` defines the shape, `messages/en.ts` follows it), `getMessages(locale)` and `getCurrentLocale()`. |
 | `lib/site/` | exists | What the public site knows about itself, without server dependencies: the public paths and the sitemap built from them, the section ids of the landing page, the legal pages, the contact address, the shape of a policy text (`policy-document.ts`). |
 | `server/site/` | exists | `site-url.ts`, the only reader of `SITE_URL`; the builder of page metadata (canonical address and language alternates); the placeholder shared by the legal pages; `policies/`, the policy texts, one file per locale. |
+| `server/shopify/` | exists | `config.ts`, the only reader of `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_PRIVATE_ACCESS_TOKEN` (neither set: the store is not connected), with the pinned Storefront API version; `client.ts`, the only module that knows the endpoint and the private token header, returning typed data or a typed error (network, HTTP, GraphQL, invalid answer). |
 | `server/` (other modules) | planned | Server-only layer, see below. |
 | `lib/` (other modules) | planned | Code shared by server and client that has no server dependencies (for example validation schemas). |
 | `test/` | exists | Test setup (`setup.ts`) and the alias smoke test. Unit tests live next to the code they cover. |
