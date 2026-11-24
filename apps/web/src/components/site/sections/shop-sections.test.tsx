@@ -40,10 +40,24 @@ describe("ShopSections", () => {
     ]);
   });
 
-  test("shows no photograph: the image is still to come", () => {
+  test("without an image, shows no photograph: the image is still to come", () => {
     renderSection();
 
     expect(within(region()).queryByRole("img")).toBeNull();
+    expect(region().querySelectorAll("img")).toHaveLength(0);
+  });
+
+  test("shows the section's image as a decorative photograph, the title still naming the link", () => {
+    renderSection([
+      { ...SECTIONS[0]!, image: { url: "https://cdn.shopify.com/s/files/1/racks.jpg", width: 800, height: 800 } },
+      SECTIONS[1]!,
+    ]);
+
+    const images = region().querySelectorAll("img");
+    expect(images).toHaveLength(1);
+    expect(images[0]!.getAttribute("alt")).toBe("");
+    expect(images[0]!.getAttribute("src")).toContain(encodeURIComponent("https://cdn.shopify.com/s/files/1/racks.jpg"));
+    expect(within(region()).getByRole("link", { name: "Suportes LockMX" })).toBeTruthy();
   });
 
   test("can take the focus without being a tab stop", () => {

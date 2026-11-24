@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
-// The landing page as the home of the shop (spec 005, amendment 2).
+// The landing page as the home of the shop (spec 005, amendment 2), with the
+// example data: every section of the shop has a large card (amendment 3).
 const locales = [
   {
     path: "/pt",
@@ -18,6 +19,7 @@ const locales = [
     cards: [
       { title: "Suportes LockMX", href: "/pt/shop/racks" },
       { title: "Pneus", href: "/pt/shop/tyres" },
+      { title: "Merchandise", href: "/pt/shop/merchandise" },
     ],
     gone: ["Catálogo", "Categorias", "Pronto para arrumar a carrinha?", "Mais tempo a rodar"],
     primaryAction: "Ver a loja",
@@ -41,6 +43,7 @@ const locales = [
     cards: [
       { title: "LockMX mounts", href: "/en/shop/racks" },
       { title: "Tyres", href: "/en/shop/tyres" },
+      { title: "Merchandise", href: "/en/shop/merchandise" },
     ],
     gone: ["Catalogue", "Categories", "Ready to sort out your van?", "More time riding"],
     primaryAction: "See the shop",

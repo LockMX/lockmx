@@ -1,8 +1,9 @@
 import { describe, expect, test } from "vitest";
 import { locales } from "@/lib/i18n/config";
-import { shopSections } from "@/lib/shop/product";
+import { exampleSections } from "@/server/shop/example-catalogue";
 import { getShopProducts, getShopSections } from "@/server/shop/shop-listing";
 
+// Without the Shopify variables (as in CI): the example shop.
 describe("getShopSections", () => {
   test("pt: one entry per section, in order, each with its listing", async () => {
     expect(await getShopSections("pt")).toEqual([
@@ -32,7 +33,7 @@ describe("getShopProducts", () => {
   test("every section has products, and together they are the whole shop", async () => {
     const all = await getShopProducts("pt", { availability: [] });
     const bySection = await Promise.all(
-      shopSections.map((section) => getShopProducts("pt", { section, availability: [] })),
+      exampleSections.map((section) => getShopProducts("pt", { section, availability: [] })),
     );
 
     for (const products of bySection) expect(products.length).toBeGreaterThan(0);

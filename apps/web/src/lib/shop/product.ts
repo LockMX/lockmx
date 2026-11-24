@@ -38,21 +38,18 @@ export type ProductSummary = {
   isExample: boolean;
 };
 
-// The sections of the shop, in order. Keys of ours and part of the address
-// (`/shop/tyres`); each maps to a Shopify collection once the store is
-// connected (spec 005, amendment 2).
-export const shopSections = ["racks", "tyres", "merchandise"] as const;
-
-export type ShopSection = (typeof shopSections)[number];
-
-export function isShopSection(value: string): value is ShopSection {
-  return (shopSections as readonly string[]).includes(value);
-}
+// A section of the shop is named by the handle of its Shopify collection,
+// which is also part of its address (`/shop/suportes-modulares`). The store
+// decides which sections exist and in what order (spec 005, amendment 3,
+// decision 24); the example catalogue has its own.
+export type ShopSection = string;
 
 export type ShopSectionEntry = {
   key: ShopSection;
   title: string;
   href: string;
+  /** The collection's image, shown by the large card of the home page. */
+  image?: ProductImage;
 };
 
 // What the availability filter of a listing can ask for.
