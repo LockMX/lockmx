@@ -16,17 +16,19 @@ Each statement says how sure it is: **verified** (official Shopify page read), *
 
 | # | Step | Who | Status |
 |---|---|---|---|
-| 1 | The client generates a collaborator request code and sends it; the owner creates a Partner account and joins the store as a collaborator | Client, owner | To do |
+| 1 | The client generates a collaborator request code and sends it; the owner creates a Partner account and joins the store as a collaborator | Client, owner | Done (owner's own Partner organization) |
 | 2 | Ask the supplier the questions below, before anything is built on Collective | Owner, client | To do |
 | 3 | Amendment 3 of spec 005 approved; T15 (Storefront API client) is done without the store | Owner, developer | Approved 2026-11-18; T15 to do |
-| 4 | Store details, EUR, PT-PT default and EN published ("Setting up the store", 1 and 2) | Client, owner | To do |
+| 4 | Store details, EUR, PT-PT default and EN published ("Setting up the store", 1 and 2) | Client, owner | Details and markets done; EN not yet returned by the API (2026-11-24) |
 | 5 | Section collections, the `featured` collection and the `shop` menu ("Test store set-up" below, part 4) | Owner | To do |
-| 6 | The first LockMX products with photographs, in PT and EN, published to Headless | Client, owner | To do |
-| 7 | Headless channel, storefront, read permissions for products and collections; private token and store domain handed to the developer outside the repository | Owner | To do |
+| 6 | The first LockMX products with photographs, in PT and EN, published to Headless | Client, owner | Two test products published (2026-11-24) |
+| 7 | Headless channel, storefront, read permissions for products and collections; private token and store domain handed to the developer outside the repository | Owner | Done; token in `apps/web/.env.local` |
 | 8 | T16: the site reads the store | Developer | Waits for 3 and 7 |
 | 9 | Shopify Payments, taxes, shipping, Collective installed as retailer; the supplier connected and its products imported | Client, owner, supplier | To do |
 | 10 | T18: supplier products read through our API, and one real order | Owner, developer | Waits for 9 |
 | 11 | The rest of "Setting up the store" (policies in Shopify, notifications, invoicing app) and launch | Client, accountant, owner | Later |
+
+**Check of 2026-11-24** (a read-only Storefront API query from the developer's machine, version 2026-10, with the private token of `.env.local`): the store answers as "LockMX", country PT, currency EUR. Two products are published to Headless, product type `Suporte`, vendor `LockMX`. The only collection is "Suportes Modulares" with the handle **`frontpage`**: it is Shopify's default home page collection, renamed, so its address would be `/shop/frontpage`; a new collection is created for the section instead. The available languages are only `PT_PT`: English is not yet published or not yet in the Portugal market. There is no `shop` menu; the default `main-menu` (Início, Catálogo, Contacto) exists. The store domain is still the generated `ita9rf-de.myshopify.com`; Shopify allows choosing a new `myshopify.com` name once (Settings > Domains, pencil icon), the old one redirecting and staying the store's permanent identifier.
 
 **Questions for the supplier** (Collective requirements, read 2026-10-09 in `../ideas/build-vs-shopify.md`):
 
