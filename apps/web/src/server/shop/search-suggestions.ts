@@ -15,14 +15,16 @@ import { getShopifyConfig } from "@/server/shopify/config";
 // suggests nothing.
 //
 // A section leads to its listing. A product leads to the listing narrowed to
-// its title, until the product pages exist.
+// its title, until the product pages exist; a title too long to be a search
+// gives the text typed instead, so the listing is never left unnarrowed.
 
 function sectionSuggestion(section: ShopSectionEntry): ShopSuggestion {
   return { kind: "section", label: section.title, href: section.href };
 }
 
-function productSuggestion(locale: Locale, title: string): ShopSuggestion {
-  return { kind: "product", label: title, href: localizedPath(locale, shopSearchPath(title)) };
+function productSuggestion(locale: Locale, title: string, query: string): ShopSuggestion {
+  const search = parseSearchQuery(title) ?? query;
+  return { kind: "product", label: title, href: localizedPath(locale, shopSearchPath(search)) };
 }
 
 export async function getSearchSuggestions(locale: Locale, text: unknown): Promise<ShopSuggestion[]> {
@@ -38,7 +40,7 @@ export async function getSearchSuggestions(locale: Locale, text: unknown): Promi
       ...sections.filter((section) => matchesSearch(section.title, query)).map(sectionSuggestion),
       ...exampleProducts(locale)
         .filter((product) => matchesSearch(product.title, query))
-        .map((product) => productSuggestion(locale, product.title)),
+        .map((product) => productSuggestion(locale, product.title, query)),
     ];
   } else {
     const found = await readSuggestions(config, locale, query);
@@ -48,7 +50,7 @@ export async function getSearchSuggestions(locale: Locale, text: unknown): Promi
       const section = sections.find((each) => each.key === handle);
       return section ? [sectionSuggestion(section)] : [];
     });
-    suggestions = [...listed, ...found.products.map(({ title }) => productSuggestion(locale, title))];
+    suggestions = [...listed, ...found.products.map(({ title }) => productSuggestion(locale, title, query))];
   }
 
   return suggestions.slice(0, SUGGESTION_LIMIT);

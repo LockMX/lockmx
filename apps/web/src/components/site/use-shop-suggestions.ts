@@ -23,7 +23,9 @@ function isSuggestion(value: unknown): value is ShopSuggestion {
     // Only an address of this site.
     typeof href === "string" &&
     href.startsWith("/") &&
-    !href.startsWith("//")
+    // "//host" and "/\host" are other sites to a browser.
+    href[1] !== "/" &&
+    href[1] !== "\\"
   );
 }
 
@@ -42,12 +44,15 @@ async function fetchSuggestions(locale: Locale, text: string, signal: AbortSigna
 
 type Answer = { text: string; suggestions: ShopSuggestion[] };
 
+// `edited` is false until the visitor changes the field: a text the page was
+// opened with (a search listing) asks for nothing.
 export function useShopSuggestions(
   locale: Locale,
   value: string,
+  edited: boolean,
 ): { suggestions: ShopSuggestion[]; pending: boolean } {
   const text = value.trim();
-  const searchable = [...text].length >= MIN_SEARCH_LENGTH;
+  const searchable = edited && [...text].length >= MIN_SEARCH_LENGTH;
   const [answer, setAnswer] = useState<Answer>({ text: "", suggestions: [] });
 
   useEffect(() => {

@@ -26,8 +26,9 @@ describe("parseSearchQuery", () => {
     expect(parseSearchQuery(["pneu", "boné"])).toBe("pneu");
   });
 
-  test("removes control characters", () => {
+  test("removes control characters, then collapses the spaces around them", () => {
     expect(parseSearchQuery("pn\u0000eu\u001b")).toBe("pneu");
+    expect(parseSearchQuery("pneu \u0000 traseiro")).toBe("pneu traseiro");
   });
 
   test("gives null for a text longer than the limit, counted in characters", () => {

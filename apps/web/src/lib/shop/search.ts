@@ -19,13 +19,14 @@ export type ShopSuggestion = {
   href: string;
 };
 
-const CONTROL_CHARACTERS = /\p{Cc}/gu;
+// Control characters that are not white space: a tab separates words.
+const CONTROL_CHARACTERS = /[^\P{Cc}\s]/gu;
 
 export function parseSearchQuery(value: unknown): string | null {
   const first = Array.isArray(value) ? value[0] : value;
   if (typeof first !== "string") return null;
 
-  const text = first.replace(/\s+/g, " ").replace(CONTROL_CHARACTERS, "").trim();
+  const text = first.replace(CONTROL_CHARACTERS, "").replace(/\s+/g, " ").trim();
   const length = [...text].length;
   return length >= MIN_SEARCH_LENGTH && length <= MAX_SEARCH_LENGTH ? text : null;
 }

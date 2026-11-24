@@ -36,7 +36,13 @@ type ShopSearchProps = {
 export function ShopSearch({ locale, action, defaultValue = "", labels, className }: ShopSearchProps) {
   const router = useRouter();
   const [text, setText] = useState(defaultValue);
-  const { suggestions, pending } = useShopSuggestions(locale, text);
+  const [edited, setEdited] = useState(false);
+  const { suggestions, pending } = useShopSuggestions(locale, text, edited);
+
+  function change(next: string) {
+    setText(next);
+    setEdited(true);
+  }
 
   const options = suggestions.map((suggestion: ShopSuggestion) => ({
     ...suggestion,
@@ -56,7 +62,7 @@ export function ShopSearch({ locale, action, defaultValue = "", labels, classNam
       resultsLabel={labels.results}
       noResultsLabel={labels.noResults}
       value={text}
-      onChange={setText}
+      onChange={change}
       suggestions={options}
       filter={false}
       pending={pending}

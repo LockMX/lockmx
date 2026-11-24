@@ -46,6 +46,7 @@ The rule is not in the repository: the page on custom rules says `vercel.json` s
 - The request over the limit is answered by the firewall, not by our code: the form must treat a 429 it did not write as "too many attempts" (spec 006).
 - It cannot be tested locally or in CI. It is verified by hand after the rule is published, first with the Log action, as the Vercel page advises, and the result is recorded in the notes of spec 006.
 - Plan limits read: Hobby has 1 rate limiting rule per project and 1,000,000 allowed requests included; Pro has 40 rules and is billed by usage, with a price per region that was not read. Which plan the project is on is the open question of ADR 0012.
+- Since 2026-11-24 the one Hobby rule is used by the search suggestions (ADR 0016), while the form is on hold. Building the form then needs a second rule, and so a plan that allows it.
 - Persistent actions (blocking the address for a time after the limit) are for Pro and Enterprise and are not used.
 
 ## Sources
