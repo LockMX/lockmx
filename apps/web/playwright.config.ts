@@ -59,8 +59,16 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
       // The tests cover the real pages, not the placeholder. The production
-      // build needs the public origin (server/site/site-url.ts).
-      env: { COMING_SOON: "false", SITE_URL: siteUrl },
+      // build needs the public origin (server/site/site-url.ts). The shop is
+      // tested with its example data, as in CI: empty Shopify variables win
+      // over a developer's .env.local (variables already set are not loaded
+      // from .env files), and empty means "not connected" (server/shopify/config.ts).
+      env: {
+        COMING_SOON: "false",
+        SITE_URL: siteUrl,
+        SHOPIFY_STORE_DOMAIN: "",
+        SHOPIFY_PRIVATE_ACCESS_TOKEN: "",
+      },
     },
     {
       command: `${next} start --port ${comingSoonPort}`,

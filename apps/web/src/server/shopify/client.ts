@@ -29,6 +29,12 @@ export type StorefrontResult<T> = { ok: true; data: T } | { ok: false; error: St
 // must not hold it for ever.
 const TIMEOUT_MS = 10_000;
 
+// Every read is for a page, and the pages refresh on a time basis (spec 005,
+// T16; no webhooks yet). A POST is only cached when asked to, and only a 200
+// answer is stored (bundled Next.js docs, 03-api-reference/04-functions/fetch.md,
+// `options.cache` and `options.next.revalidate`).
+export const REVALIDATE_SECONDS = 300;
+
 type GraphqlAnswer<T> = {
   data?: T | null;
   errors?: { message?: unknown }[];
@@ -62,6 +68,8 @@ export async function storefrontQuery<T>(
       },
       body: JSON.stringify(request),
       signal: AbortSignal.timeout(TIMEOUT_MS),
+      cache: "force-cache",
+      next: { revalidate: REVALIDATE_SECONDS },
     });
   } catch {
     return { ok: false, error: { kind: "network" } };

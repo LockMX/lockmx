@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
-import { storefrontQuery, type FetchFunction } from "@/server/shopify/client";
+import { REVALIDATE_SECONDS, storefrontQuery, type FetchFunction } from "@/server/shopify/client";
 import type { ShopifyConfig } from "@/server/shopify/config";
 
 const config: ShopifyConfig = {
@@ -38,6 +38,17 @@ describe("storefrontQuery", () => {
     expect(new Headers(init?.headers).get("Content-Type")).toBe("application/json");
     expect(JSON.parse(String(init?.body))).toEqual({ query: document, variables: { handle: "racks" } });
     expect(init?.signal).toBeInstanceOf(AbortSignal);
+  });
+
+  test("asks Next.js to cache the answer for a while, since every read is for a page", async () => {
+    const fetchDouble = respond({ data: { shop: null } });
+
+    await storefrontQuery(config, { query: document }, fetchDouble);
+
+    const [, init] = vi.mocked(fetchDouble).mock.calls[0]!;
+    expect(init?.cache).toBe("force-cache");
+    expect(init?.next).toEqual({ revalidate: REVALIDATE_SECONDS });
+    expect(REVALIDATE_SECONDS).toBeGreaterThan(0);
   });
 
   test("returns the data of a successful answer", async () => {

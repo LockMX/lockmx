@@ -3,7 +3,6 @@ import { FeaturedProducts } from "@/components/site/sections/featured-products";
 import { Hero, type HeroImage } from "@/components/site/sections/hero";
 import { ShopSections } from "@/components/site/sections/shop-sections";
 import { htmlLang } from "@/lib/i18n/config";
-import type { ShopSection } from "@/lib/shop/product";
 import { contactPath, localizedPath, modularSystemPath, shopPath } from "@/lib/site/public-paths";
 import { sectionIds } from "@/lib/site/sections";
 import { getCurrentLocale } from "@/server/i18n/current-locale";
@@ -19,9 +18,6 @@ const HERO_IMAGE: Omit<HeroImage, "alt"> = {
   height: 1600,
 };
 
-// The sections of the shop that get a large card (owner, 2026-10-13).
-const HOME_SECTIONS: readonly ShopSection[] = ["racks", "tyres"];
-
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getCurrentLocale();
   const { metadata } = await getMessages(locale);
@@ -29,8 +25,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // The landing page is the home of the shop (spec 005, amendment 2): the hero,
-// the featured products and one large card per section of the shop. It shows
-// example data until the store is connected.
+// the featured products and one large card per section of the shop, every
+// section of the store's menu (owner, 2026-11-24). It shows example data until
+// the store is connected.
 export default async function Home() {
   const locale = await getCurrentLocale();
   const { home, shop } = await getMessages(locale);
@@ -70,7 +67,7 @@ export default async function Home() {
       <ShopSections
         id={sectionIds.shopSections}
         title={shop.home.title}
-        sections={shopSections.filter((section) => HOME_SECTIONS.includes(section.key))}
+        sections={shopSections}
       />
     </>
   );

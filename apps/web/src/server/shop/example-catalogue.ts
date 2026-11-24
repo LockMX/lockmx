@@ -1,18 +1,25 @@
 import type { Locale } from "@/lib/i18n/config";
-import type { Money, ProductSummary, ShopSection } from "@/lib/shop/product";
+import type { Money, ProductSummary } from "@/lib/shop/product";
 
 // Example products, so the shop sections can be judged before the catalogue
 // exists (spec 005, decision 2). Names and prices are invented working data,
 // not the client's catalogue: every item is flagged and its card says so.
-// Reading from Shopify replaces this module.
+// Shown only while the store is not connected (spec 005, amendment 3,
+// decision 25).
 
 type Translated = Record<Locale, string>;
+
+// The sections of the example shop, in order; their titles are in the
+// dictionaries (`shop.sections`).
+export const exampleSections = ["racks", "tyres", "merchandise"] as const;
+
+type ExampleSection = (typeof exampleSections)[number];
 
 type ExampleProduct = Omit<ProductSummary, "title" | "productType" | "price" | "compareAtPrice" | "isExample"> & {
   title: Translated;
   productType: Translated;
   /** The section of the shop it is listed in. */
-  section: ShopSection;
+  section: ExampleSection;
   /** Shown in the carousel of the home page. */
   featured: boolean;
   priceCents: number;
@@ -140,7 +147,7 @@ export function exampleFeaturedProducts(locale: Locale): ProductSummary[] {
 }
 
 // Every example, or the ones of one section of the shop.
-export function exampleProducts(locale: Locale, section?: ShopSection): ProductSummary[] {
+export function exampleProducts(locale: Locale, section?: string): ProductSummary[] {
   return EXAMPLES.filter((example) => section === undefined || example.section === section).map(
     (example) => summaryOf(example, locale),
   );
