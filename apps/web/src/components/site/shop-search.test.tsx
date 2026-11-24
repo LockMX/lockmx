@@ -82,6 +82,18 @@ describe("ShopSearch", () => {
     ]);
   });
 
+  test("asks nothing for the text the page was opened with", async () => {
+    vi.useFakeTimers();
+    const fetchDouble = answering({ suggestions: SUGGESTIONS });
+    renderSearch("pneu");
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(SUGGESTION_DELAY_MS * 2);
+    });
+
+    expect(fetchDouble).not.toHaveBeenCalled();
+  });
+
   test("asks nothing for one character", async () => {
     vi.useFakeTimers();
     const fetchDouble = answering({ suggestions: SUGGESTIONS });
@@ -123,6 +135,10 @@ describe("ShopSearch", () => {
     [
       "an address of another site",
       () => answering({ suggestions: [{ kind: "product", label: "X", href: "//evil.example" }] }),
+    ],
+    [
+      "an address of another site, with a backslash",
+      () => answering({ suggestions: [{ kind: "product", label: "X", href: "/\\evil.example" }] }),
     ],
   ])("%s gives no suggestion, and says so", async (_case, arrange) => {
     arrange();

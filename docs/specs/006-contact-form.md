@@ -1,6 +1,6 @@
 # 006. Contact form
 
-- Status: on hold (owner, 2026-10-13). Written as a draft the same day; then the client said the contact form is optional, and contact became the page `/contact` with the email address and the social links (spec 005, amendment 2). If the form is built, it lives on that page, not in a section of the landing page: "The form on the page" and T5 are rewritten then. Nothing of this spec is implemented.
+- Status: on hold (owner, 2026-10-13). Written as a draft the same day; then the client said the contact form is optional, and contact became the page `/contact` with the email address and the social links (spec 005, amendment 2). If the form is built, it lives on that page, not in a section of the landing page: "The form on the page" and T5 are rewritten then. Nothing of this spec is implemented. Since 2026-11-24 the one rate limiting rule of the Vercel Hobby plan is used by the search suggestions (ADR 0016): if the form is built, the site needs a second rule, which the Hobby plan does not allow.
 - Idea: `../ideas/landing-page.md`, section "Contact form"
 - Decisions: `../decisions/0005-transactional-email-resend.md` (section "Contact form"), `../decisions/0015-contact-form-rate-limit.md`, `../decisions/0012-provisional-hosting-vercel.md`, `../decisions/0014-shopify-headless-commerce.md`
 

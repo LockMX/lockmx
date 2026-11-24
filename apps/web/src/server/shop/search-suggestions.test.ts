@@ -84,7 +84,18 @@ describe("with the store connected", () => {
     expect(await getSearchSuggestions("pt", "pneu")).toEqual([]);
   });
 
-  test.each([null, "", " ", "a", "x".repeat(101), ["pneu"].length])(
+  test("a product whose title is too long to be a search leads to the text typed", async () => {
+    vi.mocked(readSuggestions).mockResolvedValue({
+      collections: [],
+      products: [{ handle: "long", title: "Suporte ".repeat(20).trim() }],
+    });
+
+    const [suggestion] = await getSearchSuggestions("pt", "suporte");
+
+    expect(suggestion?.href).toBe("/pt/shop?q=suporte");
+  });
+
+  test.each([null, "", " ", "a", "x".repeat(101), 3])(
     "asks nothing of the store for %j",
     async (text) => {
       expect(await getSearchSuggestions("pt", text)).toEqual([]);
