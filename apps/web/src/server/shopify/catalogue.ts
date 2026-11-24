@@ -47,15 +47,16 @@ export type ShopifySection = {
 
 const IMAGE = "url altText width height";
 
-const PRODUCT = `
+// The fields of a product card, shared with the search (T17).
+export const PRODUCT_FIELDS = `
   id handle title productType availableForSale
   featuredImage { ${IMAGE} }
   priceRange { minVariantPrice { amount currencyCode } maxVariantPrice { amount currencyCode } }
   compareAtPriceRange { minVariantPrice { amount currencyCode } maxVariantPrice { amount currencyCode } }
 `;
 
-const CONTEXT = "$language: LanguageCode, $country: CountryCode";
-const IN_CONTEXT = "@inContext(language: $language, country: $country)";
+export const CONTEXT = "$language: LanguageCode, $country: CountryCode";
+export const IN_CONTEXT = "@inContext(language: $language, country: $country)";
 
 const SECTIONS_QUERY = `query ShopSections($handle: String!, ${CONTEXT}) ${IN_CONTEXT} {
   menu(handle: $handle) {
@@ -64,11 +65,11 @@ const SECTIONS_QUERY = `query ShopSections($handle: String!, ${CONTEXT}) ${IN_CO
 }`;
 
 const COLLECTION_PRODUCTS_QUERY = `query CollectionProducts($handle: String!, $first: Int!, ${CONTEXT}) ${IN_CONTEXT} {
-  collection(handle: $handle) { products(first: $first) { nodes { ${PRODUCT} } } }
+  collection(handle: $handle) { products(first: $first) { nodes { ${PRODUCT_FIELDS} } } }
 }`;
 
 const ALL_PRODUCTS_QUERY = `query AllProducts($first: Int!, ${CONTEXT}) ${IN_CONTEXT} {
-  products(first: $first) { nodes { ${PRODUCT} } }
+  products(first: $first) { nodes { ${PRODUCT_FIELDS} } }
 }`;
 
 type MenuItem = {
@@ -117,11 +118,13 @@ export function toProductSummary(product: ShopifyProduct): ProductSummary | null
   };
 }
 
-function toProductSummaries(products: ShopifyProduct[]): ProductSummary[] {
+export function toProductSummaries(products: ShopifyProduct[]): ProductSummary[] {
   return products.flatMap((product) => toProductSummary(product) ?? []);
 }
 
-async function read<T>(
+// One read in the language of the page; null, logged with the kind of error
+// only, when it fails.
+export async function readInContext<T>(
   what: string,
   config: ShopifyConfig,
   locale: Locale,
@@ -143,7 +146,7 @@ export async function readSections(
   locale: Locale,
   fetchFn?: FetchFunction,
 ): Promise<ShopifySection[] | null> {
-  const data = await read<{ menu: { items: MenuItem[] } | null }>(
+  const data = await readInContext<{ menu: { items: MenuItem[] } | null }>(
     "sections",
     config,
     locale,
@@ -165,7 +168,7 @@ export async function readCollectionProducts(
   handle: string,
   fetchFn?: FetchFunction,
 ): Promise<ProductSummary[] | null> {
-  const data = await read<{ collection: { products: { nodes: ShopifyProduct[] } } | null }>(
+  const data = await readInContext<{ collection: { products: { nodes: ShopifyProduct[] } } | null }>(
     `collection ${handle}`,
     config,
     locale,
@@ -181,7 +184,7 @@ export async function readAllProducts(
   locale: Locale,
   fetchFn?: FetchFunction,
 ): Promise<ProductSummary[] | null> {
-  const data = await read<{ products: { nodes: ShopifyProduct[] } }>(
+  const data = await readInContext<{ products: { nodes: ShopifyProduct[] } }>(
     "products",
     config,
     locale,

@@ -140,6 +140,7 @@ export const en: Messages = {
       // The name of the grid, for assistive technology.
       products: "Products",
       empty: "No product matches the filters.",
+      noMatch: "No product matches the search.",
     },
     product: {
       inStock: "In stock",
@@ -154,6 +155,7 @@ export const en: Messages = {
       list: "Suggestions",
       results: { one: "{count} suggestion", other: "{count} suggestions" },
       noResults: "No suggestions",
+      section: "Section",
     },
     carousel: {
       roleDescription: "carousel",

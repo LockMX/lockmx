@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import type { ProductSummary } from "@/lib/shop/product";
 import { readAllProducts, readCollectionProducts, readSections } from "@/server/shopify/catalogue";
 import { getShopifyConfig, type ShopifyConfig } from "@/server/shopify/config";
+import { readSearchProducts } from "@/server/shopify/search";
 import { FEATURED_COLLECTION, getFeaturedProducts } from "@/server/shop/home-catalogue";
 import { findShopSection, getShopProducts, getShopSections } from "@/server/shop/shop-listing";
 
@@ -14,6 +15,7 @@ vi.mock("@/server/shopify/catalogue", () => ({
   readCollectionProducts: vi.fn(),
   readAllProducts: vi.fn(),
 }));
+vi.mock("@/server/shopify/search", () => ({ readSearchProducts: vi.fn() }));
 
 const config: ShopifyConfig = {
   storeDomain: "lockmx.myshopify.com",
@@ -39,6 +41,7 @@ beforeEach(() => {
   vi.mocked(readSections).mockReset();
   vi.mocked(readCollectionProducts).mockReset();
   vi.mocked(readAllProducts).mockReset();
+  vi.mocked(readSearchProducts).mockReset();
 });
 
 describe("with the store connected", () => {
@@ -85,6 +88,15 @@ describe("with the store connected", () => {
     expect(readCollectionProducts).toHaveBeenCalledWith(config, "pt", "suportes-modulares");
   });
 
+  test("a search is the store's search, filtered by availability", async () => {
+    vi.mocked(readSearchProducts).mockResolvedValue([product("a"), product("b", false)]);
+
+    const products = await getShopProducts("en", { query: "cabide", availability: ["in"] });
+
+    expect(products.map((each) => each.id)).toEqual(["a"]);
+    expect(readSearchProducts).toHaveBeenCalledWith(config, "en", "cabide");
+  });
+
   test("the featured products are the featured collection", async () => {
     vi.mocked(readCollectionProducts).mockResolvedValue([product("a")]);
 
@@ -97,10 +109,12 @@ describe("with the store connected", () => {
     vi.mocked(readSections).mockResolvedValue(null);
     vi.mocked(readAllProducts).mockResolvedValue(null);
     vi.mocked(readCollectionProducts).mockResolvedValue(null);
+    vi.mocked(readSearchProducts).mockResolvedValue(null);
 
     expect(await getShopSections("pt")).toEqual([]);
     expect(await getShopProducts("pt", { availability: [] })).toEqual([]);
     expect(await getShopProducts("pt", { section: "x", availability: [] })).toEqual([]);
+    expect(await getShopProducts("pt", { query: "pneu", availability: [] })).toEqual([]);
     expect(await getFeaturedProducts("pt")).toEqual([]);
   });
 });

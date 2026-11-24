@@ -66,3 +66,20 @@ describe("getShopProducts", () => {
     expect(new Set(products.map((product) => product.handle)).size).toBe(products.length);
   });
 });
+
+describe("a search of the example shop", () => {
+  test("gives the products whose names contain every word, in the language of the page", async () => {
+    expect(
+      (await getShopProducts("pt", { query: "exemplo pneu", availability: [] })).map((each) => each.title),
+    ).toEqual(["Pneu traseiro de exemplo", "Pneu dianteiro de exemplo"]);
+    expect(
+      (await getShopProducts("en", { query: "CAP", availability: [] })).map((each) => each.title),
+    ).toEqual(["Example cap"]);
+  });
+
+  test("is narrowed by the availability filter", async () => {
+    const products = await getShopProducts("pt", { query: "exemplo", availability: ["out"] });
+    expect(products.every((each) => !each.availableForSale)).toBe(true);
+    expect(products.length).toBeGreaterThan(0);
+  });
+});

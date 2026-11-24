@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button, Checkbox } from "@/components/ui";
 import { classNames } from "@/components/ui/class-names";
 import { AVAILABILITY_PARAM } from "@/lib/shop/listing-filters";
+import { SEARCH_PARAM } from "@/lib/shop/search";
 import type { Availability, ShopSection, ShopSectionEntry } from "@/lib/shop/product";
 
 type ShopFiltersProps = {
@@ -12,6 +13,8 @@ type ShopFiltersProps = {
   sections: ShopSectionEntry[];
   /** Left out on the listing of the whole shop. */
   current?: ShopSection;
+  /** The search the listing shows: applying the filters keeps it. */
+  query?: string;
   availability: readonly Availability[];
   labels: {
     filters: string;
@@ -42,6 +45,7 @@ export function ShopFilters({
   allHref,
   sections,
   current,
+  query,
   availability,
   labels,
 }: ShopFiltersProps) {
@@ -84,6 +88,7 @@ export function ShopFilters({
         </ul>
       </nav>
       <form action={action} method="get" className="flex flex-col gap-4">
+        {query && <input type="hidden" name={SEARCH_PARAM} value={query} />}
         <fieldset>
           {/* A legend takes no part in a flex layout, so the gap is its own. */}
           <legend className={classNames(GROUP_TITLE, "mb-3")}>{labels.availability}</legend>

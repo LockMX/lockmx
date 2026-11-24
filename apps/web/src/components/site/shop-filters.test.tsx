@@ -71,4 +71,17 @@ describe("ShopFilters", () => {
       "/pt/shop/tyres",
     );
   });
+
+  test("keeps the search of the listing when the filters are applied", () => {
+    const { container } = render(<ShopFilters {...props} current={undefined} query="pneu" />);
+
+    const hidden = container.querySelector<HTMLInputElement>('form input[type="hidden"]');
+    expect([hidden?.name, hidden?.value]).toEqual(["q", "pneu"]);
+  });
+
+  test("sends no search when the listing has none", () => {
+    const { container } = render(<ShopFilters {...props} />);
+
+    expect(container.querySelector('input[type="hidden"]')).toBeNull();
+  });
 });

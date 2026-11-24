@@ -144,6 +144,51 @@ describe("SearchBar", () => {
     expect(status()).toBe("Sem sugestões");
   });
 
+  test("with `filter` off shows the candidates as given, six at most", async () => {
+    const found = Array.from({ length: 8 }, (_, index) => ({ label: `Suporte ${index}` }));
+    renderBar({ suggestions: found, filter: false });
+
+    // A search elsewhere tolerated the typing error: nothing here contains it.
+    await userEvent.type(field(), "supotre");
+
+    expect(options()).toHaveLength(6);
+    expect(status()).toBe("6 sugestões");
+  });
+
+  test("while `pending` announces nothing, then announces what arrived", async () => {
+    const { rerender } = renderBar({ suggestions: [], pending: true });
+
+    await userEvent.type(field(), "capacete");
+    expect(status()).toBe("");
+
+    rerender(
+      <SearchBar
+        {...TEXT}
+        suggestions={[]}
+        pending={false}
+        onSubmit={(_query, event) => event.preventDefault()}
+      />,
+    );
+    expect(status()).toBe("Sem sugestões");
+  });
+
+  test("gives back the suggestion selected, with its own fields", async () => {
+    const onSelect = vi.fn();
+    render(
+      <SearchBar
+        {...TEXT}
+        suggestions={[{ label: "Pneus", href: "/pt/shop/tyres" }]}
+        onSelect={onSelect}
+        onSubmit={(_query, event) => event.preventDefault()}
+      />,
+    );
+
+    await userEvent.type(field(), "pn");
+    await userEvent.click(screen.getByRole("option", { name: "Pneus" }));
+
+    expect(onSelect).toHaveBeenCalledWith({ label: "Pneus", href: "/pt/shop/tyres" });
+  });
+
   test("Down and Up move the active option and wrap at the ends", async () => {
     renderBar();
     await userEvent.type(field(), "pneu");
