@@ -24,3 +24,7 @@ debugging/
 
 # SMTP credentials
 docs/credentials/
+
+# product photographs kept by the owner while setting up the store: the
+# published copies live on Shopify, the originals with the client
+docs/products/
