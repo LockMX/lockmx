@@ -56,6 +56,8 @@ Rules:
 A pull request (PR) is the request, made on GitHub, to merge a branch into `main`. It shows the changes, runs the automatic checks (CI) and only lets the code in once they pass.
 
 - After the initial bootstrap steps, each spec has a branch: `feat/<NNN>-<subject>`, with the same identifier as the spec.
+- One flow at a time. The idea, the decisions (ADRs) and the spec that prepare a feature, and the tasks that implement it, are all done on that spec's branch, created from an up-to-date `main`. The branch is merged into `main` (pull request with CI passing) before the branch of the next spec is created.
+- A spec left `in progress` because a task waits on someone outside the project (a client, a supplier) is merged with what is done. The waiting task is done later on a new branch from `main`, `feat/<NNN>-<subject>-t<N>` (for example `feat/005-shop-home-t18`), and merged the same way.
 - `main` is always ready to ship. Nobody commits directly to `main` once CI is active.
 - Merging into `main` uses "rebase and merge", to keep one commit per task in the history. Do not use "squash".
 - Pushing, opening a PR and merging only happen on explicit request or authorization from the project owner.
