@@ -26,10 +26,10 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 | `app/[lang]/coming-soon` | exists | The placeholder page, outside the group, so without the shell. |
 | `app/api/` | exists | Route Handlers, outside `[lang]` and skipped by the proxy. `search/route.ts` gives the suggestions of the shop's search bar; its rate limit is a firewall rule of the hosting (ADR 0016). |
 | `app/global-error.tsx`, `app/sitemap.ts`, `app/robots.ts` | exist | The error page of last resort, with its own `<html>`; the sitemap and the robots file. |
-| `app/[lang]/(shop)`, `(account)`, `(admin)` | planned | Route groups, one per site section, inside `[lang]`. |
+| `app/[lang]/(account)`, `(admin)` | planned | Route groups, one per site section, inside `[lang]`. The shop pages are in `(marketing)`, which holds the shell: a `(shop)` group would need a second copy of the layout (spec 005, T10). |
 | `proxy.ts` | exists | Sends a request without a supported locale prefix to `/<locale>/...`. While `COMING_SOON` is `true`, shows the placeholder at every page address, with `X-Robots-Tag: noindex`. Kept small: later specs add their own checks here. |
 | `components/` | exists | Reusable components. Receive text and data through props, never read dictionaries themselves. |
-| `components/ui/` | exists | Design system primitives, one folder per group (`core` now; `forms`, `surfaces`, `commerce`, `data` planned). See `design/components.md`. |
+| `components/ui/` | exists | Design system primitives, one folder per group: `core`, `forms`, `surfaces`, `commerce`, `data`. See `design/components.md`. |
 | `components/site/` | exists | The parts of the public site: skip link, header and its menu for narrow screens, navigation, footer, error and not-found views, the focus helper for section links, the parts of the shop (`product-grid.tsx` and `product-summary-card.tsx`, `shop-filters.tsx`, `shop-search.tsx` with `use-shop-suggestions.ts`, the browser side of the search suggestions), and `sections/` with the sections of the landing page (among them `featured-products.tsx`, the carousel of "Destaques", and `shop-sections.tsx`, one large card per section of the shop) and of the modular system page. They import primitives from `components/ui` only. |
 | `styles/` | exists | `tokens.css`, the design tokens and single source of truth for visual values, with the contrast and theme guard tests. Wired into Tailwind by `app/globals.css`. |
 | `lib/i18n/` | exists | Locale configuration, locale negotiation from `Accept-Language`, path switching. No server dependencies. |
@@ -123,6 +123,7 @@ Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucid
 | Provisional hosting of the placeholder page on Vercel | `decisions/0012-provisional-hosting-vercel.md` | proposed |
 | Playwright as end-to-end test runner | `decisions/0013-e2e-test-runner.md` | accepted |
 | Shopify as the commerce backend, headless | `decisions/0014-shopify-headless-commerce.md` | accepted |
+| Rate limit of the contact form in the hosting firewall | `decisions/0015-contact-form-rate-limit.md` | accepted |
 | Rate limit of the search suggestions in the hosting firewall | `decisions/0016-search-rate-limit.md` | accepted |
 
 ADR 0014 puts the shop's data, accounts, checkout and payments on Shopify. ADRs 0002, 0003, 0005 and 0006 and the planned `server/auth`, `server/db`, `server/repositories`, `server/payments` and `server/invoicing` modules above were written for a custom shop and are revisited with the shop idea; until then they are not built.
