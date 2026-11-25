@@ -1,6 +1,6 @@
 # 005. Shop: connection to Shopify and shop-style home
 
-- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); amendment 2 approved (owner, 2026-10-13) and implemented; amendment 3 (phase B rewritten) approved with changes (owner, 2026-11-18)
+- Status: approved (owner, 2026-10-11); amendment 1 approved (owner, 2026-10-13); amendment 2 approved (owner, 2026-10-13) and implemented; amendment 3 (phase B rewritten) approved with changes (owner, 2026-11-18); in progress (2026-11-25): every task is done except T18, which waits for the supplier and Collective
 - Idea: `../ideas/shop-style-home.md`, `../ideas/landing-focus-and-shop-route.md`
 - Decisions: `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0013-e2e-test-runner.md`, `../decisions/0010-icons-lucide.md`
 
@@ -323,7 +323,7 @@ The owner approved the amendment on 2026-11-18 and changed decisions 24, 25 and 
 ### Where the spec stands (2026-11-25)
 
 - T15, T16 and T17 are done. The store set-up of prerequisites 2 to 5 is done (`../integrations/shopify-setup.md`, check of 2026-11-25); the search rule of ADR 0016 is created in Vercel.
-- **T19 can be done now.** It ends with the spec `in progress`, naming T18 as the task that waits.
+- T19 is done: `../architecture.md` updated, `../checklists/04-shop-home.md` written, the spec `in progress`.
 - **T18 waits for the supplier** (open point 2): Shopify Payments is active in the client's store (owner, 2026-11-25), the owner is talking to the supplier. Open for T18: the site has no cart yet (decision 28), so the "one real order" needs a checkout address made outside the site, for example a cart created once from the developer's machine, which needs a Storefront permission to write carts that the storefront does not have now (read-only by design). To decide with the owner when T18 starts; otherwise the order waits for the cart spec.
 - After this spec: the product pages spec (decision 28), then the cart and checkout hand-over.
 
@@ -379,6 +379,10 @@ The owner approved the amendment on 2026-11-18 and changed decisions 24, 25 and 
 #### T19. Architecture, checklist and status
 - Replaces T8 without the switch (decision 26): update `docs/architecture.md` (`server/shopify/`, `server/shop/`, `lib/shop/`), write `docs/checklists/04-shop-home.md` from what was done, and set this spec to `done`, or to `in progress` naming what waits for the client or the supplier.
 - Commit: `docs: add shop home checklist`
+- Notes (2026-11-25, done):
+  - `docs/architecture.md`: a row for `lib/shop/`, the shop parts of `components/site/`, the `server-only` stand-in of `test/`, a "Shop" section with the rules the code follows, and ADR 0016 in the decisions table. The `server/shopify/` and `server/shop/` rows were already up to date (T15 to T17).
+  - `docs/checklists/04-shop-home.md` is written from T1 to T17 and says T18 is not done; `docs/checklists/README.md` lists it.
+  - The spec is `in progress`: T18 waits for the supplier (open point 2). The checklist and ADR 0014 are updated when T18 is done.
 
 ## Carousel brief
 
