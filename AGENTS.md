@@ -70,6 +70,7 @@ Online store for LockMX (motocross products: tyres and racks for carrying equipm
 - Written for a custom shop and to be revisited before anything is built on them (ADR 0014): Drizzle with PostgreSQL (ADR 0002), Better Auth (ADR 0003), Resend (ADR 0005, except its contact form section), database provider (ADR 0006).
 - Contact form: one email to the client through Resend (ADR 0005), rate limit in the hosting firewall (ADR 0015).
 - Search suggestions: rate limit in the hosting firewall (ADR 0016).
+- Shop: spec 005 is in progress, only T18 left (waits for the supplier). Next: the product pages, from an idea to a new spec; its starting points are in spec 005, "Where the spec stands".
 - Open (ADR before choosing): hosting, cookie consent management.
 - Accepted: Vitest as unit test runner (ADR 0004), Playwright as end-to-end test runner (ADR 0013).
 - Web app specific rules: `apps/web/AGENTS.md`.
