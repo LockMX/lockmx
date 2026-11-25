@@ -326,6 +326,7 @@ The owner approved the amendment on 2026-11-18 and changed decisions 24, 25 and 
 - T19 is done: `../architecture.md` updated, `../checklists/04-shop-home.md` written, the spec `in progress`.
 - **T18 waits for the supplier** (open point 2): Shopify Payments is active in the client's store (owner, 2026-11-25), the owner is talking to the supplier. Open for T18: the site has no cart yet (decision 28), so the "one real order" needs a checkout address made outside the site, for example a cart created once from the developer's machine, which needs a Storefront permission to write carts that the storefront does not have now (read-only by design). To decide with the owner when T18 starts; otherwise the order waits for the cart spec.
 - After this spec: the product pages spec (decision 28), then the cart and checkout hand-over.
+- **The shop joins the sitemap with the product pages spec** (owner, 2026-11-25): `/shop`, its sections and the product pages, read from the store. It was left out while it could show example products (old T8, dropped by decision 26); at launch the store is connected and shows only its own products (decision 25), so that reason no longer holds. The details are settled in that spec.
 
 ### Tasks
 
