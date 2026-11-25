@@ -10,30 +10,24 @@ Catalog at launch: a few tyres and the flagship product, racks for carrying equi
 
 The owner is the only developer. The project is a real commercial delivery for a client.
 
+The shop is Shopify behind our own Next.js frontend (ADR 0014): catalogue, stock, orders, customers and their accounts, checkout, payments and the account and order emails are Shopify's, and the catalogue and orders are managed in the Shopify admin. The project has no database, authentication or transactional email of its own.
+
 ## Functional requirements
 
 - Landing page and institutional content.
 - Product catalog with product search.
 - Shopping cart.
-- Customer area (account, orders, invoices). Passwordless: registration and login with name and email plus a one-time code sent by email (see `customer-accounts-and-consent.md`).
-- Buying requires an account (no guest checkout). This way the customer can always access the information about their orders (items, prices, quantities, shipping costs), change the delivery address and change the invoicing data. A first-time buyer registers inside the checkout with the emailed code.
-- Landing page contact form, protected with Cloudflare Turnstile and rate limits (no double opt-in). The client gets the message by email at `crew@lockmx.com` and answers from that mailbox; the sender gets no automatic email (changed on 2026-10-09, see `landing-page.md`).
-- No marketing emails at launch. A welcome email is sent once, after the registration code is confirmed, and it stays strictly transactional.
-- Admin panel for the client to manage the catalog: add, remove and edit products, prices and stock, and manage orders. Protected by a role check on the server, not by shared credentials.
 - Languages: PT-PT and EN from the start.
-- Payment methods requested: MB WAY, Multibanco (entity and reference), bank card, bank transfer (IBAN) and possibly Stripe.
-- Invoicing through software certified by the Portuguese tax authority (AT), with an API, issuing the invoice when the payment is confirmed.
+- Payment methods requested: MB WAY, Multibanco (entity and reference), bank card and bank transfer (IBAN), through Shopify.
+- Invoicing through software certified by the Portuguese tax authority (AT).
 - Legal pages: privacy policy, cookie policy, terms and conditions, and the electronic complaints book.
-- Transactional emails from the client's own domain (`@lockmx.com`, being created), sent through Resend, with PT-PT and EN templates for each moment (welcome, registration, login code, order confirmation, and so on).
+- No marketing emails at launch. If they come, electronic marketing to a natural person needs prior and explicit consent (Law 41/2004, art. 13-A; secondary source, to verify).
 - Analytics: Google Analytics 4 only, loaded after cookie consent.
 
 ## Non-functional requirements
 
 - Security as a priority: personal data and payments are involved.
-- Idempotency for payments and order creation.
-- The same item must never be sold twice (stock reservation and concurrency control).
-- Full observability: error tracking, structured logs, uptime monitoring, backups and an audit trail for orders, stock and price changes.
-- The client owns or can take over every account (repository, hosting, database, domain, payment provider, invoicing).
+- The client owns or can take over every account (repository, hosting, domain, Shopify, invoicing).
 
 ## Business rules already discussed
 
@@ -43,22 +37,14 @@ The owner is the only developer. The project is a real commercial delivery for a
 ## Constraints and status
 
 - Legal texts (privacy, cookies, terms) and their legal review are handled by the client.
-
-- Brand identity exists; the files are pending from the client. The design system is built around it, with Claude Design.
-- Emails: the `@lockmx.com` mailboxes are being created on AWS. Sending domain for the shop: `@lockmx.com`, validated in Resend by the owner afterwards.
-- Costs of third-party services (email, bot protection, database, hosting) are paid by the client.
-- Shipping: not yet discussed with the client.
-- Stack decided so far: Next.js, pnpm monorepo, a single web app with the backend inside Next.js, Drizzle (PostgreSQL). See `AGENTS.md`.
+- Brand identity exists. The design system is built around it, with Claude Design.
+- The `@lockmx.com` mailboxes are on AWS (`../integrations/aws-ses-mailboxes.md`).
+- Costs of third-party services (Shopify, hosting, invoicing) are paid by the client.
 
 ## Open questions
 
-- Payment provider: does a single provider cover MB WAY, Multibanco and cards? Verify and compare fees at the official sources.
-- Invoicing provider: compare the certified options and their APIs at the official sources.
-- Authentication: proposed in ADR 0003 (Better Auth, passwordless customers, strong second method for admins).
-- Delivery fallback for the code, and DNS records for a domain shared by mailboxes and Resend: see `customer-accounts-and-consent.md`.
-- Database provider and hosting.
+- Hosting of the frontend (ADR 0007).
 - Cookie consent management: a paid platform or a self-built solution.
-- Image storage for product photos.
 - Shipping zones, costs and carriers.
 
 ## Outcome

@@ -36,7 +36,7 @@ const SECTION_LINK =
 const HEADING_ID = "shop-filters-heading";
 
 /**
- * The filters of a shop listing (spec 005, T13): the sections of the shop as
+ * The filters of a shop listing (spec 005, T6): the sections of the shop as
  * links, and the availability as a form sent with GET. The choice is in the
  * address, so it works without script and the server does the filtering.
  */

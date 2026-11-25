@@ -2,7 +2,7 @@
 
 - Status: done
 - Idea: `../ideas/project-brief.md`
-- Decisions: `../decisions/0001-monorepo-single-web-app.md`, `../decisions/0002-orm-drizzle-postgresql.md`, `../decisions/0004-unit-test-runner.md`
+- Decisions: `../decisions/0001-monorepo-single-web-app.md`, `../decisions/0004-unit-test-runner.md`
 
 ## Objective
 
@@ -12,8 +12,6 @@ Give the repository the tooling that every later spec relies on: typecheck, unit
 
 Everything that needs an external service or an undecided ADR. Each of these gets its own spec:
 
-- Database, Drizzle setup and schema (needs the database provider ADR).
-- Authentication (ADR 0003 is still a proposal).
 - i18n routing and dictionaries.
 - End-to-end tests (Playwright), once there are real flows to cover.
 - Design system and UI.
@@ -95,7 +93,7 @@ Anything not listed here (exact versions, options) is confirmed against the offi
 - Commit: `docs: add architecture document`
 
 ### T8. Foundation checklist
-- Description: write `docs/checklists/00-foundation.md` in English, from what T1-T7 actually did, replacing the foundation part of the legacy Portuguese checklist (pnpm install, monorepo, typecheck, tests, hooks, CI, structure). The legacy file stays for the modules not yet redone (i18n, database, server actions) and is removed when the last of them is replaced.
+- Description: write `docs/checklists/00-foundation.md` in English, from what T1-T7 actually did (pnpm install, monorepo, typecheck, tests, hooks, CI, structure).
 - Planned files: `docs/checklists/00-foundation.md`, `docs/checklists/README.md`.
 - Acceptance criteria: each step names the exact command or file and the expected result, and matches the repository.
 - Tests: no tests (documentation).

@@ -29,7 +29,7 @@ type ShopSearchProps = {
 };
 
 /**
- * The search bar of the shop (spec 005, T17). It suggests sections and
+ * The search bar of the shop (spec 005, T10). It suggests sections and
  * products while the visitor types; a suggestion leads where it says, and a
  * submission is a plain GET of the listing, so it works without script.
  */

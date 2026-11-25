@@ -18,10 +18,10 @@ These complement the root `AGENTS.md`. The block above is managed by Next.js: do
 
 ## Structure
 
-- `src/app/` only contains routes, layouts and composition. Route groups: `(marketing)` exists (public pages and their shell, the shop included: a `(shop)` group would need a second copy of the layout, spec 005, T10); `(account)` and `(admin)` are planned. Pages contain no business logic.
-- Business logic, data access and integrations (database, authentication, payments, invoicing) live in server code separated from the UI and protected with `server-only`.
+- `src/app/` only contains routes, layouts and composition. Route groups: `(marketing)` holds the public pages and their shell, the shop included (a `(shop)` group would need a second copy of the layout, spec 005, T6). Pages contain no business logic.
+- Business logic, data access and integrations (the Shopify client) live in server code separated from the UI and protected with `server-only`.
 - Components receive only the data they need (DTOs), never full entities with internal fields.
-- The exact structure of `src/` is defined in the technical foundation spec. Until then, do not create new folders outside what the spec defines.
+- The structure of `src/` is in `docs/architecture.md`; a new folder is added there with its first use.
 
 ## Server and client
 

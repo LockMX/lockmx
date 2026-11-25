@@ -18,13 +18,13 @@ import { getShopifyConfig } from "@/server/shopify/config";
 
 // What a listing of the shop shows. The pages ask here and do not know where
 // the answer comes from: the store once it is connected, the example data
-// until then (spec 005, amendment 3, decision 25). A connected store that
+// until then (spec 005, decision 5). A connected store that
 // fails gives nothing, never examples.
 
 export type ShopListingFilters = {
   /** Left out for the whole shop. */
   section?: ShopSection;
-  /** A search of the whole shop (T17), already parsed; it takes the place of a section. */
+  /** A search of the whole shop (T10), already parsed; it takes the place of a section. */
   query?: string;
   availability: readonly Availability[];
 };
@@ -74,7 +74,7 @@ const getProducts = cache(
   },
 );
 
-// The availability filter is applied here, on one page of products (T16
+// The availability filter is applied here, on one page of products (T9
 // notes): the same for both sources.
 export async function getShopProducts(
   locale: Locale,

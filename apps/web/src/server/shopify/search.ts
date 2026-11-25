@@ -13,7 +13,7 @@ import {
 } from "@/server/shopify/catalogue";
 import type { ShopifyConfig } from "@/server/shopify/config";
 
-// The search of the store (spec 005, T17). Sources, read 2026-11-24:
+// The search of the store (spec 005, T10). Sources, read 2026-11-24:
 // - https://shopify.dev/docs/api/storefront/latest/queries/predictiveSearch
 //   (`limit` from 1 to 10, per type of result)
 // - https://shopify.dev/docs/api/storefront/latest/queries/search

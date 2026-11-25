@@ -18,7 +18,7 @@ const config: ShopifyConfig = {
 
 const eur = (amount: string) => ({ amount, currencyCode: "EUR" });
 
-// The shape the store answered with on 2026-11-24 (T15 notes).
+// The shape the store answered with on 2026-11-24 (T8 notes).
 function product(overrides: Partial<ShopifyProduct> = {}): ShopifyProduct {
   return {
     id: "gid://shopify/Product/11501821985110",

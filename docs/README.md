@@ -24,7 +24,7 @@ All project documentation lives in `docs/`. This file is the index and explains 
 | `workflow.md` | Rules for executing each task: commits, tests, branches. |
 | `architecture.md` | Current structure, layers and boundaries, linking to the ADRs behind each choice. |
 
-Created only when there is real content: further `integrations/` files (payments, invoicing) and `runbooks/` (deploy, backups, incidents).
+Created only when there is real content: further `integrations/` files (for example invoicing) and `runbooks/` (deploy, backups, incidents).
 
 ## Documentation rules
 

@@ -6,7 +6,7 @@ Rules shared by the whole monorepo, read by Claude Code and Codex. Keep this fil
 
 Online store for LockMX (motocross products: tyres and racks for carrying equipment inside vans). It is a real business for a client, with personal data and payments, so security and correctness matter more than speed.
 
-- A single Next.js site in `apps/web`: marketing, shop, customer area and admin panel.
+- A single Next.js site in `apps/web`: the marketing pages and the shop, with Shopify behind it (headless, ADR 0014).
 - Languages: PT-PT and EN.
 - pnpm monorepo. `packages/` only receives code once there is a second real consumer.
 - Documentation index and working cycle: `docs/README.md`.
@@ -54,9 +54,9 @@ Online store for LockMX (motocross products: tyres and racks for carrying equipm
 - Secrets never go in code, logs, examples or commits. `NEXT_PUBLIC_*` variables are public: never put secrets in them.
 - Validate all untrusted input on the server. Authenticate and authorize on the server, on every action: hiding a button is not access control.
 - Never trust the browser for prices, stock, discounts, totals or user identity.
-- Card data never passes through this project's server: use the payment provider's checkout or tokenization.
-- A payment is confirmed by the provider's webhook, with a verified signature and idempotent processing.
-- Authentication, payments and personal data follow only the flows documented in `docs/`. No shortcuts.
+- Card data never passes through this project's server: payments happen in Shopify's checkout.
+- A Shopify webhook, if one is ever used, is verified by its signature and processed idempotently.
+- Personal data follows only the flows documented in `docs/`. No shortcuts.
 
 ## Commands (from the root)
 
@@ -66,11 +66,9 @@ Online store for LockMX (motocross products: tyres and racks for carrying equipm
 
 ## Current state
 
-- Decided: Next.js, pnpm monorepo, a single web app. The shop is Shopify behind this frontend (headless, ADR 0014): catalogue, stock, orders, customers, checkout and payments live on Shopify.
-- Written for a custom shop and to be revisited before anything is built on them (ADR 0014): Drizzle with PostgreSQL (ADR 0002), Better Auth (ADR 0003), Resend (ADR 0005, except its contact form section), database provider (ADR 0006).
-- Contact form: one email to the client through Resend (ADR 0005), rate limit in the hosting firewall (ADR 0015).
+- Decided: Next.js, pnpm monorepo, a single web app. The shop is Shopify behind this frontend (headless, ADR 0014): catalogue, stock, orders, customers and their accounts, checkout, payments and the account and order emails live on Shopify. The project has no database, authentication or transactional email of its own.
 - Search suggestions: rate limit in the hosting firewall (ADR 0016).
-- Shop: spec 005 is in progress, only T18 left (waits for the supplier). Next: the product pages, from an idea to a new spec; its starting points are in spec 005, "Where the spec stands".
+- Shop: spec 005 is in progress, only T11 left (waits for the supplier). Next: the product pages, from an idea to a new spec (006); its starting points are in spec 005, "Still open".
 - Open (ADR before choosing): hosting, cookie consent management.
 - Accepted: Vitest as unit test runner (ADR 0004), Playwright as end-to-end test runner (ADR 0013).
 - Web app specific rules: `apps/web/AGENTS.md`.

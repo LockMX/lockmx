@@ -26,7 +26,7 @@ Icons are decorative by default (`aria-hidden`). An icon that carries meaning on
 
 ## Update (owner, 2026-10-13): one brand icon outside the package
 
-The contact page and the footer link to the Instagram page of LockMX with an icon (spec 005, amendment 2). The installed `lucide-react` (1.48.0) has no brand icons: no `instagram` file exists in the package. The owner chose a glyph of our own over a text link.
+The contact page and the footer link to the Instagram page of LockMX with an icon (spec 005, decisions 12 and 14). The installed `lucide-react` (1.48.0) has no brand icons: no `instagram` file exists in the package. The owner chose a glyph of our own over a text link.
 
 - The icon is defined in `core/icon.tsx` with the `createLucideIcon` helper the package exports, from the outline (a rounded square, a circle and a dot) that Lucide shipped for Instagram before it dropped brand icons. It is one more name of the closed set and behaves like the rest.
 - It is a drawing in the stroke style of the set, not the official asset. Meta asks that only the logos of its Brand Resource Center are used; the page read (https://www.meta.com/brand/resources/instagram/instagram-brand/, 2026-10-13) does not give the rules for the glyph itself (colour, redrawing, size), and the page that does was not read. If the client wants the official glyph, it is downloaded from that centre and replaces this drawing; raised with the owner.

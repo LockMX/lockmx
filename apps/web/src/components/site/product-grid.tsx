@@ -20,7 +20,7 @@ const IMAGE_SIZES = "(min-width: 80rem) 25vw, (min-width: 40rem) 50vw, 100vw";
 
 const HEADING_ID = "shop-products-heading";
 
-/** The products of a shop listing (spec 005, T13). It shows what it is given. */
+/** The products of a shop listing (spec 005, T6). It shows what it is given. */
 export function ProductGrid({ title, products, priceLocale, productHref, labels }: ProductGridProps) {
   return (
     <section aria-labelledby={HEADING_ID} className="flex flex-col gap-4">

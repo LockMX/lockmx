@@ -5,7 +5,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { MIN_SEARCH_LENGTH, SEARCH_PARAM, type ShopSuggestion } from "@/lib/shop/search";
 
 // Asks the server for the suggestions of the shop's search bar (spec 005,
-// T17) once the visitor pauses, and drops the answer to a text that is no
+// T10) once the visitor pauses, and drops the answer to a text that is no
 // longer in the field. Whatever goes wrong (the firewall's 429, a failed
 // request, an answer of the wrong shape) is no suggestion.
 

@@ -9,7 +9,7 @@ import { readSuggestions, SUGGESTION_LIMIT } from "@/server/shopify/search";
 import { getShopifyConfig } from "@/server/shopify/config";
 
 // What the search bar of the shop suggests while the visitor types (spec 005,
-// T17). The text is untrusted: a text that is not a search asks nothing of
+// T10). The text is untrusted: a text that is not a search asks nothing of
 // the store. Like the listings, the suggestions come from the store once it
 // is connected and from the example data until then; a store that fails
 // suggests nothing.

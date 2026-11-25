@@ -1,10 +1,23 @@
 # AWS SES: receiving and forwarding mailboxes
 
-Status: in use (being migrated to the v2 function). Written on 2026-10-08. The mailbox catalog and the reasons for splitting SES and Resend are in `../decisions/0005-transactional-email-resend.md`; this file is the operational setup.
+Status: in use (being migrated to the v2 function). Written on 2026-10-08. The mailbox catalog and the operational setup.
 
 ## Purpose
 
-The company mailboxes (`support@`, `crew@`, `fabio.ramalhinho@`, `privacy@`, `terms@`, `returns@`, `dev@`, `abuse@`, `postmaster@`) do not exist as real mailboxes. SES receives the mail for them and a Lambda forwards a copy to the client's inbox (`lock_mx@outlook.com`). `returns@` (named in the return policy) was added on 2026-11-17: the owner configured it in SES and reported that the client added it to their Gmail as an alias; not checked from this repository. Transactional shop mail (`shop@`, send only) does not use this path: it goes through Resend on its own subdomain, so the two reputations stay separate.
+The company mailboxes (`support@`, `crew@`, `fabio.ramalhinho@`, `privacy@`, `terms@`, `returns@`, `dev@`, `abuse@`, `postmaster@`) do not exist as real mailboxes. SES receives the mail for them and a Lambda forwards a copy to the client's inbox (`lock_mx@outlook.com`). `returns@` (named in the return policy) was added on 2026-11-17: the owner configured it in SES and reported that the client added it to their Gmail as an alias; not checked from this repository. The store's customer and order emails are sent by Shopify, not through this account.
+
+## Mailboxes
+
+| Address | Role | Notes |
+|---|---|---|
+| `support@lockmx.com` | Public help address for anything about a purchase. | Alias forwarded to the client's mailbox. |
+| `crew@lockmx.com` | The contact address shown on `/contact` and in the footer (`apps/web/src/lib/site/contact.ts`). The client answers from it. | Alias forwarded to the client's mailbox. |
+| `fabio.ramalhinho@lockmx.com` | Direct relationship with customers, used by the person when he chooses. | Whether he answers from this address or from `support@` is not decided. |
+| `privacy@lockmx.com`, `terms@lockmx.com` | Data protection and legal terms contacts. | Exist already. |
+| `returns@lockmx.com` | Return requests, named in the return policy. | Exists (configured by the owner, 2026-11-17). |
+| `postmaster@lockmx.com`, `abuse@lockmx.com` | Role mailboxes expected by email conventions. Not a legal requirement. | Aliases. |
+| `dev@lockmx.com` | Owner of the accounts of third-party services (AWS, Cloudflare, domain registrar). Belongs to the maintainer, see below. | The owner's convention across his projects. |
+| `dmarc@lockmx.com` (proposed) | Receives DMARC aggregate reports. | Alias, to keep them out of people's inboxes. |
 
 ## Flow
 
@@ -21,7 +34,7 @@ Code: `aws-ses-forwarder.py` (this folder). Locally tested with a stubbed `boto3
 | `Region` | SES region |
 | `MailS3Bucket` | bucket where the receipt rules store the mail |
 | `MailRecipient` | inbox that receives the copies |
-| `ForwardPrefixes` | comma separated mailbox names allowed to be forwarded, for example `support,fabio.ramalhinho,privacy,terms,returns,dev,abuse,postmaster` |
+| `ForwardPrefixes` | comma separated mailbox names allowed to be forwarded, for example `support,crew,fabio.ramalhinho,privacy,terms,returns,abuse,postmaster` |
 | `ConfigurationSet` | optional SES configuration set, to get bounce and complaint metrics for forwarded mail |
 
 Function settings to raise from the defaults (128 MB and 3 s, with which the function timed out in a console test on 2026-10-08): memory (the message is read, parsed and serialized again, so several copies of it live in memory; 512 MB or more) and timeout (60 s for large attachments). The IAM role needs `s3:GetObject` on the bucket and `ses:SendEmail` for the sending identity.
@@ -60,14 +73,13 @@ One rule per mailbox, in the active rule set. For each: recipient condition (the
 
 ## Reputation
 
-SES sending limits and reputation review are account-wide: a high bounce or complaint rate from forwarded mail can put the whole account under review, including any other sending identity in it. Reasons to keep the forwarder lean: the strict rules above, a configuration set to watch the metrics, and keeping the shop's customer mail out of this account (Resend). Alarms to create: CloudWatch alarms on the SES account bounce and complaint rates well below the review thresholds, and on Lambda errors. Thresholds to confirm against the current SES documentation when the alarms are created.
+SES sending limits and reputation review are account-wide: a high bounce or complaint rate from forwarded mail can put the whole account under review, including any other sending identity in it. Reasons to keep the forwarder lean: the strict rules above, a configuration set to watch the metrics, and keeping the shop's customer mail out of this account (Shopify sends it). Alarms to create: CloudWatch alarms on the SES account bounce and complaint rates well below the review thresholds, and on Lambda errors. Thresholds to confirm against the current SES documentation when the alarms are created.
 
 ## Open points
 
 - The SES account is still in the sandbox (2026-10-08): it only sends to verified addresses, so every forwarding destination must be verified until production access is granted.
 - `_dmarc.lockmx.com` is `v=DMARC1; p=none;` with no report address (2026-10-08).
-- Receiving domain and sending subdomain names (planned: Resend on `shop.lockmx.com`, SES custom MAIL FROM on `mail.lockmx.com`); the MAIL FROM subdomain must not be used for anything else.
-- The Resend DNS records must be checked in the Resend dashboard before touching DNS, to confirm they do not collide with the SES records.
+- The SES custom MAIL FROM subdomain is `mail.lockmx.com`; it must not be used for anything else.
 - Outlook safe-sender rule so that forwarded copies do not land in junk.
 - `crew@` was added after this document was written and replaces `fabio.ramalhinho@` as the client mailbox for contacts. The owner reported on 2026-10-09 that its forwarding is configured and working; the value of `ForwardPrefixes` in the deployed stack was not read for this note.
 - Whether `fabio.ramalhinho@` and `support@` share the same inbox.

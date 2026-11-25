@@ -2,10 +2,9 @@ import type { Locale } from "@/lib/i18n/config";
 import type { Money, ProductSummary } from "@/lib/shop/product";
 
 // Example products, so the shop sections can be judged before the catalogue
-// exists (spec 005, decision 2). Names and prices are invented working data,
+// exists (spec 005, decision 5). Names and prices are invented working data,
 // not the client's catalogue: every item is flagged and its card says so.
-// Shown only while the store is not connected (spec 005, amendment 3,
-// decision 25).
+// Shown only while the store is not connected.
 
 type Translated = Record<Locale, string>;
 

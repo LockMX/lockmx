@@ -1,6 +1,6 @@
 import { shopPath } from "@/lib/site/public-paths";
 
-// The search of the shop (spec 005, T17). The text comes from the browser, so
+// The search of the shop (spec 005, T10). The text comes from the browser, so
 // the server keeps it only when it is text of a sensible length; anything else
 // is no search at all.
 

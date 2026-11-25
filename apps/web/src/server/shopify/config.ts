@@ -1,9 +1,9 @@
 import "server-only";
 
-// The connection to the Shopify store (spec 005, T15). SHOPIFY_STORE_DOMAIN and
+// The connection to the Shopify store (spec 005, T8). SHOPIFY_STORE_DOMAIN and
 // SHOPIFY_PRIVATE_ACCESS_TOKEN are read here and nowhere else. Neither set
 // means the store is not connected and the site shows its example data
-// (amendment 3, decision 25); one without the other is a mistake and fails.
+// (decision 5); one without the other is a mistake and fails.
 
 // Pinned in code, not in the environment: the queries are written and tested
 // against it, so a new version is a reviewed change. Stable versions and their

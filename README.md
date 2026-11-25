@@ -1,6 +1,6 @@
 # LockMX
 
-Online store for LockMX: motocross products (tyres and racks for carrying equipment inside vans). A single Next.js site covering marketing, shop, customer area and admin panel, in PT-PT and EN.
+Online store for LockMX: motocross products (tyres and racks for carrying equipment inside vans). A single Next.js site covering the marketing pages and the shop, with Shopify behind it, in PT-PT and EN.
 
 ## Prerequisites
 
@@ -25,6 +25,7 @@ The site runs at http://localhost:3000.
 | `pnpm lint` | ESLint. |
 | `pnpm typecheck` | Next.js type generation, then the TypeScript compiler without emitting. |
 | `pnpm test` | Unit tests (Vitest). |
+| `pnpm test:e2e` | End-to-end tests (Playwright, against the production build). |
 
 ## Documentation
 

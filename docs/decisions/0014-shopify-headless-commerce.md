@@ -5,11 +5,11 @@
 
 ## Context
 
-`../ideas/build-vs-shopify.md` compared a fully custom shop (Option A), a hosted Shopify store (Option B) and our own Next.js frontend with Shopify as the commerce backend (Option C).
+Three options were compared for the client: a fully custom shop (Option A: our own database, authentication, payments, emails and admin panel), a hosted Shopify store with a theme (Option B), and our own Next.js frontend with Shopify as the commerce backend (Option C).
 
 One supplier of the client has a Shopify store and proposed that LockMX resell its products with the supplier shipping to the end customer and managing its own stock. The client wants that model for the complementary products, because it removes their stock and order handling from LockMX. The main product stays the racks for vans.
 
-A cart and a checkout belong to one system, so the complementary products cannot be on Shopify while the racks are sold through a separate custom checkout (same file, "One shop or two").
+A cart and a checkout belong to one system, so the complementary products cannot be on Shopify while the racks are sold through a separate custom checkout: a customer who wants both would pay twice, in two checkouts, with two accounts, two order histories and two invoicing integrations. If Shopify is used for the extras, the racks are Shopify products too, and the custom database, authentication, payment and admin work of Option A is not built.
 
 ## Decision
 
@@ -25,11 +25,12 @@ Decided by the owner with the client in a meeting on 2026-10-09: Option C.
 
 The decision was taken knowing these are open. Each is closed in the idea or spec of the shop, before code depends on it.
 
-- That products imported through Collective are returned by the Storefront API when published to the Headless channel. It follows from how publishing works and no page read contradicts it, but Shopify does not state it. To be proven in a trial store with the client's supplier: one imported product read through the API and one real order.
-- That the supplier meets the Collective requirements: a store in Portugal, in EUR, with Shopify Payments, enrolled as a supplier.
+- That products imported through Collective are returned by the Storefront API when published to the Headless channel. It follows from how publishing works and no page read contradicts it, but Shopify does not state it. To be proven in the client's store with the supplier: one imported product read through the API and one real order (spec 005, T11).
+- That the supplier meets the Collective requirements (`../integrations/shopify-setup.md`, "Supplier products").
 - MB WAY on Shopify Payments is in early access and not available to every merchant. The Multibanco rate is not published.
 - Whether the plan's product limits (3 options per product) fit the racks, and whether a fitment finder is needed.
-- Languages through the Storefront API, the domain the checkout and sign-in pages are served from, VAT on the subscription, and that the certified invoicing integration works for orders from a headless storefront.
+- VAT on the subscription, and that the certified invoicing integration works for orders from a headless storefront.
+- Closed since: languages through the Storefront API work with `@inContext(language:)` on the operation, `PT_PT` and `EN` (spec 005, T8 and T9 notes, checked against the store on 2026-11-24). The checkout cannot run on our own domain: a subdomain such as `checkout.lockmx.com` is pointed at Shopify (`../integrations/shopify-setup.md`, "Checkout domain and launch").
 
 ## Alternatives considered
 
@@ -38,19 +39,23 @@ The decision was taken knowing these are open. Each is closed in the idea or spe
 
 ## Consequences
 
-- Fixed cost: Shopify Basic (19 EUR per month billed annually, 27 EUR monthly), plus frontend hosting and certified invoicing, about 44 to 56 EUR per month in total; payment fees are Shopify's (figures and sources in the idea file).
-- Collective requires Shopify Payments, so a separate Portuguese payment provider is not used. The research on ifthenpay, Stripe and Mollie in the idea file is no longer a pending decision.
-- Earlier decisions to revisit, each in its own ADR update. Nothing is superseded by this file alone:
-  - ADR 0003 (Better Auth): customer accounts and sign-in are Shopify's (Customer Account API), and the admin is the Shopify admin. Better Auth has no remaining use unless a need outside Shopify appears.
-  - ADR 0002 (Drizzle, PostgreSQL) and ADR 0006 (database provider): the shop needs no database of ours. A database is justified only by something Shopify does not hold, to be named before one is created.
-  - ADR 0005 (Resend): login codes and order emails are sent by Shopify. Resend remains a candidate only for the contact form.
-  - ADR 0007 and 0012 (hosting): unchanged, the frontend is still hosted by us.
-  - ADR 0001: unchanged, with the commerce backend outside the application.
-- `../ideas/project-brief.md` lists requirements written for the custom build (an admin panel built by us, stock reservation, idempotent payment webhooks, audit trail). Shopify now covers them; the brief is updated when the shop idea is written.
+- Fixed cost, VAT excluded (1 EUR = 1.1225 USD, ECB reference rate of 2026-10-02): Shopify Basic 19 EUR per month billed annually or 27 EUR monthly; frontend hosting on Vercel Pro (20 USD, about 18 EUR); certified invoicing 7 to 11 EUR. About 44 to 56 EUR per month in total. The API and the Headless channel add nothing to the Shopify plan (no "API only" plan exists; Basic allows one headless storefront). Payment fees are Shopify's: on Basic, 1.8% + 0.30 EUR for standard online cards and 1.3% + 0.30 EUR for MB WAY.
+- Collective requires Shopify Payments, so a separate Portuguese payment provider is not used.
+- The checkout is not ours: the cart's `checkoutUrl` sends the buyer to Shopify's web checkout. Below Plus, its styling is a logo, a colour palette and fonts chosen from a list; the design system stops at the cart. Customer accounts use Shopify's hosted sign-in (Customer Account API).
+- What Option A would have built is not ours: the project has no database, authentication or transactional email of its own. The ADRs written for it were withdrawn on 2026-11-25 (`README.md`, "Withdrawn decisions").
+- ADR 0001, 0007 and 0012 are unchanged: the frontend is still ours and hosted by us.
 - Security rules in `AGENTS.md` still apply to what remains ours: the Storefront API private token is a secret read only in the server layer; prices, stock and totals always come from Shopify, never from the browser; any webhook from Shopify is verified by its signature.
 - Lock-in: catalogue, orders and customers live on Shopify. Leaving means migrating that data and building what Option A planned.
-- Spec 004 (public shell and landing page) is unaffected. The shop gets its own idea and spec.
 
 ## Sources
 
-All in `../ideas/build-vs-shopify.md`, sections "Option C", "Does it solve the supplier problem?" and "One shop or two" (Shopify pricing, shopify.dev and Shopify help pages, read 2026-10-09).
+Read 2026-10-09 unless another date is given.
+
+- Shopify pricing, Portugal: https://www.shopify.com/pt/precos (plans, "create headless storefronts", Shopify Payments rates, third-party gateway fee; MB WAY rate read 2026-10-06); European version: https://www.shopify.com/pricing.
+- Storefront API and headless: https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api, https://shopify.dev/docs/storefronts/headless/bring-your-own-stack, https://shopify.dev/docs/api/storefront#rate-limits, https://shopify.dev/docs/api/usage/limits, https://shopify.dev/docs/api/storefront/latest/objects/Cart, https://shopify.dev/docs/storefronts/headless/building-with-the-customer-account-api, https://apps.shopify.com/headless.
+- Starter plan not available to new stores: https://help.shopify.com/en/manual/intro-to-shopify/pricing-plans/plans-features/shopify-starter-plan. Checkout styling: https://help.shopify.com/en/manual/checkout-settings/customize-checkout-configurations/checkout-style.
+- Shopify Payments in Portugal: https://help.shopify.com/en/manual/payments/shopify-payments/supported-countries/portugal/payment-methods, `/local-payment-methods/mb-way`, `/local-payment-methods/multibanco`.
+- Shopify Collective: the pages listed in `../integrations/shopify-setup.md`, "Supplier products".
+- Invoicing: Moloni plans https://www.moloni.pt/planos/ and Shopify integration https://www.moloni.pt/plugins/shopify/; InvoiceXpress plans https://invoicexpress.com/planos-precos/ and Shopify plugin https://plugins.invoicexpress.com/shopify/ (read 2026-10-02).
+- Vercel pricing: https://vercel.com/pricing (2026-09-30).
+- ECB euro reference rate (USD), 2026-10-02: https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/eurofxref-graph-usd.en.html

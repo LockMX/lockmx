@@ -6,7 +6,7 @@ import { isLocale } from "@/lib/i18n/config";
 import { SEARCH_PARAM } from "@/lib/shop/search";
 import { getSearchSuggestions } from "@/server/shop/search-suggestions";
 
-// The suggestions of the shop's search bar (spec 005, T17). The browser gives
+// The suggestions of the shop's search bar (spec 005, T10). The browser gives
 // only the text and the language, both checked on the server. The rate limit
 // is a rule of the hosting firewall (ADR 0016), not code.
 export async function GET(request: NextRequest) {

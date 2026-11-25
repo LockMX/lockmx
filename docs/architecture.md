@@ -22,11 +22,10 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 |---|---|---|
 | `app/` | exists | Routes, layouts and composition only. No business logic in pages. |
 | `app/[lang]/` | exists | Root segment for the locale (`pt` or `en`). Holds the root layout and every page. |
-| `app/[lang]/(marketing)` | exists | The public pages and their shell: the layout (skip link, header, `main`, footer), the landing page (the home of the shop), `modular-system`, `contact`, `shop` and `shop/[category]` (the listings), `cart`, `privacy-policy`, `terms` and `returns` (the policy texts), the placeholder legal pages (`company`, `cookies`), `not-found`, `error` and a catch-all route that sends unknown addresses to `not-found`. |
+| `app/[lang]/(marketing)` | exists | The public pages and their shell: the layout (skip link, header, `main`, footer), the landing page (the home of the shop), `modular-system`, `contact`, `shop` and `shop/[category]` (the listings), `cart`, `privacy-policy`, `terms` and `returns` (the policy texts), the placeholder legal pages (`company`, `cookies`), `not-found`, `error` and a catch-all route that sends unknown addresses to `not-found`. The shop is here and not in a `(shop)` group, which would need a second copy of the layout (spec 005, T6). |
 | `app/[lang]/coming-soon` | exists | The placeholder page, outside the group, so without the shell. |
 | `app/api/` | exists | Route Handlers, outside `[lang]` and skipped by the proxy. `search/route.ts` gives the suggestions of the shop's search bar; its rate limit is a firewall rule of the hosting (ADR 0016). |
 | `app/global-error.tsx`, `app/sitemap.ts`, `app/robots.ts` | exist | The error page of last resort, with its own `<html>`; the sitemap and the robots file. |
-| `app/[lang]/(account)`, `(admin)` | planned | Route groups, one per site section, inside `[lang]`. The shop pages are in `(marketing)`, which holds the shell: a `(shop)` group would need a second copy of the layout (spec 005, T10). |
 | `proxy.ts` | exists | Sends a request without a supported locale prefix to `/<locale>/...`. While `COMING_SOON` is `true`, shows the placeholder at every page address, with `X-Robots-Tag: noindex`. Kept small: later specs add their own checks here. |
 | `components/` | exists | Reusable components. Receive text and data through props, never read dictionaries themselves. |
 | `components/ui/` | exists | Design system primitives, one folder per group: `core`, `forms`, `surfaces`, `commerce`, `data`. See `design/components.md`. |
@@ -47,9 +46,8 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 
 Everything that is not presentation lives in `server/`, separated from the UI:
 
-- `server/auth`, `server/db`, `server/repositories`, `server/payments`, `server/invoicing` (all planned): authentication, database access, data access, payment provider and invoicing integrations.
 - Every module in `server/` imports `server-only`, so importing it from a client component fails the build.
-- Data access goes through a data access layer (`server/repositories`). Components never query the database directly.
+- Data access goes through `server/shopify/` and `server/shop/`. Components never call Shopify directly.
 - Components receive DTOs with only the fields they render, never full entities with internal fields.
 - Server Actions and Route Handlers validate input, authenticate and authorize on the server, on every call.
 - Environment variables are read only in the server layer. `NEXT_PUBLIC_*` variables are public and never hold secrets.
@@ -110,22 +108,15 @@ Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucid
 | Choice | ADR | Status |
 |---|---|---|
 | Monorepo with a single web app, backend inside Next.js | `decisions/0001-monorepo-single-web-app.md` | accepted |
-| Drizzle ORM with PostgreSQL | `decisions/0002-orm-drizzle-postgresql.md` | accepted |
-| Authentication with Better Auth | `decisions/0003-authentication-better-auth.md` | proposed |
 | Vitest as unit test runner | `decisions/0004-unit-test-runner.md` | accepted |
 | Internationalization with the native Next.js pattern | `decisions/0008-i18n-native-next.md` | accepted |
 | Styling with design tokens consumed through Tailwind | `decisions/0009-styling-design-tokens-tailwind.md` | accepted |
 | Icons with lucide-react | `decisions/0010-icons-lucide.md` | accepted |
 | Fonts self-hosted through next/font | `decisions/0011-fonts-next-font.md` | accepted |
-| Transactional email with Resend | `decisions/0005-transactional-email-resend.md` | proposed |
-| Database provider | `decisions/0006-database-provider.md` | proposed |
 | Application hosting | `decisions/0007-application-hosting.md` | proposed |
 | Provisional hosting of the placeholder page on Vercel | `decisions/0012-provisional-hosting-vercel.md` | proposed |
 | Playwright as end-to-end test runner | `decisions/0013-e2e-test-runner.md` | accepted |
 | Shopify as the commerce backend, headless | `decisions/0014-shopify-headless-commerce.md` | accepted |
-| Rate limit of the contact form in the hosting firewall | `decisions/0015-contact-form-rate-limit.md` | accepted |
 | Rate limit of the search suggestions in the hosting firewall | `decisions/0016-search-rate-limit.md` | accepted |
 
-ADR 0014 puts the shop's data, accounts, checkout and payments on Shopify. ADRs 0002, 0003, 0005 and 0006 and the planned `server/auth`, `server/db`, `server/repositories`, `server/payments` and `server/invoicing` modules above were written for a custom shop and are revisited with the shop idea; until then they are not built.
-
-Cookie consent management is still open (no ADR yet).
+Withdrawn decisions, and why, are listed in `decisions/README.md`. Cookie consent management is still open (no ADR yet).

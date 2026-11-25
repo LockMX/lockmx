@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // The main product of the site: what the modular system is, its parts and why
-// (spec 005, amendment 2).
+// (spec 005, decision 13).
 export default async function ModularSystemPage() {
   const locale = await getCurrentLocale();
   const { modularSystem } = await getMessages(locale);

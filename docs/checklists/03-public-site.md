@@ -53,9 +53,9 @@ Run `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm test:e2e` (it includes 
 | `/pt`, `/en` | 200, one `h1`, header, footer, canonical link to itself |
 | `/pt/modular-system` | 200, title `Sistema modular | LockMX`, header link marked as current |
 | `/pt/no-such-page` | 404, translated page inside the shell |
-| `/sitemap.xml` | Both home pages and both modular system pages, absolute, no placeholder |
+| `/sitemap.xml` | In both locales, absolute: the home page, `/modular-system`, `/contact`, `/privacy-policy`, `/terms` and `/returns`; no placeholder |
 | `/robots.txt` | `Allow: /` and the sitemap address |
 | `/pt` with `COMING_SOON=true` | The placeholder, with `X-Robots-Tag: noindex` |
-| `/pt/privacy` | 200, "Em implementação", `noindex`, not in the sitemap |
+| `/pt/company` | 200, "Em implementação", `noindex`, not in the sitemap |
 
-By eye, at 320, 768, 1024 and 1440 px: the header (menu button below 768 px, links from there up), the landing page and the modular system page, with no sideways scroll.
+By eye, at 320, 768, 1024 and 1440 px: the header (menu button below 1024 px, links from there up), the landing page and the modular system page, with no sideways scroll.

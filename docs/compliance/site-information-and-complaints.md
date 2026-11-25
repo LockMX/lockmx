@@ -110,4 +110,4 @@ Before the marketing and legal spec starts, the client provides:
 
 ## Related
 
-- Contact addresses and the order email flow: `../decisions/0005-transactional-email-resend.md`.
+- Contact addresses: `../integrations/aws-ses-mailboxes.md`. Order emails are Shopify's notifications (`../integrations/shopify-setup.md`, "Setting up the store", item 8).
