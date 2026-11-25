@@ -1,6 +1,6 @@
 # 0016. Rate limit of the search suggestions in the hosting firewall
 
-- Status: accepted (owner, 2026-11-24), while the site is hosted on Vercel (ADR 0012, still proposed). The numbers of the rule were set by the owner with spec 005, T17.
+- Status: accepted (owner, 2026-11-24), while the site is hosted on Vercel (ADR 0012, still proposed). The numbers of the rule were set by the owner with spec 005, T17. The owner created the rule in the Vercel project on 2026-11-25; whether it fires is checked by hand after the first deployment that serves `/api/search`.
 - Date: 2026-11-24
 
 ## Context

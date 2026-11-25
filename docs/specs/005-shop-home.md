@@ -320,6 +320,13 @@ The owner approved the amendment on 2026-11-18 and changed decisions 24, 25 and 
 3. **How many products** the supplier's catalogue has: from about 250 products a listing needs pagination, and the filters of amendment 2 (open point 3) may need product type and brand.
 4. **Sections for supplier products:** which sections the client wants, and whether subsections (nested menu items) are needed; the supplier's product types decide whether automated collections can sort them (question 6 in `shopify-setup.md`).
 
+### Where the spec stands (2026-11-25)
+
+- T15, T16 and T17 are done. The store set-up of prerequisites 2 to 5 is done (`../integrations/shopify-setup.md`, check of 2026-11-25); the search rule of ADR 0016 is created in Vercel.
+- **T19 can be done now.** It ends with the spec `in progress`, naming T18 as the task that waits.
+- **T18 waits for the supplier** (open point 2): Shopify Payments is active in the client's store (owner, 2026-11-25), the owner is talking to the supplier. Open for T18: the site has no cart yet (decision 28), so the "one real order" needs a checkout address made outside the site, for example a cart created once from the developer's machine, which needs a Storefront permission to write carts that the storefront does not have now (read-only by design). To decide with the owner when T18 starts; otherwise the order waits for the cart spec.
+- After this spec: the product pages spec (decision 28), then the cart and checkout hand-over.
+
 ### Tasks
 
 #### T15. Shopify Storefront API client
