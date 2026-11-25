@@ -184,11 +184,11 @@ For each supplier the client brings: country, whether it has Shopify, whether it
 | 2 | Path A: create a client transfer store and try installing Headless | Owner | Prerequisite 2 |
 | 2b | Path B: the client signs up and sends a collaborator code | Client | Prerequisite 2 |
 | 3 | Store details, EUR, PT-PT and EN | Client, Owner | |
-| 4 | Collections: racks, tyres, merchandise, featured | Owner | Prerequisite 5 |
+| 4 | Collections: one per section, `featured`, and the `shop` menu (spec 005, decision 24) | Owner | Prerequisite 5 |
 | 5 | A few real products with images, in PT and EN, published to Headless | Client, Owner | Prerequisite 5 |
 | 6 | Headless channel, storefront, permissions | Owner | Prerequisite 3 |
 | 7 | Private token and store domain handed over outside the repository | Owner | Prerequisite 4, T5 |
-| 8 | Amend phase B to amendment 2 (done: amendment 3, waiting for approval), then T15 to T19 | Owner | |
+| 8 | Amend phase B to amendment 2 (done: amendment 3, approved 2026-11-18), then T15 to T19 (done but T18, which waits for the supplier) | Owner | |
 | 9 | Taxes, shipping, policies, notifications, invoicing app | Client, accountant | Launch |
 | 10 | Shopify Payments, Multibanco, MB WAY request | Client | Launch |
 | 11 | Transfer (path A), plan, remove password, checkout subdomain | Client, Owner | Launch |
