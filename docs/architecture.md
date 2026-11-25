@@ -30,17 +30,18 @@ pnpm workspace with a single lockfile. Root scripts delegate to `apps/web`. Comm
 | `proxy.ts` | exists | Sends a request without a supported locale prefix to `/<locale>/...`. While `COMING_SOON` is `true`, shows the placeholder at every page address, with `X-Robots-Tag: noindex`. Kept small: later specs add their own checks here. |
 | `components/` | exists | Reusable components. Receive text and data through props, never read dictionaries themselves. |
 | `components/ui/` | exists | Design system primitives, one folder per group (`core` now; `forms`, `surfaces`, `commerce`, `data` planned). See `design/components.md`. |
-| `components/site/` | exists | The parts of the public site: skip link, header and its menu for narrow screens, navigation, footer, error and not-found views, the focus helper for section links, and `sections/` with the sections of the landing page and of the modular system page. They import primitives from `components/ui` only. |
+| `components/site/` | exists | The parts of the public site: skip link, header and its menu for narrow screens, navigation, footer, error and not-found views, the focus helper for section links, the parts of the shop (`product-grid.tsx` and `product-summary-card.tsx`, `shop-filters.tsx`, `shop-search.tsx` with `use-shop-suggestions.ts`, the browser side of the search suggestions), and `sections/` with the sections of the landing page (among them `featured-products.tsx`, the carousel of "Destaques", and `shop-sections.tsx`, one large card per section of the shop) and of the modular system page. They import primitives from `components/ui` only. |
 | `styles/` | exists | `tokens.css`, the design tokens and single source of truth for visual values, with the contrast and theme guard tests. Wired into Tailwind by `app/globals.css`. |
 | `lib/i18n/` | exists | Locale configuration, locale negotiation from `Accept-Language`, path switching. No server dependencies. |
 | `server/i18n/` | exists | Typed dictionaries (`messages/pt.ts` defines the shape, `messages/en.ts` follows it), `getMessages(locale)` and `getCurrentLocale()`. |
 | `lib/site/` | exists | What the public site knows about itself, without server dependencies: the public paths and the sitemap built from them, the section ids of the landing page, the legal pages, the contact address, the shape of a policy text (`policy-document.ts`). |
 | `server/site/` | exists | `site-url.ts`, the only reader of `SITE_URL`; the builder of page metadata (canonical address and language alternates); the placeholder shared by the legal pages; `policies/`, the policy texts, one file per locale. |
+| `lib/shop/` | exists | What the shop is, without server dependencies: `product.ts` (the shapes the components take, `ProductSummary`, `Money` in whole minor units, `ShopSectionEntry`, the availability values), `listing-filters.ts` (the availability filter read from the address), `search.ts` (what a search is, the `ShopSuggestion` shape, the address of a search listing). |
 | `server/shopify/` | exists | `config.ts`, the only reader of `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_PRIVATE_ACCESS_TOKEN` (neither set: the store is not connected), with the pinned Storefront API version; `client.ts`, the only module that knows the endpoint and the private token header, returning typed data or a typed error (network, HTTP, GraphQL, invalid answer), every read cached for 5 minutes; `catalogue.ts`, the reads of the shop (the sections from the store's `shop` menu, a collection's products, every product), in the page's language, mapped to the shop's shapes; `search.ts`, the store's search (suggestions and products); `money.ts`, Shopify's amounts as whole minor units. |
 | `server/shop/` | exists | What the shop pages ask for, without knowing the source: `shop-listing.ts` (sections and listings, and the search of the whole shop), `home-catalogue.ts` (the `featured` collection) and `search-suggestions.ts` (the suggestions of the search bar). They read the store when it is connected and the example data (`example-catalogue.ts`) only when it is not; a connected store that fails gives empty states. `listing-page.tsx` is the listing shared by `/shop` and `/shop/[category]`. |
 | `server/` (other modules) | planned | Server-only layer, see below. |
 | `lib/` (other modules) | planned | Code shared by server and client that has no server dependencies (for example validation schemas). |
-| `test/` | exists | Test setup (`setup.ts`) and the alias smoke test. Unit tests live next to the code they cover. |
+| `test/` | exists | Test setup (`setup.ts`), the alias smoke test, shared doubles and the empty stand-in for `server-only`, which only Next.js resolves. Unit tests live next to the code they cover. |
 
 ## Server layer
 
@@ -77,6 +78,17 @@ Specified in `specs/004-landing-page.md`; how to repeat it is in `checklists/03-
 - A link to a section of the landing page is `/<locale>#<id>`; the layout moves the focus to the section.
 - The privacy policy (`/privacy-policy`), the terms (`/terms`) and the return policy (`/returns`) are indexed and in the sitemap. Their text is data in `server/site/policies/` (one file per policy and locale, read through `policies.ts`; the PT file a translation of the EN one, a test keeps their structure equal), rendered by `components/site/policy-document-view.tsx`. The repository is the source of the policy texts: they are changed there, not in the generator they came from. The other legal pages are placeholders with `noindex` until the client delivers their content (T7 of the spec). The site cannot be launched with them.
 
+## Shop
+
+Decided in `decisions/0014-shopify-headless-commerce.md` and `0016-search-rate-limit.md`, specified in `specs/005-shop-home.md`; how to repeat it is in `checklists/04-shop-home.md`.
+
+- Shopify is the source of the products, prices, availability and sections; the site reads them through the Storefront API with a private token and writes nothing. Only `server/shopify/` talks to Shopify and reads its variables.
+- The sections of the shop are the collections of the store's `shop` menu, in its order; `featured` ("Destaques") is the one collection the code names. A section is changed in the Shopify admin, not in code.
+- Without the Shopify variables the shop shows the example data, marked "Exemplo"; with them it never does, also when Shopify fails (empty states instead).
+- Prices are shown as Shopify returns them; the frontend computes no price, discount or total. A product card leads to `/contact` until the product pages exist.
+- Pages refresh on a time basis: every Storefront read is cached for 5 minutes. There are no webhooks yet.
+- `/shop` and its sections are not in the sitemap yet (`lib/site/public-paths.ts`).
+
 ## Design system
 
 Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucide.md` and `0011-fonts-next-font.md`, specified in `specs/003-design-system.md`, documented in `design/`.
@@ -111,6 +123,7 @@ Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucid
 | Provisional hosting of the placeholder page on Vercel | `decisions/0012-provisional-hosting-vercel.md` | proposed |
 | Playwright as end-to-end test runner | `decisions/0013-e2e-test-runner.md` | accepted |
 | Shopify as the commerce backend, headless | `decisions/0014-shopify-headless-commerce.md` | accepted |
+| Rate limit of the search suggestions in the hosting firewall | `decisions/0016-search-rate-limit.md` | accepted |
 
 ADR 0014 puts the shop's data, accounts, checkout and payments on Shopify. ADRs 0002, 0003, 0005 and 0006 and the planned `server/auth`, `server/db`, `server/repositories`, `server/payments` and `server/invoicing` modules above were written for a custom shop and are revisited with the shop idea; until then they are not built.
 

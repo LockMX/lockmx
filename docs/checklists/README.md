@@ -15,6 +15,7 @@ Technical foundation (from pnpm to folder structure), customer area, cart, payme
 - `02-design-system.md`: design system (tokens as the only Tailwind theme, contrast and theme guards, fonts, brand assets, component conventions, test strategy and doubles, browser check).
 - `03-public-site.md`: public site (Playwright in three engines and CI, site address and page metadata, shell with skip link, header menu and footer, not-found and error pages, sitemap and robots, landing page, placeholder legal pages). The company page and the cookie policy are still to come.
 - `03a-policy-texts.md`: the policy texts (privacy, terms, returns): where they live, how to change them, and how to import and translate a new one, with `policy-texts-import.py`, the converter from a Termly HTML export.
+- `04-shop-home.md`: shop home connected to Shopify (product shapes and example data, featured products carousel, listings and filters, Storefront API client, sections from the store's menu, search suggestions and their rate limit). The check of supplier products through Collective is still to come.
 - `nextjs-project-checklist.md`: legacy checklist, in Portuguese, from a simpler Next.js project. Still the reference for the modules not yet redone (database, server actions), and removed when the last of them is replaced. Do not follow it without confirming each step against the current documentation.
 
 ## Template
