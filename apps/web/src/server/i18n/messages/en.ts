@@ -82,7 +82,7 @@ export const en: Messages = {
       action: "Get in touch",
     },
   },
-  // The contact page (spec 005, amendment 2).
+  // The contact page (spec 005, decision 14).
   contact: {
     eyebrow: "LockMX",
     title: "Contact",
@@ -122,7 +122,7 @@ export const en: Messages = {
       empty: "There are no featured products yet.",
       example: "Example",
     },
-    // The sections of the shop (spec 005, amendment 2).
+    // The sections of the example shop (spec 005, decision 5).
     sections: {
       racks: "LockMX mounts",
       tyres: "Tyres",

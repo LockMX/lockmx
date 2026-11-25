@@ -14,7 +14,7 @@ import { getMessages } from "@/server/i18n/messages";
 import { getShopProducts, getShopSections } from "@/server/shop/shop-listing";
 import { buildPageMetadata } from "@/server/site/page-metadata";
 
-// One listing for the whole shop and for each of its sections (spec 005, T13):
+// One listing for the whole shop and for each of its sections (spec 005, T6):
 // the routes differ only in the section they pass.
 
 // Source: 01-app/03-api-reference/03-file-conventions/page.md (bundled Next.js
@@ -49,7 +49,7 @@ export async function ShopListingPage({ section, searchParams }: ShopListingPage
   // The address is untrusted input: only the values the filter knows are kept.
   const params = await searchParams;
   const availability = parseAvailability(params[AVAILABILITY_PARAM]);
-  // A search is of the whole shop (T17): a section listing ignores it.
+  // A search is of the whole shop (T10): a section listing ignores it.
   const query = section ? undefined : (parseSearchQuery(params[SEARCH_PARAM]) ?? undefined);
   const sections = await getShopSections(locale);
   const products = await getShopProducts(locale, { section: section?.key, query, availability });

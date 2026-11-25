@@ -83,7 +83,7 @@ export const pt = {
       action: "Fala connosco",
     },
   },
-  // The contact page (spec 005, amendment 2).
+  // The contact page (spec 005, decision 14).
   contact: {
     eyebrow: "LockMX",
     title: "Contactos",
@@ -126,7 +126,7 @@ export const pt = {
       // On every card of an example product, until the catalogue exists.
       example: "Exemplo",
     },
-    // The sections of the shop (spec 005, amendment 2).
+    // The sections of the example shop (spec 005, decision 5).
     sections: {
       racks: "Suportes LockMX",
       tyres: "Pneus",

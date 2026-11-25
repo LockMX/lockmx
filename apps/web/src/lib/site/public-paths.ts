@@ -20,8 +20,8 @@ export const publicPaths: readonly string[] = [
   returnPolicyPath,
 ];
 
-// The shop joins the sitemap with the product pages spec (spec 005, "Where the
-// spec stands"); until then it is left out.
+// The shop joins the sitemap with the product pages spec (spec 005, "Still
+// open"); until then it is left out.
 export const shopPath = "/shop";
 export const cartPath = "/cart";
 

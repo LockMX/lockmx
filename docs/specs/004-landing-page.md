@@ -1,7 +1,7 @@
 # 004. Public site shell and landing page
 
-- Status: in progress (approved by the owner on 2026-10-09). The landing page it built was recomposed on 2026-10-13 by amendment 1 of `005-shop-home.md`: the modular system is a section of it again, `/modular-system`, the buy block and the complements block are gone. Amendment 2 of the same spec, also of 2026-10-13, reverses that after the client's answer: the landing page is the shop home, `/modular-system` is back and contact is the page `/contact`. T7 is split (2026-11-17): the privacy policy, the terms and the return policy are done; the company page and the cookie policy wait.
-- Idea: `../ideas/landing-page.md`
+- Status: in progress (approved by the owner on 2026-10-09). T7 is split (2026-11-17): the privacy policy, the terms and the return policy are done; the company page and the cookie policy wait for the client. The landing page it built was replaced by spec 005, which made it the home of the shop and moved contact to the page `/contact`.
+- Idea: `../ideas/project-brief.md`
 - Decisions: `../decisions/0013-e2e-test-runner.md`, `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0008-i18n-native-next.md`, `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0001-monorepo-single-web-app.md`
 
 ## Objective
@@ -12,7 +12,6 @@ The shop itself is Shopify behind this frontend (ADR 0014) and has its own idea 
 
 ## Out of scope
 
-- The contact form, its emails, Turnstile and rate limits (own spec, after ADR 0005 and the decisions listed in the idea). The contact section shows contact details only.
 - No personal data is collected and no cookie is set by this spec, so no consent banner and no analytics.
 - Products, prices, cart, search, accounts. The owner wants the shop one step away from the landing page (a navigation entry or an icon in the header). That entry, and the switch of the page's main action to the shop, belong to the shop spec: the header gets no entry that leads nowhere.
 - Statements the client's copy does not make: materials, origin, warranty, specific van models, prices.
@@ -61,8 +60,8 @@ Anything not listed is confirmed against the official documentation at the momen
 3. **Purpose of the landing page.** Present the racks: say what the system is, explain it in detail, then lead to buying. Complementary products get one short block. The section order of T6 is accepted as the starting point; adjustments come after it is seen.
 4. **Error page text.** The proposal of T4 is accepted: the marketing layout passes the error strings to a client provider, and `global-error` carries its own two texts.
 5. **Legal part last.** The company data and the policy texts are with the client. T7 is the last task and waits for them; the rest of the spec does not.
-6. **Contact address.** The contact section shows `crew@lockmx.com` (T6). `support@lockmx.com`, the public address named in `../compliance/site-information-and-complaints.md` and ADR 0005, is kept for questions about orders and payments and is the email of the company information page (T7); its use in the shop is settled in the shop spec.
-7. **Shop.** Shopify headless (ADR 0014). Turnstile is the bot protection for the contact form, which stays in its own spec.
+6. **Contact address.** The contact section shows `crew@lockmx.com` (T6). `support@lockmx.com`, the public address named in `../compliance/site-information-and-complaints.md`, is kept for questions about orders and payments and is the email of the company information page (T7); its use in the shop is settled in the shop spec.
+7. **Shop.** Shopify headless (ADR 0014).
 
 ## Copy
 
@@ -98,17 +97,15 @@ Where the kit differs, and what this spec does:
 | Header has a product search, an account icon and a cart icon | Not in the header | They lead to the shop, which does not exist yet (Out of scope). Added by the shop spec. |
 | Header navigation is "Racks", "Pneus", "Contacto" (shop categories) | Links to the page sections and to contact | There are no category pages yet. |
 | Footer has the columns "Loja" and "Conta" | One navigation column and the legal column | Same reason. The legal column gets its policy links in T7. |
-| Home is hero, two category tiles (racks, tyres), four featured products with prices, contact form | The seven sections of T6 | Owner decision 3: the page presents the racks; the kit treats racks and tyres as equal and shows prices. |
+| Home is hero, two category tiles (racks, tyres), four featured products with prices | The seven sections of T6 | Owner decision 3: the page presents the racks; the kit treats racks and tyres as equal and shows prices. |
 | Hero has a product search and the heading "Carrega as motos. Fecha a carrinha." | No search; heading from the client's tagline | Placeholder copy. The client's copy is the source. |
 | Names van models (Sprinter, Crafter), prices and stock | None of them | The client's copy does not state them (Out of scope). |
-| Contact is a form with a privacy checkbox, and says a confirmation was sent to the sender's email | Contact details only | The form has its own spec, and the owner decided that no automatic email goes to the sender. |
 | Inline styles, `#fff`, sizes in `px` | Tokens and utilities only | Conventions of this spec and of spec 003. |
 | No narrow layout | Designed here from 320 px, with the grids of the kit collapsing to one column | The kit defines none. If the header navigation does not fit, it is raised (T3). |
 
 Decided by the owner on 2026-10-09:
 
 - **Sticky header.** The header stays at the top while the page scrolls, as in the kit. In-page links must not leave the heading they jump to under it, so the sections get a scroll offset (T3).
-- **Yellow contact section.** As in the kit, with the contact details in the white card.
 - **Hero image.** Not the mockup `m1.jpg`. The owner named `M5.png` or `M4.png` of the identity pack, because they have more colour (corrected on 2026-10-09; the cut-out logo and `M2.png` mentioned first were a mistake). `M5.png` is a black sign with the white and yellow logo on a grey wall; `M4.png` is a yellow sign with the black and white logo. The hero of T6 takes its image as a prop and works without one; `M5.png` is tried first; `M4.png` only if the owner does not like the result (owner, 2026-10-09).
 
 ## Open points
@@ -177,6 +174,7 @@ Decided by the owner on 2026-10-09:
 - Commit: `feat: add header menu for narrow screens`
 
 ### T6. Landing page
+- Later: spec 005 removed the buy, complements and contact sections and made the landing page the home of the shop; `/modular-system` (T6a) and `/contact` hold the system and the contact.
 - Description: replace the stub with the landing page, composed of section components that receive their text through props. In page order:
   1. **Hero.** The display heading with the tagline, one sentence saying what LockMX is (a modular system that organizes riding gear inside a van), and two actions: the primary one leads to buying, the secondary one to the system section. Until the shop spec gives the primary action a destination, it leads to the contact section.
   2. **The system.** The client's long description: who it is for, what it turns the van into, what it solves.
@@ -193,8 +191,8 @@ Decided by the owner on 2026-10-09:
 
 ### T7. Company information and policy pages
 - Last task. Blocked until the client delivers the company data and the policy texts (decision 5). If only part arrives, the task is split and the missing part is named in the status.
-- Description: this task adds the footer links to its pages (T3 builds the footer without them, so no link leads nowhere). The routes for the texts the client delivers (privacy policy, cookie policy, terms), each a translated static page linked from the footer and listed in the sitemap, with the text exactly as delivered and reviewed on the client's side. And a page linked from the footer of every page with the identification the law requires (`../compliance/site-information-and-complaints.md`, sections 1, 3 and 7): company name, registered address, email, commercial registry data, tax number, telephone, the physical address for complaints, the dispute resolution entity if the client is bound to one, and the Complaints Book link again. The values live in one typed module, not in the dictionaries (they are data, the same in both languages); the labels are translated. The contact section of the landing page reads telephone and address from the same module. The page joins the sitemap.
-- Planned files: `apps/web/src/lib/site/company.ts` and test, `apps/web/src/app/[lang]/(marketing)/company/page.tsx`, one route per policy text, dictionaries, `apps/web/src/components/site/sections/contact.tsx`, `apps/web/e2e/company.spec.ts`.
+- Description: this task adds the footer links to its pages (T3 builds the footer without them, so no link leads nowhere). The routes for the texts the client delivers (privacy policy, cookie policy, terms), each a translated static page linked from the footer and listed in the sitemap, with the text exactly as delivered and reviewed on the client's side. And a page linked from the footer of every page with the identification the law requires (`../compliance/site-information-and-complaints.md`, sections 1, 3 and 7): company name, registered address, email, commercial registry data, tax number, telephone, the physical address for complaints, the dispute resolution entity if the client is bound to one, and the Complaints Book link again. The values live in one typed module, not in the dictionaries (they are data, the same in both languages); the labels are translated. The page `/contact` shows the telephone and the address from the same module. The page joins the sitemap.
+- Planned files: `apps/web/src/lib/site/company.ts` and test, `apps/web/src/app/[lang]/(marketing)/company/page.tsx`, one route per policy text, dictionaries, `apps/web/src/app/[lang]/(marketing)/contact/page.tsx`, `apps/web/e2e/company.spec.ts`.
 - Acceptance criteria: the page is one click from every page; every value shown comes from the client's answer, recorded with its date in the task notes; a missing mandatory value fails a test instead of rendering an empty line.
 - Tests: a unit test that every mandatory field is present and non-empty; end-to-end for the footer link and the presence of each labelled value in both locales.
 - Commit: `feat: add company information and policy pages`
@@ -372,8 +370,6 @@ Decided by the owner on 2026-10-09:
   - The company name is written "LockmMX Modular System" (with an extra "m") in the identification and in the contact section.
   - The postal address is "__________, __________, Portugal".
   - The VAT number 254870112 has a valid check digit; it starts with 2, the range of individual taxpayers in Portugal (not verified at the tax authority's source in this task). Whether the seller is a company or a sole trader changes the identification the site must show (`../compliance/site-information-and-complaints.md`).
-  - Section 6 lists "mbway" and "shopify" as payment methods.
-  - Section 7 sends to a return policy at `http://www.lockmx.com/return-policy`, which does not exist on the site. The withdrawal right of distance sales has no text yet.
   - Section 14 says the Services are hosted in Ireland. Hosting is not decided (ADR 0007, ADR 0012 proposed).
   - Section 18 sends disputes to binding arbitration at the European Court of Arbitration; section 25 is about California. Whether this fits consumer sales in Portugal (alternative dispute resolution, `../compliance/site-information-and-complaints.md`) is for the client's legal review.
   - The minimum age is 13; the contact address is `crew@lockmx.com`, while the compliance file names `support@lockmx.com` for questions about orders.
@@ -386,11 +382,8 @@ Decided by the owner on 2026-10-09:
 
 - Added by the owner the same day, from line 184 of the same file (Termly, last updated 2026-11-16, English), with a new footer entry "Política de devolução" / "Return policy" at `/returns`, after the terms. Same conversion (every character compared with the HTML; no anchors; the hidden, empty data request link of Termly is dropped) and the same agent translation to PT-PT, kept in `server/site/policies/return-policy.*.ts`.
 - **Kept as delivered, to be reviewed by the owner and the client:**
-  - Section 7 of the terms still sends to `http://www.lockmx.com/return-policy`, not to `/returns`. The fix is in the text of the terms, both files.
   - Returns within 15 days of the purchase date, in new and unused condition, with the return shipping paid by the buyer. Distance sales to consumers in Portugal have a legal right of withdrawal with its own rules (period, from when it counts, who pays the return, refund deadline); this text was not checked against them, and `../compliance/` has no file on it yet.
-  - Refunds "1-2 billing cycles" on the credit card statement; payment methods also include MB WAY.
   - The return address (Bairro Resid. da BA11 Bloco A9 2 Esq, 7800-399 Beja) is the first full postal address in the policies; the terms still have "__________" and the privacy policy only "Beja, Portugal".
-  - The contact is `returns@lockmx.com`, which is not in the list of mailboxes of `../integrations/aws-ses-mailboxes.md`: mail sent to it may not be received.
 - Tests: the policy content tests and `e2e/policy-pages.spec.ts` cover it; the anchor test is skipped for a policy without a table of contents.
 
 ### Changes to the policy texts (owner, 2026-11-17)
@@ -403,7 +396,7 @@ Decided by the owner on 2026-10-09:
 
 - `../architecture.md` has the `(marketing)` group, `components/site/`, `lib/site/`, `server/site/`, the files at the root of `app/` and a "Public site" section. `apps/web/AGENTS.md` says the group exists. `../checklists/03-public-site.md` is written from T1 to T7a and listed in the checklists index.
 - **The spec stays `in progress`:** T7 waits for the client. The checklist says so at its top.
-- Follow-up asked by the owner and not part of this spec: `../ideas/shop-style-home.md` (search bar in the hero, featured products carousel, product type cards).
+- Follow-up asked by the owner and not part of this spec: the shop sections of the landing page (search bar, featured products carousel, product type cards), built by spec 005.
 - Verified: every path named in the checklist and in the new rows of the architecture file exists (checked with a script). No code changed, so no test was run for this task.
 
 ## Boundaries

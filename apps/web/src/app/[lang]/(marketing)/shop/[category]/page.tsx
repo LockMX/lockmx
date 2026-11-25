@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: ShopSectionPageProps): Promis
 }
 
 // One section of the shop: its products, with the filters beside them. The
-// sections are the store's (spec 005, amendment 3, decision 24); a section
+// sections are the store's (spec 005, decision 3); a section
 // the shop does not have is not found.
 export default async function ShopSectionPage({ params, searchParams }: ShopSectionPageProps) {
   const { category } = await params;

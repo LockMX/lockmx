@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// The listings of the shop (spec 005, T13), with example data.
+// The listings of the shop (spec 005, T6), with example data.
 const locales = [
   {
     path: "/pt",
@@ -283,7 +283,7 @@ for (const locale of locales) {
   });
 }
 
-// The endpoint of the suggestions (spec 005, T17).
+// The endpoint of the suggestions (spec 005, T10).
 test.describe("/api/search", () => {
   test("answers with the suggestions for the text in the language asked", async ({ request }) => {
     const response = await request.get("/api/search?q=pneu&lang=pt");

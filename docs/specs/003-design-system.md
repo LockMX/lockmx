@@ -6,11 +6,11 @@
 
 ## Objective
 
-Turn the design system created in Claude Design (project "LockMX Design System") into production code and documentation, so every later page (marketing, shop, customer area, admin) is built from the same tokens and components. After this spec: the design tokens are the single source of truth in the app, fonts and brand assets are self-hosted, `docs/design/` documents the system, and the 22 primitives exist as accessible, tested, i18n-ready TypeScript components.
+Turn the design system created in Claude Design (project "LockMX Design System") into production code and documentation, so every later page (marketing and shop) is built from the same tokens and components. After this spec: the design tokens are the single source of truth in the app, fonts and brand assets are self-hosted, `docs/design/` documents the system, and the 22 primitives exist as accessible, tested, i18n-ready TypeScript components.
 
 ## Out of scope
 
-- The three UI kits (`ui_kits/storefront`, `account`, `admin`): proposals, used as input to the spec of each surface (marketing and shop, customer area, admin). No screens are built here.
+- The UI kits (`ui_kits/`): proposals; `storefront` is the input to the marketing and shop specs. No screens are built here.
 - The Claude Design tooling files: `_ds_bundle.js`, `_ds_manifest.json`, `_adherence.oxlintrc.json`, `*.card.html`, `thumbnail.html`, `guidelines/*.html` (specimen cards). They are read as reference; the content that matters is rewritten as Markdown in `docs/design/`.
 - A dark theme. The design system defines light surfaces plus a black inverse surface; the dark mode block in the current `globals.css` is removed, not extended.
 - A component documentation site (Storybook or similar).

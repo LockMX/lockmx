@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
-// The landing page as the home of the shop (spec 005, amendment 2), with the
-// example data: every section of the shop has a large card (amendment 3).
+// The landing page as the home of the shop (spec 005, decision 1), with the
+// example data: every section of the shop has a large card.
 const locales = [
   {
     path: "/pt",

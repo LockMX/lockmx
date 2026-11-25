@@ -8,8 +8,8 @@ Three brand colours come from the logo: Lock Yellow (`--lmx-yellow`), black (`--
 
 | Group | Tokens | Use |
 |---|---|---|
-| Surfaces | `--surface-page`, `--surface-card`, `--surface-subtle`, `--surface-sunken` | Light surfaces: shop, customer area and admin content. |
-| | `--surface-inverse`, `--surface-inverse-raised` | Black surfaces: header, hero, footer, admin sidebar. |
+| Surfaces | `--surface-page`, `--surface-card`, `--surface-subtle`, `--surface-sunken` | Light surfaces: page and shop content. |
+| | `--surface-inverse`, `--surface-inverse-raised` | Black surfaces: header, hero, footer. |
 | | `--surface-accent` | Yellow surface. At most one accent section or card per page. |
 | | `--surface-backdrop` | The scrim behind a dialog or drawer. The only translucent surface. |
 | Text | `--text-strong`, `--text-body`, `--text-muted`, `--text-subtle` | On light surfaces, from headings down to secondary notes. |
@@ -98,5 +98,4 @@ All visible text goes through i18n, PT-PT first and EN second.
 - The customer is addressed as "tu"; the brand speaks as "nós".
 - Direct and practical. Headlines are short and imperative; everything else is factual.
 - Commerce copy is exact: the price format is produced by the `Price` component from the locale, tax and shipping are stated before payment, and nothing is promised that the backend does not guarantee. Legal wording comes from `../compliance/`, not from here.
-- Authentication copy explains the passwordless flow and never reveals whether an email has an account.
 - No emoji, no rows of exclamation marks.

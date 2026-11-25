@@ -5,12 +5,12 @@ import { storefrontQuery, type FetchFunction, type StorefrontRequest } from "@/s
 import type { ShopifyConfig } from "@/server/shopify/config";
 import { parseMoney, type ShopifyMoney } from "@/server/shopify/money";
 
-// What the shop reads from the store (spec 005, T16), mapped to the shapes the
+// What the shop reads from the store (spec 005, T9), mapped to the shapes the
 // components take. Every read is in the language of the page; a failed read
 // gives null, so the caller shows an empty state and never example data
-// (amendment 3, decision 25). Sources, read 2026-11-24:
+// (decision 5). Sources, read 2026-11-24:
 // - menu: https://shopify.dev/docs/api/storefront/latest/queries/menu
-//   (the `shop` menu lists the sections, decision 24)
+//   (the `shop` menu lists the sections, decision 3)
 // - languages: https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/markets/multiple-languages
 //   (`@inContext` goes on the operation; collection titles are translated,
 //   menu item titles are not)
@@ -19,7 +19,7 @@ import { parseMoney, type ShopifyMoney } from "@/server/shopify/money";
 export const SECTIONS_MENU = "shop";
 
 // One page of products. Pagination waits for a catalogue that needs it
-// (amendment 3, open point 3); 250 is the most a connection gives at once.
+// (open point 2); 250 is the most a connection gives at once.
 export const PAGE_SIZE = 250;
 
 // The store sells in Portugal (its market); the language follows the page.
@@ -47,7 +47,7 @@ export type ShopifySection = {
 
 const IMAGE = "url altText width height";
 
-// The fields of a product card, shared with the search (T17).
+// The fields of a product card, shared with the search (T10).
 export const PRODUCT_FIELDS = `
   id handle title productType availableForSale
   featuredImage { ${IMAGE} }

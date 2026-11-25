@@ -33,4 +33,5 @@ Read on 2026-11-17 through an agent, in the consolidated texts of the Procurador
 - The model information and form of the annex of DL 24/2014: to read, so the new text can use them.
 - Where the information of item 2 is shown before the purchase: the checkout is Shopify's (ADR 0014). Whether Shopify's checkout and order emails carry it, or the store has to add it there, is not researched.
 - Arts. 43.º and 51.º of DL 84/2021: to read verbatim.
+- A sale by quote outside Shopify (a custom rack paid, for example, by MB WAY; owner, 2026-11-25, flow not defined, `../integrations/shopify-setup.md`, "Open questions for the client") still needs an invoice issued by software certified by the tax authority. Not yet verified at the source.
 - The terms point disputes to binding arbitration at the European Court of Arbitration (section 18): see `site-information-and-complaints.md`, item 7, on consumer dispute resolution.

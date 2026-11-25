@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // The cart, empty until the store is connected: its lines, prices and totals
-// come from Shopify, never from the browser (spec 005, decision 16).
+// come from Shopify, never from the browser (spec 005, decision 10).
 export default async function Cart() {
   const locale = await getCurrentLocale();
   const { shop } = await getMessages(locale);

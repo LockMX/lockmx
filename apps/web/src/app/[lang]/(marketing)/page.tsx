@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata({ locale, path: "/", description: metadata.description });
 }
 
-// The landing page is the home of the shop (spec 005, amendment 2): the hero,
+// The landing page is the home of the shop (spec 005, decision 1): the hero,
 // the featured products and one large card per section of the shop, every
 // section of the store's menu (owner, 2026-11-24). It shows example data until
 // the store is connected.

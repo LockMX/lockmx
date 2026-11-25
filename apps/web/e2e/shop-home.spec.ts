@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
-// The shop sections of the landing page (spec 005, amendment 2), with example data.
+// The shop sections of the landing page (spec 005, decision 1), with example data.
 const locales = [
   {
     path: "/pt",

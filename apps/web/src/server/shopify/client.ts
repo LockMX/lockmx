@@ -2,7 +2,7 @@ import "server-only";
 import type { ShopifyConfig } from "@/server/shopify/config";
 
 // The only module that knows the Storefront API endpoint and its headers
-// (spec 005, T15). Sources, read 2026-11-24:
+// (spec 005, T8). Sources, read 2026-11-24:
 // - endpoint and private token header:
 //   https://shopify.dev/docs/api/usage/authentication
 // - versioned endpoint and the X-Shopify-API-Version answer header:
@@ -30,7 +30,7 @@ export type StorefrontResult<T> = { ok: true; data: T } | { ok: false; error: St
 const TIMEOUT_MS = 10_000;
 
 // Every read is for a page, and the pages refresh on a time basis (spec 005,
-// T16; no webhooks yet). A POST is only cached when asked to, and only a 200
+// T9; no webhooks yet). A POST is only cached when asked to, and only a 200
 // answer is stored (bundled Next.js docs, 03-api-reference/04-functions/fetch.md,
 // `options.cache` and `options.next.revalidate`).
 export const REVALIDATE_SECONDS = 300;

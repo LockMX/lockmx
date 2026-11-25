@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // How to reach LockMX: the email address and the social networks (spec 005,
-// decision 20). A contact form, if it comes, lives here (spec 006).
+// decision 14).
 export default async function ContactPage() {
   const locale = await getCurrentLocale();
   const { contact } = await getMessages(locale);

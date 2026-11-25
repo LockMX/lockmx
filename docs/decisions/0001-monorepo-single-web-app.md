@@ -5,14 +5,14 @@
 
 ## Context
 
-LockMX needs a marketing site, a shop, a customer area and an admin panel. They share the brand, the catalog, authentication and the design system. The owner is the only developer. Sensitive data (accounts, payments) is involved, so the server-side boundaries must be explicit.
+LockMX needs a marketing site and a shop. They share the brand, the catalog and the design system. Since ADR 0014 the shop's catalogue, customers, accounts, checkout and payments are on Shopify, behind this frontend. The owner is the only developer. A secret token and personal data are involved, so the server-side boundaries must be explicit.
 
 An earlier suggestion of separate apps (landing, shop, client panel) was dropped: they are the same product seen from different angles, and splitting them adds deployments and coordination without a benefit today.
 
 ## Decision
 
 - A pnpm monorepo, with `apps/web` as the only application and `packages/` reserved for code that gains a second real consumer.
-- `apps/web` is a single Next.js app. Sections are organized with route groups: `(marketing)`, `(shop)`, `(account)` and `(admin)`.
+- `apps/web` is a single Next.js app. Sections are organized with route groups: `(marketing)` holds the public pages and the shop; another group is added only when a section needs a layout of its own.
 - The backend lives inside the same Next.js app (Route Handlers and Server Actions), behind a server-only layer that owns data access and integrations.
 - A standalone API (`apps/api`) is created only when a concrete need appears, such as a mobile app, public integrations or long-running jobs.
 
@@ -26,7 +26,7 @@ An earlier suggestion of separate apps (landing, shop, client panel) was dropped
 
 - One repository, one lockfile, one deployment for the site.
 - The server boundary must be enforced by convention and tooling (`server-only`, a data access layer, validation in every action), because it lives in the same codebase as the UI.
-- Scheduled and background work (for example releasing expired stock reservations, retrying invoicing) does not fit request handlers. It needs a scheduler decision in a later ADR.
+- Scheduled and background work does not fit request handlers. If it is ever needed, it gets a scheduler decision in a later ADR.
 - Extracting `apps/api` later means moving the server layer, not rewriting the shop.
 
 ## Sources

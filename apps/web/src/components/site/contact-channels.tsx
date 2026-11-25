@@ -15,7 +15,7 @@ type ContactChannelsProps = {
   channels: ContactChannel[];
 };
 
-/** The ways to reach LockMX, one subsection each (spec 005, decision 20). */
+/** The ways to reach LockMX, one subsection each (spec 005, decision 14). */
 export function ContactChannels({ channels }: ContactChannelsProps) {
   return (
     <div className="grid gap-8 sm:grid-cols-2">

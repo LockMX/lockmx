@@ -2,7 +2,7 @@
 
 Repeats what spec 005 (`../specs/005-shop-home.md`) built: the shop product shapes and example data, the carousel of featured products, the shop listings with their filters, the connection to a Shopify store through the Storefront API (sections, listings, featured products) and the search suggestions with their rate limit. Decisions: `../decisions/0014-shopify-headless-commerce.md`, `../decisions/0016-search-rate-limit.md`. How the store itself is set up: `../integrations/shopify-setup.md`.
 
-**Not finished:** T18 of the spec waits for the supplier. Whether products imported through Shopify Collective come back like the store's own products, and one real order of such a product, are not checked. Step 6 does not pin the image host to the store for that reason.
+**Not finished:** T11 of the spec waits for the supplier. Whether products imported through Shopify Collective come back like the store's own products, and one real order of such a product, are not checked. Step 6 does not pin the image host to the store for that reason.
 
 All paths are inside `apps/web/` unless they start with `docs/` or `.github/`.
 

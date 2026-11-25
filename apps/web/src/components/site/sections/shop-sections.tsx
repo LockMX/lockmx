@@ -12,7 +12,7 @@ type ShopSectionsProps = {
 
 /**
  * One large card per section of the shop, on the home page (spec 005, decision
- * 17). Each leads to the listing of its section. The photograph is the image
+ * 1). Each leads to the listing of its section. The photograph is the image
  * of the section's collection in the store, under a backdrop that keeps the
  * title readable; without one, the card shows the mark of an image to come.
  * The photograph is decorative: the title names the link.

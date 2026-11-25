@@ -7,7 +7,7 @@ import { FEATURED_COLLECTION, getFeaturedProducts } from "@/server/shop/home-cat
 import { findShopSection, getShopProducts, getShopSections } from "@/server/shop/shop-listing";
 
 // With the store connected, the shop reads it and never shows examples
-// (spec 005, amendment 3, decision 25).
+// (spec 005, decision 5).
 
 vi.mock("@/server/shopify/config", () => ({ getShopifyConfig: vi.fn() }));
 vi.mock("@/server/shopify/catalogue", () => ({

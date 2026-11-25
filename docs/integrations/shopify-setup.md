@@ -1,6 +1,6 @@
 # Shopify: setting up the store and connecting the frontend
 
-Guide for the owner and the client, from creating the account to the phase B of `../specs/005-shop-home.md`. Researched on 2026-10-14 unless another date is given. The decision is ADR 0014; the costs and Collective research are in `../ideas/build-vs-shopify.md`.
+Guide for the owner and the client, from creating the account to the shop of `../specs/005-shop-home.md`. Researched on 2026-10-14 unless another date is given. The decision is ADR 0014; its costs are in the ADR; the Collective requirements are under "Supplier products" below.
 
 Each statement says how sure it is: **verified** (official Shopify page read), **community** (forum or third party, not official), **not researched**.
 
@@ -10,7 +10,7 @@ Each statement says how sure it is: **verified** (official Shopify page read), *
 
 - The client's own products, the LockMX racks and the tyres, are created in the LockMX store and managed there by the client.
 - The client also resells the whole catalogue of a contact's existing Shopify store, the supplier shipping to the customer. This is meant to go through Shopify Collective ("Supplier products", path 1): Shopify imports the supplier's products into the LockMX store and keeps them in sync; we do not copy them. If the supplier is not eligible, path 2 of the same section applies.
-- Our frontend reads both through the Headless channel. Spec 005 phase B is rewritten for this by amendment 3 (`../specs/005-shop-home.md`), approved with changes on 2026-11-18: the sections of the site come from a menu of the store, and supplier products are sorted by automated collections.
+- Our frontend reads both through the Headless channel: the sections of the site come from a menu of the store, and supplier products are sorted by automated collections (spec 005, decisions 3 and 4).
 
 **Next steps, in order.** Steps 1 to 3 can run at the same time.
 
@@ -18,32 +18,32 @@ Each statement says how sure it is: **verified** (official Shopify page read), *
 |---|---|---|---|
 | 1 | The client generates a collaborator request code and sends it; the owner creates a Partner account and joins the store as a collaborator | Client, owner | Done (owner's own Partner organization) |
 | 2 | Ask the supplier the questions below, before anything is built on Collective | Owner, client | In progress: the owner is talking to the supplier (2026-11-25) |
-| 3 | Amendment 3 of spec 005 approved; T15 (Storefront API client) is done without the store | Owner, developer | Done (T15, 2026-11-24) |
+| 3 | Spec 005, T8 (Storefront API client), done without the store | Owner, developer | Done (2026-11-24) |
 | 4 | Store details, EUR, PT-PT default and EN published ("Setting up the store", 1 and 2) | Client, owner | Done: the API answers in EN (collection titles translated; product titles not yet, 2026-11-25) |
 | 5 | Section collections, the `featured` collection and the `shop` menu ("Test store set-up" below, part 4) | Owner | Done (2026-11-25): see the check below |
 | 6 | The first LockMX products with photographs, in PT and EN, published to Headless | Client, owner | Two test products with photographs (2026-11-25); English titles to do |
 | 7 | Headless channel, storefront, read permissions for products and collections; private token and store domain handed to the developer outside the repository | Owner | Done; token in `apps/web/.env.local` |
-| 8 | T16 and T17: the site reads the store and suggests searches | Developer | Done (2026-11-24) |
+| 8 | Spec 005, T9 and T10: the site reads the store and suggests searches | Developer | Done (2026-11-24) |
 | 9 | Shopify Payments, taxes, shipping, Collective installed as retailer; the supplier connected and its products imported | Client, owner, supplier | Shopify Payments active (owner, 2026-11-25); taxes, shipping and Collective not confirmed; the supplier not connected |
-| 10 | T18: supplier products read through our API, and one real order | Owner, developer | Waits for 9 |
+| 10 | Spec 005, T11: supplier products read through our API, and one real order | Owner, developer | Waits for 9 |
 | 11 | The rest of "Setting up the store" (policies in Shopify, notifications, invoicing app) and launch | Client, accountant, owner | Later |
 
 **Check of 2026-11-24** (a read-only Storefront API query from the developer's machine, version 2026-10, with the private token of `.env.local`): the store answers as "LockMX", country PT, currency EUR. Two products are published to Headless, product type `Suporte`, vendor `LockMX`. The only collection is "Suportes Modulares" with the handle **`frontpage`**: it is Shopify's default home page collection, renamed, so its address would be `/shop/frontpage`; a new collection is created for the section instead. The available languages are only `PT_PT`: English is not yet published or not yet in the Portugal market. There is no `shop` menu; the default `main-menu` (Início, Catálogo, Contacto) exists. The store domain is still the generated `ita9rf-de.myshopify.com`; Shopify allows choosing a new `myshopify.com` name once (Settings > Domains, pencil icon), the old one redirecting and staying the store's permanent identifier.
 
 **Check of 2026-11-25** (same kind of read-only query): the `shop` menu has two items, "Suportes Modulares" (`modular-supports`, with image; "Modular Supports" under `EN`) and "Merchandise" (`merchandise`, no image and no products yet, so its section card has no photograph and its listing is empty). The `featured` collection has the hanger. Both products have photographs (the hanger 5, the boots support 2); their titles come back in Portuguese under `EN`. Handles of sections are in English, product handles in Portuguese (owner, 2026-11-24). The old handle `destaques` redirects to `featured` in the Online Store only, which the site does not use.
 
-**Questions for the supplier** (Collective requirements, read 2026-10-09 in `../ideas/build-vs-shopify.md`):
+**Questions for the supplier** (Collective requirements in "Supplier products" below):
 
 1. Is the store established in Portugal and does it sell in EUR?
 2. Does it use Shopify Payments, with payouts active, and Shopify Tax, Basic Tax or a tax app (not manual tax)? Is its VAT number verified?
 3. Does it accept to join Collective as a supplier, and to ship LockMX orders to the customer?
 4. How many products, and do they use metafields (Collective does not carry them)?
 5. Who handles returns of its products, and under which conditions? The return policy of the site has to cover them (`../compliance/returns-and-withdrawal.md`).
-6. Does every product have a product type (and the same type for products of the same kind)? Its collections are not imported by Collective, so the LockMX sections sort its products by product type or vendor (spec 005, decision 27).
+6. Does every product have a product type (and the same type for products of the same kind)? Its collections are not imported by Collective, so the LockMX sections sort its products by product type or vendor (spec 005, decision 4).
 
 ## Test store set-up (2026-11-18)
 
-What the owner does now, in the client's store, so T16 can read real data. Admin paths read on 2026-11-18; Shopify renames menus often, so search the admin when a path differs. Payments, taxes, shipping, invoicing and Collective are not needed to read products and stay in "Setting up the store" below.
+What the owner does now, in the client's store, so spec 005, T9 could read real data. Admin paths read on 2026-11-18; Shopify renames menus often, so search the admin when a path differs. Payments, taxes, shipping, invoicing and Collective are not needed to read products and stay in "Setting up the store" below.
 
 **1. Access**
 - [ ] The client: Settings > Users (or "Users & permissions") > Security, click the 4-digit collaborator request code to copy it and send it to the owner. A new one: "Generate new code" in the Collaborators section (old codes stop working).
@@ -59,10 +59,10 @@ What the owner does now, in the client's store, so T16 can read real data. Admin
 **3. Products** (a few real ones are enough to start)
 - [ ] Products > Add product: title, description, photographs (the client's, with the right to use them), price in EUR, compare-at price only for a real discount, **product type** filled in (`Suporte`, `Pneu`, ...: the automated collections use it), vendor `LockMX`, variants for sizes or models (up to 3 options), inventory tracked.
 - [ ] Status **Active** and, under "Sales channels", **Headless** ticked (after part 5 exists; go back and tick it). A product not published to Headless never reaches the site.
-- [ ] One product with a compare-at price, one without photograph and one out of stock, for T16's checks.
+- [ ] One product with a compare-at price, one without photograph and one out of stock, for the checks of spec 005, T9.
 - [ ] English: Settings > Languages > Translate (Translate & Adapt app), title, description and options of each product.
 
-**4. Sections** (spec 005, decisions 24 and 27)
+**4. Sections** (spec 005, decisions 3 and 4)
 - [ ] Products > Collections > Create collection, **automated**, one per section: for example "Suportes" with "Product type is equal to Suporte", "Pneus" with "Product type is equal to Pneu". New products of that type join by themselves. Give each an image (the section card) and translate its title to English.
 - [ ] Check each collection's handle (the end of its address; where the admin shows it was not checked): it becomes `/shop/<handle>`. Set it before launch; changing it later changes the site's address.
 - [ ] A **manual** collection with the handle `featured` ("Destaques"), with the products to show on the landing page.
@@ -105,12 +105,11 @@ Sources: client transfer stores (read as raw text) and dev stores on shopify.dev
 
 - A **dev store** (as opposed to a transfer store) can never become the real store and cannot be transferred: never build the catalogue on one.
 - **Not verified:** whether the Headless channel installs on a transfer store. Transfer stores accept free apps and Headless is free and made by Shopify, but no page says so. It takes minutes to try, and it decides path A.
-- **Community:** a password-protected store has been reported to send the `checkoutUrl` back to the password page. This does not block phase B, which only reads products, but a full test order through our frontend may need path B.
+- **Community:** a password-protected store has been reported to send the `checkoutUrl` back to the password page. This does not block reading products, but a full test order through our frontend may need path B.
 - A Shopify Collective test needs a real order with Shopify Payments (verified, Collective testing page, 2026-10-09), so it can only happen on the client's live store.
 
 **Chosen: path B.** The client signed up at shopify.com on or before 2026-11-17 (owner); the store has no setup yet. The trial and the promotional months started then. The developer joins as a collaborator with the client's request code.
 
-**Recommendation:** path A if the Headless channel installs on a transfer store, since nothing is billed to the client before the shop is ready, at the cost of the sign-up promotion; otherwise path B. In both, the client owns the account from the start of real sales.
 
 ## Setting up the store (Shopify admin)
 
@@ -129,34 +128,32 @@ In order. "Client" means the decision or data is the client's; "Owner" is the de
 8. **Notifications** (owner, with the client's texts): the order confirmation email carries the information on consumer arbitration centres (Lei 144/2015, art. 18.º n.º 2, "durable medium"; see `../compliance/site-information-and-complaints.md`) and the right of withdrawal.
 9. **Checkout branding** (owner): logo, colours and a font from Shopify's list (ADR 0014).
 10. **Certified invoicing** (client and accountant): invoices in Portugal must be issued by software certified by the tax authority. Shopify apps found: **Moloni ON** (by Webinfor; free to install, needs a Moloni subscription; no reviews at the time; no support in English) and an **InvoiceXpress** integration announced by the vendor (listing not read). Both from search results, not read on the App Store. Whether they work for orders from a headless storefront is still open (ADR 0014). The accountant should choose.
-11. **Customer accounts:** not part of phase B. Not researched in this pass.
+11. **Customer accounts:** not part of spec 005. Not researched in this pass.
 
 ## Products
 
 - **By hand** in Products, or **by CSV** (template from Shopify; only Title is required for a new product; variants as extra rows with the same handle and Option1, Option2, Option3 columns; images by public `https://` address, up to 250 per product; UTF-8). **A product can have up to 3 options.** (Verified, CSV help page.) The maximum number of variants was not verified today.
-- **Collections (spec 005, amendment 3):** one automated collection per shop section, listed in the `shop` menu, and the manual `featured` collection for the landing page carousel. The site reads the sections from the menu, so new sections need no code. Automated collection conditions (read 2026-11-18): product title, variant title, type, vendor, category, tag, status, price, compare-at price, weight, stock, and metafields marked for it; up to 5,000 such collections per store. Collective does not import a supplier's collections or tags, so its products are sorted by product type or vendor.
+- **Collections (spec 005, decisions 3 and 4):** one automated collection per shop section, listed in the `shop` menu, and the manual `featured` collection for the landing page carousel. The site reads the sections from the menu, so new sections need no code. Automated collection conditions (read 2026-11-18): product title, variant title, type, vendor, category, tag, status, price, compare-at price, weight, stock, and metafields marked for it; up to 5,000 such collections per store. Collective does not import a supplier's collections or tags, so its products are sorted by product type or vendor.
 - **Translations** of title, description and options for EN, with Translate & Adapt.
 - **Publishing:** a product only reaches our frontend when it is published to the Headless channel (sales channel availability on the product). (Verified, Headless management page: the channel supports product publishing.)
 - **Metafields** (extra fields such as compatible vans) work, but Collective is incompatible with metafields (verified): imported supplier products would not carry them.
-- **Images:** for spec 005 phase B the client's photographs, with the right to use them.
+- **Images:** the client's photographs, with the right to use them.
 
 ## The Headless channel
 
 1. Install **Headless** from the Shopify App Store (free, made by Shopify). The user doing it needs the staff role and the Apps and channels permission. (Verified.)
 2. **Create storefront.** It generates a public and a private access token. (Verified.)
-3. **Storefront API permissions:** set them to what phase B reads (products, collections). Permissions are shared by all storefronts of the store. (Verified.)
-4. **Hand over the private token** and the store domain (`<name>.myshopify.com`) to the developer outside the repository (spec 005, prerequisite 4). It is a secret: never in a `NEXT_PUBLIC_*` variable, a log, a test or a commit. Rotation: create a new token, update the hosting, delete the old one; the old one works until deleted. (Verified.)
+3. **Storefront API permissions:** set them to what the site reads (products, collections, the menu). Permissions are shared by all storefronts of the store. (Verified.)
+4. **Hand over the private token** and the store domain (`<name>.myshopify.com`) to the developer outside the repository It is a secret: never in a `NEXT_PUBLIC_*` variable, a log, a test or a commit. Rotation: create a new token, update the hosting, delete the old one; the old one works until deleted. (Verified.)
 
 **Limits that disagree:** the pricing page lists "1" headless storefront on Basic, Grow and Advanced and 25 on Plus; the developer docs say a store can have up to 100 active storefronts and tokens. One storefront is all this project needs.
 
-## How the frontend connects (spec 005, phase B)
+## How the frontend connects (spec 005)
 
-**Phase B was rewritten by amendment 3 of spec 005** (proposed 2026-11-17, approved with changes by the owner on 2026-11-18; T15 to T17 done on 2026-11-24): it was written before amendment 2 and read "product types", which T14 deleted, and nothing covered the `/shop` listings. The task numbers below are those of phase B; amendment 3 renames them T15 (client), T16 (listings and featured), T17 (search), T18 (Collective check) and T19 (docs).
-
-- **T5:** a server-only client in `apps/web/src/server/shopify/` posts GraphQL to `https://<store>.myshopify.com/api/<version>/graphql.json` with the private token header. The token and the domain are environment variables of the hosting; the API version is pinned in code (`config.ts`, T15).
-- **T6:** the featured collection and the section collections are read with `@inContext(language: PT | EN)`; prices and stock come only from Shopify. Pages are refreshed on a time basis at first; Shopify webhooks need an app (below) and are left for later.
-- **Cart and checkout** (after phase B, a spec of its own): the Cart API (`cartCreate`, `cartLinesUpdate`, `cart`), whose `checkoutUrl` sends the buyer to Shopify's checkout. The cart id has a secret part that is never exposed; server requests on behalf of a buyer send `Shopify-Storefront-Buyer-IP`. The language of the cart, and so of the checkout, is set with `@inContext` on `cartCreate`. (Verified, cart and languages guides.)
-- **Not adopted:** Shopify's Hydrogen now offers a way to add it to an existing project and a Next.js template hosted on Vercel (verified, Hydrogen getting started). It would be a new dependency; the plain client of T5 is the plan. Not researched further.
+- **Client (T8):** a server-only client in `apps/web/src/server/shopify/` posts GraphQL to `https://<store>.myshopify.com/api/<version>/graphql.json` with the private token header. The token and the domain are environment variables of the hosting; the API version is pinned in code (`config.ts`).
+- **Reads (T9):** the sections of the `shop` menu, the section collections and the `featured` collection are read with `@inContext(language: PT_PT | EN)`; prices and stock come only from Shopify. Pages are refreshed on a time basis; Shopify webhooks need an app (below) and are left for later.
+- **Cart and checkout** (a spec of its own, after the product pages): the Cart API (`cartCreate`, `cartLinesUpdate`, `cart`), whose `checkoutUrl` sends the buyer to Shopify's checkout. The cart id has a secret part that is never exposed; server requests on behalf of a buyer send `Shopify-Storefront-Buyer-IP`. The language of the cart, and so of the checkout, is set with `@inContext` on `cartCreate`. (Verified, cart and languages guides.)
+- **Not adopted:** Shopify's Hydrogen now offers a way to add it to an existing project and a Next.js template hosted on Vercel (verified, Hydrogen getting started). It would be a new dependency; the plain client of T8 is used. Not researched further.
 - **Webhooks and the Admin API (later):** since 2026-01-01 new "legacy custom apps" cannot be created in the admin; new apps are made in the Dev Dashboard (community, several Shopify forum threads). To be researched when a task needs webhooks.
 
 ## Checkout domain and launch
@@ -167,7 +164,15 @@ In order. "Client" means the decision or data is the client's; "Owner" is the de
 
 ## Supplier products
 
-1. **The supplier has a Shopify store in Portugal, in EUR, and joins Collective:** its products are imported into the LockMX store, the supplier ships and is paid automatically from the LockMX Shopify Payments balance. Requirements and limits in `../ideas/build-vs-shopify.md`; still not verified that imported products are returned to a headless storefront (ADR 0014). Proven only with a real order on the live store.
+1. **The supplier has a Shopify store in Portugal, in EUR, and joins Collective:** its products are imported into the LockMX store, the supplier ships and is paid automatically from the LockMX Shopify Payments balance. Still not verified that imported products are returned to a headless storefront (ADR 0014). Proven only with a real order on the live store.
+   - **Requirements** (verified 2026-10-09, the same for retailer and supplier): an active Shopify plan; Shopify Payments set up with active payouts; a supported country (Portugal is listed) and currency (EUR is listed); the retailer and the supplier in the same country and using the same currency; Shopify Tax, Basic Tax or a tax app, not manual tax; a verified VAT number; Shopify Network Intelligence activated; possibly identity verification. Collective is free ("No setup fees"); with automatic payments the product cost and shipping are debited from the retailer's Shopify Payments balance and paid to the supplier when it marks the order fulfilled.
+   - **Imported products:** they are products of the LockMX store. The retailer can change price, title, description and media; variants cannot be edited and inventory is read-only, synced from the supplier. The product policy decides where they are published ("All channels" by default, "Specific channels" or "Don't publish"); a product is sellable when it is Active and published to a sales channel, and Headless is a sales channel.
+   - **Orders:** the buyer pays in Shopify's checkout. "Orders are created on supplier stores when they're marked as Paid", after a two-minute hold. A channel that does not capture payment until fulfilment needs a manual fulfilment request.
+   - **Limits:** the supplier controls stock and variants; a product is limited to 100 variants (search summary, not read on the page); Collective is incompatible with Managed Markets, pickup in store and metafields; a refund means cancelling the order in our admin, and the supplier may refuse a cancellation it has already processed; uninstalling the app sets the imported products' inventory to 0.
+   - **Shipping:** by default the checkout shows the supplier's rates. A cart mixing LockMX and supplier products shows one combined rate, or one rate per shipment with split shipping on.
+   - **Tax:** the retailer charges tax to the customer at its checkout; the supplier can collect B2B tax from the retailer, by default on the cost price. Who issues which invoice is not stated: for Portugal this needs the accountant (LockMX sells to the customer and issues the certified invoice; the supplier's sale to LockMX is a separate document).
+   - **Testing:** Shopify's testing page says to connect with another store and place an end-to-end order, "a real transaction using Shopify Payments".
+   - Sources (read 2026-10-09): https://apps.shopify.com/collective and the Collective help pages under https://help.shopify.com/en/manual/online-sales-channels/shopify-collective/ : `retailers/requirements-and-considerations`, `suppliers/requirements-and-considerations`, `retailers/payments`, `retailers/importing-products`, `retailers/policies/products`, `retailers/shipping`, `retailers/managing-collective-orders`, `retailers/taxes`, `testing`.
 2. **The supplier has no Shopify, or is not eligible:** its products are created as LockMX products, with the supplier in the Vendor field.
    - **Stock and prices:** kept by hand, or synced from a file the supplier publishes (CSV, XML, FTP, Google Sheets) by an App Store app. Example found: Stockistly Inventory Sync, about 20 USD per month for three feeds with one daily sync (listing only, not tested). Needs the supplier to provide such a feed.
    - **Orders:** the supplier must be told what to ship. By hand, or with Shopify Flow, which is free on Basic (verified). Whether Flow can email a supplier was not verified; its HTTP request action needs Grow or above (verified).
@@ -176,23 +181,13 @@ In order. "Client" means the decision or data is the client's; "Owner" is the de
 
 For each supplier the client brings: country, whether it has Shopify, whether it is in Collective, whether it can provide a stock feed, and how it wants orders.
 
-## Checklist
+## Open questions for the client
 
-| # | Step | Who | Unblocks |
-|---|---|---|---|
-| 1 | Choose path A or B; create the Partner account | Owner | |
-| 2 | Path A: create a client transfer store and try installing Headless | Owner | Prerequisite 2 |
-| 2b | Path B: the client signs up and sends a collaborator code | Client | Prerequisite 2 |
-| 3 | Store details, EUR, PT-PT and EN | Client, Owner | |
-| 4 | Collections: one per section, `featured`, and the `shop` menu (spec 005, decision 24) | Owner | Prerequisite 5 |
-| 5 | A few real products with images, in PT and EN, published to Headless | Client, Owner | Prerequisite 5 |
-| 6 | Headless channel, storefront, permissions | Owner | Prerequisite 3 |
-| 7 | Private token and store domain handed over outside the repository | Owner | Prerequisite 4, T5 |
-| 8 | Amend phase B to amendment 2 (done: amendment 3, approved 2026-11-18), then T15 to T19 (done but T18, which waits for the supplier) | Owner | |
-| 9 | Taxes, shipping, policies, notifications, invoicing app | Client, accountant | Launch |
-| 10 | Shopify Payments, Multibanco, MB WAY request | Client | Launch |
-| 11 | Transfer (path A), plan, remove password, checkout subdomain | Client, Owner | Launch |
-| 12 | Collective test with the supplier: one product read, one real order | Client, Owner | Supplier products |
+- How the racks are sold: in the cart, by quote, or both, and whether they depend on the van model (a variant with up to 3 options, or a fitment finder; ADR 0014).
+- A sale by quote may exist: a customer contacts the client by email, the client makes a custom rack, and the payment is made outside Shopify (for example MB WAY). The flow is not defined yet; its invoicing is an open point in `../compliance/returns-and-withdrawal.md`.
+- How many products at launch, of how many brands and sizes (it decides pagination and filters, spec 005).
+- Which products are featured (the `featured` collection).
+- Product photographs, including racks installed in a van, with the right to use them.
 
 ## Not researched
 
