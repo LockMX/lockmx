@@ -89,7 +89,7 @@ Type, spacing and layout tokens are in `rem`, so they follow the font size the r
 
 ## Links that open a new tab
 
-The credits link of the footer opens a new tab and says so to assistive technology in a visually hidden text ("abre num novo separador"). WCAG technique G201 also advises a visual cue; it would be a new icon, which is asked of the owner first (spec 006, T4).
+The credits link of the footer opens a new tab and says so to assistive technology in a visually hidden text ("abre num novo separador"). WCAG technique G201 also advises a visual cue; an external link icon was tried and the owner chose the name alone (2026-11-26).
 
 ## Per component
 
