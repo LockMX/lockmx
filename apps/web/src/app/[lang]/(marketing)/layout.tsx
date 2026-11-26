@@ -64,7 +64,6 @@ export default async function MarketingLayout({ children }: { children: React.Re
         <ErrorMessagesProvider messages={{ ...error, homeHref }}>{children}</ErrorMessagesProvider>
       </main>
       <SiteFooter
-        locale={locale}
         logoAlt={footer.logoAlt}
         tagline={footer.tagline}
         contactLinks={[
@@ -77,8 +76,8 @@ export default async function MarketingLayout({ children }: { children: React.Re
         legalTitle={footer.legalTitle}
         legalItems={legalItems}
         complaintsBookLabel={footer.complaintsBook}
-        languageLabel={languageSwitcher.label}
         copyright={copyright}
+        credits={footer.credits}
       />
     </>
   );
