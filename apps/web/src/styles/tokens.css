@@ -178,6 +178,11 @@
   --duration-fast: 120ms;
   --duration-base: 180ms;
   --duration-slow: 320ms;
+  /* Spec 006, a trial: tuned by the owner on the finished pages. */
+  --duration-fade: 240ms;
+  --duration-bar: 260ms;
+  /* The bar of the new page fills once the old one has emptied. */
+  --delay-bar: var(--duration-bar);
 
   --z-dropdown: 20;
   --z-header: 50;
