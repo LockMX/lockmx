@@ -79,6 +79,8 @@ State that colour shows is also shown by shape or text: an error has an icon and
 
 A link is underlined in its own text colour. The imported yellow underline measured 1.76:1 on white and was the only sign of a link, so yellow is used for the underline only inside `data-surface="inverse"`, where it measures 11.26:1.
 
+Exception: navigation-style links (the header, the footer lists, the language switcher) and the credits link of the footer are not underlined; they are marked by the slant bar (`link-bar`) on hover or as the current page.
+
 ## Text size
 
 Type, spacing and layout tokens are in `rem`, so they follow the font size the reader set in the browser. A component does not set a font size or a text container height in `px`.

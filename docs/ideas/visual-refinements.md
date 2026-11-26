@@ -9,7 +9,7 @@ Give the public site a motion language of its own, built on the logo's slanted y
 - Every effect is one of a small set, used the same way everywhere: the yellow bar of links that fills from the left and leaves to the right, the corner brackets that lock onto a card, and a fade.
 - Nothing hides content or waits for the effect: the page is complete without motion.
 - A visitor who asks for reduced motion sees every state change without movement.
-- On a device without hover the cards play their effect each time they come into view.
+- On a device without hover a card plays its effect when tapped, before its link is followed (amended at the spec's review).
 - No new production dependency.
 - The site does not feel slow. Durations are tuned by eye on the finished result; the current rule (at most 320 ms, "fades and slides only") is a starting point, not a limit.
 
@@ -31,8 +31,7 @@ Left out: a 3D tilt (the reference's effect, and the most common one), animated 
 
 ## Open questions
 
-- The final durations, decided by the owner on the finished result.
-- Whether the short shake of the title and arrow of option A stays.
+None: the durations and the shake were settled at the spec's review of 2026-11-26.
 
 ## Outcome
 

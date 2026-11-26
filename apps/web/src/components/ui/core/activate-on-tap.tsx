@@ -43,9 +43,9 @@ function waitsForTheEffect(event: React.MouseEvent): boolean {
 
 /**
  * On a device without hover, a tap on the link inside marks it `data-active`,
- * so an effect styled on `in-data-active:` plays, and follows the link once
- * the effect has played (`--duration-lock`). On a device with hover, under
- * reduced motion, or with a modifier key, the link is followed at once. The
+ * so an effect styled on `locked:` (or `in-data-active:`) plays, and follows
+ * the link once the effect has played (`--duration-lock`). On a device with
+ * hover, under reduced motion, or with a modifier key, the link is followed at once. The
  * script only sets the attribute and delays the click; the effect is CSS.
  */
 export function ActivateOnTap({ className, children }: ActivateOnTapProps) {
