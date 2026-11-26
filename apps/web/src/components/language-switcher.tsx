@@ -23,7 +23,7 @@ export function LanguageSwitcher({ label, current }: LanguageSwitcherProps) {
               lang={htmlLang[locale]}
               aria-current={locale === current ? "true" : undefined}
               // The slant bar marks the language in use, as it marks the page in the navigation.
-              className="link-bar link-bar-hover inline-block pb-1 no-underline aria-[current=true]:font-bold"
+              className="link-bar link-bar-current link-bar-hover inline-block pb-1 no-underline aria-[current=true]:font-bold"
             >
               {/* The code is what is seen; the name follows it in the accessible name. */}
               {localeCodes[locale]}{" "}

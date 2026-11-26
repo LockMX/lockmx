@@ -19,9 +19,10 @@ type SiteNavigationProps = {
   orientation?: SiteNavigationOrientation;
 };
 
-// The current page is marked by the slant bar, as in the logo (`link-bar` in globals.css).
+// The slant bar of the logo (`link-bar` in globals.css) fills on hover; in the
+// header it also marks the current page, in the footer the weight does.
 const LINK_STYLES = {
-  row: "link-bar link-bar-hover py-2 text-sm leading-tight font-semibold tracking-label uppercase no-underline",
+  row: "link-bar link-bar-current link-bar-hover py-2 text-sm leading-tight font-semibold tracking-label uppercase no-underline",
   column:
     "link-bar link-bar-hover inline-block pb-1 text-sm leading-body no-underline aria-[current=page]:font-semibold",
 };

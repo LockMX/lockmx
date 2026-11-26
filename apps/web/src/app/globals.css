@@ -187,10 +187,10 @@
   );
 }
 
-/* The logo's slanted yellow bar under a link, marking the current page or
-   language (`aria-current`). It fills from the left and empties to the right:
-   the origin flips with the state, at once, and only the scale is animated.
-   The bar of the new page waits for the old one to empty. */
+/* The logo's slanted yellow bar under a link, empty until a state fills it
+   (`link-bar-current`, `link-bar-hover`). It fills from the left and empties
+   to the right: the origin flips with the state, at once, and only the scale
+   is animated. */
 @utility link-bar {
   position: relative;
 
@@ -206,7 +206,11 @@
     scale: 0 1;
     transition: scale var(--duration-bar) var(--ease-in-out);
   }
+}
 
+/* The bar marks the current page or language (`aria-current`). The bar of the
+   new page waits for the old one to empty. */
+@utility link-bar-current {
   &[aria-current]::after {
     transform-origin: left;
     scale: 1;
