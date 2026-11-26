@@ -77,9 +77,9 @@ Borders do the work: a card has a `--border-subtle` outline and no shadow. `--sh
 Quick and mechanical, with one signature: the slant locks into place (spec 006, durations set by the owner on 2026-11-26).
 
 - `--duration-fast` for small colour changes of controls, `--duration-base` for controls, `--duration-slow` for drawers and image zoom, with `--ease-out` (or `--ease-in-out` for movement that starts and ends at rest).
-- `--duration-fade` (240 ms) for the colour fade of links and of the hero and header buttons on hover.
+- `--duration-fade` (240 ms) for the colour fade of links, buttons and cards on hover.
 - `--duration-bar` (260 ms) for the slant bar under a link (`link-bar`); the bar of a new page waits `--delay-bar` for the old one to empty.
-- `--duration-lock` (360 ms) with `--ease-lock`, a short overshoot, for the corner brackets that lock onto a card (`lock-brackets`), its zoom and its arrow. It is the only overshoot of the site. On a device without hover a tapped card plays it before its link is followed (`ActivateOnTap`).
+- `--duration-lock` (360 ms) with `--ease-lock`, a short overshoot, for the corner brackets that lock onto a card (`lock-brackets`) and the arrow of a large card; the image zoom stays at `--duration-slow`. It is the only overshoot of the site. On a device without hover a tapped card plays it before its link is followed (`ActivateOnTap`).
 - `--duration-page` (240 ms) for the crossfade between pages (`PageTransition`); a change of query only does not animate.
 - Fades, slides, scale and the lock-in only: no shake, no bounce, nothing that moves while the page scrolls. `globals.css` removes transitions, animations and their delays when the reader asks for reduced motion.
 
