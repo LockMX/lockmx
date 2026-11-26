@@ -1,6 +1,6 @@
 # 0007. Application hosting
 
-- Status: proposed
+- Status: accepted (2026-11-26)
 - Date: 2026-10-02
 
 ## Context
@@ -40,16 +40,19 @@ Notes:
 - The difference of about 20 USD per month has to be weighed against the owner's time and the risk of an unpatched server on a store with customer data and payments.
 - AWS keeps everything in the client's existing account, which simplifies ownership and billing.
 
-## Decision (proposed)
+## Decision
 
-Leaning: Vercel Pro in a team owned by the client, for the lowest operations effort and a documented fit with the framework version in use. Keep AWS Amplify as the alternative worth testing, but only after confirming Next.js 16 support in the official documentation or with a test deployment. Lightsail is not recommended for this project.
+Vercel, on the Hobby plan, decided by the owner on 2026-11-26. Whether to move to a paid plan (Pro) is considered after the shop is launched.
 
-## To verify before accepting
+The owner accepts the risk described in "Why not the free plan": under Vercel's terms this site is commercial use, which Hobby does not allow, and a deployment in breach can be paused. The risk grows once the shop takes payments.
+
+Vercel was preferred to AWS for the lowest operations effort and a documented fit with the framework version in use. AWS Amplify stays the alternative worth testing if the client wants hosting in its AWS account, after confirming Next.js 16 support. Lightsail is not recommended for this project.
+
+## Still to verify
 
 - Amplify: official support for Next.js 16 and its `proxy` file, the Node runtime used, the free amounts (permanent or time-limited), the European regions and prices, and how deployments, rollbacks and preview environments work.
 - Vercel: the number of seats needed (the owner as developer seat), the credit included in Pro, and expected usage against it for this shop.
 - Whether the client prefers to keep hosting in the existing AWS account, and who would operate it.
-- Whether Hobby is acceptable for the owner's other projects is a separate question to settle with Vercel support if in doubt.
 
 ## Sources
 

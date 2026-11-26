@@ -1,6 +1,6 @@
 # 0016. Rate limit of the search suggestions in the hosting firewall
 
-- Status: accepted (owner, 2026-11-24), while the site is hosted on Vercel (ADR 0012, still proposed). The numbers of the rule were set by the owner with spec 005, T10. The owner created the rule in the Vercel project on 2026-11-25; whether it fires is checked by hand after the first deployment that serves `/api/search`.
+- Status: accepted (owner, 2026-11-24), while the site is hosted on Vercel (ADR 0007). The numbers of the rule were set by the owner with spec 005, T10. The owner created the rule in the Vercel project on 2026-11-25; whether it fires is checked by hand after the first deployment that serves `/api/search`.
 - Date: 2026-11-24
 
 ## Context
@@ -43,7 +43,7 @@ The rule is not in the repository: the page on custom rules says `vercel.json` s
 
 ## Consequences
 
-- This takes the single rule of the Hobby plan; Pro allows 40. The commercial use question of ADR 0012 is separate and still open.
+- This takes the single rule of the Hobby plan; Pro allows 40. The commercial use risk of Hobby is recorded in ADR 0007.
 - The limit exists only where the rule is published: the page on custom rules says publishing applies the changes "to your production deployment"; whether preview deployments are covered was not verified.
 - "Rate limit counters are tracked on a per-region basis", so traffic from several regions can exceed the limit of one.
 - People behind one shared address share the limit.

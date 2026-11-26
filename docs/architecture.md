@@ -113,8 +113,8 @@ Decided in `decisions/0009-styling-design-tokens-tailwind.md`, `0010-icons-lucid
 | Styling with design tokens consumed through Tailwind | `decisions/0009-styling-design-tokens-tailwind.md` | accepted |
 | Icons with lucide-react | `decisions/0010-icons-lucide.md` | accepted |
 | Fonts self-hosted through next/font | `decisions/0011-fonts-next-font.md` | accepted |
-| Application hosting | `decisions/0007-application-hosting.md` | proposed |
-| Provisional hosting of the placeholder page on Vercel | `decisions/0012-provisional-hosting-vercel.md` | proposed |
+| Application hosting | `decisions/0007-application-hosting.md` | accepted |
+| Provisional hosting of the placeholder page on Vercel | `decisions/0012-provisional-hosting-vercel.md` | accepted |
 | Playwright as end-to-end test runner | `decisions/0013-e2e-test-runner.md` | accepted |
 | Shopify as the commerce backend, headless | `decisions/0014-shopify-headless-commerce.md` | accepted |
 | Rate limit of the search suggestions in the hosting firewall | `decisions/0016-search-rate-limit.md` | accepted |
