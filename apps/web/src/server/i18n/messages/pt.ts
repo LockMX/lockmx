@@ -99,6 +99,7 @@ export const pt = {
     // The names of the links, also for the icons of the footer.
     email: "E-mail",
     instagram: "Instagram",
+    facebook: "Facebook",
   },
   home: {
     hero: {

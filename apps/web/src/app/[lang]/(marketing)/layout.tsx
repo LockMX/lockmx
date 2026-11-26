@@ -6,7 +6,7 @@ import { SectionFocus } from "@/components/site/section-focus";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SkipLink } from "@/components/site/skip-link";
-import { contactEmail, instagramUrl } from "@/lib/site/contact";
+import { contactEmail, facebookUrl, instagramUrl } from "@/lib/site/contact";
 import { legalPageHref, legalPages } from "@/lib/site/legal-pages";
 import {
   cartPath,
@@ -72,6 +72,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
         contactLinks={[
           { href: `mailto:${contactEmail}`, label: contact.email, icon: "mail" },
           { href: instagramUrl, label: contact.instagram, icon: "instagram", external: true },
+          { href: facebookUrl, label: contact.facebook, icon: "facebook", external: true },
         ]}
         navigationLabel={navigation.footer}
         navigationTitle={footer.navigationTitle}

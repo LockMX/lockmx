@@ -18,6 +18,7 @@ describe("Icon", () => {
       "chevron-down",
       "circle-alert",
       "circle-check",
+      "facebook",
       "footprints",
       "hard-hat",
       "image",
@@ -66,8 +67,8 @@ describe("Icon", () => {
     expect(svg.getAttribute("class")?.split(" ")).toContain(sizeClass);
   });
 
-  test("draws the Instagram glyph as one filled shape, with no stroke", () => {
-    const paths = renderedSvg(<Icon name="instagram" />).querySelectorAll("path");
+  test.each(["facebook", "instagram"] as const)("draws the %s glyph as one filled shape, with no stroke", (name) => {
+    const paths = renderedSvg(<Icon name={name} />).querySelectorAll("path");
 
     expect(paths).toHaveLength(1);
     expect(paths[0]?.getAttribute("fill")).toBe("currentColor");
