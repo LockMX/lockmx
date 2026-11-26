@@ -66,6 +66,7 @@ const candidates = [
   "px-gutter",
   "max-w-page",
   "link-bar",
+  "link-bar-current",
   "link-bar-hover",
   "lock-brackets",
   "locked:lock-brackets-on",
@@ -148,11 +149,14 @@ describe("token utilities", () => {
   it("draws the bar under a link from the slant and motion tokens", () => {
     // Tailwind keeps the nesting of a custom utility; the build flattens it.
     const start = css.indexOf(".link-bar {");
-    const bar = css.slice(start, css.indexOf(".link-bar-hover", start));
+    const bar = css.slice(start, css.indexOf(".link-bar-", start));
 
     expect(bar).toContain("transform: skewX(var(--slant))");
     expect(bar).toContain("var(--duration-bar)");
-    expect(bar).toMatch(/&\[aria-current\]::after\s*\{[^}]*var\(--delay-bar\)/);
+    expect(bar).not.toContain("aria-current");
+    expect(
+      compiledCssMatches(/\.link-bar-current\[aria-current\]::after\s*\{[^}]*var\(--delay-bar\)/),
+    ).toBe(true);
     expect(
       compiledCssMatches(/@media \(hover: hover\)\s*\{\s*\.link-bar-hover:hover::after\s*\{[^}]*scale: 1/),
     ).toBe(true);

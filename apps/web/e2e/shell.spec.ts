@@ -317,27 +317,36 @@ function barScale(link: Locator) {
   });
 }
 
-// Below the `lg` breakpoint the header links are behind the menu: the footer has the same bar.
-function navigationOf(page: Page, isMobile: boolean) {
-  return isMobile
-    ? page.getByRole("contentinfo").getByRole("navigation", { name: "Rodapé" })
-    : page.getByRole("banner").getByRole("navigation", { name: "Principal" });
+// Below the `lg` breakpoint the header links are behind the menu.
+async function headerNavigation(page: Page, isMobile: boolean) {
+  if (isMobile) await page.getByRole("banner").getByRole("button", { name: "Menu" }).click();
+  return page.getByRole("banner").getByRole("navigation", { name: "Principal" });
 }
 
 test.describe("the bar under the links", () => {
   test("moves to the link of the new page after a navigation", async ({ page, isMobile }) => {
     await page.goto("/pt");
-    const navigation = navigationOf(page, isMobile);
-    const home = navigation.getByRole("link", { name: "Início" });
-    const modularSystem = navigation.getByRole("link", { name: "Sistema modular" });
-
-    await modularSystem.click();
+    await (await headerNavigation(page, isMobile)).getByRole("link", { name: "Sistema modular" }).click();
     await expect(page).toHaveURL(/\/pt\/modular-system$/);
 
+    const navigation = await headerNavigation(page, isMobile);
+    const home = navigation.getByRole("link", { name: "Início" });
+    const modularSystem = navigation.getByRole("link", { name: "Sistema modular" });
     await expect(modularSystem).toHaveAttribute("aria-current", "page");
     await expect(home).not.toHaveAttribute("aria-current", "page");
     await expect.poll(() => barScale(home)).toBe(0);
     await expect.poll(() => barScale(modularSystem)).toBe(1);
+  });
+
+  test("leaves the footer link of the current page without a bar", async ({ page }) => {
+    await page.goto("/pt/modular-system");
+    const link = page
+      .getByRole("contentinfo")
+      .getByRole("navigation", { name: "Rodapé" })
+      .getByRole("link", { name: "Sistema modular" });
+
+    await expect(link).toHaveAttribute("aria-current", "page");
+    await expect.poll(() => barScale(link)).toBe(0);
   });
 
   test("fills under a header link on hover", async ({ page, isMobile }) => {
