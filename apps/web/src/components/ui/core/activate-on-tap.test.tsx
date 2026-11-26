@@ -75,6 +75,18 @@ describe("ActivateOnTap", () => {
     expect(follow).toHaveBeenCalledOnce();
   });
 
+  test("follows the link again on a later tap, if the page is still there", () => {
+    setDevice();
+    const { link } = renderCard();
+
+    fireEvent.click(link);
+    act(() => vi.advanceTimersByTime(360));
+    fireEvent.click(link);
+    act(() => vi.advanceTimersByTime(360));
+
+    expect(follow).toHaveBeenCalledTimes(2);
+  });
+
   test.each([
     ["on a device with hover", { canHover: true }],
     ["under reduced motion", { reducedMotion: true }],
