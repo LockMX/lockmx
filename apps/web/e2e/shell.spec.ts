@@ -374,3 +374,56 @@ test.describe("the bar under the links", () => {
     });
   });
 });
+
+// The crossfade between pages (spec 006, T8). The animation is checked by eye;
+// here, that a page change asks the browser for a view transition and a change
+// of the query only does not, and that both still work.
+test.describe("the change of page", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      const counted = window as Window & { viewTransitions?: number };
+      counted.viewTransitions = 0;
+      const start = document.startViewTransition?.bind(document);
+      if (!start) return;
+      document.startViewTransition = ((update: ViewTransitionUpdateCallback) => {
+        counted.viewTransitions! += 1;
+        return start(update);
+      }) as typeof document.startViewTransition;
+    });
+  });
+
+  function viewTransitions(page: Page) {
+    return page.evaluate(() => (window as Window & { viewTransitions?: number }).viewTransitions);
+  }
+
+  function supportsViewTransitions(page: Page) {
+    return page.evaluate(() => "startViewTransition" in document);
+  }
+
+  test("crossfades to a new page, which works as before", async ({ page }) => {
+    await page.goto("/pt");
+    await page
+      .getByRole("contentinfo")
+      .getByRole("navigation", { name: "Rodapé" })
+      .getByRole("link", { name: "Sistema modular" })
+      .click();
+
+    await expect(page).toHaveURL(/\/pt\/modular-system$/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Um quartel-general sobre rodas");
+    if (await supportsViewTransitions(page)) await expect.poll(() => viewTransitions(page)).toBe(1);
+  });
+
+  test("does not animate a change of the filters, and keeps the focus", async ({ page }) => {
+    await page.goto("/pt/shop/racks?availability=in");
+    const clear = page
+      .getByRole("complementary", { name: "Filtros" })
+      .getByRole("link", { name: "Limpar filtros" });
+
+    await clear.focus();
+    await page.keyboard.press("Enter");
+
+    await expect(page).toHaveURL(/\/pt\/shop\/racks$/);
+    await expect(clear).toBeFocused();
+    expect(await viewTransitions(page)).toBe(0);
+  });
+});

@@ -231,6 +231,18 @@ describe("compiled stylesheet", () => {
     expect(compiledCssMatches(/--space-1:\s*0\.25rem/)).toBe(true);
   });
 
+  it("crossfades the page and makes it instant under reduced motion", () => {
+    expect(compiledCssMatches(/::view-transition-old\(\.page\)[^{]*\{[^}]*var\(--duration-page\)/)).toBe(
+      true,
+    );
+    expect(compiledCssMatches(/::view-transition\s*\{[^}]*pointer-events:\s*none/)).toBe(true);
+    expect(
+      compiledCssMatches(
+        /prefers-reduced-motion: reduce[\s\S]*::view-transition-new\(\*\)\s*\{[^}]*animation-duration:\s*0s !important/,
+      ),
+    ).toBe(true);
+  });
+
   it("stops the page from scrolling behind a modal dialog", () => {
     expect(
       compiledCssMatches(/html:has\(dialog:modal\)\s*\{[^}]*overflow:\s*hidden/),

@@ -281,6 +281,34 @@
   transition-timing-function: var(--ease-lock);
 }
 
+/* The change of page (components/site/page-transition.tsx). The content
+   crossfades; the header stays still above it, so the bar of its links is
+   seen moving; the clicks of the visitor go through to the live page.
+   Source: the bundled Next.js guide 01-app/02-guides/view-transitions.md,
+   "Anchoring the header" and "Keeping the page interactive". */
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(.page),
+::view-transition-new(.page) {
+  animation-duration: var(--duration-page);
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: var(--z-header);
+}
+
+::view-transition-old(site-header) {
+  display: none;
+}
+
+::view-transition-new(site-header) {
+  animation: none;
+}
+
 @layer base {
   /* A link to a place in the page stops below the sticky header, not under it. */
   html {
@@ -347,6 +375,14 @@
       transition-duration: 0.01ms !important;
       transition-delay: 0s !important;
       scroll-behavior: auto !important;
+    }
+
+    /* The universal selector does not reach the view transition pseudo-elements. */
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation-duration: 0s !important;
+      animation-delay: 0s !important;
     }
   }
 }

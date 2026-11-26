@@ -1,6 +1,7 @@
 // Source: 01-app/03-api-reference/03-file-conventions/route-groups.md (bundled Next.js docs):
 // the group gives its pages this layout without changing their address.
 import { ErrorMessagesProvider } from "@/components/site/error-messages";
+import { PageTransition } from "@/components/site/page-transition";
 import { SectionFocus } from "@/components/site/section-focus";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
@@ -61,7 +62,9 @@ export default async function MarketingLayout({ children }: { children: React.Re
       />
       {/* Focusable only so the skip link can move the focus here; it is not a tab stop. */}
       <main id={MAIN_ID} tabIndex={-1} className="flex flex-1 flex-col outline-none">
-        <ErrorMessagesProvider messages={{ ...error, homeHref }}>{children}</ErrorMessagesProvider>
+        <ErrorMessagesProvider messages={{ ...error, homeHref }}>
+          <PageTransition>{children}</PageTransition>
+        </ErrorMessagesProvider>
       </main>
       <SiteFooter
         logoAlt={footer.logoAlt}

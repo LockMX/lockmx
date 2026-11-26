@@ -35,7 +35,8 @@ export function SiteHeader({
   return (
     <header
       data-surface="inverse"
-      className="sticky top-0 z-(--z-header) border-b border-border-inverse bg-surface-inverse text-text-inverse"
+      // Named for view transitions, so it stays still while the page crossfades.
+      className="sticky top-0 z-(--z-header) border-b border-border-inverse bg-surface-inverse text-text-inverse [view-transition-name:site-header]"
     >
       <div className="mx-auto flex h-header max-w-page items-center gap-4 px-gutter lg:gap-8">
         <Link href={homeHref} className="shrink-0">
