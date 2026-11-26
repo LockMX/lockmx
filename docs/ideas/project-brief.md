@@ -43,7 +43,6 @@ The shop is Shopify behind our own Next.js frontend (ADR 0014): catalogue, stock
 
 ## Open questions
 
-- Hosting of the frontend (ADR 0007).
 - Cookie consent management: a paid platform or a self-built solution.
 - Shipping zones, costs and carriers.
 
