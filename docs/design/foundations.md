@@ -66,7 +66,7 @@ Hard edges: `--radius-xs`, `--radius-sm`, `--radius-md`. `--radius-pill` is only
 
 ## The slant
 
-The logo's forward-leaning underline bar is the signature motif. It appears as a bar skewed by `--slant` (hero accents, the active tab underline, order progress) and as a parallelogram clipped by `--slant-cut` (hero buttons) or `--slant-cut-sm` (merchandising tags). One or two per view.
+The logo's forward-leaning underline bar is the signature motif. It appears as a bar skewed by `--slant` (hero accents, the active tab underline, order progress) and as a parallelogram clipped by `--slant-cut` (hero buttons) or `--slant-cut-sm` (merchandising tags). One or two per view. In motion it is the signature of the site: the bar under a link (`link-bar`) fills from the left on hover, and in the header and the language switcher also marks the current page; the footer marks it with weight only. The yellow corner brackets of a card (`lock-brackets`, the `locked:` variant) lock onto it on hover, focus or a tap.
 
 ## Elevation
 
@@ -74,7 +74,14 @@ Borders do the work: a card has a `--border-subtle` outline and no shadow. `--sh
 
 ## Motion
 
-Quick and mechanical. `--duration-fast` for colour changes, `--duration-base` for controls, `--duration-slow` for drawers and image zoom, with `--ease-out` (or `--ease-in-out` for movement that starts and ends at rest). Fades and slides only. `globals.css` removes transitions and animations when the reader asks for reduced motion.
+Quick and mechanical, with one signature: the slant locks into place (spec 006, durations set by the owner on 2026-11-26).
+
+- `--duration-fast` for small colour changes of controls, `--duration-base` for controls, `--duration-slow` for drawers and image zoom, with `--ease-out` (or `--ease-in-out` for movement that starts and ends at rest).
+- `--duration-fade` (240 ms) for the colour fade of links and of the hero and header buttons on hover.
+- `--duration-bar` (260 ms) for the slant bar under a link (`link-bar`); the bar of a new page waits `--delay-bar` for the old one to empty.
+- `--duration-lock` (360 ms) with `--ease-lock`, a short overshoot, for the corner brackets that lock onto a card (`lock-brackets`), its zoom and its arrow. It is the only overshoot of the site. On a device without hover a tapped card plays it before its link is followed (`ActivateOnTap`).
+- `--duration-page` (240 ms) for the crossfade between pages (`PageTransition`); a change of query only does not animate.
+- Fades, slides, scale and the lock-in only: no shake, no bounce, nothing that moves while the page scrolls. `globals.css` removes transitions, animations and their delays when the reader asks for reduced motion.
 
 ## Stacking
 

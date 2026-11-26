@@ -178,7 +178,7 @@
   --duration-fast: 120ms;
   --duration-base: 180ms;
   --duration-slow: 320ms;
-  /* Spec 006, a trial: tuned by the owner on the finished pages. */
+  /* Spec 006, set by the owner on 2026-11-26 (rules in docs/design/foundations.md, Motion). */
   --duration-fade: 240ms;
   --duration-bar: 260ms;
   /* The bar of the new page fills once the old one has emptied. */

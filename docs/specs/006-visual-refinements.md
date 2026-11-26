@@ -1,6 +1,6 @@
 # 006. Visual refinements: motion, section titles and footer
 
-- Status: approved by the owner on 2026-11-26
+- Status: done on 2026-11-26 (approved by the owner on 2026-11-26)
 - Idea: `../ideas/visual-refinements.md`
 - Decisions: `../decisions/0009-styling-design-tokens-tailwind.md`, `../decisions/0013-e2e-test-runner.md`
 
@@ -155,6 +155,7 @@ Added by this spec:
 ### T9. Design docs, checklist and status
 - Description: after the owner reviews the durations on the finished pages, record the motion rule that comes out of it in `../design/foundations.md` (Motion and The slant: the bar of links and the brackets of cards as the motion signature) and `../design/accessibility.md` (view transitions under reduced motion); update `../design/components.md` (`ProductCard`, `Section`), `../architecture.md` if a folder is added, the checklist `../checklists/03-public-site.md` (footer, motion), and set this spec to `done`. `AGENTS.md` "Current state" names the next spec.
 - Commit: `docs: record the motion rules`
+- Notes (2026-11-26): the rule is in `foundations.md` (Motion and The slant) and `accessibility.md` (Motion, links that open a new tab); the tokens lost the "trial" comment. `components.md` already had `ProductCard` and `ActivateOnTap`; `Section` lives in `components/site`, outside the inventory, so it is not there. No folder was added, so `architecture.md` does not change. The checklist `03-public-site.md` got steps 14 and 15.
 
 ## Boundaries
 
