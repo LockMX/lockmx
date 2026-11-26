@@ -226,10 +226,12 @@
   }
 }
 
-/* A card that is engaged: hovered, holding the keyboard focus (on itself or
-   on its link), or active in view on a device without hover (ActivateInView).
+/* A card that is engaged: hovered, holding the focus (on itself or on its
+   link), or active in view on a device without hover (ActivateInView).
    The card names itself `group/lock`; a named group, so a group around it
-   (a carousel, a grid) never engages every card at once. */
+   (a carousel, a grid) never engages every card at once. The focus branch is
+   `:focus-within`, not `:has(:focus-visible)`: WebKit matched the second but
+   did not restyle the brackets (Playwright WebKit, 2026-11-26). */
 @custom-variant locked {
   @media (hover: hover) {
     &:is(:where(.group\/lock):hover *) {
@@ -237,7 +239,7 @@
     }
   }
 
-  &:is(:where(.group\/lock):is(:focus-visible, :has(:focus-visible)) *) {
+  &:is(:where(.group\/lock):focus-within *) {
     @slot;
   }
 

@@ -51,7 +51,8 @@ const STOCK_TONES: Record<ProductStock, BadgeProps["tone"]> = {
 
 /**
  * A product in a grid. One link, on the title, covers the whole card; the add
- * button sits above it. It holds no cart logic: `onAdd` is the caller's, so a
+ * button sits above it. Hovered, focused or active in view (`ActivateInView`
+ * around it), corner brackets lock onto the image and the image zooms. It holds no cart logic: `onAdd` is the caller's, so a
  * page that passes it is a Client Component.
  */
 export function ProductCard({
@@ -74,7 +75,7 @@ export function ProductCard({
     <article
       {...articleProps}
       className={classNames(
-        "group relative flex flex-col overflow-hidden rounded-md border border-border-subtle bg-surface-card transition-colors hover:border-border-strong",
+        "group/lock relative flex flex-col overflow-hidden rounded-md border border-border-subtle bg-surface-card transition-colors duration-(--duration-fade) hover:border-border-strong in-data-active:border-border-strong",
         className,
       )}
     >
@@ -86,7 +87,7 @@ export function ProductCard({
             fill
             sizes={image.sizes}
             className={classNames(
-              "object-cover transition-transform duration-(--duration-slow) motion-safe:group-hover:scale-103",
+              "object-cover transition-transform duration-(--duration-slow) motion-safe:locked:scale-103",
               out && "grayscale",
             )}
           />
@@ -98,6 +99,8 @@ export function ProductCard({
             <Icon name="image" size="lg" />
           </div>
         )}
+        {/* Before the badge, so the badge is drawn over it. */}
+        <span aria-hidden="true" className="lock-brackets locked:lock-brackets-on" />
         {badge && (
           <Badge tone="accent" variant="solid" shape="slant" className="absolute top-3 left-3">
             {badge}

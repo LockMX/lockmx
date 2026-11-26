@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 // The listings of the shop (spec 005, T6), with example data.
 const locales = [
@@ -301,5 +301,44 @@ test.describe("/api/search", () => {
   }) => {
     expect((await request.get("/api/search?q=pneu&lang=fr")).status()).toBe(400);
     expect(await (await request.get("/api/search?q=p&lang=pt")).json()).toEqual({ suggestions: [] });
+  });
+});
+
+// The corner brackets of a product card (spec 006, T7).
+test.describe("the product cards", () => {
+  function lastCard(page: Page) {
+    return page.getByRole("main").getByRole("article").last();
+  }
+
+  function bracketsOpacity(card: Locator) {
+    return card.locator(".lock-brackets").evaluate((element) => getComputedStyle(element).opacity);
+  }
+
+  test("lock when one comes into view on a device without hover", async ({ page, isMobile }) => {
+    test.skip(!isMobile, "Only a device without hover plays the effect in view.");
+    await page.goto("/pt/shop");
+    const card = lastCard(page);
+
+    await expect(card.locator("..")).not.toHaveAttribute("data-active");
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.locator("..")).toHaveAttribute("data-active");
+    await expect.poll(() => bracketsOpacity(card)).toBe("1");
+  });
+
+  test("lock on hover and on keyboard focus of the title link", async ({ page, isMobile }) => {
+    test.skip(isMobile, "The mobile project has no hover.");
+    await page.goto("/pt/shop");
+    const card = page.getByRole("main").getByRole("article").first();
+
+    await expect.poll(() => bracketsOpacity(card)).toBe("0");
+    await card.hover();
+    await expect.poll(() => bracketsOpacity(card)).toBe("1");
+
+    await page.mouse.move(0, 0);
+    await expect.poll(() => bracketsOpacity(card)).toBe("0");
+    // A key pressed before the focus moves makes it keyboard focus (`:focus-visible`).
+    await page.keyboard.press("Shift");
+    await card.getByRole("link").focus();
+    await expect.poll(() => bracketsOpacity(card)).toBe("1");
   });
 });
