@@ -164,7 +164,7 @@ describe("token utilities", () => {
     expect(compiledCssMatches(/var\(--ease-lock\)/)).toBe(true);
   });
 
-  it("locks a card on hover, on keyboard focus inside it, and while it is active in view", () => {
+  it("locks a card on hover, on focus inside it, and while it is active in view", () => {
     const rule = ".locked\\:lock-brackets-on:is(:where(";
 
     expect(
@@ -172,9 +172,7 @@ describe("token utilities", () => {
         /@media \(hover: hover\)\s*\{\s*\.locked\\:lock-brackets-on:is\(:where\(\.group\\\/lock\):hover \*\)/,
       ),
     ).toBe(true);
-    expect(
-      css.includes(`${rule}.group\\/lock):is(:focus-visible, :has(:focus-visible)) *)`),
-    ).toBe(true);
+    expect(css.includes(`${rule}.group\\/lock):focus-within *)`)).toBe(true);
     expect(css.includes(`${rule}[data-active]) *)`)).toBe(true);
   });
 

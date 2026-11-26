@@ -156,6 +156,28 @@ describe("ProductCard", () => {
     for (const name of zoom) expect(name.startsWith("motion-safe:")).toBe(true);
   });
 
+  test("locks corner brackets onto the image, decorative and under the badge", () => {
+    render(<ProductCard {...PRODUCT} image={IMAGE} badge="Novo" />);
+    const brackets = card().querySelector(".lock-brackets");
+    const badge = screen.getByText("Novo");
+
+    expect(brackets?.getAttribute("aria-hidden")).toBe("true");
+    expect(brackets?.className).toContain("locked:lock-brackets-on");
+    expect(brackets?.parentElement).toBe(card().querySelector("img")?.parentElement);
+    // Painted before the badge, so the badge stays on top.
+    expect(brackets!.compareDocumentPosition(badge) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.getByRole("link").textContent).toBe("Pneu Enduro 120/90");
+  });
+
+  test("is the group the lock-in effect follows, and keeps its border change", () => {
+    render(<ProductCard {...PRODUCT} image={IMAGE} />);
+    const classes = card().className.split(" ");
+
+    expect(classes).toContain("group/lock");
+    expect(classes).toContain("hover:border-border-strong");
+    expect(classes).toContain("in-data-active:border-border-strong");
+  });
+
   test("shows a placeholder icon when there is no image", () => {
     render(<ProductCard {...PRODUCT} />);
 

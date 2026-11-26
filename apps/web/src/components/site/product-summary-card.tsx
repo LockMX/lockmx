@@ -1,4 +1,10 @@
-import { Badge, ProductCard, type PriceAmount, type ProductImage } from "@/components/ui";
+import {
+  ActivateInView,
+  Badge,
+  ProductCard,
+  type PriceAmount,
+  type ProductImage,
+} from "@/components/ui";
 import type { ProductSummary } from "@/lib/shop/product";
 
 export type ProductSummaryCardLabels = {
@@ -57,7 +63,8 @@ export function ProductSummaryCard({
   labels,
 }: ProductSummaryCardProps) {
   return (
-    <div className="relative grid">
+    // On a device without hover, the card plays its lock-in effect in view.
+    <ActivateInView className="relative grid">
       <ProductCard
         title={product.title}
         href={href}
@@ -77,6 +84,6 @@ export function ProductSummaryCard({
           {labels.example}
         </Badge>
       )}
-    </div>
+    </ActivateInView>
   );
 }

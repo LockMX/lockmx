@@ -1,7 +1,17 @@
 import { render, screen, within } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { ProductGrid } from "@/components/site/product-grid";
 import type { ProductSummary } from "@/lib/shop/product";
+
+// jsdom has no `matchMedia`, which each card asks whether the device can hover.
+// It can, so no card observes its visibility.
+beforeEach(() => {
+  vi.stubGlobal("matchMedia", () => ({ matches: false }));
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 const labels = {
   empty: "Nenhum produto.",
