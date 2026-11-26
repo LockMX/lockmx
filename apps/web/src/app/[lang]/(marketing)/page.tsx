@@ -66,6 +66,7 @@ export default async function Home() {
       />
       <ShopSections
         id={sectionIds.shopSections}
+        eyebrow={shop.home.sectionsEyebrow}
         title={shop.home.title}
         sections={shopSections}
       />

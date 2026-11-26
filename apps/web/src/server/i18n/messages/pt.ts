@@ -112,6 +112,8 @@ export const pt = {
     home: {
       eyebrow: "LockMX",
       title: "Loja",
+      // Above the title of the large cards of the shop sections, on the home page.
+      sectionsEyebrow: "Explora por secção",
     },
     cart: {
       title: "Carrinho",
@@ -119,7 +121,7 @@ export const pt = {
       action: "Ir para a loja",
     },
     featured: {
-      eyebrow: "Produtos",
+      eyebrow: "Escolhidos para ti",
       title: "Destaques",
       carousel: "Produtos em destaque",
       empty: "Ainda não há produtos em destaque.",

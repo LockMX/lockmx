@@ -10,6 +10,7 @@ const locales = [
     menu: "Menu",
     title: "Lock it, send it!",
     headings: ["Destaques", "Loja"],
+    eyebrows: ["Escolhidos para ti", "Explora por secção"],
     navigation: [
       { link: "Início", href: "/pt" },
       { link: "Sistema modular", href: "/pt/modular-system", heading: "Um quartel-general sobre rodas" },
@@ -34,6 +35,7 @@ const locales = [
     menu: "Menu",
     title: "Lock it, send it!",
     headings: ["Featured", "Shop"],
+    eyebrows: ["Picked for you", "Browse by section"],
     navigation: [
       { link: "Home", href: "/en" },
       { link: "Modular system", href: "/en/modular-system", heading: "A command center on wheels" },
@@ -71,6 +73,18 @@ for (const locale of locales) {
       await expect(main.getByRole("heading", { level: 2 })).toHaveText(locale.headings);
       for (const heading of locale.headings) {
         await expect(main.getByRole("region", { name: heading, exact: true })).toBeVisible();
+      }
+    });
+
+    test("shows the title of the featured and shop sections, each with its eyebrow", async ({
+      page,
+    }) => {
+      const main = page.getByRole("main");
+
+      for (const [index, heading] of locale.headings.entries()) {
+        const region = main.getByRole("region", { name: heading, exact: true });
+        await expect(region.getByRole("heading", { level: 2, name: heading })).toBeVisible();
+        await expect(region.getByText(locale.eyebrows[index]!, { exact: true })).toBeVisible();
       }
     });
 

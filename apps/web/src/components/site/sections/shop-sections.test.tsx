@@ -9,7 +9,9 @@ const SECTIONS: ShopSectionEntry[] = [
 ];
 
 function renderSection(sections = SECTIONS) {
-  return render(<ShopSections id="shop-sections" title="Loja" sections={sections} />);
+  return render(
+    <ShopSections id="shop-sections" eyebrow="Explora por secção" title="Loja" sections={sections} />,
+  );
 }
 
 function region() {
@@ -28,6 +30,15 @@ describe("ShopSections", () => {
         .getAllByRole("heading", { level: 3 })
         .map((heading) => heading.textContent),
     ).toEqual(["Suportes LockMX", "Pneus"]);
+  });
+
+  test("shows its title, with the eyebrow above it", () => {
+    renderSection();
+
+    const heading = within(region()).getByRole("heading", { level: 2 });
+    expect(heading.className).not.toContain("sr-only");
+    const eyebrow = within(region()).getByText("Explora por secção");
+    expect(eyebrow.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   test("each card is one link, named by its section, to its listing", () => {
