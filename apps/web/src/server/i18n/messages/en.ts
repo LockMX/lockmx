@@ -109,6 +109,8 @@ export const en: Messages = {
     home: {
       eyebrow: "LockMX",
       title: "Shop",
+      // Above the title of the large cards of the shop sections, on the home page.
+      sectionsEyebrow: "Browse by section",
     },
     cart: {
       title: "Cart",
@@ -116,7 +118,7 @@ export const en: Messages = {
       action: "Go to the shop",
     },
     featured: {
-      eyebrow: "Products",
+      eyebrow: "Picked for you",
       title: "Featured",
       carousel: "Featured products",
       empty: "There are no featured products yet.",
