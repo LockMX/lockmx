@@ -85,7 +85,11 @@ Type, spacing and layout tokens are in `rem`, so they follow the font size the r
 
 ## Motion
 
-`globals.css` reduces every transition and animation to an instant change under `prefers-reduced-motion: reduce`. A component that conveys progress with motion alone (a spinner) also exposes the state to assistive technology (`aria-busy`, a status message), since the motion disappears.
+`globals.css` reduces every transition and animation to an instant change under `prefers-reduced-motion: reduce`. That includes the delay of the link bar and the `::view-transition-*` pseudo-elements of the crossfade between pages, so the change of page is instant. A card on a device without hover follows its link at once under reduced motion, with no wait for the lock-in effect. A component that conveys progress with motion alone (a spinner) also exposes the state to assistive technology (`aria-busy`, a status message), since the motion disappears.
+
+## Links that open a new tab
+
+The credits link of the footer opens a new tab and says so to assistive technology in a visually hidden text ("abre num novo separador"). WCAG technique G201 also advises a visual cue; it would be a new icon, which is asked of the owner first (spec 006, T4).
 
 ## Per component
 

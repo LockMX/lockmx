@@ -27,6 +27,8 @@ All paths are inside `apps/web/` unless they start with `docs/` or `.github/`.
 11. **Placeholder legal pages.** `src/lib/site/legal-pages.ts` lists `/company`, `/privacy`, `/cookies` and `/terms` (on 2026-11-17 `/privacy` became `/privacy-policy`, and it and `/terms` got their text, and `/returns` joined them: see the notes of T7 in spec 004 and `03a-policy-texts.md`); each route under `(marketing)/` uses `src/server/site/pending-legal-page.tsx`, which shows `components/site/pending-page-view.tsx` and sends `noindex`. The footer lists them before the Complaints Book link. They are not in `publicPaths`. Tests: `e2e/legal-pages.spec.ts`.
 12. **Dictionaries.** Every string and accessible name above is in `src/server/i18n/messages/pt.ts` and `en.ts`.
 13. **Docs.** Update `docs/architecture.md` and the spec.
+14. **Motion (spec 006).** Tokens `--duration-fade`, `--duration-bar`, `--delay-bar`, `--duration-lock`, `--ease-lock` and `--duration-page` in `styles/tokens.css`. In `globals.css`: the utilities `link-bar` (the bar, empty), `link-bar-current` (fills under `aria-current`, after `--delay-bar`) and `link-bar-hover` (fills on hover, only on a device that hovers); `lock-brackets` and `lock-brackets-on` with the `locked:` variant (hover, `:focus-within`, or `data-active` from `components/ui/core/activate-on-tap.tsx` on a device without hover; a card names itself `group/lock`); the view transition rules for `components/site/page-transition.tsx`, keyed by the path, with the header held still by `view-transition-name: site-header`; the reduced motion rule zeroes durations and delays, the pseudo-elements of the crossfade included. Tests: `src/styles/theme.test.ts`, `e2e/shell.spec.ts`, `e2e/shop-home.spec.ts`, `e2e/shop-listing.spec.ts`.
+15. **Footer (spec 006).** `components/site/site-footer.tsx`: the large logo and the brand line, the link columns (bar on hover only), the icons (email, Instagram, Facebook: the Facebook address in `src/lib/site/contact.ts` is a placeholder until the client gives it), the copyright and the credits link, which opens a new tab. The language switcher is in the header only. Tests: `site-footer.test.tsx`, `e2e/shell.spec.ts`, `e2e/contact.spec.ts`.
 
 ## Common errors
 
@@ -42,6 +44,7 @@ All paths are inside `apps/web/` unless they start with `docs/` or `.github/`.
 - In CI the end-to-end step never ends, although the log shows every test passed and no summary line follows (2026-10-12: it ran 3 h 42 min until it was cancelled by hand, and took 2 min 46 s once fixed). At the end of a run Playwright kills the process group of each `webServer` command and waits for the output of the command to close (`launchProcess` in `playwright-core`, 1.63.0). On the Linux runner the server started through `pnpm exec` (pnpm 12.6.0) outlived that kill; on Windows it does not, so it cannot be seen locally. Start the server with `node node_modules/next/dist/bin/next` (step 1). What pnpm does differently on Linux was not looked into. The step timeout (step 2) is what turns a run like this into a failure with a report, instead of hours of runner time.
 - A check that was cancelled, not failed, leaves the pull request without a merge button and without a Playwright report: the report is uploaded on failure only. Read the end of the step's log on GitHub; it needs a signed-in session.
 - The build fails on the hosting provider with "SITE_URL is not set" on the first deployment of a branch: the variable is set in CI but not in the hosting project (step 2).
+- A card of the lock-in effect does not restyle on keyboard focus in WebKit with `:has(:focus-visible)`, though the selector matches: the `locked:` variant uses `:focus-within`.
 - A shell heredoc with an apostrophe in it fails on Git Bash: write the file with an editor or a script file.
 
 ## Verification
@@ -57,5 +60,7 @@ Run `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm test:e2e` (it includes 
 | `/robots.txt` | `Allow: /` and the sitemap address |
 | `/pt` with `COMING_SOON=true` | The placeholder, with `X-Robots-Tag: noindex` |
 | `/pt/company` | 200, "Em implementação", `noindex`, not in the sitemap |
+
+By eye: the bar under a header link fills on hover and moves to the new page's link after a navigation; a card locks on hover and, on a phone, on a tap before its page opens; the page crossfades and the header stays still. Under reduced motion all of it is instant.
 
 By eye, at 320, 768, 1024 and 1440 px: the header (menu button below 1024 px, links from there up), the landing page and the modular system page, with no sideways scroll.
