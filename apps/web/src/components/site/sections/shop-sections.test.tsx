@@ -1,5 +1,5 @@
 import { render, screen, within } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { ShopSections } from "@/components/site/sections/shop-sections";
 import type { ShopSectionEntry } from "@/lib/shop/product";
 
@@ -7,6 +7,16 @@ const SECTIONS: ShopSectionEntry[] = [
   { key: "racks", title: "Suportes LockMX", href: "/pt/shop/racks" },
   { key: "tyres", title: "Pneus", href: "/pt/shop/tyres" },
 ];
+
+// jsdom has no `matchMedia`, which each card asks whether the device can hover.
+// It can, so no card observes its visibility.
+beforeEach(() => {
+  vi.stubGlobal("matchMedia", () => ({ matches: false }));
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 function renderSection(sections = SECTIONS) {
   return render(
@@ -49,6 +59,15 @@ describe("ShopSections", () => {
       ["Suportes LockMX", "/pt/shop/racks"],
       ["Pneus", "/pt/shop/tyres"],
     ]);
+  });
+
+  test("the corner brackets of each card are decorative and leave its name as it is", () => {
+    renderSection();
+
+    const link = within(region()).getByRole("link", { name: "Suportes LockMX" });
+    const brackets = link.querySelector(".lock-brackets");
+    expect(brackets?.getAttribute("aria-hidden")).toBe("true");
+    expect(link.textContent).toBe("Suportes LockMX");
   });
 
   test("without an image, shows no photograph: the image is still to come", () => {

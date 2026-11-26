@@ -226,6 +226,59 @@
   }
 }
 
+/* A card that is engaged: hovered, holding the keyboard focus (on itself or
+   on its link), or active in view on a device without hover (ActivateInView).
+   The card names itself `group/lock`; a named group, so a group around it
+   (a carousel, a grid) never engages every card at once. */
+@custom-variant locked {
+  @media (hover: hover) {
+    &:is(:where(.group\/lock):hover *) {
+      @slot;
+    }
+  }
+
+  &:is(:where(.group\/lock):is(:focus-visible, :has(:focus-visible)) *) {
+    @slot;
+  }
+
+  &:is(:where([data-active]) *) {
+    @slot;
+  }
+}
+
+/* Four yellow corner brackets over a card, decorative (`aria-hidden`). At
+   rest they sit open on the card's edges, unseen; `lock-brackets-on` moves
+   them in to lock onto the corners, overshooting a little. Each bracket is two
+   gradient bars, so one element draws all four. */
+@utility lock-brackets {
+  --lock-arm: var(--space-6);
+  --lock-stroke: var(--space-1);
+  --lock-bar: linear-gradient(var(--lmx-yellow), var(--lmx-yellow));
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    var(--lock-bar) top left / var(--lock-arm) var(--lock-stroke),
+    var(--lock-bar) top left / var(--lock-stroke) var(--lock-arm),
+    var(--lock-bar) top right / var(--lock-arm) var(--lock-stroke),
+    var(--lock-bar) top right / var(--lock-stroke) var(--lock-arm),
+    var(--lock-bar) bottom left / var(--lock-arm) var(--lock-stroke),
+    var(--lock-bar) bottom left / var(--lock-stroke) var(--lock-arm),
+    var(--lock-bar) bottom right / var(--lock-arm) var(--lock-stroke),
+    var(--lock-bar) bottom right / var(--lock-stroke) var(--lock-arm);
+  background-repeat: no-repeat;
+  transition-property: inset, opacity;
+  transition-duration: var(--duration-lock);
+  transition-timing-function: var(--ease-out);
+}
+
+@utility lock-brackets-on {
+  inset: var(--space-3);
+  opacity: 1;
+  transition-timing-function: var(--ease-lock);
+}
+
 @layer base {
   /* A link to a place in the page stops below the sticky header, not under it. */
   html {

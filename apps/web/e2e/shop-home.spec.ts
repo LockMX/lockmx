@@ -144,3 +144,55 @@ test("with reduced motion the carousel starts paused", async ({ page }) => {
     carouselOf(page, "Produtos em destaque").getByRole("button").first(),
   ).toHaveAccessibleName("Retomar rotação");
 });
+
+// The corner brackets of a large card of the shop sections (spec 006, T6).
+test.describe("the shop section cards", () => {
+  function card(page: Page) {
+    return page
+      .getByRole("main")
+      .getByRole("region", { name: "Loja", exact: true })
+      .getByRole("link", { name: "Pneus" });
+  }
+
+  function bracketsOpacity(link: Locator) {
+    return link.locator(".lock-brackets").evaluate((element) => getComputedStyle(element).opacity);
+  }
+
+  test("lock when one comes into view on a device without hover, each time", async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(!isMobile, "Only a device without hover plays the effect in view.");
+    await page.goto("/pt");
+    const wrapper = card(page).locator("..");
+
+    await expect(wrapper).not.toHaveAttribute("data-active");
+    await card(page).scrollIntoViewIfNeeded();
+    await expect(wrapper).toHaveAttribute("data-active");
+
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(wrapper).not.toHaveAttribute("data-active");
+    await card(page).scrollIntoViewIfNeeded();
+    await expect(wrapper).toHaveAttribute("data-active");
+  });
+
+  test("lock on hover and on keyboard focus, and stay one link", async ({ page, isMobile }) => {
+    test.skip(isMobile, "The mobile project has no hover.");
+    await page.goto("/pt");
+    const link = card(page);
+
+    await expect.poll(() => bracketsOpacity(link)).toBe("0");
+    await link.hover();
+    await expect.poll(() => bracketsOpacity(link)).toBe("1");
+    await expect(link.locator("..")).not.toHaveAttribute("data-active");
+
+    await page.mouse.move(0, 0);
+    await expect.poll(() => bracketsOpacity(link)).toBe("0");
+    // Desktop WebKit does not move to links with Tab by default. A key pressed
+    // before the focus moves makes it keyboard focus (`:focus-visible`).
+    await page.keyboard.press("Shift");
+    await link.focus();
+    await expect(link).toBeFocused();
+    await expect.poll(() => bracketsOpacity(link)).toBe("1");
+  });
+});

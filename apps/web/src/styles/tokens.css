@@ -183,6 +183,9 @@
   --duration-bar: 260ms;
   /* The bar of the new page fills once the old one has emptied. */
   --delay-bar: var(--duration-bar);
+  /* The corner brackets that lock onto a card, with a short overshoot. */
+  --duration-lock: 360ms;
+  --ease-lock: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   --z-dropdown: 20;
   --z-header: 50;
