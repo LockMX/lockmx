@@ -67,6 +67,8 @@ const candidates = [
   "max-w-page",
   "link-bar",
   "link-bar-hover",
+  "lock-brackets",
+  "locked:lock-brackets-on",
 ];
 
 let css: string;
@@ -154,6 +156,26 @@ describe("token utilities", () => {
     expect(
       compiledCssMatches(/@media \(hover: hover\)\s*\{\s*\.link-bar-hover:hover::after\s*\{[^}]*scale: 1/),
     ).toBe(true);
+  });
+
+  it("draws the corner brackets of a card from the slant colour and motion tokens", () => {
+    expect(ruleFor("lock-brackets")).toContain("var(--duration-lock)");
+    expect(ruleFor("lock-brackets")).toContain("var(--lmx-yellow)");
+    expect(compiledCssMatches(/var\(--ease-lock\)/)).toBe(true);
+  });
+
+  it("locks a card on hover, on keyboard focus inside it, and while it is active in view", () => {
+    const rule = ".locked\\:lock-brackets-on:is(:where(";
+
+    expect(
+      compiledCssMatches(
+        /@media \(hover: hover\)\s*\{\s*\.locked\\:lock-brackets-on:is\(:where\(\.group\\\/lock\):hover \*\)/,
+      ),
+    ).toBe(true);
+    expect(
+      css.includes(`${rule}.group\\/lock):is(:focus-visible, :has(:focus-visible)) *)`),
+    ).toBe(true);
+    expect(css.includes(`${rule}[data-active]) *)`)).toBe(true);
   });
 
   it("keeps the spin animation and the responsive variants", () => {
