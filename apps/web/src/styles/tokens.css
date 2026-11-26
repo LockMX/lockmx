@@ -186,6 +186,8 @@
   /* The corner brackets that lock onto a card, with a short overshoot. */
   --duration-lock: 360ms;
   --ease-lock: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* The crossfade between pages. */
+  --duration-page: 240ms;
 
   --z-dropdown: 20;
   --z-header: 50;
