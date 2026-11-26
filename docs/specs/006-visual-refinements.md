@@ -69,6 +69,11 @@ Added by this spec:
 - Acceptance criteria: after a navigation the bar is under the new link only; a hovered footer link shows the bar; under reduced motion the bar appears and disappears at once; the links keep their names and `aria-current`.
 - Tests: unit tests keep checking `aria-current` (the markup does not change). End-to-end: after navigating from home to the modular system page, the bar of the old link has width 0 and the new one its full width (computed transform, after the transition); with `reducedMotion: "reduce"` the transition duration is near 0.
 - Commit: `feat: animate the yellow bar of links`
+- Notes (2026-11-26):
+  - The bar is two utilities in `globals.css`: `link-bar` (the bar of `aria-current`, with the wait) and `link-bar-hover` (the bar on hover, no wait, inside `@media (hover: hover)` as Tailwind's `hover:`). The origin flips with the state and only `scale` is animated, so it fills from the left and empties to the right with no script. Tailwind v4 writes `scale` as its own property, so the end-to-end test reads `scale` of `::after`, not `transform`.
+  - New tokens: `--duration-bar` (260 ms), `--delay-bar` (the same), and `--duration-fade` (240 ms) for the colour fade of links (`a` in `globals.css`, colour and underline colour). The reduced motion rule now also zeroes `transition-delay` and `animation-delay`; without it the bar of the new page still waited.
+  - The Complaints Book link of the footer got the same bar, so the legal column reads as one.
+  - The language switcher: hover works as planned, but changing the language changes the `[lang]` segment and the layout is mounted again, so the bar of the new language appears at once instead of waiting and filling (checked in Chromium). Not worked around.
 
 ### T2. Colour fades of buttons
 - Description: the buttons of the hero and the shop button of the header fade their colours on hover (decision 2). Today they use `transition-colors` at `--duration-fast` (120 ms), too short to be seen; the duration is raised in `button-styles.ts`, for every variant, slanted or not.
@@ -76,6 +81,7 @@ Added by this spec:
 - Acceptance criteria: hover on the primary, secondary and outline buttons changes colour gradually; pressing still moves the button down at once.
 - Tests: none new: a duration cannot be observed in jsdom, and an end-to-end check of a colour mid-transition would be flaky. Checked by eye, stated in the task notes.
 - Commit: `feat: fade button colours on hover`
+- Notes (2026-11-26): `--duration-fade` (240 ms) on the base classes and on the clipped background of the slanted button; `transition-colors` leaves `translate` out, so pressing still moves at once. Checked in Chromium on the production build: the computed `transition-duration` is 0.24 s, and the hero's primary button went from `rgb(255, 182, 0)` to `rgb(233, 166, 0)` 80 ms into the hover and settled on `rgb(230, 164, 0)` (`--action-primary-hover`).
 
 ### T3. Titles of the featured and shop sections
 - Description: the featured section gets the eyebrow "Escolhidos para ti" and keeps the title "Destaques" (decision 3). `ShopSections` is built on `Section` with the eyebrow "Explora por secção" and the visible title "Loja", replacing its heading for assistive technology only.
@@ -83,6 +89,7 @@ Added by this spec:
 - Acceptance criteria: both titles are visible in both locales; the page's heading order skips no level; each section is still named by its heading.
 - Tests: unit tests for the visible headings and eyebrows; end-to-end for the headings in both locales.
 - Commit: `feat: add visible titles to the featured and shop sections`
+- Notes (2026-11-26): `ShopSections` is built on `Section`; the eyebrow is `shop.home.sectionsEyebrow`. The end-to-end test went to `e2e/landing.spec.ts`, which already holds the headings of the landing page, not `e2e/shop-home.spec.ts`.
 
 ### T4. Footer
 - Description: rebuild `site-footer.tsx` to decision 7: the logo (`lockup`, `light`) centred and three to four times today's 12rem, full width on a phone; "Lock it, send it!" large, in the display type, under it; a line; the link columns (navigation and legal, with the complaints book); a line; the social icons; the copyright line and the credits line, stacked and centred. The language switcher and its props leave the footer. The copyright reads "LockMX © {year}. Todos os direitos reservados." ("All rights reserved."), with the year computed as today. The credits read "Desenvolvido por" ("Developed by") and the name, a link to `https://www.ricardorato.dev` with `target="_blank"` and `rel="noopener noreferrer"`, whose accessible name says that it opens a new tab.
@@ -90,6 +97,10 @@ Added by this spec:
 - Acceptance criteria: the legal links and the complaints book are still in the footer (`../compliance/site-information-and-complaints.md`); the logo's `sizes` matches its rendered width; no sideways scroll at 320 px; the credits link opens a new tab and says so to assistive technology.
 - Tests: unit tests for the order of the parts, the copyright with the year, the credits link and its attributes, the absence of the language switcher; end-to-end for the footer in both locales.
 - Commit: `feat: rebuild the footer around a large logo`
+- Notes (2026-11-26):
+  - Logo 40rem wide at most (`max-w-160`), the full width of the content below it; `sizes` follows the container padding. The link columns sit together at the centre from `sm` up.
+  - WCAG technique G201 (read 2026-11-26, advisory) asks for a warning that assistive technology speaks and a visual one. The credits link has the spoken one (hidden text in the accessible name); the visual one would need a new icon, which this spec's boundaries say to ask for first. Left for the owner.
+  - The copyright year is computed in the marketing layout, as before.
 
 ### T5. Cards that play their effect in view
 - Description: a small client component in `components/ui` that marks its child as active (`data-active`) while at least most of it is in view, on a device without hover only (`(hover: none)`). It sets and removes the attribute each time, so the effect replays on every entry (decision 5). Nothing changes on a device with hover, and nothing renders differently on the server.
@@ -97,6 +108,7 @@ Added by this spec:
 - Acceptance criteria: the attribute follows the visibility on a device without hover; it is never set on a device with hover; the component adds no element that changes the layout.
 - Tests: unit tests with a stubbed `IntersectionObserver` and `matchMedia` (jsdom has neither).
 - Commit: `feat: add in-view activation for cards`
+- Notes (2026-11-26): `components/ui/core/activate-in-view.tsx`. MDN, read 2026-11-26: the `IntersectionObserver` callback runs when the visible share crosses a threshold in either direction; `intersectionRatio` is that share; `(hover: none)` is a primary input that cannot hover conveniently. "Most of it" is 60%. The component is a `div` that takes the place of the card's existing wrapper, so it adds no box. Committed before T4.
 
 ### T6. Large card motion
 - Description: in `ShopSections`, on hover, keyboard focus or `data-active`: four yellow brackets lock onto the corners with a short overshoot, the photo zooms as today and the arrow moves forward; on leaving, the brackets open (decision 4, open point 1). The brackets are decorative (`aria-hidden`).
@@ -104,6 +116,10 @@ Added by this spec:
 - Acceptance criteria: the effect plays on hover and on keyboard focus; on the mobile project it plays when a card scrolls into view; the card stays one link with the same name; under reduced motion the final state is shown without movement.
 - Tests: unit test that the decorations are hidden from assistive technology and the link name is unchanged; end-to-end on the mobile project that a card scrolled into view gets `data-active`.
 - Commit: `feat: add lock-in motion to the shop section cards`
+- Notes (2026-11-26):
+  - The brackets are one decorative element drawn with eight gradient bars (`lock-brackets`), moved in by `inset` with an overshoot curve (`lock-brackets-on`, `--duration-lock` 360 ms, `--ease-lock`). The engaged state is one custom variant, `locked:` (hover, focus inside, or `data-active` above), on a named group, `group/lock`, so a group around the cards never engages all of them.
+  - Open point 1: the shake of the title and arrow is not built; for the owner's review.
+  - The mobile project (iPhone 12, WebKit) reports `(hover: none)`.
 
 ### T7. Small card motion
 - Description: in `ProductCard`, on hover, keyboard focus or `data-active`: brackets lock onto the image and the image zooms as today (decision 4). Every product card has it: the featured carousel and the shop listings.
@@ -111,6 +127,10 @@ Added by this spec:
 - Acceptance criteria: as T6; a card out of stock keeps its grey image; the brackets do not cover the badge.
 - Tests: as T6, on `ProductCard`.
 - Commit: `feat: add lock-in motion to product cards`
+- Notes (2026-11-26):
+  - The brackets are drawn before the badge, so the badges stay over them; the border change on hover stays, and also shows while the card is active in view.
+  - The focus branch of `locked:` is `:focus-within`, not `:has(:focus-visible)`: Playwright WebKit matched the second but did not restyle the brackets. It changes T6 too: a card that takes the focus from a click also locks, which is harmless since the click leads away.
+  - On a phone, the featured carousel's own rotation brings cards into view, so their effect plays on each rotation, not only while scrolling (decision 5). For the owner.
 
 ### T8. Page transition
 - Description: a crossfade when the page changes, with React's `ViewTransition` (decision 6). The header stays still during the crossfade, so the bar of T1 is seen moving ("Anchoring the header" in the bundled guide). A change of only the query (filters, search) does not animate. The overlay lets the pointer through. Under reduced motion the change is instant (rule on the `::view-transition-*` pseudo-elements in `globals.css`). How the change of page is told from a change of query is decided in the task, from the guide and React's reference, and recorded in the notes.
@@ -118,6 +138,10 @@ Added by this spec:
 - Acceptance criteria: changing page crossfades in a browser that supports view transitions and works without animation in one that does not; changing a filter does not animate; links stay usable during the transition; nothing moves under reduced motion.
 - Tests: end-to-end that navigation still works in the three engines and that a filter change keeps the focus where it was. The animation itself is checked by eye, stated in the notes.
 - Commit: `feat: crossfade between pages`
+- Notes (2026-11-26):
+  - `components/site/page-transition.tsx` wraps the page inside `main` in a `ViewTransition` keyed by the path, with `enter` and `exit` set to the class `page` and `default="none"` (React's reference, read 2026-11-26: a new key is an exit and an enter; `none` turns the other triggers off). A change of the query only keeps the key, so it does not animate and the focus stays. The filter and search forms are plain GET forms, so they reload the page as before; the "clear filters" link is the change of query the end-to-end test uses.
+  - The header has `view-transition-name: site-header`, does not animate and stays above the page; `::view-transition` lets the pointer through. As the guide says, a named element is skipped by hit-testing during the transition, so the header links cannot be clicked for those 240 ms (`--duration-page`).
+  - Checked by eye in Chromium on the production build: the content crossfades; frames at 150, 350 and 600 ms show the bar leaving the old link and filling under the new one. The rest of the page (the footer included) fades as the root, so a shorter new page shows its footer over the old content for a moment. For the owner.
 
 ### T9. Design docs, checklist and status
 - Description: after the owner reviews the durations on the finished pages, record the motion rule that comes out of it in `../design/foundations.md` (Motion and The slant: the bar of links and the brackets of cards as the motion signature) and `../design/accessibility.md` (view transitions under reduced motion); update `../design/components.md` (`ProductCard`, `Section`), `../architecture.md` if a folder is added, the checklist `../checklists/03-public-site.md` (footer, motion), and set this spec to `done`. `AGENTS.md` "Current state" names the next spec.
