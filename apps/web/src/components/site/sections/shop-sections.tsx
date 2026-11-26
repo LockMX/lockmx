@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Section } from "@/components/site/sections/section";
-import { ActivateInView, Icon } from "@/components/ui";
+import { ActivateOnTap, Icon } from "@/components/ui";
 import type { ShopSectionEntry } from "@/lib/shop/product";
 
 type ShopSectionsProps = {
@@ -17,7 +17,7 @@ type ShopSectionsProps = {
  * of the section's collection in the store, under a backdrop that keeps the
  * title readable; without one, the card shows the mark of an image to come.
  * The photograph is decorative: the title names the link. Hovered, focused or,
- * on a device without hover, in view, the card locks: corner brackets close
+ * on a device without hover, tapped, the card locks: corner brackets close
  * onto it, the photograph zooms and the arrow moves forward (spec 006, T6).
  */
 export function ShopSections({ id, eyebrow, title, sections }: ShopSectionsProps) {
@@ -28,7 +28,7 @@ export function ShopSections({ id, eyebrow, title, sections }: ShopSectionsProps
       <ul className="grid gap-4 sm:grid-cols-2">
         {sections.map((section) => (
           <li key={section.key} className="grid">
-            <ActivateInView className="grid">
+            <ActivateOnTap className="grid">
               <Link
                 href={section.href}
                 data-surface="inverse"
@@ -65,7 +65,7 @@ export function ShopSections({ id, eyebrow, title, sections }: ShopSectionsProps
                   />
                 </span>
               </Link>
-            </ActivateInView>
+            </ActivateOnTap>
           </li>
         ))}
       </ul>

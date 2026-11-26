@@ -42,9 +42,18 @@ Give the public site a motion language of its own and fix two places that read b
 7. **Footer.** Logo at the centre, three to four times its current width, with "Lock it, send it!" large under it; the link columns; a line; the social icons; "LockMX © {year}. Todos os direitos reservados."; "Desenvolvido por Ricardo Rato", where the name links to `https://www.ricardorato.dev` in a new tab. The last lines are stacked and centred. The language switcher leaves the footer: it is always in the header.
 8. **Motion rule.** The current rule of `../design/foundations.md` ("Quick and mechanical", at most `--duration-slow`, "Fades and slides only") is relaxed for this spec as a trial. The owner decides the durations on the finished result, and T9 writes the rule that comes out of it.
 
+### Review of the owner (2026-11-26)
+
+- Decision 1 and 2, amended: the header links also fill their bar on hover. The footer links no longer mark the current page with the bar, only on hover (their weight still marks it). The language switcher keeps both.
+- Decision 5, amended: the earlier answer was ambiguous. On a device without hover the card effect plays when the card is tapped, not when it comes into view: the tap locks the card, and the link is followed once the effect has played (`--duration-lock`). Under reduced motion the link is followed at once. `ActivateInView` became `ActivateOnTap`.
+- The trial durations stay as they are (T9 records them): `--duration-fade` 240 ms, `--duration-bar` and `--delay-bar` 260 ms, `--duration-lock` 360 ms with `--ease-lock`, `--duration-page` 240 ms.
+- Open point 1: no shake. The title turning yellow as the card locks stays.
+- The footer gets a Facebook icon beside Instagram; the address is a placeholder until the client gives it (ADR 0010, update of 2026-11-26).
+- The crossfade over the footer and the header links that cannot be clicked during it are accepted.
+
 ## Open points
 
-1. Option A in the prototype also gives the title and the arrow of a large card a short shake as the brackets lock. The owner disliked it in the combination with option C; whether it stays with option A alone is decided on the review of T6.
+1. ~~Option A in the prototype also gives the title and the arrow of a large card a short shake as the brackets lock.~~ Closed on the review of 2026-11-26: no shake.
 
 ## Working branch
 
@@ -130,7 +139,7 @@ Added by this spec:
 - Notes (2026-11-26):
   - The brackets are drawn before the badge, so the badges stay over them; the border change on hover stays, and also shows while the card is active in view.
   - The focus branch of `locked:` is `:focus-within`, not `:has(:focus-visible)`: Playwright WebKit matched the second but did not restyle the brackets. It changes T6 too: a card that takes the focus from a click also locks, which is harmless since the click leads away.
-  - On a phone, the featured carousel's own rotation brings cards into view, so their effect plays on each rotation, not only while scrolling (decision 5). For the owner.
+  - On a phone, the featured carousel's own rotation brings cards into view, so their effect plays on each rotation, not only while scrolling (decision 5). For the owner. Moot since the review of 2026-11-26: the effect plays on a tap.
 
 ### T8. Page transition
 - Description: a crossfade when the page changes, with React's `ViewTransition` (decision 6). The header stays still during the crossfade, so the bar of T1 is seen moving ("Anchoring the header" in the bundled guide). A change of only the query (filters, search) does not animate. The overlay lets the pointer through. Under reduced motion the change is instant (rule on the `::view-transition-*` pseudo-elements in `globals.css`). How the change of page is told from a change of query is decided in the task, from the guide and React's reference, and recorded in the notes.

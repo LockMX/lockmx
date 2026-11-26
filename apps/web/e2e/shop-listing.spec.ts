@@ -314,15 +314,23 @@ test.describe("the product cards", () => {
     return card.locator(".lock-brackets").evaluate((element) => getComputedStyle(element).opacity);
   }
 
-  test("lock when one comes into view on a device without hover", async ({ page, isMobile }) => {
-    test.skip(!isMobile, "Only a device without hover plays the effect in view.");
+  test("lock when one is tapped on a device without hover, then lead to the product", async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(!isMobile, "Only a device without hover plays the effect on a tap.");
     await page.goto("/pt/shop");
     const card = lastCard(page);
+    const href = await card.getByRole("link").getAttribute("href");
 
-    await expect(card.locator("..")).not.toHaveAttribute("data-active");
     await card.scrollIntoViewIfNeeded();
+    await expect(card.locator("..")).not.toHaveAttribute("data-active");
+    await expect.poll(() => bracketsOpacity(card)).toBe("0");
+
+    await card.getByRole("link").tap();
     await expect(card.locator("..")).toHaveAttribute("data-active");
     await expect.poll(() => bracketsOpacity(card)).toBe("1");
+    await expect(page).toHaveURL(new RegExp(`${href}$`));
   });
 
   test("lock on hover and on keyboard focus of the title link", async ({ page, isMobile }) => {
