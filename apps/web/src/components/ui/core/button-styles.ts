@@ -18,8 +18,10 @@ export type ButtonAppearance = {
   fullWidth?: boolean;
 };
 
+// Colours fade over `--duration-fade`; pressing moves the button at once, as
+// `transition-colors` leaves `translate` out.
 const BASE_CLASSES =
-  "items-center justify-center border-2 font-display font-bold italic uppercase leading-none tracking-caps whitespace-nowrap no-underline transition-colors active:translate-y-px disabled:pointer-events-none";
+  "items-center justify-center border-2 font-display font-bold italic uppercase leading-none tracking-caps whitespace-nowrap no-underline transition-colors duration-(--duration-fade) active:translate-y-px disabled:pointer-events-none";
 
 // A variant sets `--button-bg` for each state; the shape decides what paints it.
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
@@ -72,7 +74,7 @@ const RECTANGLE_CLASSES = "rounded-sm bg-(--button-bg)";
 // The background is a clipped pseudo-element, so the element keeps a whole
 // outline for its focus ring. A slanted button has no visible border.
 const SLANTED_CLASSES =
-  "relative isolate border-transparent before:absolute before:inset-0 before:-z-10 before:bg-(--button-bg) before:transition-colors before:clip-slant";
+  "relative isolate border-transparent before:absolute before:inset-0 before:-z-10 before:bg-(--button-bg) before:transition-colors before:duration-(--duration-fade) before:clip-slant";
 
 export const BUTTON_ICON_SIZES: Record<ButtonSize, IconSize> = {
   sm: "sm",
