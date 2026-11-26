@@ -1,5 +1,5 @@
 import {
-  ActivateInView,
+  ActivateOnTap,
   Badge,
   ProductCard,
   type PriceAmount,
@@ -63,8 +63,8 @@ export function ProductSummaryCard({
   labels,
 }: ProductSummaryCardProps) {
   return (
-    // On a device without hover, the card plays its lock-in effect in view.
-    <ActivateInView className="relative grid">
+    // On a device without hover, the card plays its lock-in effect when tapped.
+    <ActivateOnTap className="relative grid">
       <ProductCard
         title={product.title}
         href={href}
@@ -84,6 +84,6 @@ export function ProductSummaryCard({
           {labels.example}
         </Badge>
       )}
-    </ActivateInView>
+    </ActivateOnTap>
   );
 }

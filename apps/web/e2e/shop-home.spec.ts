@@ -158,22 +158,22 @@ test.describe("the shop section cards", () => {
     return link.locator(".lock-brackets").evaluate((element) => getComputedStyle(element).opacity);
   }
 
-  test("lock when one comes into view on a device without hover, each time", async ({
+  test("lock when one is tapped on a device without hover, then lead to its section", async ({
     page,
     isMobile,
   }) => {
-    test.skip(!isMobile, "Only a device without hover plays the effect in view.");
+    test.skip(!isMobile, "Only a device without hover plays the effect on a tap.");
     await page.goto("/pt");
-    const wrapper = card(page).locator("..");
+    const link = card(page);
+    const wrapper = link.locator("..");
 
+    await link.scrollIntoViewIfNeeded();
     await expect(wrapper).not.toHaveAttribute("data-active");
-    await card(page).scrollIntoViewIfNeeded();
-    await expect(wrapper).toHaveAttribute("data-active");
+    await expect.poll(() => bracketsOpacity(link)).toBe("0");
 
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await expect(wrapper).not.toHaveAttribute("data-active");
-    await card(page).scrollIntoViewIfNeeded();
+    await link.tap();
     await expect(wrapper).toHaveAttribute("data-active");
+    await expect(page).toHaveURL(/\/pt\/shop\/tyres$/);
   });
 
   test("lock on hover and on keyboard focus, and stay one link", async ({ page, isMobile }) => {

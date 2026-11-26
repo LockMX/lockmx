@@ -11,7 +11,7 @@ export {
   type ProductCardProps,
   type ProductImage,
 } from "./commerce/product-card";
-export { ActivateInView, type ActivateInViewProps } from "./core/activate-in-view";
+export { ActivateOnTap, type ActivateOnTapProps } from "./core/activate-on-tap";
 export { Badge, type BadgeProps } from "./core/badge";
 export { Button, type ButtonProps } from "./core/button";
 export { ButtonLink, type ButtonLinkProps } from "./core/button-link";

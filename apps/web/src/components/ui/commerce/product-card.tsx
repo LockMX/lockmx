@@ -51,7 +51,7 @@ const STOCK_TONES: Record<ProductStock, BadgeProps["tone"]> = {
 
 /**
  * A product in a grid. One link, on the title, covers the whole card; the add
- * button sits above it. Hovered, focused or active in view (`ActivateInView`
+ * button sits above it. Hovered, focused or tapped (`ActivateOnTap`
  * around it), corner brackets lock onto the image and the image zooms. It holds no cart logic: `onAdd` is the caller's, so a
  * page that passes it is a Client Component.
  */

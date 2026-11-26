@@ -1,5 +1,5 @@
 import { render, screen, within } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { ShopSections } from "@/components/site/sections/shop-sections";
 import type { ShopSectionEntry } from "@/lib/shop/product";
 
@@ -7,16 +7,6 @@ const SECTIONS: ShopSectionEntry[] = [
   { key: "racks", title: "Suportes LockMX", href: "/pt/shop/racks" },
   { key: "tyres", title: "Pneus", href: "/pt/shop/tyres" },
 ];
-
-// jsdom has no `matchMedia`, which each card asks whether the device can hover.
-// It can, so no card observes its visibility.
-beforeEach(() => {
-  vi.stubGlobal("matchMedia", () => ({ matches: false }));
-});
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
 
 function renderSection(sections = SECTIONS) {
   return render(

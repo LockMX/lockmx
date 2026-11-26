@@ -168,7 +168,7 @@ describe("token utilities", () => {
     expect(compiledCssMatches(/var\(--ease-lock\)/)).toBe(true);
   });
 
-  it("locks a card on hover, on focus inside it, and while it is active in view", () => {
+  it("locks a card on hover, on focus inside it, and while it is tapped", () => {
     const rule = ".locked\\:lock-brackets-on:is(:where(";
 
     expect(

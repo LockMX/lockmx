@@ -231,7 +231,7 @@
 }
 
 /* A card that is engaged: hovered, holding the focus (on itself or on its
-   link), or active in view on a device without hover (ActivateInView).
+   link), or tapped on a device without hover (ActivateOnTap).
    The card names itself `group/lock`; a named group, so a group around it
    (a carousel, a grid) never engages every card at once. The focus branch is
    `:focus-within`, not `:has(:focus-visible)`: WebKit matched the second but
