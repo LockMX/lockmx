@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const locales = [
   {
@@ -298,4 +298,72 @@ test("does not scroll sideways at 320 px", async ({ page }) => {
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   expect(overflow).toBeLessThanOrEqual(0);
+});
+
+// The bar under a link is its `::after`, scaled on the horizontal axis. Tailwind
+// writes the scale in the standalone `scale` property; the slant stays in `transform`.
+// Engines serialize `scale` differently ("0 1", "0"), so only the first number is read.
+function barScale(link: Locator) {
+  return link.evaluate((element) => {
+    const scale = getComputedStyle(element, "::after").scale;
+    return scale === "none" ? 1 : Number.parseFloat(scale);
+  });
+}
+
+// Below the `lg` breakpoint the header links are behind the menu: the footer has the same bar.
+function navigationOf(page: Page, isMobile: boolean) {
+  return isMobile
+    ? page.getByRole("contentinfo").getByRole("navigation", { name: "Rodapé" })
+    : page.getByRole("banner").getByRole("navigation", { name: "Principal" });
+}
+
+test.describe("the bar under the links", () => {
+  test("moves to the link of the new page after a navigation", async ({ page, isMobile }) => {
+    await page.goto("/pt");
+    const navigation = navigationOf(page, isMobile);
+    const home = navigation.getByRole("link", { name: "Início" });
+    const modularSystem = navigation.getByRole("link", { name: "Sistema modular" });
+
+    await modularSystem.click();
+    await expect(page).toHaveURL(/\/pt\/modular-system$/);
+
+    await expect(modularSystem).toHaveAttribute("aria-current", "page");
+    await expect(home).not.toHaveAttribute("aria-current", "page");
+    await expect.poll(() => barScale(home)).toBe(0);
+    await expect.poll(() => barScale(modularSystem)).toBe(1);
+  });
+
+  test("fills under a footer link on hover", async ({ page, isMobile }) => {
+    test.skip(isMobile, "The mobile project has no hover.");
+    await page.goto("/pt");
+    const link = page
+      .getByRole("contentinfo")
+      .getByRole("navigation", { name: "Rodapé" })
+      .getByRole("link", { name: "Sistema modular" });
+
+    await expect.poll(() => barScale(link)).toBe(0);
+    await link.hover();
+    await expect.poll(() => barScale(link)).toBe(1);
+  });
+
+  test.describe("under reduced motion", () => {
+    test.use({ reducedMotion: "reduce" });
+
+    test("changes at once", async ({ page }) => {
+      await page.goto("/pt");
+      const timing = await page
+        .getByRole("contentinfo")
+        .getByRole("link", { name: "Início" })
+        .evaluate((element) => {
+          const style = getComputedStyle(element, "::after");
+          return {
+            duration: Number.parseFloat(style.transitionDuration),
+            delay: Number.parseFloat(style.transitionDelay),
+          };
+        });
+
+      expect(timing.duration).toBeLessThan(0.001);
+      expect(timing.delay).toBe(0);
+    });
+  });
 });

@@ -98,7 +98,7 @@ export function SiteFooter({
                 <a
                   href={COMPLAINTS_BOOK_URL}
                   rel="noopener noreferrer"
-                  className="text-sm leading-body"
+                  className="link-bar link-bar-hover inline-block pb-1 text-sm leading-body no-underline"
                 >
                   {complaintsBookLabel}
                 </a>

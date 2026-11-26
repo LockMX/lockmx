@@ -65,6 +65,8 @@ const candidates = [
   "h-header",
   "px-gutter",
   "max-w-page",
+  "link-bar",
+  "link-bar-hover",
 ];
 
 let css: string;
@@ -141,6 +143,19 @@ describe("token utilities", () => {
     expect(rule).toContain("var(--ease-out)");
   });
 
+  it("draws the bar under a link from the slant and motion tokens", () => {
+    // Tailwind keeps the nesting of a custom utility; the build flattens it.
+    const start = css.indexOf(".link-bar {");
+    const bar = css.slice(start, css.indexOf(".link-bar-hover", start));
+
+    expect(bar).toContain("transform: skewX(var(--slant))");
+    expect(bar).toContain("var(--duration-bar)");
+    expect(bar).toMatch(/&\[aria-current\]::after\s*\{[^}]*var\(--delay-bar\)/);
+    expect(
+      compiledCssMatches(/@media \(hover: hover\)\s*\{\s*\.link-bar-hover:hover::after\s*\{[^}]*scale: 1/),
+    ).toBe(true);
+  });
+
   it("keeps the spin animation and the responsive variants", () => {
     expect(ruleFor("animate-spin")).toContain("animation:");
     expect(ruleFor("animate-pulse")).toContain("animation:");
@@ -204,7 +219,7 @@ describe("compiled stylesheet", () => {
 
   it("underlines links in their own text colour, not in yellow", () => {
     expect(
-      compiledCssMatches(/\n\s*a\s*\{[^}]*text-decoration-color/),
+      compiledCssMatches(/\n\s*a\s*\{[^}]*text-decoration-color:/),
     ).toBe(false);
     expect(
       compiledCssMatches(/\n\s*a\s*\{[^}]*text-decoration(-line)?:\s*underline/),

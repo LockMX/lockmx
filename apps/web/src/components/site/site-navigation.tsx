@@ -19,10 +19,11 @@ type SiteNavigationProps = {
   orientation?: SiteNavigationOrientation;
 };
 
+// The current page is marked by the slant bar, as in the logo (`link-bar` in globals.css).
 const LINK_STYLES = {
-  // The current page is marked by the slant bar, as in the logo.
-  row: "relative py-2 text-sm leading-tight font-semibold tracking-label uppercase no-underline after:absolute after:inset-x-0 after:bottom-0 after:hidden after:h-1 after:skew-x-(--slant) after:bg-yellow aria-[current=page]:after:block",
-  column: "text-sm leading-body no-underline hover:underline aria-[current=page]:font-semibold",
+  row: "link-bar py-2 text-sm leading-tight font-semibold tracking-label uppercase no-underline",
+  column:
+    "link-bar link-bar-hover inline-block pb-1 text-sm leading-body no-underline aria-[current=page]:font-semibold",
 };
 
 type SiteNavigationLinkProps = {
