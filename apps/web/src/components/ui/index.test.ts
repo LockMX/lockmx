@@ -4,6 +4,7 @@ import * as ui from "@/components/ui";
 describe("components/ui entry point", () => {
   test("exports every design system component built so far", () => {
     expect(Object.keys(ui).sort()).toEqual([
+      "ActivateInView",
       "Badge",
       "Button",
       "ButtonLink",
