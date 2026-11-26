@@ -340,6 +340,19 @@ test.describe("the bar under the links", () => {
     await expect.poll(() => barScale(modularSystem)).toBe(1);
   });
 
+  test("fills under a header link on hover", async ({ page, isMobile }) => {
+    test.skip(isMobile, "The mobile project has no hover.");
+    await page.goto("/pt");
+    const link = page
+      .getByRole("banner")
+      .getByRole("navigation", { name: "Principal" })
+      .getByRole("link", { name: "Sistema modular" });
+
+    await expect.poll(() => barScale(link)).toBe(0);
+    await link.hover();
+    await expect.poll(() => barScale(link)).toBe(1);
+  });
+
   test("fills under a footer link on hover", async ({ page, isMobile }) => {
     test.skip(isMobile, "The mobile project has no hover.");
     await page.goto("/pt");
