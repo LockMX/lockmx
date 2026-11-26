@@ -6,7 +6,10 @@
 // click on the element, as a tap would. React (react.dev, "Responding to
 // Events"): an `onClickCapture` handler runs before the handlers of the
 // children, and `stopPropagation` there keeps the click from reaching them.
-import { useEffect, useRef, useState } from "react";
+// The bundled Next.js guide 01-app/02-guides/preserving-ui-state.md: transient
+// state is reset in a `useLayoutEffect` cleanup, which also runs when a kept
+// page is hidden.
+import { useLayoutEffect, useRef, useState } from "react";
 
 const NO_HOVER = "(hover: none)";
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
@@ -48,9 +51,17 @@ function waitsForTheEffect(event: React.MouseEvent): boolean {
 export function ActivateOnTap({ className, children }: ActivateOnTapProps) {
   const [active, setActive] = useState(false);
   const following = useRef(false);
+  // The pending follow of the link, while the effect plays.
   const timer = useRef<number | undefined>(undefined);
 
-  useEffect(() => () => window.clearTimeout(timer.current), []);
+  useLayoutEffect(
+    () => () => {
+      window.clearTimeout(timer.current);
+      timer.current = undefined;
+      setActive(false);
+    },
+    [],
+  );
 
   function handleClickCapture(event: React.MouseEvent<HTMLDivElement>) {
     if (following.current) {
@@ -62,10 +73,11 @@ export function ActivateOnTap({ className, children }: ActivateOnTapProps) {
 
     event.preventDefault();
     event.stopPropagation();
-    if (active) return;
+    if (timer.current !== undefined) return;
 
     setActive(true);
     timer.current = window.setTimeout(() => {
+      timer.current = undefined;
       following.current = true;
       link.click();
     }, lockDurationMs());
