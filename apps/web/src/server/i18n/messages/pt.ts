@@ -35,7 +35,12 @@ export const pt = {
     legalTitle: "Legal",
     complaintsBook: "Livro de Reclamações",
     // {year} is replaced by the current year.
-    copyright: "© {year} LockMX",
+    copyright: "LockMX © {year}. Todos os direitos reservados.",
+    credits: {
+      lead: "Desenvolvido por",
+      name: "Ricardo Rato",
+      newTab: "(abre num novo separador)",
+    },
   },
   modularSystem: {
     eyebrow: "Sistema modular LockMX",

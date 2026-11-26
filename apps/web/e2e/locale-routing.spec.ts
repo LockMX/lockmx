@@ -34,8 +34,7 @@ for (const home of homes) {
 
     test("marks the current language and leads to the other one", async ({ page, isMobile }) => {
       await page.goto(home.path);
-      // The header and the footer both have the switcher; on a narrow screen
-      // the one of the header is in the menu.
+      // The switcher is in the header only; on a narrow screen it is in the menu.
       if (isMobile) await page.getByRole("banner").getByRole("button", { name: "Menu" }).click();
       const switcher = page.getByRole("banner").getByRole("navigation", { name: home.switcher });
 

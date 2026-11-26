@@ -7,7 +7,6 @@ vi.mock("next/navigation", () => ({
 }));
 
 const props = {
-  locale: "pt" as const,
   logoAlt: "LockMX Modular System",
   tagline: "Lock it, send it!",
   contactLinks: [
@@ -28,8 +27,12 @@ const props = {
     { href: "/pt/privacy-policy", label: "Política de privacidade" },
   ],
   complaintsBookLabel: "Livro de Reclamações",
-  languageLabel: "Idioma",
-  copyright: "© 2026 LockMX",
+  copyright: "LockMX © 2026. Todos os direitos reservados.",
+  credits: {
+    lead: "Desenvolvido por",
+    name: "Ricardo Rato",
+    newTab: "(abre num novo separador)",
+  },
 };
 
 describe("SiteFooter", () => {
@@ -45,7 +48,7 @@ describe("SiteFooter", () => {
 
     expect(screen.getByRole("img", { name: "LockMX Modular System" })).toBeTruthy();
     expect(screen.getByText("Lock it, send it!")).toBeTruthy();
-    expect(screen.getByText("© 2026 LockMX")).toBeTruthy();
+    expect(screen.getByText("LockMX © 2026. Todos os direitos reservados.")).toBeTruthy();
   });
 
   test("has the contact links as named icons", () => {
@@ -96,9 +99,39 @@ describe("SiteFooter", () => {
     expect(hrefs.some((href) => href.includes("ec.europa.eu"))).toBe(false);
   });
 
-  test("has the language switcher", () => {
+  test("has no language switcher: it is in the header", () => {
     render(<SiteFooter {...props} />);
 
-    expect(screen.getByRole("navigation", { name: "Idioma" })).toBeTruthy();
+    expect(screen.queryByRole("navigation", { name: "Idioma" })).toBeNull();
+    expect(screen.queryByRole("link", { name: /English/ })).toBeNull();
+  });
+
+  test("leads with the logo and the tagline, then the links, the icons, the copyright and the credits", () => {
+    render(<SiteFooter {...props} />);
+
+    const parts = [
+      screen.getByRole("img", { name: "LockMX Modular System" }),
+      screen.getByText("Lock it, send it!"),
+      screen.getByRole("navigation", { name: "Rodapé" }),
+      screen.getByRole("navigation", { name: "Legal" }),
+      screen.getByRole("link", { name: "E-mail" }),
+      screen.getByText("LockMX © 2026. Todos os direitos reservados."),
+      screen.getByText("Desenvolvido por", { exact: false }),
+    ];
+    for (let index = 1; index < parts.length; index += 1) {
+      expect(
+        parts[index - 1]!.compareDocumentPosition(parts[index]!) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    }
+  });
+
+  test("credits the developer with a link that opens a new tab and says so", () => {
+    render(<SiteFooter {...props} />);
+
+    const link = screen.getByRole("link", { name: "Ricardo Rato (abre num novo separador)" });
+    expect(link.getAttribute("href")).toBe("https://www.ricardorato.dev");
+    expect(link.getAttribute("target")).toBe("_blank");
+    expect(link.getAttribute("rel")).toBe("noopener noreferrer");
+    expect(link.parentElement?.textContent).toContain("Desenvolvido por");
   });
 });

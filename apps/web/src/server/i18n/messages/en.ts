@@ -34,7 +34,12 @@ export const en: Messages = {
     navigationTitle: "Navigation",
     legalTitle: "Legal",
     complaintsBook: "Complaints Book",
-    copyright: "© {year} LockMX",
+    copyright: "LockMX © {year}. All rights reserved.",
+    credits: {
+      lead: "Developed by",
+      name: "Ricardo Rato",
+      newTab: "(opens in a new tab)",
+    },
   },
   modularSystem: {
     eyebrow: "LockMX modular system",

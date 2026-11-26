@@ -15,6 +15,9 @@ const locales = [
     emptyCart: "O teu carrinho está vazio.",
     toShop: "Ir para a loja",
     complaintsBook: "Livro de Reclamações",
+    copyright: `LockMX © ${new Date().getFullYear()}. Todos os direitos reservados.`,
+    credits: "Desenvolvido por",
+    developer: "Ricardo Rato (abre num novo separador)",
     other: "English",
     otherPath: "/en",
   },
@@ -32,6 +35,9 @@ const locales = [
     emptyCart: "Your cart is empty.",
     toShop: "Go to the shop",
     complaintsBook: "Complaints Book",
+    copyright: `LockMX © ${new Date().getFullYear()}. All rights reserved.`,
+    credits: "Developed by",
+    developer: "Ricardo Rato (opens in a new tab)",
     other: "Português",
     otherPath: "/pt",
   },
@@ -58,7 +64,7 @@ for (const locale of locales) {
       await expect(banner.getByRole("navigation", { name: locale.language })).toBeVisible();
       if (isMobile) await banner.getByRole("button", { name: locale.menu }).click();
       await expect(footer.getByRole("navigation", { name: locale.footerNavigation })).toBeVisible();
-      await expect(footer.getByRole("navigation", { name: locale.language })).toBeVisible();
+      await expect(footer.getByRole("navigation", { name: locale.language })).toHaveCount(0);
 
       // Below the `lg` breakpoint the links of the header are behind the menu button.
       const main = banner.getByRole("navigation", { name: locale.mainNavigation });
@@ -263,14 +269,15 @@ for (const locale of locales) {
       await expect(link).toHaveAttribute("href", "https://www.livroreclamacoes.pt");
     });
 
-    test("switches language from the footer and keeps the page", async ({ page }) => {
-      await page
-        .getByRole("contentinfo")
-        .getByRole("navigation", { name: locale.language })
-        .getByRole("link", { name: locale.other })
-        .click();
+    test("ends the footer with the copyright of this year and the credits", async ({ page }) => {
+      const footer = page.getByRole("contentinfo");
+      const developer = footer.getByRole("link", { name: locale.developer });
 
-      await expect(page).toHaveURL(new RegExp(`${locale.otherPath}$`));
+      await expect(footer.getByText(locale.copyright, { exact: true })).toBeVisible();
+      await expect(footer.getByText(locale.credits)).toBeVisible();
+      await expect(developer).toHaveAttribute("href", "https://www.ricardorato.dev");
+      await expect(developer).toHaveAttribute("target", "_blank");
+      await expect(developer).toHaveAttribute("rel", "noopener noreferrer");
     });
 
     test("does not scroll sideways", async ({ page }) => {
