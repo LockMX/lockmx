@@ -41,6 +41,13 @@ The owner accepted Meta's terms, downloaded the asset pack from the Brand Resour
 - **Not verified at the source:** the rules for the glyph. The page of Meta that held them answers 404 at every address its redirects lead to (2026-10-13). Secondary summaries (for example https://www.sendible.com/insights/social-media-icons, 2026-10-13) say: any single solid colour, no change of shape or rotation, clear space of half the glyph, never under 29 by 29 pixels. They are followed as if true: the glyph is drawn at 2rem (`Icon` size `xl`, new), in white, in the text colour or in yellow on hover, with at least 1.5rem between it and its neighbour in the footer.
 - The mail icon beside it is a stroke icon, so the two differ in weight. Accepted by the owner with the choice of the official glyph.
 
+## Update (owner, 2026-11-26): the Facebook logo
+
+The owner asked for a Facebook icon in the footer, beside Instagram, linking to the Facebook page of LockMX. The address is a placeholder (`https://www.facebook.com/`) until the client gives it.
+
+- The path is the Facebook logo of Simple Icons 13.21.0 (CC0-1.0 for the file; the trademark stays Meta's), https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/facebook.svg, read 2026-11-26. It is drawn on 24 units, so it is used unchanged, filled with the colour of the text, at `xl` like the Instagram glyph.
+- **Not verified at the source:** Meta's rules for the Facebook logo; its Brand Resource Center was not read. If the client wants the file of Meta's own pack, as for Instagram, its path replaces this one.
+
 ## Sources
 
 - Lucide guide for `lucide-react`: https://lucide.dev/guide/packages/lucide-react (2026-10-07): tree-shaken named imports, size, colour and stroke width props, ISC licence. The page does not state the `aria-hidden` default or React 19 support; both are confirmed in the package documentation and tests at install time (spec 003, T4) before the dependency is added.

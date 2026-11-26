@@ -98,6 +98,7 @@ export const en: Messages = {
     // The names of the links, also for the icons of the footer.
     email: "Email",
     instagram: "Instagram",
+    facebook: "Facebook",
   },
   home: {
     hero: {

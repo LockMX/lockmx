@@ -54,7 +54,7 @@ for (const locale of locales) {
       await expect(main.locator("input, textarea")).toHaveCount(0);
     });
 
-    test("the footer has the email and the Instagram icons under the logo", async ({ page }) => {
+    test("the footer has the email, Instagram and Facebook icons under the logo", async ({ page }) => {
       const footer = page.getByRole("contentinfo");
 
       await expect(
@@ -64,6 +64,9 @@ for (const locale of locales) {
         "href",
         instagram,
       );
+      const facebook = footer.getByRole("link", { name: "Facebook", exact: true });
+      await expect(facebook).toHaveAttribute("href", /^https:\/\/www\.facebook\.com\//);
+      await expect(facebook).toHaveAttribute("rel", "noopener noreferrer");
     });
 
     test("has its own title, canonical address and place in the sitemap", async ({
